@@ -238,7 +238,6 @@ def main(ftrs_filePath:str, csv_filepath:str):
         cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
         cleaned_data_df.to_csv(ftrs_filePath[:-5] + ' Cleaned' + '.csv', index=False)
         print(ftrs_filePath)
-        #Git test
         #Raw matched data for debugging
         # ff.sort_values('inferredStructure', inplace=True, ascending=True)
         # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
