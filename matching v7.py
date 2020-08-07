@@ -244,6 +244,6 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"OT_200124_Ecoli_WT_2_Rep1.ftrs"
+    ftrs_filepath = r"OT_200124_Ecoli_WT_1_Rep1.ftrs"
     csv_filepath = r"E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
