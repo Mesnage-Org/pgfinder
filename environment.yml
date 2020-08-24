@@ -1,0 +1,9 @@
+name: ms1
+channels:
+  - defaults
+dependencies:
+  # install dependencies
+  - python=3.7
+  - pandas
+  - sqlite=3.32.3
+  - numpy
