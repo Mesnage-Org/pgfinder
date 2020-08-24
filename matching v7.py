@@ -5,7 +5,7 @@ from decimal import *
 import sys
 
 
-def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
+def calc_ppm_tolerance(mw: float, ppm_tol: int = 15):
     return (mw * ppm_tol) / 1000000
 
 def filtered_theo(ftrs_df,theo_list):
@@ -70,6 +70,24 @@ def modification_generator(filtered_theo_df, mod_type:str,):
     elif mod_type == "Nude":
         mod_mass = Decimal('478.1799')
         mod_name = "GM-"
+    elif mod_type == "Amindated":
+        mod_mass = Decimal('-0.9840')
+        mod_name = "Amidated"
+    elif mod_type == "disacchrideX2":
+        mod_mass = Decimal("938.3492")
+        mod_name = "(GM x2)"
+    elif mod_type == "disacchrideX3":
+        mod_name = "(GM x3)"
+        mod_mass = Decimal("1418.5290")
+    elif mod_type == "disacchrideX4":
+        mod_name = "(GM x4)"
+        mod_mass = Decimal("1897.7090")
+    elif mod_type == "disacchrideX5":
+        mod_name = "(GM x5)"
+        mod_mass = Decimal("2376.8889")
+    elif mod_type == "disacchrideX6":
+        mod_name = "(GM x6)"
+        mod_mass = Decimal("2856.06880")
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
 
@@ -192,7 +210,7 @@ def main(ftrs_filePath:str, csv_filepath:str):
     sugar = Decimal('203.0794')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
-    time_delta_window = 0.08 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
+    time_delta_window = 0.5 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
 
     with sqlite3.connect(ftrs_filePath) as db:
 
@@ -244,6 +262,6 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"C:\Users\ankur\Documents\E coli replicates 2020-07-24\OT_200124_Ecoli_WT_2_Rep1.ftrs"
+    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\Anderson et al JBC 2019 Planktonic B3.T3.ftrs"
     csv_filepath = r"C:\Users\ankur\Downloads\Brucella FTRS\E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
