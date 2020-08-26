@@ -68,26 +68,26 @@ def modification_generator(filtered_theo_df, mod_type:str,):
         mod_mass = Decimal('37.9559')
         mod_name = "K+"
     elif mod_type == "Nude":
-        mod_mass = Decimal('478.1799')
+        mod_mass = Decimal('460.1693')
         mod_name = "GM-"
-    elif mod_type == "Amindated":
+    elif mod_type == "Amidated":
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
     elif mod_type == "disacchrideX2":
-        mod_mass = Decimal("938.3492")
+        mod_mass = Decimal('938.3492')
         mod_name = "(GM x2)"
     elif mod_type == "disacchrideX3":
+        mod_mass = Decimal('1418.5290')
         mod_name = "(GM x3)"
-        mod_mass = Decimal("1418.5290")
     elif mod_type == "disacchrideX4":
+        mod_mass = Decimal('1897.7090')
         mod_name = "(GM x4)"
-        mod_mass = Decimal("1897.7090")
     elif mod_type == "disacchrideX5":
+        mod_mass = Decimal('2376.8889')
         mod_name = "(GM x5)"
-        mod_mass = Decimal("2376.8889")
     elif mod_type == "disacchrideX6":
+        mod_mass = Decimal('2856.06880')
         mod_name = "(GM x6)"
-        mod_mass = Decimal("2856.06880")
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
 
@@ -241,8 +241,16 @@ def main(ftrs_filePath:str, csv_filepath:str):
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
         nude_df = modification_generator(obs_theo_df, "Nude")
         decay_df = modification_generator(obs_theo_df, "Decay")
+        print("Generating sugar chain variants")
+        x2_chain_df = modification_generator(obs_theo_df,"disacchrideX2")
+        x3_chain_df = modification_generator(obs_theo_df, "disacchrideX3")
+        x4_chain_df = modification_generator(obs_theo_df, "disacchrideX4")
+        x5_chain_df = modification_generator(obs_theo_df, "disacchrideX5")
+        x6_chain_df = modification_generator(obs_theo_df, "disacchrideX6")
+        master_sugar_frame = [x2_chain_df,x3_chain_df,x4_chain_df,x5_chain_df,x6_chain_df]
+        sugar_variants_list = pd.concat(master_sugar_frame)
 
-        master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df]
+        master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df,sugar_variants_list]
         master_list = pd.concat(master_frame)
         master_list = master_list.astype({'Monoisotopicmass': float})
         print("Matching")
