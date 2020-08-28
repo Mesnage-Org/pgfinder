@@ -7,3 +7,10 @@ dependencies:
   - pandas
   - sqlite=3.32.3
   - numpy
+  - pip
+  - pip:
+    - dash==0.21.1  
+    - dash-renderer==0.13.0  
+    - dash-html-components==0.11.0
+    - dash-core-components==0.23.0  
+    - plotly
