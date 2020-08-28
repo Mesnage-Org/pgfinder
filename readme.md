@@ -13,3 +13,13 @@ conda activate ms1
 ```
 python 'matching v7.py' 
 ```
+
+# Dash app
+
+To test the dash app:
+
+```
+python app.py
+```
+
+then navigate to http://127.0.0.1:8050/
