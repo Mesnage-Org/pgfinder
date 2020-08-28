@@ -270,6 +270,6 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\Anderson et al JBC 2019 Planktonic B3.T3.ftrs"
-    csv_filepath = r"C:\Users\ankur\Downloads\Brucella FTRS\E coli disaccharides monomers only.csv"
+    ftrs_filepath = r"OT_200124_Ecoli_WT_1_Rep1.ftrs"
+    csv_filepath = r"E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
