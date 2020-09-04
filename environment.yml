@@ -7,3 +7,4 @@ dependencies:
   - pandas
   - sqlite=3.32.3
   - numpy
+  - jupyterlab
