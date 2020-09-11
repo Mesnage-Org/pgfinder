@@ -73,21 +73,24 @@ def modification_generator(filtered_theo_df, mod_type:str,):
     elif mod_type == "Amidated":
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
-    elif mod_type == "disacchrideX2":
-        mod_mass = Decimal('938.3492')
-        mod_name = "(GM x2)"
-    elif mod_type == "disacchrideX3":
-        mod_mass = Decimal('1418.5290')
-        mod_name = "(GM x3)"
-    elif mod_type == "disacchrideX4":
-        mod_mass = Decimal('1897.7090')
-        mod_name = "(GM x4)"
-    elif mod_type == "disacchrideX5":
-        mod_mass = Decimal('2376.8889')
-        mod_name = "(GM x5)"
-    elif mod_type == "disacchrideX6":
-        mod_mass = Decimal('2856.06880')
-        mod_name = "(GM x6)"
+    # elif mod_type == "disacchrideX2":
+    #     mod_mass = Decimal('956.3598')
+    #     mod_name = "(GM x2)"
+    # elif mod_type == "disacchrideX3":
+    #     mod_mass = Decimal('1434.5397')
+    #     mod_name = "(GM x3)"
+    # elif mod_type == "disacchrideX4":
+    #     mod_mass = Decimal('1912.7196')
+    #     mod_name = "(GM x4)"
+    # elif mod_type == "disacchrideX5":
+    #     mod_mass = Decimal('2390.8995')
+    #     mod_name = "(GM x5)"
+    # elif mod_type == "disacchrideX6":
+    #     mod_mass = Decimal('2869.0794')
+    #     mod_name = "(GM x6)"
+    # elif mod_type == "disacchrideX7":
+    #     mod_mass = Decimal('3347.2593')
+    #     mod_name = "(GM x7)"
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
 
@@ -205,12 +208,7 @@ def clean_up(ftrs_df, mass_to_clean:Decimal, time_delta:float):
 
     return consolidated_decay_df
 
-def main(ftrs_filePath:str, csv_filepath:str):
-
-    sugar = Decimal('203.0794')
-    sodium = Decimal('21.9819')
-    potassium = Decimal('37.9559')
-    time_delta_window = 0.5 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
+def ftrs_reader(ftrs_filePath:str):
 
     with sqlite3.connect(ftrs_filePath) as db:
 
@@ -219,57 +217,97 @@ def main(ftrs_filePath:str, csv_filepath:str):
         ff = pd.read_sql(sql, db)
         ff['inferredStructure'] = np.nan
         ff['theo_mwMonoisotopic'] = np.nan
-        theo = pd.read_csv(csv_filepath)
         ff.rename(columns={'Id': 'ID', 'apexRetentionTimeMinutes': 'rt', 'apexMwMonoisotopic': 'mwMonoisotopic', 'maxAveragineCorrelation': 'corrMax' }, inplace=True)
         cols_order = ['ID', 'xicStart', 'xicEnd', 'feature', 'corrMax', 'ionCount', 'chargeOrder', 'maxIsotopeCount',
                       'rt', 'mwMonoisotopic','theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
         ff = ff[cols_order]
-        print("Filtering Theo masses by observed masses")
-        obs_monomers_df = filtered_theo(ff, theo)
-        print("Building multimers from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df)
-        print("fitering theo multimers by observed")
-        obs_multimers_df = filtered_theo(ff,theo_multimers_df)
-        print("building custom searh file")
-        obs_frames = [obs_monomers_df,obs_multimers_df]
-        obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
-        print("generating variants")
-        adducts_sodium_df = modification_generator(obs_theo_df,"Sodium")
-        adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
-        anhydro_df = modification_generator(obs_theo_df, "Anhydro")
-        deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
-        deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
-        nude_df = modification_generator(obs_theo_df, "Nude")
-        decay_df = modification_generator(obs_theo_df, "Decay")
-        print("Generating sugar chain variants")
-        x2_chain_df = modification_generator(obs_theo_df,"disacchrideX2")
-        x3_chain_df = modification_generator(obs_theo_df, "disacchrideX3")
-        x4_chain_df = modification_generator(obs_theo_df, "disacchrideX4")
-        x5_chain_df = modification_generator(obs_theo_df, "disacchrideX5")
-        x6_chain_df = modification_generator(obs_theo_df, "disacchrideX6")
-        master_sugar_frame = [x2_chain_df,x3_chain_df,x4_chain_df,x5_chain_df,x6_chain_df]
-        sugar_variants_list = pd.concat(master_sugar_frame)
+        return ff
 
-        master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df,sugar_variants_list]
-        master_list = pd.concat(master_frame)
-        master_list = master_list.astype({'Monoisotopicmass': float})
-        print("Matching")
-        matched_data_df = matching(ff,master_list)
-        print("Cleaning data")
-        cleaned_df = clean_up(matched_data_df,sodium,time_delta_window)
-        cleaned_df = clean_up(cleaned_df,potassium,time_delta_window)
-        cleaned_data_df = clean_up(cleaned_df,sugar,time_delta_window)
+def maxquant_file_reader(filepath):
 
-        print("Saving results")
-        cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-        cleaned_data_df.to_csv(ftrs_filePath[:-5] + ' Cleaned' + '.csv', index=False)
-        print(ftrs_filePath)
-        #Raw matched data for debugging
-        # ff.sort_values('inferredStructure', inplace=True, ascending=True)
-        # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
+    maxquant_df = pd.read_excel(filepath)
+    maxquant_df['inferredStructure'] = np.nan
+    maxquant_df['theo_mwMonoisotopic'] = np.nan
+    maxquant_df.rename(columns={'Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+                               inplace=True)
+    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'Retention length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
+    cols_order = ['ID', 'rt', 'Retention length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
+    focused_maxquant_df = focused_maxquant_df[cols_order]
+
+
+    return focused_maxquant_df
+
+def main(ftrs_filePath:str, csv_filepath:str):
+
+    sugar = Decimal('203.0794')
+    sodium = Decimal('21.9819')
+    potassium = Decimal('37.9559')
+    time_delta_window = 0.5 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
+
+
+    theo = pd.read_csv(csv_filepath)
+    # ff = ftrs_filePath(ftrs_filepath)
+    ff = maxquant_file_reader(mq_filepath)
+
+    print("Filtering Theo masses by observed masses")
+    obs_monomers_df = filtered_theo(ff, theo)
+    print("Building multimers from obs muropeptides")
+    theo_multimers_df = multimer_builder(obs_monomers_df)
+    print("fitering theo multimers by observed")
+    obs_multimers_df = filtered_theo(ff,theo_multimers_df)
+    print("building custom searh file")
+    obs_frames = [obs_monomers_df,obs_multimers_df]
+    obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
+    print("generating variants")
+    adducts_sodium_df = modification_generator(obs_theo_df,"Sodium")
+    adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
+    anhydro_df = modification_generator(obs_theo_df, "Anhydro")
+    deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
+    deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
+    nude_df = modification_generator(obs_theo_df, "Nude")
+    decay_df = modification_generator(obs_theo_df, "Decay")
+    ami_df = modification_generator(obs_theo_df,"Amidated")
+    # print("Generating sugar chains")
+    # x2_chain_df = modification_generator(obs_theo_df, "disacchrideX2")
+    # x3_chain_df = modification_generator(obs_theo_df, "disacchrideX3")
+    # x4_chain_df = modification_generator(obs_theo_df, "disacchrideX4")
+    # x5_chain_df = modification_generator(obs_theo_df, "disacchrideX5")
+    # x6_chain_df = modification_generator(obs_theo_df, "disacchrideX6")
+    # x7_chain_df = modification_generator(obs_theo_df, "disacchrideX7")
+    # master_sugar_frame = [x2_chain_df, x3_chain_df, x4_chain_df, x5_chain_df, x6_chain_df,x7_chain_df]
+    # sugar_variants_list = pd.concat(master_sugar_frame)
+    #
+    # print("Generating sugar variants")
+    #
+    # sugar_anhydro = modification_generator(sugar_variants_list, "Anhydro")
+    # sugar_deactyl = modification_generator(sugar_variants_list, "Deacetyl")
+    # sugar_deac_anhydro = modification_generator(sugar_variants_list, 'Deacetyl-Anhydro')
+
+
+    # master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df,sugar_variants_list, sugar_anhydro,sugar_deac_anhydro,sugar_deactyl]
+    master_frame = [obs_theo_df, adducts_potassium_df, adducts_sodium_df, anhydro_df, deac_anhy_df, deacetyl_df,
+                    decay_df, nude_df,ami_df]
+    master_list = pd.concat(master_frame)
+    master_list = master_list.astype({'Monoisotopicmass': float})
+    print("Matching")
+    matched_data_df = matching(ff,master_list)
+    print("Cleaning data")
+    cleaned_df = clean_up(matched_data_df,sodium,time_delta_window)
+    cleaned_df = clean_up(cleaned_df,potassium,time_delta_window)
+    cleaned_data_df = clean_up(cleaned_df,sugar,time_delta_window)
+
+    print("Saving results")
+    cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
+    # cleaned_data_df.to_csv(ftrs_filePath[:-5] + ' Cleaned' + '.csv', index=False)
+    cleaned_data_df.to_excel(mq_filepath + ' Cleaned', index=False)
+    print(ftrs_filePath)
+    #Raw matched data for debugging
+    # ff.sort_values('inferredStructure', inplace=True, ascending=True)
+    # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\Anderson et al JBC 2019 Planktonic B3.T3.ftrs"
+    ftrs_filepath = r"C:\Users\ankur\Documents\MS Data\Pseudomonas\Anderson et al JBC 2019 Planktonic B3.T1.ftrs"
+    mq_filepath = r"C:\Users\ankur\Documents\Code\MS1 Matching\Mass-Spec-MS1-Analysis\Planktonic B3 T1.xlsx"
     csv_filepath = r"C:\Users\ankur\Downloads\Brucella FTRS\E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
