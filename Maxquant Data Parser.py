@@ -1,18 +1,15 @@
 import pandas as pd
 import numpy as np
 pd.options.display.width = 0
-# filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant results\combined\txt\allPeptides.txt"
-# # mq_df = pd.read_csv(filepath,sep='  ', engine='python')
-# mq_df_2 = pd.read_table(filepath, low_memory=False)
-#
-# # print(mq_df_2.tail())
-#
-# raw_data_set_1_df = mq_df_2.loc[mq_df_2['Raw file'] == 'Anderson et al JBC 2019 Planktonic B3.001']
-# print(raw_data_set_1_df)
-# print(raw_data_set_1_df.shape)
-# raw_data_set_1_df.to_excel('Planktonic B3 T1.xlsx')
+fp = r"C:\Users\ankur\Documents\MS Data\2020-09-17 E coli Thermo & mzXML MQ matching\mzXML MQ E coli WT 1 Rep 1.txt"
 
-filepath = r"C:\Users\ankur\Documents\Code\MS1 Matching\Mass-Spec-MS1-Analysis\Planktonic B3 T1.xlsx"
+def process_maxquant_raw_results(fp):
+
+    mq_df_2 = pd.read_table(fp, low_memory=False)
+    mq_df_2.rename(columns={list(mq_df_2)[1]: 'ID'},inplace=True)
+    mq_df_2.to_excel('mzXML MQ E coli WT 1 Rep 1.xlsx')
+
+filepath = r"C:\Users\ankur\Documents\Code\MS1 Matching\Mass-Spec-MS1-Analysis\Thermo MQ results E coli WT 1 Rep 1.xlsx"
 
 def maxquant_file_reader(filepath):
 
@@ -29,5 +26,7 @@ def maxquant_file_reader(filepath):
     return focused_maxquant_df
 
 
+process_maxquant_raw_results(fp)
 result_df = maxquant_file_reader(filepath)
 print(result_df.head())
+result_df.to_excel('mzXML MQ E coli WT 1 Rep 1_formatted.xlsx')
