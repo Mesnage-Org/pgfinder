@@ -5,7 +5,7 @@ from decimal import *
 import sys
 
 
-def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
+def calc_ppm_tolerance(mw: float, ppm_tol: int = 25):
     return (mw * ppm_tol) / 1000000
 
 def filtered_theo(ftrs_df,theo_list):
@@ -41,11 +41,11 @@ def multimer_builder(theo_list):
                 theo_mw.append(Decimal(mw)+donor_mw+Decimal('-18.0106'))
                 theo_struct.append(donor+'-'+acceptor+'|'+str(mult_num))
 
-    builder("GM-AEJA",Decimal('941.4077'),2)
-    builder("GM-AEJ",Decimal('871.3706'),2)
-    builder("GM-AEJ-GM-AEJ",Decimal('1722.7306'),3)
-    builder("GM-AEJ-GM-AEJA",Decimal('1793.7677'),3)
-    builder("GM-AEJA-GM-AEJA",Decimal('1864.8084'),3)
+    builder("GM-AEJA", Decimal('941.4075'), 2)
+    builder("GM-AEJ", Decimal('870.3704'), 2)
+    builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
+    builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
+    builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
 
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=['Monoisotopicmass', 'Structure'])
 
@@ -56,11 +56,11 @@ def modification_generator(filtered_theo_df, mod_type:str,):
     if mod_type == "Anhydro":
         mod_mass = Decimal('-20.0262')
     elif mod_type == "Deacetyl":
-        mod_mass = Decimal('-42.0106')
+        mod_mass = Decimal('-42.0105')
     elif mod_type == "Deacetyl-Anhydro":
         mod_mass = Decimal('-62.0368')
     elif mod_type == "Decay":
-        mod_mass = Decimal('-203.0794')
+        mod_mass = Decimal('-203.0793')
     elif mod_type == "Sodium":
         mod_mass = Decimal('21.9819')
         mod_name = "Na+"
@@ -74,8 +74,8 @@ def modification_generator(filtered_theo_df, mod_type:str,):
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
     elif mod_type == "Amidase Product":
-        mod_mass = Decimal('-480.1799')
-        mod_name = "(-GM)"
+        mod_mass = Decimal('-480.1954')
+        mod_name = "(Amidase Product)"
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
 
@@ -253,26 +253,12 @@ def main(ftrs_filePath:str, csv_filepath:str):
     decay_df = modification_generator(obs_theo_df, "Decay")
     ami_df = modification_generator(obs_theo_df,"Amidated")
     deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
-    # print("Generating sugar chains")
-    # x2_chain_df = modification_generator(obs_theo_df, "disacchrideX2")
-    # x3_chain_df = modification_generator(obs_theo_df, "disacchrideX3")
-    # x4_chain_df = modification_generator(obs_theo_df, "disacchrideX4")
-    # x5_chain_df = modification_generator(obs_theo_df, "disacchrideX5")
-    # x6_chain_df = modification_generator(obs_theo_df, "disacchrideX6")
-    # x7_chain_df = modification_generator(obs_theo_df, "disacchrideX7")
-    # master_sugar_frame = [x2_chain_df, x3_chain_df, x4_chain_df, x5_chain_df, x6_chain_df,x7_chain_df]
-    # sugar_variants_list = pd.concat(master_sugar_frame)
-    #
-    # print("Generating sugar variants")
-    #
-    # sugar_anhydro = modification_generator(sugar_variants_list, "Anhydro")
-    # sugar_deactyl = modification_generator(sugar_variants_list, "Deacetyl")
-    # sugar_deac_anhydro = modification_generator(sugar_variants_list, 'Deacetyl-Anhydro')
+
 
 
     # master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df,sugar_variants_list, sugar_anhydro,sugar_deac_anhydro,sugar_deactyl]
     master_frame = [obs_theo_df, adducts_potassium_df, adducts_sodium_df, anhydro_df, deac_anhy_df, deacetyl_df,
-                    decay_df, nude_df,ami_df,deglyco_df]
+                    decay_df, nude_df, ami_df, deglyco_df]
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
     print("Matching")
@@ -285,7 +271,7 @@ def main(ftrs_filePath:str, csv_filepath:str):
     print("Saving results")
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
     # cleaned_data_df.to_csv(ftrs_filePath[:-5] + ' Cleaned2' + '.csv', index=False)
-    cleaned_data_df.to_excel(ftrs_filePath[:-5] + ' Cleaned' + '.xlsx', index=False)
+    cleaned_data_df.to_excel(ftrs_filePath[:-5] + ' Cleaned 25ppm tol' + '.xlsx', index=False)
     # cleaned_data_df.to_excel(mq_filepath + ' Cleaned2' + '.xlsx' , index=False)
     print(ftrs_filePath)
     #Raw matched data for debugging
@@ -294,7 +280,7 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\E coli Feature finder results (2020-10-13)\OT_200908_Ecoli_WT_3_Rep1.ftrs"
+    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\100 mz floor FF search\Anderson et al JBC 2019 Planktonic B3.T1.ftrs"
     mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\E coli WT 1 FTRS and MQ comparison\E coli WT 1 Byos Matched.xlsx"
-    csv_filepath = r"C:\Users\ankur\Downloads\Brucella FTRS\E coli disaccharides monomers only.csv"
+    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
