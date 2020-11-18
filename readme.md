@@ -13,3 +13,5 @@ conda activate ms1
 ```
 python 'matching v7.py' 
 ```
+
+**This software is licensed as specified by the [GPL License](COPYING) and [LGPL License](COPYING.LESSER).**
