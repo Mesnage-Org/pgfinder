@@ -55,6 +55,8 @@ def modification_generator(filtered_theo_df, mod_type:str,):
 
     if mod_type == "Anhydro":
         mod_mass = Decimal('-20.0262')
+    elif mod_type == "Double Anhydro":
+        mod_mass = Decimal('-40.0524')
     elif mod_type == "Deacetyl":
         mod_mass = Decimal('-42.0105')
     elif mod_type == "Deacetyl-Anhydro":
@@ -68,7 +70,7 @@ def modification_generator(filtered_theo_df, mod_type:str,):
         mod_mass = Decimal('37.9559')
         mod_name = "K+"
     elif mod_type == "Nude":
-        mod_mass = Decimal('460.1693')
+        mod_mass = Decimal('478.1978')
         mod_name = "GM-"
     elif mod_type == "Amidated":
         mod_mass = Decimal('-0.9840')
@@ -122,7 +124,7 @@ def clean_up(ftrs_df, mass_to_clean:Decimal, time_delta:float):
 
     sodiated = Decimal('21.9819')
     potassated = Decimal('37.9559')
-    decay = Decimal('203.0794')
+    decay = Decimal('203.0793')
 
     if mass_to_clean == sodiated:
         parent = "^GM|^M"
@@ -224,7 +226,7 @@ def maxquant_file_reader(filepath):
 
 def main(ftrs_filePath:str, csv_filepath:str):
 
-    sugar = Decimal('203.0794')
+    sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
     time_delta_window = 0.5 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
@@ -253,26 +255,25 @@ def main(ftrs_filePath:str, csv_filepath:str):
     decay_df = modification_generator(obs_theo_df, "Decay")
     ami_df = modification_generator(obs_theo_df,"Amidated")
     deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
+    double_Anhydro_df = modification_generator(obs_multimers_df, 'Double Anhydro')
 
 
 
-    # master_frame = [obs_theo_df,adducts_potassium_df,adducts_sodium_df,anhydro_df,deac_anhy_df,deacetyl_df,decay_df,nude_df,sugar_variants_list, sugar_anhydro,sugar_deac_anhydro,sugar_deactyl]
     master_frame = [obs_theo_df, adducts_potassium_df, adducts_sodium_df, anhydro_df, deac_anhy_df, deacetyl_df,
-                    decay_df, nude_df, ami_df, deglyco_df]
+                    decay_df, nude_df, ami_df, deglyco_df, double_Anhydro_df]
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
     print("Matching")
     matched_data_df = matching(ff,master_list)
     print("Cleaning data")
-    cleaned_df = clean_up(matched_data_df,sodium,time_delta_window)
-    cleaned_df = clean_up(cleaned_df,potassium,time_delta_window)
-    cleaned_data_df = clean_up(cleaned_df,sugar,time_delta_window)
+    cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
+    cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
+    cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     print("Saving results")
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-    # cleaned_data_df.to_csv(ftrs_filePath[:-5] + ' Cleaned2' + '.csv', index=False)
-    cleaned_data_df.to_excel(ftrs_filePath[:-5] + ' Cleaned 25ppm tol' + '.xlsx', index=False)
-    # cleaned_data_df.to_excel(mq_filepath + ' Cleaned2' + '.xlsx' , index=False)
+    cleaned_data_df.to_excel(ftrs_filePath[:-5] + ' Cleaned 25ppm tol 2' + '.xlsx', index=False)
+    # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
     print(ftrs_filePath)
     #Raw matched data for debugging
     # ff.sort_values('inferredStructure', inplace=True, ascending=True)
@@ -280,7 +281,7 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\100 mz floor FF search\Anderson et al JBC 2019 Planktonic B3.T1.ftrs"
-    mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\E coli WT 1 FTRS and MQ comparison\E coli WT 1 Byos Matched.xlsx"
+    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\100 mz floor FF search\Anderson et al JBC 2019 Planktonic B1.T1.ftrs"
+    # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
     csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E coli disaccharides monomers only.csv"
     main(ftrs_filepath, csv_filepath)
