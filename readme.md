@@ -1,6 +1,6 @@
 # MS1
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Mesnage-Org/Mass-Spec-MS1-Analysis/blob/jupyter/gui-demo.ipynb) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/Mass-Spec-MS1-Analysis/jupyter?filepath=gui-demo.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/Mass-Spec-MS1-Analysis/jupyter?filepath=gui-demo.ipynb)
 ## Installation
 
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With conda installed, run the following commands to create the virtual environment and activate it:
