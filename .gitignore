@@ -1,8 +1,14 @@
-# cache
-.pytest_cache/*
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# temp
+.pytest_cache/
+.ipynb_checkpoints/
 
 # outputs
 *Cleaned.csv
 
 #IDE
-.vscode/*
+.vscode/
+.idea/
