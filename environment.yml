@@ -1,6 +1,7 @@
 name: ms1
 channels:
   - defaults
+  - conda-forge
 dependencies:
   # install dependencies
   - python=3.7
