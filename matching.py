@@ -224,7 +224,7 @@ def maxquant_file_reader(filepath):
 
     return focused_maxquant_df
 
-def main(ftrs_filePath:str, csv_filepath:str):
+def main(ftrs_filepath:str, csv_filepath:str):
 
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
@@ -272,9 +272,9 @@ def main(ftrs_filePath:str, csv_filepath:str):
 
     print("Saving results")
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-    cleaned_data_df.to_excel(ftrs_filePath[:-5] + ' Cleaned 25ppm tol 2' + '.xlsx', index=False)
+    cleaned_data_df.to_csv(ftrs_filepath[:-5] + ' Cleaned 25ppm tol 2' + '.csv', index=False)
     # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
-    print(ftrs_filePath)
+    print(ftrs_filepath)
     #Raw matched data for debugging
     # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
