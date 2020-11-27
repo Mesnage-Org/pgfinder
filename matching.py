@@ -272,7 +272,7 @@ def main(ftrs_filepath:str, csv_filepath:str):
 
     print("Saving results")
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-    cleaned_data_df.to_csv(ftrs_filepath[:-5] + ' Cleaned 25ppm tol 2' + '.csv', index=False)
+    #cleaned_data_df.to_csv(ftrs_filepath[:-5] + ' Cleaned 25ppm tol 2' + '.csv', index=False)
     # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
     print(ftrs_filepath)
     #Raw matched data for debugging
@@ -281,7 +281,7 @@ def main(ftrs_filepath:str, csv_filepath:str):
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\MS1 Analysis\100 mz floor FF search\Anderson et al JBC 2019 Planktonic B1.T1.ftrs"
+    ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\OT_200124_Ecoli_WT_1_Rep1.ftrs"
     # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E coli disaccharides monomers only.csv"
+    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E_coli_disaccharides_monomers_only.csv"
     main(ftrs_filepath, csv_filepath)
