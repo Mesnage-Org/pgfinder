@@ -239,6 +239,7 @@ def theo_masses_reader(filepath: str):
 
 def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list):
 
+
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
@@ -325,6 +326,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
+
     print(master_list.shape)
     return cleaned_data_df
     
@@ -334,6 +336,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     # #Raw matched data for debugging
     # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
+
 
 
 if __name__== "__main__":
