@@ -5,7 +5,7 @@ from decimal import *
 import sys
 
 
-def calc_ppm_tolerance(mw: float, ppm_tol: int = 25):
+def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     return (mw * ppm_tol) / 1000000
 
 def filtered_theo(ftrs_df,theo_list):
@@ -224,12 +224,12 @@ def maxquant_file_reader(filepath):
 
     return focused_maxquant_df
 
-def main(ftrs_filepath:str, csv_filepath:str):
+def main(ftrs_filepath:str, csv_filepath:str, RT_window:float, Sodium:bool, Potassium:bool, Anhydro:bool, DeAc:bool, Deacetyl_Anh:bool, Nude:bool, Decay:bool, Amidation:bool, Amidase:bool, Double_Anh:bool):
 
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
-    time_delta_window = 0.5 #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
+    time_delta_window = RT_window #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
 
 
     theo = pd.read_csv(csv_filepath)
@@ -246,16 +246,47 @@ def main(ftrs_filepath:str, csv_filepath:str):
     obs_frames = [obs_monomers_df,obs_multimers_df]
     obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
     print("generating variants")
-    adducts_sodium_df = modification_generator(obs_theo_df,"Sodium")
-    adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
-    anhydro_df = modification_generator(obs_theo_df, "Anhydro")
-    deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
-    deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
-    nude_df = modification_generator(obs_theo_df, "Nude")
-    decay_df = modification_generator(obs_theo_df, "Decay")
-    ami_df = modification_generator(obs_theo_df,"Amidated")
-    deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
-    double_Anhydro_df = modification_generator(obs_multimers_df, 'Double Anhydro')
+
+    if Sodium:
+        adducts_sodium_df = modification_generator(obs_theo_df,"Sodium")
+    else:
+        adducts_sodium_df = pd.DataFrame()
+    if Potassium:
+        adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
+    else:
+        adducts_potassium_df = pd.DataFrame()
+    if Anhydro:
+        anhydro_df = modification_generator(obs_theo_df, "Anhydro")
+    else:
+        anhydro_df = pd.DataFrame()
+    if DeAc:
+        deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
+    else:
+        deacetyl_df = pd.DataFrame()
+    if Deacetyl_Anh:
+        deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
+    else:
+        deac_anhy_df = pd.DataFrame()
+    if Nude:
+        nude_df = modification_generator(obs_theo_df, "Nude")
+    else:
+        nude_df = pd.DataFrame()
+    if Decay:
+        decay_df = modification_generator(obs_theo_df, "Decay")
+    else:
+        decay_df = pd.DataFrame()
+    if Amidation:
+        ami_df = modification_generator(obs_theo_df,"Amidated")
+    else:
+        ami_df = pd.DataFrame()
+    if Amidase:
+        deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
+    else:
+        deglyco_df = pd.DataFrame()
+    if Double_Anh:
+        double_Anhydro_df = modification_generator(obs_multimers_df, 'Double Anhydro')
+    else:
+        double_Anhydro_df = pd.DataFrame()
 
 
 
@@ -270,18 +301,20 @@ def main(ftrs_filepath:str, csv_filepath:str):
     cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
-    print("Saving results")
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-    #cleaned_data_df.to_csv(ftrs_filepath[:-5] + ' Cleaned 25ppm tol 2' + '.csv', index=False)
-    # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
-    print(ftrs_filepath)
-    #Raw matched data for debugging
-    # ff.sort_values('inferredStructure', inplace=True, ascending=True)
-    # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
+
+    return cleaned_data_df
+    
+    # cleaned_data_df.to_csv(ftrs_filepath[:-5] + 'sodium option - False' + '.csv', index=False)
+    # # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
+    # print(ftrs_filepath)
+    # #Raw matched data for debugging
+    # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
+    # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
 
 if __name__== "__main__":
 
     ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\OT_200124_Ecoli_WT_1_Rep1.ftrs"
     # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
     csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E_coli_disaccharides_monomers_only.csv"
-    main(ftrs_filepath, csv_filepath)
+    main(ftrs_filepath, csv_filepath, 0.5, False, False, False, False, False, False, False, False, False, False)
