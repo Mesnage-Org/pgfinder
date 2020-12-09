@@ -8,7 +8,8 @@ import sys
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     return (mw * ppm_tol) / 1000000
 
-def filtered_theo(ftrs_df,theo_list):
+
+def filtered_theo(ftrs_df, theo_list):
 
     matched_df = matching(ftrs_df,theo_list) # Match theoretical structures to raw data to generate a list of observed structures
 
@@ -24,6 +25,7 @@ def filtered_theo(ftrs_df,theo_list):
                        inplace=True)
 
     return exploded_df
+
 
 def multimer_builder(theo_list):
 
@@ -51,7 +53,8 @@ def multimer_builder(theo_list):
 
     return multimer_df
 
-def modification_generator(filtered_theo_df, mod_type:str,):
+
+def modification_generator(filtered_theo_df, mod_type: str):
 
     if mod_type == "Anhydro":
         mod_mass = Decimal('-20.0262')
@@ -100,7 +103,8 @@ def modification_generator(filtered_theo_df, mod_type:str,):
 
     return obs_theo_muropeptides_df
 
-def matching(ftrs_df:pd.DataFrame,matching_df:pd.read_csv):
+
+def matching(ftrs_df: pd.DataFrame, matching_df: pd.read_csv):
 
     raw_data = ftrs_df.copy()
 
@@ -120,7 +124,8 @@ def matching(ftrs_df:pd.DataFrame,matching_df:pd.read_csv):
 
     return raw_data
 
-def clean_up(ftrs_df, mass_to_clean:Decimal, time_delta:float):
+
+def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
     sodiated = Decimal('21.9819')
     potassated = Decimal('37.9559')
@@ -195,9 +200,10 @@ def clean_up(ftrs_df, mass_to_clean:Decimal, time_delta:float):
 
     return consolidated_decay_df
 
-def ftrs_reader(ftrs_filePath:str):
 
-    with sqlite3.connect(ftrs_filePath) as db:
+def ftrs_reader(filePath: str):
+
+    with sqlite3.connect(filePath) as db:
 
         sql = "SELECT * FROM Features"
 
@@ -210,7 +216,8 @@ def ftrs_reader(ftrs_filePath:str):
         ff = ff[cols_order]
         return ff
 
-def maxquant_file_reader(filepath):
+
+def maxquant_file_reader(filepath: str):
 
     maxquant_df = pd.read_excel(filepath)
     maxquant_df['inferredStructure'] = np.nan
@@ -224,66 +231,82 @@ def maxquant_file_reader(filepath):
 
     return focused_maxquant_df
 
-def main(ftrs_filepath:str, csv_filepath:str, RT_window:float, Sodium:bool, Potassium:bool, Anhydro:bool, DeAc:bool, Deacetyl_Anh:bool, Nude:bool, Decay:bool, Amidation:bool, Amidase:bool, Double_Anh:bool):
+
+def theo_masses_reader(filepath: str):
+    theo_masses_df = pd.read_csv(filepath)
+    return theo_masses_df
+
+
+def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list):
 
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
-    time_delta_window = RT_window #RT window too look in for in source decay products (RT of parent ion plus or minus time_delta)
+    time_delta_window = rt_window #retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
 
 
-    theo = pd.read_csv(csv_filepath)
-    ff = ftrs_reader(ftrs_filepath)
-    # ff = maxquant_file_reader(mq_filepath)
+
+
+    theo = theo_masses_df
+    ff = raw_data_df
 
     print("Filtering Theo masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo)
     print("Building multimers from obs muropeptides")
     theo_multimers_df = multimer_builder(obs_monomers_df)
     print("fitering theo multimers by observed")
-    obs_multimers_df = filtered_theo(ff,theo_multimers_df)
+    obs_multimers_df = filtered_theo(ff, theo_multimers_df)
     print("building custom searh file")
-    obs_frames = [obs_monomers_df,obs_multimers_df]
+    obs_frames = [obs_monomers_df, obs_multimers_df]
     obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
     print("generating variants")
 
-    if Sodium:
-        adducts_sodium_df = modification_generator(obs_theo_df,"Sodium")
+    if 'Sodium' in enabled_mod_list:
+        adducts_sodium_df = modification_generator(obs_theo_df, "Sodium")
     else:
         adducts_sodium_df = pd.DataFrame()
-    if Potassium:
+
+    if 'Potassium' in enabled_mod_list:
         adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
     else:
         adducts_potassium_df = pd.DataFrame()
-    if Anhydro:
+
+    if 'Anydro' in enabled_mod_list:
         anhydro_df = modification_generator(obs_theo_df, "Anhydro")
     else:
         anhydro_df = pd.DataFrame()
-    if DeAc:
+
+    if 'DeAc' in enabled_mod_list:
         deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
     else:
         deacetyl_df = pd.DataFrame()
-    if Deacetyl_Anh:
+
+    if 'Deacetyl_Anydro' in enabled_mod_list:
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
     else:
         deac_anhy_df = pd.DataFrame()
-    if Nude:
+
+    if 'Nude' in enabled_mod_list:
         nude_df = modification_generator(obs_theo_df, "Nude")
     else:
         nude_df = pd.DataFrame()
-    if Decay:
+
+    if 'Decay' in enabled_mod_list:
         decay_df = modification_generator(obs_theo_df, "Decay")
     else:
         decay_df = pd.DataFrame()
-    if Amidation:
+
+    if 'Amidation' in enabled_mod_list:
         ami_df = modification_generator(obs_theo_df,"Amidated")
     else:
         ami_df = pd.DataFrame()
-    if Amidase:
+
+    if 'Amidase' in enabled_mod_list:
         deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
     else:
         deglyco_df = pd.DataFrame()
-    if Double_Anh:
+
+    if 'Double_Anh' in enabled_mod_list:
         double_Anhydro_df = modification_generator(obs_multimers_df, 'Double Anhydro')
     else:
         double_Anhydro_df = pd.DataFrame()
@@ -295,14 +318,14 @@ def main(ftrs_filepath:str, csv_filepath:str, RT_window:float, Sodium:bool, Pota
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
     print("Matching")
-    matched_data_df = matching(ff,master_list)
+    matched_data_df = matching(ff, master_list)
     print("Cleaning data")
     cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
     cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-
+    print(master_list.shape)
     return cleaned_data_df
     
     # cleaned_data_df.to_csv(ftrs_filepath[:-5] + 'sodium option - False' + '.csv', index=False)
@@ -312,9 +335,14 @@ def main(ftrs_filepath:str, csv_filepath:str, RT_window:float, Sodium:bool, Pota
     # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
 
+
 if __name__== "__main__":
 
     ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\OT_200124_Ecoli_WT_1_Rep1.ftrs"
     # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
     csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E_coli_disaccharides_monomers_only.csv"
-    main(ftrs_filepath, csv_filepath, 0.5, False, False, False, False, False, False, False, False, False, False)
+    raw_data = ftrs_reader(ftrs_filepath)
+    theo_masses = theo_masses_reader(csv_filepath)
+    mod_test = ['Sodium','Nude', 'DeAc']
+    results = data_analysis(raw_data, theo_masses, 0.5, mod_test)
+    pd.options.display.width = None
