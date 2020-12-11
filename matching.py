@@ -70,7 +70,7 @@ def modification_generator(filtered_theo_df, mod_type:str,):
         mod_mass = Decimal('37.9559')
         mod_name = "K+"
     elif mod_type == "Nude":
-        mod_mass = Decimal('478.1978')
+        mod_mass = Decimal('478.1799')
         mod_name = "GM-"
     elif mod_type == "Amidated":
         mod_mass = Decimal('-0.9840')
