@@ -12,6 +12,6 @@ def test_matching_baseline():
 
     output_df = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test)
     
-    baseline_df = pd.read_csv("data/baseline_output.csv")
+    baseline_df = pd.read_csv("data/baseline_output.csv", index_col=0)
 
     pd.testing.assert_frame_equal(output_df, baseline_df)
