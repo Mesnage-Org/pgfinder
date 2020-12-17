@@ -336,16 +336,3 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     # #Raw matched data for debugging
     # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
-
-
-
-if __name__== "__main__":
-
-    ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\OT_200124_Ecoli_WT_1_Rep1.ftrs"
-    # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\E_coli_disaccharides_monomers_only.csv"
-    raw_data = ftrs_reader(ftrs_filepath)
-    theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Nude', 'DeAc']
-    results = data_analysis(raw_data, theo_masses, 0.5, mod_test)
-    pd.options.display.width = None
