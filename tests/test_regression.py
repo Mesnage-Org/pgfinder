@@ -10,9 +10,8 @@ def test_matching_baseline():
     theo_masses = matching.theo_masses_reader(masses_file_name)
     mod_test = ['Sodium','Nude', 'DeAc']
 
-    results = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test)
+    output_df = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test)
     
     baseline_df = pd.read_csv("data/baseline_output.csv")
-    output_df = pd.read_csv("output.csv")
 
     pd.testing.assert_frame_equal(output_df, baseline_df)
