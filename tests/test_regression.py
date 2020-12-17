@@ -3,8 +3,8 @@ import ms1.matching as matching
 
 def test_matching_baseline():
     '''Test that output of the major function in the module is unchanged.'''
-    masses_file_name = "data/E_coli_disaccharides_monomers_only.csv"
-    ftrs_file_name = "data/OT_200124_Ecoli_WT_1_Rep1.ftrs"
+    masses_file_name = "data/test_masses.csv"
+    ftrs_file_name = "data/test_ms_data.ftrs"
 
     raw_data = matching.ftrs_reader(ftrs_file_name)
     theo_masses = matching.theo_masses_reader(masses_file_name)
