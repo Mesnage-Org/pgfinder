@@ -79,7 +79,7 @@ def modification_generator(filtered_theo_df, mod_type: str):
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
     elif mod_type == "Amidase Product":
-        mod_mass = Decimal('-480.1954')
+        mod_mass = Decimal('-408.1744')
         mod_name = "(Amidase Product)"
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
@@ -239,7 +239,6 @@ def theo_masses_reader(filepath: str):
 
 def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list):
 
-
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
     potassium = Decimal('37.9559')
@@ -253,13 +252,19 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
     print("Filtering Theo masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo)
-    print("Building multimers from obs muropeptides")
-    theo_multimers_df = multimer_builder(obs_monomers_df)
-    print("fitering theo multimers by observed")
-    obs_multimers_df = filtered_theo(ff, theo_multimers_df)
+
+    if 'Multimers' in enabled_mod_list:
+        print("Building multimers from obs muropeptides")
+        theo_multimers_df = multimer_builder(obs_monomers_df)
+        print("fitering theo multimers by observed")
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df)
+    else:
+        obs_multimers_df = pd.DataFrame()
+
     print("building custom searh file")
     obs_frames = [obs_monomers_df, obs_multimers_df]
     obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
+
     print("generating variants")
 
     if 'Sodium' in enabled_mod_list:
@@ -272,7 +277,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     else:
         adducts_potassium_df = pd.DataFrame()
 
-    if 'Anydro' in enabled_mod_list:
+    if 'Anhydro' in enabled_mod_list:
         anhydro_df = modification_generator(obs_theo_df, "Anhydro")
     else:
         anhydro_df = pd.DataFrame()
@@ -282,7 +287,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     else:
         deacetyl_df = pd.DataFrame()
 
-    if 'Deacetyl_Anydro' in enabled_mod_list:
+    if 'Deacetyl_Anhydro' in enabled_mod_list:
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
     else:
         deac_anhy_df = pd.DataFrame()
@@ -303,12 +308,12 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         ami_df = pd.DataFrame()
 
     if 'Amidase' in enabled_mod_list:
-        deglyco_df = modification_generator(obs_multimers_df,'Amidase Product')
+        deglyco_df = modification_generator(obs_theo_df,'Amidase Product')
     else:
         deglyco_df = pd.DataFrame()
 
     if 'Double_Anh' in enabled_mod_list:
-        double_Anhydro_df = modification_generator(obs_multimers_df, 'Double Anhydro')
+        double_Anhydro_df = modification_generator(obs_theo_df, 'Double Anhydro')
     else:
         double_Anhydro_df = pd.DataFrame()
 
@@ -326,13 +331,26 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-
     print(master_list.shape)
     return cleaned_data_df
     
-    # cleaned_data_df.to_csv(ftrs_filepath[:-5] + 'sodium option - False' + '.csv', index=False)
+    # cleaned_data_df.to_csv(ftrs_filepath[:-5] + '(2x DeAc)' + '.csv', index=False)
     # # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
     # print(ftrs_filepath)
     # #Raw matched data for debugging
     # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
+
+
+if __name__== "__main__":
+
+    ftrs_filepath = r"G:\Shared drives\MS1 Paper shared drive\E coli Feature finder results (2020-10-13)\Amidase & Denuded corrected\OT_200908_Ecoli_WT_3_Rep3.ftrs"
+    # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
+    csv_filepath = r"G:\Shared drives\MS1 Paper shared drive\E coli Feature finder results (2020-10-13)\Verified monomer list.csv"
+    raw_data = ftrs_reader(ftrs_filepath)
+    theo_masses = theo_masses_reader(csv_filepath)
+    mod_test = ['Nude', 'Amidase', 'Multimers', 'Sodium', 'Potassium', 'Anhydro', 'DeAc', 'Deacetyl_Anhydro', 'Decay', 'Double_Anh']
+    results = data_analysis(raw_data, theo_masses, 0.5, mod_test)
+    pd.options.display.width = None
+    print(results)
+    results.to_csv(ftrs_filepath[:-5] + ' 10ppm Tol' + '.csv', index=False)
