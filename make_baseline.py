@@ -1,5 +1,3 @@
-import pandas as pd
-
 import ms1.matching as matching
 
 csv_filepath = "data/test_masses.csv"
