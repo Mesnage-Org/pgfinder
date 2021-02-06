@@ -9,9 +9,9 @@ def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     return (mw * ppm_tol) / 1000000
 
 
-def filtered_theo(ftrs_df, theo_list):
+def filtered_theo(ftrs_df, theo_list, user_ppm: int):
 
-    matched_df = matching(ftrs_df,theo_list) # Match theoretical structures to raw data to generate a list of observed structures
+    matched_df = matching(ftrs_df,theo_list,user_ppm) # Match theoretical structures to raw data to generate a list of observed structures
 
     filtered_df = matched_df.loc[:, 'theo_mwMonoisotopic':'inferredStructure'] # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
     filtered_df.dropna(subset=['theo_mwMonoisotopic'], inplace=True) # Drop all rows with NaN values in the theo_mwMonoisotopic column
@@ -104,7 +104,7 @@ def modification_generator(filtered_theo_df, mod_type: str):
     return obs_theo_muropeptides_df
 
 
-def matching(ftrs_df: pd.DataFrame, matching_df: pd.read_csv):
+def matching(ftrs_df: pd.DataFrame, matching_df: pd.read_csv, set_ppm: int):
 
     raw_data = ftrs_df.copy()
 
@@ -114,7 +114,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.read_csv):
 
     for x, row in raw_data.iterrows():
         mw = row.mwMonoisotopic
-        t_tol = calc_ppm_tolerance(mw)
+        t_tol = calc_ppm_tolerance(mw, set_ppm)
         t_df = matching_df[(matching_df['Monoisotopicmass'] >= mw - t_tol) & (matching_df['Monoisotopicmass'] <= mw + t_tol)]
 
         if not t_df.empty:
@@ -237,7 +237,7 @@ def theo_masses_reader(filepath: str):
     return theo_masses_df
 
 
-def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list):
+def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm = int):
 
     sugar = Decimal('203.0793')
     sodium = Decimal('21.9819')
@@ -251,13 +251,13 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     ff = raw_data_df
 
     print("Filtering Theo masses by observed masses")
-    obs_monomers_df = filtered_theo(ff, theo)
+    obs_monomers_df = filtered_theo(ff, theo,user_ppm)
 
     if 'Multimers' in enabled_mod_list:
         print("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
         print("fitering theo multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df,user_ppm)
     else:
         obs_multimers_df = pd.DataFrame()
 
@@ -324,7 +324,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
     print("Matching")
-    matched_data_df = matching(ff, master_list)
+    matched_data_df = matching(ff, master_list, user_ppm)
     print("Cleaning data")
     cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
     cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
@@ -350,7 +350,7 @@ if __name__== "__main__":
     raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
     mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
-    results = data_analysis(raw_data, theo_masses, 0.5, mod_test)
+    results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 5)
     pd.options.display.width = None
     print(results)
-    results.to_csv(ftrs_filepath[:-5] + ' v2' + '.csv', index=False)
+    results.to_csv(ftrs_filepath[:-5] + ' 5ppm test' + '.csv', index=False)
