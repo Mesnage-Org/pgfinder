@@ -349,7 +349,7 @@ if __name__== "__main__":
     csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
     raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh']
+    mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
     results = data_analysis(raw_data, theo_masses, 0.5, mod_test)
     pd.options.display.width = None
     print(results)
