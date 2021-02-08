@@ -33,36 +33,42 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     theo_mw = []
     theo_struct = []
 
-    def builder(name, bond, mass, mult_num: int):
+    def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if len(row.Structure[:len(row.Structure)-2]) > 2: #Prevent dimer creation using just GM (input format is XX|n) X = letters n = number
                 mw = row.Monoisotopicmass
                 acceptor = row.Structure[:len(row.Structure)-2]
                 donor = name
                 donor_mw = mass
-                bond_type = bond
                 theo_mw.append(Decimal(mw)+donor_mw+Decimal('-18.0106'))
-                theo_struct.append(acceptor+'-'+donor+bond_type+'|'+str(mult_num))
+                theo_struct.append(acceptor+'-'+donor+'|'+str(mult_num))
 
     if multimer_type == 0:
-        builder("GM-AEJA", '_(Pep)', Decimal('941.4075'), 2)
-        builder("GM-AEJ", '_(Pep)', Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", '_(Pep)', Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", '_(Pep)', Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", '_(Pep)', Decimal('1864.8044'), 3)
-
-        builder("GM-AEJA", '_(Glyco)', Decimal('939.3919'), 2)
-        builder("GM-AEJ", '_(Glyco)', Decimal('868.3548'), 2)
-        builder("GM-AEJ-GM-AEJ", '_(Glyco)', Decimal('1720.7146'), 3)
-        builder("GM-AEJ-GM-AEJA", '_(Glyco)', Decimal('1791.7517'), 3)
-        builder("GM-AEJA-GM-AEJA", '_(Glyco)', Decimal('1862.7888'), 3)
+        builder("GM-AEJA", Decimal('941.4075'), 2)
+        builder("GM-AEJ", Decimal('870.3704'), 2)
+        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
+        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
+        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
 
     elif multimer_type == 1:
-        builder("Lac-AEJA", '_(Pep)', Decimal('533.2333'), 2)
-        builder("Lac-AEJ", '_(Pep)', Decimal('462.1962'), 2)
-        builder("Lac-AEJ-Lac-AEJ", '_(Pep)', Decimal('906.3818'), 3)
-        builder("Lac-AEJ-Lac-AEJA", '_(Pep)', Decimal('977.4189'), 3)
-        builder("Lac-AEJA-Lac-AEJA", '_(Pep)', Decimal('1048.4560'), 3)
+        builder("GM-AEJA", Decimal('941.4075'), 2)
+        builder("GM-AEJ", Decimal('870.3704'), 2)
+        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
+        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
+        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
+
+        builder("GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
+        builder("GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
+        builder("GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
+        builder("GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
+        builder("GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
+
+    elif multimer_type == 2:
+        builder("Lac-AEJA",  Decimal('533.2333'), 2)
+        builder("Lac-AEJ",  Decimal('462.1962'), 2)
+        builder("Lac-AEJ-Lac-AEJ",  Decimal('906.3818'), 3)
+        builder("Lac-AEJ-Lac-AEJA",  Decimal('977.4189'), 3)
+        builder("Lac-AEJA-Lac-AEJA", Decimal('1048.4560'), 3)
 
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=['Monoisotopicmass', 'Structure'])
 
@@ -273,9 +279,14 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         theo_multimers_df = multimer_builder(obs_monomers_df)
         print("fitering theo multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df,user_ppm)
+    elif 'multimers_Glyco' in enabled_mod_list:
+        print("Building multimers from obs muropeptides")
+        theo_multimers_df = multimer_builder(obs_monomers_df, 1)
+        print("fitering theo multimers by observed")
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
     elif 'Multimers_Lac' in enabled_mod_list:
         print("Building multimers_Lac from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, 1)
+        theo_multimers_df = multimer_builder(obs_monomers_df, 2)
         print("fitering theo multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
     else:
@@ -364,13 +375,13 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"C:\Users\Hyperion\Documents\Code\OT_200908_Ecoli_WT_1_Rep1.ftrs"
+    ftrs_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FTRS files\20210129_Cdiff_betaL_SM1.ftrs"
     # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
+    csv_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FASTA File C._diff steph minimal BETA ELIMINATED.csv"
     raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Potassium','Multimers','Decay']
+    mod_test = ['Sodium','Potassium','Multimers_Lac']
     results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
     pd.options.display.width = None
     print(results)
-    results.to_csv(ftrs_filepath[:-5] + ' Glyco dimer test' + '.csv', index=False)
+    results.to_csv(ftrs_filepath[:-5] + ' Lactyl dimer test' + '.csv', index=False)
