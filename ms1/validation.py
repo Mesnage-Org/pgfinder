@@ -45,7 +45,16 @@ def validate_theo_masses_df(theo_masses_df):
 
     if not isinstance(theo_masses_df, pd.DataFrame):
         raise('theo_masses_df must be a DataFrame.')
-    # todo: check column names and types
+    
+    colnames = ['Structure', 'Monoisotopicmass']
+
+    if theo_masses_df.columns.to_list()!=colnames:
+        raise('theo_masses_df column names are incorrect')
+
+    coltypes = [np.dtype('O'), np.dtype('float64')]
+
+    if theo_masses_df.dtypes.to_list()!=coltypes:
+        raise('theo_masses_df column data types are incorrect')
 
 def validate_rt_window(rt_window):
 
