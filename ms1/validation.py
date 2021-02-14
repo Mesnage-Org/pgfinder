@@ -66,7 +66,21 @@ def validate_enabled_mod_list(enabled_mod_list):
 
     if not isinstance(enabled_mod_list, list):
         raise('enabled_mod_list must be a list.')
-    # todo: check against allowable mod names
+    
+    allowed_mods = ['Sodium',
+                    'Potassium',
+                    'Anhydro',
+                    'DeAc',
+                    'Deacetyl_Anhydro',
+                    'Nude',
+                    'Decay',
+                    'Amidation',
+                    'Amidase',
+                    'Double_Anh',
+                    'Multimers']
+
+    if not all(item in enabled_mod_list for item in allowed_mods):
+        raise('Requested modification(s) not recognised.')
 
 def validate_user_ppm(user_ppm):
 
