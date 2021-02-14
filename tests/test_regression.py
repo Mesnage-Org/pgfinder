@@ -6,9 +6,14 @@ def test_matching_baseline():
     masses_file_name = "data/test_masses.csv"
     ftrs_file_name = "data/test_ms_data.ftrs"
 
-    raw_data = matching.ftrs_reader(ftrs_file_name)
-    theo_masses = matching.theo_masses_reader(masses_file_name)
+    raw_data = matching.ftrs_reader(ftrs_filepath)
+    validation.validate_raw_data_df(raw_data)
+
+    theo_masses = matching.theo_masses_reader(csv_filepath)
+    validation.validate_theo_masses_df(theo_masses)
+
     mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
+    validation.validate_enabled_mod_list(mod_test)
 
     output_df = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
     
