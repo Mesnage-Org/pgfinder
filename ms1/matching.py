@@ -51,6 +51,7 @@ def multimer_builder(theo_list, multimer_type: int = 0):
         builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
 
     elif multimer_type == 1:
+        builder("GM-AE", Decimal('698.2858'))
         builder("GM-AEJA", Decimal('941.4075'), 2)
         builder("GM-AEJ", Decimal('870.3704'), 2)
         builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
@@ -100,8 +101,11 @@ def modification_generator(filtered_theo_df, mod_type: str):
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
     elif mod_type == "Amidase Product":
-        mod_mass = Decimal('-408.1744')
+        mod_mass = Decimal('-480.1955')
         mod_name = "(Amidase Product)"
+    elif mod_type == "Lactyl":
+        mod_mass = Decimal('-408.1744')
+        mod_name = "(Lactyl)"
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
 
