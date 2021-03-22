@@ -45,7 +45,7 @@ def validate_theo_masses_df(theo_masses_df):
 
     if not isinstance(theo_masses_df, pd.DataFrame):
         raise('theo_masses_df must be a DataFrame.')
-    
+
     colnames = ['Structure', 'Monoisotopicmass']
 
     if theo_masses_df.columns.to_list()!=colnames:
