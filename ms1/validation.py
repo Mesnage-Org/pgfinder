@@ -66,7 +66,7 @@ def validate_enabled_mod_list(enabled_mod_list):
 
     if not isinstance(enabled_mod_list, list):
         raise('enabled_mod_list must be a list.')
-    
+
     allowed_mods = ['Sodium',
                     'Potassium',
                     'Anhydro',
