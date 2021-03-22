@@ -7,35 +7,35 @@ def validate_raw_data_df(raw_data_df):
         raise('raw_data_df must be a DataFrame.')
 
     colnames = ['ID', 
-                'xicStart', 
-                'xicEnd', 
-                'feature', 
-                'corrMax', 
-                'ionCount', 
-                'chargeOrder', 
-                'maxIsotopeCount', 
-                'rt', 
-                'mwMonoisotopic', 
-                'theo_mwMonoisotopic', 
-                'inferredStructure', 
+                'xicStart',
+                'xicEnd',
+                'feature',
+                'corrMax',
+                'ionCount',
+                'chargeOrder',
+                'maxIsotopeCount',
+                'rt',
+                'mwMonoisotopic',
+                'theo_mwMonoisotopic',
+                'inferredStructure',
                 'maxIntensity']
 
     if raw_data_df.columns.to_list()!=colnames:
         raise('raw_data_df column names are incorrect')
 
     #todo: maybe these can be relaxed - or maybe ranges needed?
-    coltypes = [np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('int64'), 
-                np.dtype('O'), 
-                np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
+    coltypes = [np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('int64'),
+                np.dtype('O'),
+                np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
                 np.dtype('int64')]
 
     if raw_data_df.dtypes.to_list()!=coltypes:
