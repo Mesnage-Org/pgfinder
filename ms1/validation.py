@@ -6,7 +6,7 @@ def validate_raw_data_df(raw_data_df):
     if not isinstance(raw_data_df, pd.DataFrame):
         raise('raw_data_df must be a DataFrame.')
 
-    colnames = ['ID', 
+    colnames = ['ID',
                 'xicStart',
                 'xicEnd',
                 'feature',
