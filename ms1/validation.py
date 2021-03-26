@@ -6,36 +6,36 @@ def validate_raw_data_df(raw_data_df):
     if not isinstance(raw_data_df, pd.DataFrame):
         raise('raw_data_df must be a DataFrame.')
 
-    colnames = ['ID', 
-                'xicStart', 
-                'xicEnd', 
-                'feature', 
-                'corrMax', 
-                'ionCount', 
-                'chargeOrder', 
-                'maxIsotopeCount', 
-                'rt', 
-                'mwMonoisotopic', 
-                'theo_mwMonoisotopic', 
-                'inferredStructure', 
+    colnames = ['ID',
+                'xicStart',
+                'xicEnd',
+                'feature',
+                'corrMax',
+                'ionCount',
+                'chargeOrder',
+                'maxIsotopeCount',
+                'rt',
+                'mwMonoisotopic',
+                'theo_mwMonoisotopic',
+                'inferredStructure',
                 'maxIntensity']
 
     if raw_data_df.columns.to_list()!=colnames:
         raise('raw_data_df column names are incorrect')
 
     #todo: maybe these can be relaxed - or maybe ranges needed?
-    coltypes = [np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('int64'), 
-                np.dtype('O'), 
-                np.dtype('int64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
-                np.dtype('float64'), 
+    coltypes = [np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('int64'),
+                np.dtype('O'),
+                np.dtype('int64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
+                np.dtype('float64'),
                 np.dtype('int64')]
 
     if raw_data_df.dtypes.to_list()!=coltypes:
@@ -45,7 +45,7 @@ def validate_theo_masses_df(theo_masses_df):
 
     if not isinstance(theo_masses_df, pd.DataFrame):
         raise('theo_masses_df must be a DataFrame.')
-    
+
     colnames = ['Structure', 'Monoisotopicmass']
 
     if theo_masses_df.columns.to_list()!=colnames:
@@ -66,7 +66,7 @@ def validate_enabled_mod_list(enabled_mod_list):
 
     if not isinstance(enabled_mod_list, list):
         raise('enabled_mod_list must be a list.')
-    
+
     allowed_mods = ['Sodium',
                     'Potassium',
                     'Anhydro',
