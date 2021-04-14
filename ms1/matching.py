@@ -366,15 +366,13 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-    print(master_list.shape)
+
     return cleaned_data_df
-    
-    # cleaned_data_df.to_csv(ftrs_filepath[:-5] + '(2x DeAc)' + '.csv', index=False)
-    # # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
-    # print(ftrs_filepath)
-    # #Raw matched data for debugging
-    # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
-    # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
+
+
+def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
+    write_location = save_filepath + '/' + filename + '.csv'
+    output_dataframe.to_csv(write_location)
 
 
 if __name__== "__main__":
@@ -388,4 +386,4 @@ if __name__== "__main__":
     results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
     pd.options.display.width = None
     print(results)
-    results.to_csv(ftrs_filepath[:-5] + ' Lactyl dimer test' + '.csv', index=False)
+    
