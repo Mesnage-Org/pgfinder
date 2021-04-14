@@ -344,9 +344,9 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_ms_data.ftrs"
-    # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
+    ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-pgfinder-Analysis\data\test_ms_data.ftrs"
+    # mq_filepath = r"G:\Shared drives\pgfinder Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
+    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-pgfinder-Analysis\data\test_masses.csv"
     raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
     mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
