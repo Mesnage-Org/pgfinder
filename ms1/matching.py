@@ -244,10 +244,11 @@ def ftrs_reader(filePath: str):
 
 def maxquant_file_reader(filepath: str):
 
-    maxquant_df = pd.read_excel(filepath)
+    maxquant_df = pd.read_table(filepath, low_memory=False)
     maxquant_df['inferredStructure'] = np.nan
     maxquant_df['theo_mwMonoisotopic'] = np.nan
-    maxquant_df.rename(columns={'Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+    maxquant_df.reset_index(level=0, inplace=True)
+    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
                                inplace=True)
     focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'Retention length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
     cols_order = ['ID', 'rt', 'Retention length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
@@ -372,18 +373,21 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
 def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
     write_location = save_filepath + '/' + filename + '.csv'
-    output_dataframe.to_csv(write_location)
+    output_dataframe.to_csv(write_location, index=False)
 
 
 if __name__== "__main__":
 
     ftrs_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FTRS files\20210129_Cdiff_betaL_SM1.ftrs"
-    # mq_filepath = r"G:\Shared drives\MS1 Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
-    csv_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FASTA File C._diff steph minimal BETA ELIMINATED.csv"
-    raw_data = ftrs_reader(ftrs_filepath)
+    mq_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\maxquant_test_data.txt"
+    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
+    # raw_data = ftrs_reader(ftrs_filepath)
+    raw_data_mq = maxquant_file_reader(mq_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Potassium','Multimers_Lac']
-    results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
+    mod_test = ['Sodium','Potassium']
+    results = data_analysis(raw_data_mq, theo_masses, 0.5, mod_test, 10)
     pd.options.display.width = None
     print(results)
-    
+    save_fp = r"C:\Users\Hyperion\Documents\Code"
+    save_name = "mq_reader_test"
+    dataframe_to_csv(save_fp, save_name, results)
