@@ -1,11 +1,9 @@
-name: Python package
+name: Tests (pytest)
 
 on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
-  push:
 
 jobs:
   build:
