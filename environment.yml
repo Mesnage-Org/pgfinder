@@ -4,7 +4,7 @@ channels:
   - conda-forge
 dependencies:
   # install dependencies
-  - python
+  - python=3.7
   - pandas
   - sqlite=3.32.3
   - numpy
