@@ -2,28 +2,14 @@ import pandas as pd
 import sqlite3
 import numpy as np
 from decimal import *
-
+import sys
 
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
-    '''
-    Calculates ppm tolerance value
-    :param mw:
-    :param ppm_tol:
-    :return float:
-    '''
     return (mw * ppm_tol) / 1000000
 
 
 def filtered_theo(ftrs_df, theo_list, user_ppm: int):
-    '''
-    Generate list of observed structures from theoretical masses dataframe to reduce search space
-
-    :param ftrs_df:
-    :param theo_list:
-    :param user_ppm:
-    :return dataframe:
-    '''
 
     matched_df = matching(ftrs_df,theo_list,user_ppm) # Match theoretical structures to raw data to generate a list of observed structures
 
@@ -41,19 +27,13 @@ def filtered_theo(ftrs_df, theo_list, user_ppm: int):
     return exploded_df
 
 
-def multimer_builder(theo_list, multimer_type: int = 0):
-    '''
-    Generate multimers (dimers & trimers) from observed monomers
-    :param theo_list:
-    :param multimer_type:
-    :return dataframe:
-    '''
+def multimer_builder(theo_list):
+
 
     theo_mw = []
     theo_struct = []
-#Builder sub function - calculates multimer mass and name
 
-    def builder(name, mass, mult_num: int):
+    def builder(name,mass,mult_num:int):
         for idx, row in theo_list.iterrows():
             if len(row.Structure[:len(row.Structure)-2]) > 2: #Prevent dimer creation using just GM (input format is XX|n) X = letters n = number
                 mw = row.Monoisotopicmass
@@ -61,54 +41,20 @@ def multimer_builder(theo_list, multimer_type: int = 0):
                 donor = name
                 donor_mw = mass
                 theo_mw.append(Decimal(mw)+donor_mw+Decimal('-18.0106'))
-                theo_struct.append(acceptor+'-'+donor+'|'+str(mult_num))
+                theo_struct.append(donor+'-'+acceptor+'|'+str(mult_num))
 
-# Calls builder subfunction with different arguements based on multimer type selected
+    builder("GM-AEJA", Decimal('941.4075'), 2)
+    builder("GM-AEJ", Decimal('870.3704'), 2)
+    builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
+    builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
+    builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
 
-    # Calculates multimers based on peptide bond through side chain
-    if multimer_type == 0:
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-
-    # Calculates multimers based on glycosidic bond through dissachrides & peptide bonds through side chains
-    elif multimer_type == 1:
-        builder("GM-AE", Decimal('698.2858'), 2)
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-
-        builder("GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
-        builder("GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
-        builder("GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
-        builder("GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
-        builder("GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
-
-    # Calculates multimers based on Lactyl peptides (peptide bond via side chain but no dissachrides on muropeptides)
-    elif multimer_type == 2:
-        builder("Lac-AEJA",  Decimal('533.2333'), 2)
-        builder("Lac-AEJ",  Decimal('462.1962'), 2)
-        builder("Lac-AEJ-Lac-AEJ",  Decimal('906.3818'), 3)
-        builder("Lac-AEJ-Lac-AEJA",  Decimal('977.4189'), 3)
-        builder("Lac-AEJA-Lac-AEJA", Decimal('1048.4560'), 3)
-
-    # converts lists to dataframe
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=['Monoisotopicmass', 'Structure'])
 
     return multimer_df
 
 
 def modification_generator(filtered_theo_df, mod_type: str):
-    '''
-    Generates modified muropeptides (calculates new mass and add modification tag to structure name)
-    :param filtered_theo_df:
-    :param mod_type:
-    :return dataframe:
-    '''
 
     if mod_type == "Anhydro":
         mod_mass = Decimal('-20.0262')
@@ -133,18 +79,14 @@ def modification_generator(filtered_theo_df, mod_type: str):
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
     elif mod_type == "Amidase Product":
-        mod_mass = Decimal('-480.1955')
-        mod_name = "(Amidase Product)"
-    elif mod_type == "Lactyl":
         mod_mass = Decimal('-408.1744')
-        mod_name = "(Lactyl)"
+        mod_name = "(Amidase Product)"
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
-    # Calculate new mass of modified structure
+
     obs_theo_muropeptides_df['Monoisotopicmass'] = obs_theo_muropeptides_df['Monoisotopicmass'].map(
         lambda Monoisotopicmass: Decimal(Monoisotopicmass) + mod_mass)
 
-# add modification tags to structure name
     if mod_type == "Decay":
         obs_theo_muropeptides_df['Structure'] = obs_theo_muropeptides_df['Structure'].map(
             lambda Structure: Structure[1:len(Structure)])
@@ -162,30 +104,19 @@ def modification_generator(filtered_theo_df, mod_type: str):
     return obs_theo_muropeptides_df
 
 
-def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
-    '''
-    Match theoretical masses to observed masses within ppm tolerance.
-    :param ftrs_df:
-    :param matching_df:
-    :param set_ppm:
-    :return raw_data - dataframe:
-    '''
+def matching(ftrs_df: pd.DataFrame, matching_df: pd.read_csv, set_ppm: int):
 
     raw_data = ftrs_df.copy()
-    #Data validation
+
     if ('Monoisotopicmass' not in matching_df.columns) | ('Structure' not in matching_df.columns):
         print(
             'Header of csv files must have column named "Monoisotopic mass" and another column named "Structure"!!!  Make note of capitalized letters and spacing!!!!')
-# Generates dataframe with matched structures
+
     for x, row in raw_data.iterrows():
-        # Observed monoisotopic mass
         mw = row.mwMonoisotopic
-        # ppm tolerance value
         t_tol = calc_ppm_tolerance(mw, set_ppm)
-        # create dataframe with values from matching_df within tolerance to observed monoisotopic mass
         t_df = matching_df[(matching_df['Monoisotopicmass'] >= mw - t_tol) & (matching_df['Monoisotopicmass'] <= mw + t_tol)]
 
-        # Populate inferred structure and theo_mwMonoisotopic columns with matched values
         if not t_df.empty:
             raw_data.loc[x, "inferredStructure"] = ','.join(t_df.Structure.values)
             raw_data.loc[x, "theo_mwMonoisotopic"]= ','.join(map(str, t_df.Monoisotopicmass.values))
@@ -201,10 +132,10 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
     decay = Decimal('203.0793')
 
     if mass_to_clean == sodiated:
-        parent = "^GM|^M|^Lac"
+        parent = "^GM|^M"
         target = "^Na+"
     elif mass_to_clean == potassated:
-        parent = "^GM|^M|^Lac"
+        parent = "^GM|^M"
         target = "^K+"
     elif mass_to_clean == decay:
         parent = "^GM"
@@ -271,54 +202,30 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
 
 def ftrs_reader(filePath: str):
-    '''
-    Reads FTRS file from Byos
-    :param filePath:
-    :return dataframe:
-    '''
 
     with sqlite3.connect(filePath) as db:
 
         sql = "SELECT * FROM Features"
-        #Reads sql database into dataframe
+
         ff = pd.read_sql(sql, db)
-        # adds inferredStructure column
         ff['inferredStructure'] = np.nan
-        # adds theo_mwMonoisotopic column
         ff['theo_mwMonoisotopic'] = np.nan
-        # Renames columns to expected column heading required for data_analysis function
         ff.rename(columns={'Id': 'ID', 'apexRetentionTimeMinutes': 'rt', 'apexMwMonoisotopic': 'mwMonoisotopic', 'maxAveragineCorrelation': 'corrMax' }, inplace=True)
-        # Desired column order
         cols_order = ['ID', 'xicStart', 'xicEnd', 'feature', 'corrMax', 'ionCount', 'chargeOrder', 'maxIsotopeCount',
                       'rt', 'mwMonoisotopic','theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
-        # Reorder columns in dataframe to desired order.
         ff = ff[cols_order]
-
         return ff
 
 
 def maxquant_file_reader(filepath: str):
-    '''
-        Reads maxquant files and outputs data as a dataframe
 
-    :param filepath:
-    :return dataframe:
-    '''
-    maxquant_df = pd.read_table(filepath, low_memory=False) # reads file into dataframe
-    # adds inferredStructure column
+    maxquant_df = pd.read_excel(filepath)
     maxquant_df['inferredStructure'] = np.nan
-    # adds theo_mwMonoisotopic column
     maxquant_df['theo_mwMonoisotopic'] = np.nan
-    # insert dataframe index as a column
-    maxquant_df.reset_index(level=0, inplace=True)
-    # Renames columns to expected column heading required for data_analysis function
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+    maxquant_df.rename(columns={'Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
                                inplace=True)
-    # Keeps only essential columns, all extraneous columns are left out.
     focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'Retention length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
-    # Desired column order
     cols_order = ['ID', 'rt', 'Retention length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
-    # Reorder columns in dataframe to desired order.
     focused_maxquant_df = focused_maxquant_df[cols_order]
 
 
@@ -326,15 +233,7 @@ def maxquant_file_reader(filepath: str):
 
 
 def theo_masses_reader(filepath: str):
-
-    '''
-    Reads theoretical masses files (csv)
-    :param filepath:
-    :return dataframe:
-    '''
-    # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(filepath)
-
     return theo_masses_df
 
 
@@ -359,16 +258,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         theo_multimers_df = multimer_builder(obs_monomers_df)
         print("fitering theo multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df,user_ppm)
-    elif 'multimers_Glyco' in enabled_mod_list:
-        print("Building multimers from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, 1)
-        print("fitering theo multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
-    elif 'Multimers_Lac' in enabled_mod_list:
-        print("Building multimers_Lac from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, 2)
-        print("fitering theo multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
     else:
         obs_multimers_df = pd.DataFrame()
 
@@ -442,36 +331,26 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
-
+    print(master_list.shape)
     return cleaned_data_df
-
-
-def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
-    '''
-    Writes dataframe to csv file at desired file location
-    :param save_filepath:
-    :param filename:
-    :param output_dataframe:
-    :return csv file:
-    '''
-
-    #Combine save location and desired file name with correct formatting for output as csv file.
-    write_location = save_filepath + '/' + filename + '.csv'
-    output_dataframe.to_csv(write_location, index=False)
+    
+    # cleaned_data_df.to_csv(ftrs_filepath[:-5] + '(2x DeAc)' + '.csv', index=False)
+    # # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
+    # print(ftrs_filepath)
+    # #Raw matched data for debugging
+    # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
+    # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
 
 
 if __name__== "__main__":
 
-    ftrs_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FTRS files\20210129_Cdiff_betaL_SM1.ftrs"
-    mq_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\maxquant_test_data.txt"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
-    # raw_data = ftrs_reader(ftrs_filepath)
-    raw_data_mq = maxquant_file_reader(mq_filepath)
+    ftrs_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-pgfinder-Analysis\data\test_ms_data.ftrs"
+    # mq_filepath = r"G:\Shared drives\pgfinder Paper shared drive\Maxquant settings tests\Pseudomonas B1 T1 1K intensity Threshold.xlsx"
+    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-pgfinder-Analysis\data\test_masses.csv"
+    raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
-    results = data_analysis(raw_data_mq, theo_masses, 0.5, mod_test, 10)
+    mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
+    results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 5)
     pd.options.display.width = None
     print(results)
-    save_fp = r"C:\Users\Hyperion\Documents\Code"
-    save_name = "mq_reader_test"
-    dataframe_to_csv(save_fp, save_name, results)
+    results.to_csv(ftrs_filepath[:-5] + ' 5ppm test' + '.csv', index=False)
