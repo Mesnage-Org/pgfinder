@@ -9,7 +9,7 @@ def process_maxquant_raw_results(fp):
     mq_df_2.rename(columns={list(mq_df_2)[1]: 'ID'},inplace=True)
     mq_df_2.to_excel('mzXML MQ E coli WT 1 Rep 1.xlsx')
 
-filepath = r"C:\Users\ankur\Documents\Code\MS1 Matching\Mass-Spec-MS1-Analysis\Thermo MQ results E coli WT 1 Rep 1.xlsx"
+filepath = r"C:\Users\ankur\Documents\Code\pgfinder Matching\Mass-Spec-pgfinder-Analysis\Thermo MQ results E coli WT 1 Rep 1.xlsx"
 
 def maxquant_file_reader(filepath):
 

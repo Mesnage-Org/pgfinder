@@ -1,4 +1,4 @@
-import ms1.matching as matching
+import pgfinder.matching as matching
 
 csv_filepath = "data/test_masses.csv"
 ftrs_filepath = "data/test_ms_data.ftrs"
