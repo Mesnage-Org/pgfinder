@@ -77,6 +77,7 @@ def validate_enabled_mod_list(enabled_mod_list):
                     'Amidation',
                     'Amidase',
                     'Double_Anh',
+                    'Multimers',
                     'multimers_Glyco',
                     'Multimers_Lac']
 
