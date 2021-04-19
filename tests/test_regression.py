@@ -1,6 +1,6 @@
 import pandas as pd
-import pgfinder.matching as matching
-import pgfinder.validation as validation
+import ms1.matching as matching
+import ms1.validation as validation
 
 def test_matching_baseline():
     '''Test that output of the major function in the module is unchanged.'''
