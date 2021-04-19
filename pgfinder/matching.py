@@ -27,11 +27,7 @@ def filtered_theo(ftrs_df, theo_list, user_ppm: int):
     return exploded_df
 
 
-<<<<<<< HEAD:pgfinder/matching.py
 def multimer_builder(theo_list):
-=======
-def multimer_builder(theo_list, multimer_type: int = 0):
->>>>>>> parent of 0fda39b (Doc strings):ms1/matching.py
 
 
     theo_mw = []
@@ -45,7 +41,6 @@ def multimer_builder(theo_list, multimer_type: int = 0):
                 donor = name
                 donor_mw = mass
                 theo_mw.append(Decimal(mw)+donor_mw+Decimal('-18.0106'))
-<<<<<<< HEAD:pgfinder/matching.py
                 theo_struct.append(donor+'-'+acceptor+'|'+str(mult_num))
 
     builder("GM-AEJA", Decimal('941.4075'), 2)
@@ -53,37 +48,6 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
     builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
     builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-=======
-                theo_struct.append(acceptor+'-'+donor+'|'+str(mult_num))
-
-    if multimer_type == 0:
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-
-    elif multimer_type == 1:
-        builder("GM-AE", Decimal('698.2858'), 2)
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-
-        builder("GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
-        builder("GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
-        builder("GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
-        builder("GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
-        builder("GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
-
-    elif multimer_type == 2:
-        builder("Lac-AEJA",  Decimal('533.2333'), 2)
-        builder("Lac-AEJ",  Decimal('462.1962'), 2)
-        builder("Lac-AEJ-Lac-AEJ",  Decimal('906.3818'), 3)
-        builder("Lac-AEJ-Lac-AEJA",  Decimal('977.4189'), 3)
-        builder("Lac-AEJA-Lac-AEJA", Decimal('1048.4560'), 3)
->>>>>>> parent of 0fda39b (Doc strings):ms1/matching.py
 
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=['Monoisotopicmass', 'Structure'])
 
@@ -255,18 +219,10 @@ def ftrs_reader(filePath: str):
 
 def maxquant_file_reader(filepath: str):
 
-<<<<<<< HEAD:pgfinder/matching.py
     maxquant_df = pd.read_excel(filepath)
     maxquant_df['inferredStructure'] = np.nan
     maxquant_df['theo_mwMonoisotopic'] = np.nan
     maxquant_df.rename(columns={'Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
-=======
-    maxquant_df = pd.read_table(filepath, low_memory=False)
-    maxquant_df['inferredStructure'] = np.nan
-    maxquant_df['theo_mwMonoisotopic'] = np.nan
-    maxquant_df.reset_index(level=0, inplace=True)
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
->>>>>>> parent of 0fda39b (Doc strings):ms1/matching.py
                                inplace=True)
     focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'Retention length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
     cols_order = ['ID', 'rt', 'Retention length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
@@ -377,7 +333,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
     print(master_list.shape)
     return cleaned_data_df
-<<<<<<< HEAD:pgfinder/matching.py
     
     # cleaned_data_df.to_csv(ftrs_filepath[:-5] + '(2x DeAc)' + '.csv', index=False)
     # # cleaned_data_df.to_excel(mq_filepath + ' Matched' + '.xlsx' , index=False)
@@ -385,13 +340,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     # #Raw matched data for debugging
     # # ff.sort_values('inferredStructure', inplace=True, ascending=True)
     # # ff.to_csv(ftrs_filePath + 'matched' + '.csv', index=False)
-=======
-
-
-def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
-    write_location = save_filepath + '/' + filename + '.csv'
-    output_dataframe.to_csv(write_location, index=False)
->>>>>>> parent of 0fda39b (Doc strings):ms1/matching.py
 
 
 if __name__== "__main__":
@@ -401,13 +349,8 @@ if __name__== "__main__":
     csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-pgfinder-Analysis\data\test_masses.csv"
     raw_data = ftrs_reader(ftrs_filepath)
     theo_masses = theo_masses_reader(csv_filepath)
-<<<<<<< HEAD:pgfinder/matching.py
     mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','Multimers']
     results = data_analysis(raw_data, theo_masses, 0.5, mod_test, 5)
-=======
-    mod_test = ['Sodium','Potassium']
-    results = data_analysis(raw_data_mq, theo_masses, 0.5, mod_test, 10)
->>>>>>> parent of 0fda39b (Doc strings):ms1/matching.py
     pd.options.display.width = None
     print(results)
     results.to_csv(ftrs_filepath[:-5] + ' 5ppm test' + '.csv', index=False)
