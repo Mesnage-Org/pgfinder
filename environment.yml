@@ -1,4 +1,4 @@
-name: pgfinder
+name: ms1
 channels:
   - defaults
   - conda-forge

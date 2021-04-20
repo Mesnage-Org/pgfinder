@@ -1,5 +1,5 @@
-import pgfinder.matching as matching
-import pgfinder.validation as validation
+import ms1.matching as matching
+import ms1.validation as validation
 
 csv_filepath = "data/test_masses.csv"
 ftrs_filepath = "data/test_ms_data.ftrs"
