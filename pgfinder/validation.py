@@ -77,7 +77,9 @@ def validate_enabled_mod_list(enabled_mod_list):
                     'Amidation',
                     'Amidase',
                     'Double_Anh',
-                    'Multimers']
+                    'Multimers',
+                    'multimers_Glyco',
+                    'Multimers_Lac']
 
     if not all(item in allowed_mods for item in enabled_mod_list):
         raise('Requested modification(s) not recognised.')
