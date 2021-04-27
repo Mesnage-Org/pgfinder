@@ -312,7 +312,7 @@ def maxquant_file_reader(filepath: str):
     # insert dataframe index as a column
     maxquant_df.reset_index(level=0, inplace=True)
     # Renames columns to expected column heading required for data_analysis function
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Rention length': 'rt_length','Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Retention length': 'rt_length','Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
                                inplace=True)
     # Keeps only essential columns, all extraneous columns are left out.
     focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'rt_length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
