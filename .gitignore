@@ -13,3 +13,6 @@ eg_output.csv
 #IDE
 .vscode/
 .idea/
+data/test_ms_data 10ppm test.csv
+data/test_ms_data 5ppm test.csv
+data/test_ms_data.ftrs
