@@ -7,11 +7,11 @@ def validate_raw_data_df(raw_data_df):
         raise('raw_data_df must be a DataFrame.')
 
     colnames = ['ID',
-                'rt', 
-                'rt_length', 
-                'mwMonoisotopic', 
+                'rt',
+                'rt_length',
+                'mwMonoisotopic',
                 'theo_mwMonoisotopic',
-                'inferredStructure', 
+                'inferredStructure',
                 'maxIntensity']
 
     if raw_data_df.columns.to_list()!=colnames:
