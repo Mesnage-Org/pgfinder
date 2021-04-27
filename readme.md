@@ -7,8 +7,9 @@
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With conda installed, run the following commands to create the virtual environment and activate it:
 
 ```
-conda env create -f environment.yml
+conda create --force -n pgfinder python=3.7
 conda activate pgfinder
+pip install -r requirements.txt
 ```
 ## Usage
 
