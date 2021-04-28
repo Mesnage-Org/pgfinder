@@ -7,14 +7,8 @@ def validate_raw_data_df(raw_data_df):
         raise('raw_data_df must be a DataFrame.')
 
     colnames = ['ID',
-                'xicStart',
-                'xicEnd',
-                'feature',
-                'corrMax',
-                'ionCount',
-                'chargeOrder',
-                'maxIsotopeCount',
                 'rt',
+                'rt_length',
                 'mwMonoisotopic',
                 'theo_mwMonoisotopic',
                 'inferredStructure',
@@ -27,16 +21,10 @@ def validate_raw_data_df(raw_data_df):
     coltypes = [np.dtype('int64'),
                 np.dtype('float64'),
                 np.dtype('float64'),
-                np.dtype('int64'),
-                np.dtype('float64'),
-                np.dtype('int64'),
-                np.dtype('O'),
-                np.dtype('int64'),
                 np.dtype('float64'),
                 np.dtype('float64'),
                 np.dtype('float64'),
-                np.dtype('float64'),
-                np.dtype('int64')]
+                np.dtype('float64')]
 
     if raw_data_df.dtypes.to_list()!=coltypes:
         raise('raw_data_df column data types are incorrect')

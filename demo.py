@@ -1,10 +1,10 @@
 import pgfinder.matching as matching
 import pgfinder.validation as validation
 
-csv_filepath = "data/test_masses.csv"
-ftrs_filepath = "data/test_ms_data.ftrs"
+csv_filepath = "data/e_coli_monomers_masses.csv"
+mq_filepath = "data/maxquant_test_data.txt"
 
-raw_data = matching.ftrs_reader(ftrs_filepath)
+raw_data = matching.maxquant_file_reader(mq_filepath)
 validation.validate_raw_data_df(raw_data)
 
 theo_masses = matching.theo_masses_reader(csv_filepath)

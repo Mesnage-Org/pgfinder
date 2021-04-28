@@ -301,7 +301,7 @@ def maxquant_file_reader(filepath: str):
     '''
         Reads maxquant files and outputs data as a dataframe
 
-    :param filepath:
+    :param filepath (file should be a text file):
     :return dataframe:
     '''
     maxquant_df = pd.read_table(filepath, low_memory=False) # reads file into dataframe
@@ -312,12 +312,12 @@ def maxquant_file_reader(filepath: str):
     # insert dataframe index as a column
     maxquant_df.reset_index(level=0, inplace=True)
     # Renames columns to expected column heading required for data_analysis function
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Retention length': 'rt_length','Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
                                inplace=True)
     # Keeps only essential columns, all extraneous columns are left out.
-    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'Retention length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
+    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'rt_length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
     # Desired column order
-    cols_order = ['ID', 'rt', 'Retention length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
+    cols_order = ['ID', 'rt', 'rt_length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
     # Reorder columns in dataframe to desired order.
     focused_maxquant_df = focused_maxquant_df[cols_order]
 
@@ -460,18 +460,3 @@ def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.Data
     output_dataframe.to_csv(write_location, index=False)
 
 
-if __name__== "__main__":
-
-    ftrs_filepath = r"G:\My Drive\PeptidoGlycan_DATA\2021-02 Pasteur (D. Lyras C. diff beta-eliminated)\FTRS files\20210129_Cdiff_betaL_SM1.ftrs"
-    mq_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\maxquant_test_data.txt"
-    csv_filepath = r"C:\Users\Hyperion\Documents\GitHub\Mass-Spec-MS1-Analysis\data\test_masses.csv"
-    # raw_data = ftrs_reader(ftrs_filepath)
-    raw_data_mq = maxquant_file_reader(mq_filepath)
-    theo_masses = theo_masses_reader(csv_filepath)
-    mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
-    results = data_analysis(raw_data_mq, theo_masses, 0.5, mod_test, 10)
-    pd.options.display.width = None
-    print(results)
-    save_fp = r"C:\Users\Hyperion\Documents\Code"
-    save_name = "mq_reader_test"
-    dataframe_to_csv(save_fp, save_name, results)
