@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from pgfinder import utils
+
 def validate_raw_data_df(raw_data_df):
 
     if not isinstance(raw_data_df, pd.DataFrame):
@@ -55,19 +57,7 @@ def validate_enabled_mod_list(enabled_mod_list):
     if not isinstance(enabled_mod_list, list):
         raise('enabled_mod_list must be a list.')
 
-    allowed_mods = ['Sodium',
-                    'Potassium',
-                    'Anhydro',
-                    'DeAc',
-                    'Deacetyl_Anhydro',
-                    'Nude',
-                    'Decay',
-                    'Amidation',
-                    'Amidase',
-                    'Double_Anh',
-                    'Multimers',
-                    'multimers_Glyco',
-                    'Multimers_Lac']
+    allowed_mods = utils.allowed_modifications()
 
     if not all(item in allowed_mods for item in enabled_mod_list):
         raise('Requested modification(s) not recognised.')
