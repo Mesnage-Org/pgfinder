@@ -1,6 +1,6 @@
 import pgfinder.matching as matching
 
-csv_filepath = "data/e_coli_monomers_masses.csv"
+csv_filepath = "data/masses/e_coli_monomer_masses.csv"
 mq_file_name = "data/maxquant_test_data.txt"
 
 raw_data = matching.maxquant_file_reader(mq_file_name)

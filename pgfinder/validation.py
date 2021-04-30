@@ -5,7 +5,7 @@ import pandas as pd
 
 def allowed_modifications():
     '''
-    Returns allowable modifications stored in a .csv config file. .csv is chosen for consistency of data storage over the project.    
+    Returns allowable modifications stored in a `.csv` config file. `.csv` is chosen for consistency of data storage over the project.    
     :return list:
     '''
     data = pkgutil.get_data(__name__, "config/allowed_modifications.csv")    
