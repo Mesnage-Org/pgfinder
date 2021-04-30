@@ -1,4 +1,4 @@
-from pgfinder import vaildation
+from pgfinder import validation
 
 def test_allowed_modifications():
-    assert(isinstance(vaildation.allowed_modifications(), list))
+    assert(isinstance(validation.allowed_modifications(), list))
