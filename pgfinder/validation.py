@@ -1,7 +1,16 @@
+import io
+import pkgutil
 import numpy as np
 import pandas as pd
 
-from pgfinder import utils
+def allowed_modifications():
+    '''
+    Returns allowable modifications stored in a .csv config file. .csv is chosen for consistency of data storage over the project.    
+    :return list:
+    '''
+    data = pkgutil.get_data(__name__, "config/allowed_modifications.csv")    
+    allowed_modifications_df  = pd.read_csv(io.BytesIO(data), header=None)
+    return allowed_modifications_df[0].tolist()
 
 def validate_raw_data_df(raw_data_df):
 
@@ -57,7 +66,7 @@ def validate_enabled_mod_list(enabled_mod_list):
     if not isinstance(enabled_mod_list, list):
         raise('enabled_mod_list must be a list.')
 
-    allowed_mods = utils.allowed_modifications()
+    allowed_mods = allowed_modifications()
 
     if not all(item in allowed_mods for item in enabled_mod_list):
         raise('Requested modification(s) not recognised.')
