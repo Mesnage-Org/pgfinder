@@ -4,7 +4,7 @@ import pgfinder.validation as validation
 
 def test_matching_baseline():
     '''Test that output of the major function in the module is unchanged.'''
-    masses_file_name = "data/e_coli_monomers_masses.csv"
+    masses_file_name = "data/masses/e_coli_monomer_masses.csv"
     mq_file_name = "data/maxquant_test_data.txt"
 
     raw_data = matching.maxquant_file_reader(mq_file_name)
