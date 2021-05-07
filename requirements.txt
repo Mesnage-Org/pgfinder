@@ -1,5 +1,5 @@
 git+https://github.com/Mesnage-Org/PGFinder.git
-hide_code>=0.6.0
+hide_code>=0.5.2
 ipysheet>=0.4.4
 ipywidgets>=7.6.3
 jupyterlab>=3.0.15
