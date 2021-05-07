@@ -2,3 +2,5 @@ jupyter nbextension install hide_code --py --sys-prefix
 jupyter nbextension enable hide_code --py --sys-prefix
 jupyter serverextension enable hide_code --py --sys-prefix
 jupyter serverextension enable --sys-prefix hide_code
+
+jupyter nbextension enable hide_code/main
