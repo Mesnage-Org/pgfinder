@@ -1,8 +1,0 @@
-pandas
-pysqlite3
-numpy
-jupyterlab
-ipywidgets
-ipysheet
-openpyxl
-hide_code
