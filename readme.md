@@ -11,8 +11,30 @@ Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also wor
 ```
 conda create --force -n pgfinder python=3.7
 conda activate pgfinder
-pip install -r requirements.txt
 ```
+
+### Normal Use
+
+```
+pip install git+https://github.com/Mesnage-Org/PGFinder.git
+```
+
+### Development
+
+Clone this repository:
+
+```
+git clone https://github.com/Mesnage-Org/PGFinder.git
+cd pgfinder
+```
+
+Install for development:
+
+```
+pip install -e .
+```
+
+You're fine to use a different virtual environment, if you want!
 ## Usage
 
 ```
