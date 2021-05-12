@@ -19,26 +19,13 @@ def validate_raw_data_df(raw_data_df):
 
     colnames = ['ID',
                 'rt',
-                'rt_length',
                 'mwMonoisotopic',
                 'theo_mwMonoisotopic',
                 'inferredStructure',
                 'maxIntensity']
 
-    if raw_data_df.columns.to_list()!=colnames:
+    if not set(colnames).issubset(set(raw_data_df.columns.to_list())):
         raise('raw_data_df column names are incorrect')
-
-    #todo: maybe these can be relaxed - or maybe ranges needed?
-    coltypes = [np.dtype('int64'),
-                np.dtype('float64'),
-                np.dtype('float64'),
-                np.dtype('float64'),
-                np.dtype('float64'),
-                np.dtype('float64'),
-                np.dtype('float64')]
-
-    if raw_data_df.dtypes.to_list()!=coltypes:
-        raise ValueError('raw_data_df column data types are incorrect')
 
 def validate_theo_masses_df(theo_masses_df):
 
