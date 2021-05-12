@@ -3,3 +3,4 @@ hide_code>=0.5.2
 ipysheet>=0.4.4
 ipywidgets>=7.6.3
 jupyterlab>=3.0.15
+jupyter_contrib_nbextensions
