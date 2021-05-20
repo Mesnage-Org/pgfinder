@@ -16,6 +16,10 @@ def validate_raw_data_df(raw_data_df):
 
     if not isinstance(raw_data_df, pd.DataFrame):
         raise ValueError('raw_data_df must be a DataFrame.')
+    
+    if isinstance(raw_data_df, pd.DataFrame):
+        print("File is okay")
+
 
     colnames = ['ID',
                 'rt',
@@ -23,6 +27,7 @@ def validate_raw_data_df(raw_data_df):
                 'theo_mwMonoisotopic',
                 'inferredStructure',
                 'maxIntensity']
+
 
     if not set(colnames).issubset(set(raw_data_df.columns.to_list())):
         raise('raw_data_df column names are incorrect')
