@@ -116,6 +116,8 @@ def modification_generator(filtered_theo_df, mod_type: str):
         mod_mass = Decimal('-40.0524')
     elif mod_type == "Deacetyl":
         mod_mass = Decimal('-42.0105')
+    elif mod_type == "O-Acetylated":
+        mod_mass = Decimal('42.0105')
     elif mod_type == "Deacetyl-Anhydro":
         mod_mass = Decimal('-62.0368')
     elif mod_type == "Decay":
@@ -196,10 +198,12 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
 
 def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
+    # Mass values for adducts
     sodiated = Decimal('21.9819')
     potassated = Decimal('37.9559')
     decay = Decimal('203.0793')
-
+    
+    # Selector substrings for generating parent and adduct dataframes
     if mass_to_clean == sodiated:
         parent = "^GM|^M|^Lac"
         target = "^Na+"
@@ -210,12 +214,18 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
         parent = "^GM"
         target = "^M"
 
+    # Generate parent dataframe - contains parents
     parent_muropeptide_df = ftrs_df[
-        ftrs_df['inferredStructure'].str.contains(parent, na=False)]  # Get all non salt adducted muropeptide
+        ftrs_df['inferredStructure'].str.contains(parent, na=False)] 
+    
+    # Generate adduct dataframe - contains adducts 
     adducted_muropeptide_df = ftrs_df[
-        ftrs_df['inferredStructure'].str.contains(target, na=False)]  # Get all salt adducted muropetides
+        ftrs_df['inferredStructure'].str.contains(target, na=False)]  
+    
+    # Generate copy of rawdata dataframe
     consolidated_decay_df = ftrs_df.copy()
 
+    # Status updates (prints to console)
     if parent_muropeptide_df.empty:
         print("No ", parent ," muropeptides found")
     if adducted_muropeptide_df.empty:
@@ -227,27 +237,35 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
     elif mass_to_clean == decay:
         print("Processing", adducted_muropeptide_df.size, "in source decay products")
 
+    # Consolidate adduct intensity with parent ions intensity
     for y, row in parent_muropeptide_df.iterrows():
+        # Get retention time value from row
         rt = row.rt
+        # Get theoretical monoisotopic mass value from row as list of values
         intact_mw = list(str(row.theo_mwMonoisotopic).split(','))
+
         # Work out rt window
         upper_lim_rt = rt + time_delta
         lower_lim_rt = rt - time_delta
-
+        
+        # Get all adduct enteries within rt window
         ins_constrained_df = adducted_muropeptide_df[adducted_muropeptide_df['rt'].between(lower_lim_rt, upper_lim_rt,
-                                                                                           inclusive=True)]  # Get all enteries within rt window
+                                                                                           inclusive=True)]  
 
+        
         if not ins_constrained_df.empty:
 
             for z, ins_row in ins_constrained_df.iterrows():
                 ins_mw = list(str(ins_row.theo_mwMonoisotopic).split(","))
-
+                
+                # Compare parent masses to adduct masses
                 for mass in intact_mw:
                     for mass_2 in ins_mw:
 
                         mass_delta = abs(
                             Decimal(mass).quantize(Decimal('0.00001')) - Decimal(mass_2).quantize(Decimal('0.00001')))
-
+                        
+                        # Consolidate intensities
                         if mass_delta == mass_to_clean:
 
                             consolidated_decay_df.sort_values('ID', inplace=True, ascending=True)
@@ -304,7 +322,9 @@ def maxquant_file_reader(filepath: str):
     :param filepath (file should be a text file):
     :return dataframe:
     '''
-    maxquant_df = pd.read_table(filepath, low_memory=False) # reads file into dataframe
+
+    # reads file into dataframe
+    maxquant_df = pd.read_table(filepath, low_memory=False)
     # adds inferredStructure column
     maxquant_df['inferredStructure'] = np.nan
     # adds theo_mwMonoisotopic column
@@ -312,12 +332,14 @@ def maxquant_file_reader(filepath: str):
     # insert dataframe index as a column
     maxquant_df.reset_index(level=0, inplace=True)
     # Renames columns to expected column heading required for data_analysis function
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Retention length': 'rt_length','Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
+    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Retention length': 'rt_length',
+                                'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
                                inplace=True)
     # Keeps only essential columns, all extraneous columns are left out.
-    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'rt_length', 'maxIntensity', 'inferredStructure', 'theo_mwMonoisotopic']]
+    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'rt_length', 'maxIntensity', 'inferredStructure',
+                                       'theo_mwMonoisotopic']]
     # Desired column order
-    cols_order = ['ID', 'rt', 'rt_length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
+    cols_order = ['ID', 'rt', 'rt_length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity']
     # Reorder columns in dataframe to desired order.
     focused_maxquant_df = focused_maxquant_df[cols_order]
 
@@ -402,6 +424,10 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
     else:
         deac_anhy_df = pd.DataFrame()
+    if 'O-acetylation' in enabled_mod_list:
+        oacetyl_df = modification_generator(obs_theo_df, "O-acetylated")
+    else:
+        oacetyl_df = pd.DataFrame()
 
     if 'Nude' in enabled_mod_list:
         nude_df = modification_generator(obs_theo_df, "Nude")
@@ -431,7 +457,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
 
     master_frame = [obs_theo_df, adducts_potassium_df, adducts_sodium_df, anhydro_df, deac_anhy_df, deacetyl_df,
-                    decay_df, nude_df, ami_df, deglyco_df, double_Anhydro_df]
+                    oacetyl_df, decay_df, nude_df, ami_df, deglyco_df, double_Anhydro_df]
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
     print("Matching")
@@ -444,7 +470,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
 
     return cleaned_data_df
-
 
 def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
     '''
