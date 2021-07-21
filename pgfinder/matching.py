@@ -249,8 +249,7 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
         lower_lim_rt = rt - time_delta
         
         # Get all adduct enteries within rt window
-        ins_constrained_df = adducted_muropeptide_df[adducted_muropeptide_df['rt'].between(lower_lim_rt, upper_lim_rt,
-                                                                                           inclusive=True)]  
+        ins_constrained_df = adducted_muropeptide_df[adducted_muropeptide_df['rt'].between(lower_lim_rt, upper_lim_rt,inclusive='both')]  
 
         
         if not ins_constrained_df.empty:
