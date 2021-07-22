@@ -150,7 +150,6 @@ def modification_generator(filtered_theo_df, mod_type: str):
     if mod_type == "Decay":
         obs_theo_muropeptides_df['Structure'] = obs_theo_muropeptides_df['Structure'].map(
             lambda Structure: Structure[1:len(Structure)])
-
     elif mod_type == "Sodium" or mod_type == "Potassium":
         obs_theo_muropeptides_df['Structure'] = obs_theo_muropeptides_df['Structure'].map(
             lambda Structure: mod_name + " " + Structure)
@@ -249,7 +248,8 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
         lower_lim_rt = rt - time_delta
         
         # Get all adduct enteries within rt window
-        ins_constrained_df = adducted_muropeptide_df[adducted_muropeptide_df['rt'].between(lower_lim_rt, upper_lim_rt,inclusive='both')]  
+        ins_constrained_df = adducted_muropeptide_df[adducted_muropeptide_df['rt'].between(lower_lim_rt, upper_lim_rt,
+                                                                                           inclusive='both')]
 
         
         if not ins_constrained_df.empty:
@@ -423,8 +423,8 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
     else:
         deac_anhy_df = pd.DataFrame()
-    if 'O-acetylation' in enabled_mod_list:
-        oacetyl_df = modification_generator(obs_theo_df, "O-acetylated")
+    if 'O-Acetylated' in enabled_mod_list:
+        oacetyl_df = modification_generator(obs_theo_df, "O-Acetylated")
     else:
         oacetyl_df = pd.DataFrame()
 
