@@ -67,26 +67,19 @@ def multimer_builder(theo_list, multimer_type: int = 0):
 
     # Calculates multimers based on peptide bond through side chain
     if multimer_type == 0:
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
+        builder("=GM-AEJA", Decimal('941.4075'), 2)
+        builder("=GM-AEJ", Decimal('870.3704'), 2)
+        builder("=GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
+        builder("=GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
+        builder("=GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
 
-    # Calculates multimers based on glycosidic bond through dissachrides & peptide bonds through side chains
+    # Calculates multimers based on glycosidic bond through dissachrides
     elif multimer_type == 1:
-        builder("GM-AE", Decimal('698.2858'), 2)
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
-
-        builder("GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
-        builder("GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
-        builder("GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
-        builder("GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
-        builder("GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
+        builder("~GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
+        builder("~GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
+        builder("~GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
+        builder("~GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
+        builder("~GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
 
     # Calculates multimers based on Lactyl peptides (peptide bond via side chain but no dissachrides on muropeptides)
     elif multimer_type == 2:
