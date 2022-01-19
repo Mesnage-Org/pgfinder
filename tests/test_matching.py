@@ -43,4 +43,5 @@ def test_filtered_theo(raw_data, theo_masses, ppm):
     obs_monomers_df = matching.filtered_theo(raw_data, theo_masses, ppm)
 
 def test_filtered_theo_no_match(raw_data_no_match, theo_masses, ppm):
-    obs_monomers_df = matching.filtered_theo(raw_data_no_match, theo_masses, ppm)
+    with pytest.raises(ValueError, match='No matches were found.'):
+        obs_monomers_df = matching.filtered_theo(raw_data_no_match, theo_masses, ppm)
