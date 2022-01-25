@@ -33,7 +33,7 @@ def filtered_theo(ftrs_df, theo_list, user_ppm: int):
     #Explode dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
     cols = ['theo_mwMonoisotopic', 'inferredStructure']
     if filtered_df.empty == True:
-        raise ValueError('No matches were found.')
+        raise ValueError('The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance.')
     exploded_df = pd.concat([filtered_df[col].str.split(',', expand=True) for col in cols], axis=1, keys=cols).stack().reset_index(level=1, drop=True)
     exploded_df.drop_duplicates(subset='inferredStructure', keep='first', inplace=True)
 
