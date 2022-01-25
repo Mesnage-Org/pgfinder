@@ -18,7 +18,7 @@ def mq_file_name():
 
 @pytest.fixture
 def mq_baseline_df():
-    return pd.read_csv("data/baseline_output.csv", index_col=0)
+    return pd.read_csv("data/baseline_output_mq.csv", index_col=0)
 
 def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_baseline_df):
     '''Test that output of the major function in the module is unchanged.'''
