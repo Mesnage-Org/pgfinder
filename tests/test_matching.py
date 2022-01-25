@@ -51,5 +51,5 @@ def test_filtered_theo(raw_data, theo_masses, ppm):
 
 
 def test_filtered_theo_no_match(raw_data_no_match, theo_masses, ppm):
-    with pytest.raises(ValueError, match="No matches were found."):
+    with pytest.raises(ValueError, match='The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance.'):
         matching.filtered_theo(raw_data_no_match, theo_masses, ppm)
