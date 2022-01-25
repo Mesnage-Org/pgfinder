@@ -8,5 +8,6 @@ setup(
     packages=find_packages(),
     install_requires=['numpy>=1.20.3',
                       'pandas>=1.2.4',
-                      'pysqlite3'],
+                      'pysqlite3',
+                      'pyyaml'],
 )

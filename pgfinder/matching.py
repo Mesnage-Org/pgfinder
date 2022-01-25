@@ -1,9 +1,51 @@
+import datetime
+import os
 import pandas as pd
 import sqlite3
 import numpy as np
+import yaml
 from decimal import *
+import pgfinder.validation as validation
 
+def match(file: str, masses_file: str, rt_window: float, modifications: list, ppm: int) -> pd.DataFrame:
+    
+    '''
+    Matches a list of experimentally determined masses to a 
+    list of theoretical masses we expect to find.
+    :param file: Location of experimental masses file.
+    :param masses_file: Location of theoretical masses database.
+    :param rt_window: Retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta).
+    :param modifications: Modifications to apply to theoretical masses when searching.
+    :param ppm: ppm tolerance value.
+    '''
 
+    metadata = {
+        'file': file,
+        'masses_file': masses_file,
+        'rt_window': rt_window,
+        'modifications': modifications,
+        'ppm': ppm
+    }
+
+    # Load data
+    try: 
+        raw_data = maxquant_file_reader(file)
+    except:
+        raw_data = ftrs_reader(file)
+    validation.validate_raw_data_df(raw_data)
+
+    # Load masses database
+    theo_masses = theo_masses_reader(masses_file)
+    validation.validate_theo_masses_df(theo_masses)
+
+    # Validate modifcations list
+    validation.validate_enabled_mod_list(modifications)
+
+    results = data_analysis(raw_data, theo_masses, rt_window, modifications, ppm)
+
+    results.attrs['metadata'] = metadata
+
+    return results
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     '''
@@ -472,7 +514,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
     return cleaned_data_df
 
-def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.DataFrame ):
+def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.DataFrame):
     '''
     Writes dataframe to csv file at desired file location
     :param save_filepath:
@@ -485,4 +527,19 @@ def dataframe_to_csv(save_filepath: str, filename:str ,output_dataframe: pd.Data
     write_location = save_filepath + '/' + filename + '.csv'
     output_dataframe.to_csv(write_location, index=False)
 
+def dataframe_to_csv_metadata(save_filepath: str, output_dataframe: pd.DataFrame):
+    write_location = os.path.join(save_filepath, default_filename())
 
+    metadata_string = yaml.dump(output_dataframe.attrs['metadata'])
+
+    #output_dataframe[metadata_string.replace("\n", " ")] = ''
+
+    output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
+
+    output_dataframe.to_csv(write_location, index=False)
+
+def default_filename():
+    now = datetime.datetime.now()
+    date_time = now.strftime('%Y-%m-%d_%H-%M-%S')
+    filename = 'results_' + date_time + '.csv'
+    return filename
