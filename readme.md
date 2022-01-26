@@ -49,12 +49,12 @@ To run tests:
 pytest
 ```
 
-The tests check output against an [expected baseline](data/baseline_output.csv). To recreate this (e.g. in response to improvements to the scientific "correctness" of the code ouput), use:
+The tests check output against an expected baseline for [Maxquant](data/baseline_output.csv) or [FTRS](data/baseline_output_ftrs.csv). To recreate this (e.g. in response to improvements to the scientific "correctness" of the code ouput), use:
 
 ```
 python make_baseline.py
 ```
 
-and replace the exisiting file.
+and replace the existing file.
 
 **This software is licensed as specified by the [GPL License](COPYING) and [LGPL License](COPYING.LESSER).**
