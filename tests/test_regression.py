@@ -9,7 +9,7 @@ def masses_file_name():
 
 @pytest.fixture
 def mod_test():
-    '''Modifications used in regression testing.'''
+    """Modifications used in regression testing."""
     return ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
 
 @pytest.fixture
@@ -44,7 +44,7 @@ def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_basel
     pd.testing.assert_frame_equal(output_df, mq_baseline_df)
 
 def test_matching_ftrs_baseline(masses_file_name, ftrs_file_name, mod_test, ftrs_baseline_df):
-    '''Test that output of the major function in the module is unchanged.'''
+    """Test that output of the major function in the module is unchanged."""
     
     raw_data = matching.ftrs_reader(ftrs_file_name)
     validation.validate_raw_data_df(raw_data)
