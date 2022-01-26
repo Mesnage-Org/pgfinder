@@ -1,5 +1,6 @@
 import datetime
 import os
+import zipfile
 import pandas as pd
 import sqlite3
 import numpy as np
@@ -532,8 +533,6 @@ def dataframe_to_csv_metadata(save_filepath: str, output_dataframe: pd.DataFrame
 
     metadata_string = yaml.dump(output_dataframe.attrs['metadata'])
 
-    #output_dataframe[metadata_string.replace("\n", " ")] = ''
-
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
     output_dataframe.to_csv(write_location, index=False)
@@ -542,4 +541,5 @@ def default_filename():
     now = datetime.datetime.now()
     date_time = now.strftime('%Y-%m-%d_%H-%M-%S')
     filename = 'results_' + date_time + '.csv'
+    
     return filename
