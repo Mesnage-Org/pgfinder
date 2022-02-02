@@ -1,3 +1,6 @@
+from typing import Union
+import pathlib
+from pathlib import Path
 import datetime
 import os
 import pandas as pd
@@ -87,12 +90,11 @@ def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.Data
     write_location = save_filepath + '/' + filename + '.csv'
     output_dataframe.to_csv(write_location, index=False)
 
-def dataframe_to_csv_metadata(save_filepath: str, output_dataframe: pd.DataFrame, filename:str = None):
+def dataframe_to_csv_metadata(save_filepath: Union[str, Path], output_dataframe: pd.DataFrame, filename: Union[str, Path] = None):
 
-    if filename is None:
-        filename = default_filename()
+    filename = pathlib.Path(filename or default_filename())
 
-    write_location = os.path.join(save_filepath, default_filename())
+    write_location = os.path.join(save_filepath, filename)
 
     metadata_string = yaml.dump(output_dataframe.attrs['metadata'])
 
