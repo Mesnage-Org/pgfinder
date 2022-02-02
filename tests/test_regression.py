@@ -29,32 +29,24 @@ def ftrs_file_name():
 def ftrs_baseline_df():
     return pd.read_csv("data/baseline_output_ftrs.csv", index_col=0)
 
-def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_baseline_df):
+def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_baseline_df, tmp_path):
     '''Test that output of the major function in the module is unchanged.'''
     
-    raw_data = pgio.maxquant_file_reader(mq_file_name)
-    validation.validate_raw_data_df(raw_data)
-
-    theo_masses = pgio.theo_masses_reader(masses_file_name)
-    validation.validate_theo_masses_df(theo_masses)
+    results = matching.match(mq_file_name, masses_file_name, 0.5, mod_test, 10)
     
-    validation.validate_enabled_mod_list(mod_test)
+    output_filepath = pgio.dataframe_to_csv_metadata(tmp_path, output_dataframe=results, filename='output_mq.csv')
 
-    output_df = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
-    
+    output_df = pd.read_csv(output_filepath, index_col=0)
+
     pd.testing.assert_frame_equal(output_df, mq_baseline_df)
 
-def test_matching_ftrs_baseline(masses_file_name, ftrs_file_name, mod_test, ftrs_baseline_df):
+def test_matching_ftrs_baseline(masses_file_name, ftrs_file_name, mod_test, ftrs_baseline_df, tmp_path):
     """Test that output of the major function in the module is unchanged."""
     
-    raw_data = pgio.ftrs_reader(ftrs_file_name)
-    validation.validate_raw_data_df(raw_data)
-
-    theo_masses = pgio.theo_masses_reader(masses_file_name)
-    validation.validate_theo_masses_df(theo_masses)
+    results = matching.match(ftrs_file_name, masses_file_name, 0.5, mod_test, 10)
     
-    validation.validate_enabled_mod_list(mod_test)
+    output_filepath = pgio.dataframe_to_csv_metadata(tmp_path, output_dataframe=results, filename='output_ftrs.csv')
 
-    output_df = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
-    
+    output_df = pd.read_csv(output_filepath, index_col=0)
+
     pd.testing.assert_frame_equal(output_df, ftrs_baseline_df)
