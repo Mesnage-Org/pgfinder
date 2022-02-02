@@ -1,18 +1,14 @@
 import pgfinder.matching as matching
-import pgfinder.validation as validation
+import pgfinder.pgio as pgio
 
-csv_filepath = "data/masses/e_coli_monomer_masses.csv"
 ftrs_filepath = "data/ftrs_test_data.ftrs"
-
-raw_data = matching.ftrs_reader(ftrs_filepath)
-validation.validate_raw_data_df(raw_data)
-
-theo_masses = matching.theo_masses_reader(csv_filepath)
-validation.validate_theo_masses_df(theo_masses)
+csv_filepath = "data/masses/e_coli_monomer_masses.csv"
 
 mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
-validation.validate_enabled_mod_list(mod_test)
 
-results = matching.data_analysis(raw_data, theo_masses, 0.5, mod_test, 10)
+results = matching.match(ftrs_filepath, csv_filepath, 0.5, mod_test, 10)
 
+print(results.attrs['metadata'])
 print(results)
+
+pgio.dataframe_to_csv_metadata(save_filepath='./', output_dataframe=results)
