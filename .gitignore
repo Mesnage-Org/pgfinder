@@ -10,6 +10,7 @@ __pycache__/
 # outputs
 *Cleaned.csv
 eg_output.csv
+results*.csv
 
 #IDE
 .vscode/
