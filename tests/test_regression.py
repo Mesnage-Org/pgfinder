@@ -47,10 +47,10 @@ def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_basel
 def test_matching_ftrs_baseline(masses_file_name, ftrs_file_name, mod_test, ftrs_baseline_df):
     """Test that output of the major function in the module is unchanged."""
     
-    raw_data = matching.ftrs_reader(ftrs_file_name)
+    raw_data = pgio.ftrs_reader(ftrs_file_name)
     validation.validate_raw_data_df(raw_data)
 
-    theo_masses = matching.theo_masses_reader(masses_file_name)
+    theo_masses = pgio.theo_masses_reader(masses_file_name)
     validation.validate_theo_masses_df(theo_masses)
     
     validation.validate_enabled_mod_list(mod_test)
