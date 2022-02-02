@@ -9,8 +9,7 @@ import numpy as np
 import yaml
 
 def ftrs_reader(filePath: str):
-    '''
-    Reads FTRS file from Byos
+    '''Reads FTRS file from Byos
     :param filePath:
     :return dataframe:
     '''

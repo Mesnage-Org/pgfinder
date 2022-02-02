@@ -8,7 +8,7 @@ import pgfinder.validation as validation
 def match(file: str, masses_file: str, rt_window: float, modifications: list, ppm: int) -> pd.DataFrame:
     
     '''
-    Matches a list of experimentally determined masses to a 
+    Matches a list of experimentally determined masses to a
     list of theoretical masses we expect to find.
     :param file: Location of experimental masses file.
     :param masses_file: Location of theoretical masses database.
@@ -26,9 +26,9 @@ def match(file: str, masses_file: str, rt_window: float, modifications: list, pp
     }
 
     # Load data
-    try: 
+    try:
         raw_data = pgio.maxquant_file_reader(file)
-    except:
+    except: # pylint: disable=bare-except
         raw_data = pgio.ftrs_reader(file)
     validation.validate_raw_data_df(raw_data)
 
