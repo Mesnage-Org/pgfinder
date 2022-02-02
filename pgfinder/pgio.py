@@ -13,7 +13,6 @@ def ftrs_reader(filePath: str):
     :param filePath:
     :return dataframe:
     '''
-
     with sqlite3.connect(filePath) as db:
 
         sql = "SELECT * FROM Features"

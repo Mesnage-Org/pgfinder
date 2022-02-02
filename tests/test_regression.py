@@ -2,7 +2,6 @@ import pandas as pd
 import pytest
 import pgfinder.matching as matching
 import pgfinder.pgio as pgio
-import pgfinder.validation as validation
 
 @pytest.fixture
 def masses_file_name():
