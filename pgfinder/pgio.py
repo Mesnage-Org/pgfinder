@@ -90,7 +90,7 @@ def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.Data
     write_location = save_filepath + '/' + filename + '.csv'
     output_dataframe.to_csv(write_location, index=False)
 
-def dataframe_to_csv_metadata(save_filepath: Union[str, Path], output_dataframe: pd.DataFrame, filename: Union[str, Path] = None):
+def dataframe_to_csv_metadata(save_filepath: Union[str, Path], output_dataframe: pd.DataFrame, filename: Union[str, Path] = None) -> Union[str, Path]:
 
     filename = pathlib.Path(filename or default_filename())
 
@@ -101,6 +101,8 @@ def dataframe_to_csv_metadata(save_filepath: Union[str, Path], output_dataframe:
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
     output_dataframe.to_csv(write_location, index=False)
+
+    return write_location
 
 def default_filename():
     now = datetime.datetime.now()
