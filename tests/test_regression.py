@@ -1,5 +1,6 @@
 import pandas as pd
 import pgfinder.matching as matching
+import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 def test_matching_baseline():
@@ -7,10 +8,10 @@ def test_matching_baseline():
     masses_file_name = "data/masses/e_coli_monomer_masses.csv"
     mq_file_name = "data/maxquant_test_data.txt"
 
-    raw_data = matching.maxquant_file_reader(mq_file_name)
+    raw_data = pgio.maxquant_file_reader(mq_file_name)
     validation.validate_raw_data_df(raw_data)
 
-    theo_masses = matching.theo_masses_reader(masses_file_name)
+    theo_masses = pgio.theo_masses_reader(masses_file_name)
     validation.validate_theo_masses_df(theo_masses)
 
     mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
