@@ -1,5 +1,7 @@
 import pytest
+
 import pgfinder.matching as matching
+import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 
@@ -20,21 +22,21 @@ def theo_masses_filename():
 
 @pytest.fixture
 def raw_data(raw_data_filename):
-    my_raw_data = matching.maxquant_file_reader(raw_data_filename)
+    my_raw_data = pgio.maxquant_file_reader(raw_data_filename)
     validation.validate_raw_data_df(my_raw_data)
     return my_raw_data
 
 
 @pytest.fixture
 def raw_data_no_match(raw_data_no_match_filename):
-    my_raw_data_no_match = matching.maxquant_file_reader(raw_data_no_match_filename)
+    my_raw_data_no_match = pgio.maxquant_file_reader(raw_data_no_match_filename)
     validation.validate_raw_data_df(my_raw_data_no_match)
     return my_raw_data_no_match
 
 
 @pytest.fixture
 def theo_masses(theo_masses_filename):
-    my_theo_masses = matching.theo_masses_reader(theo_masses_filename)
+    my_theo_masses = pgio.theo_masses_reader(theo_masses_filename)
     validation.validate_theo_masses_df(my_theo_masses)
     return my_theo_masses
 

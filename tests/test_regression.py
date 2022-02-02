@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
 import pgfinder.matching as matching
+import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 @pytest.fixture
@@ -31,10 +32,10 @@ def ftrs_baseline_df():
 def test_matching_mq_baseline(masses_file_name, mq_file_name, mod_test, mq_baseline_df):
     '''Test that output of the major function in the module is unchanged.'''
     
-    raw_data = matching.maxquant_file_reader(mq_file_name)
+    raw_data = pgio.maxquant_file_reader(mq_file_name)
     validation.validate_raw_data_df(raw_data)
 
-    theo_masses = matching.theo_masses_reader(masses_file_name)
+    theo_masses = pgio.theo_masses_reader(masses_file_name)
     validation.validate_theo_masses_df(theo_masses)
     
     validation.validate_enabled_mod_list(mod_test)

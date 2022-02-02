@@ -1,11 +1,8 @@
-import datetime
-import os
-import zipfile
-import pandas as pd
-import sqlite3
-import numpy as np
-import yaml
 from decimal import *
+
+import pandas as pd
+
+import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 def match(file: str, masses_file: str, rt_window: float, modifications: list, ppm: int) -> pd.DataFrame:
@@ -30,13 +27,13 @@ def match(file: str, masses_file: str, rt_window: float, modifications: list, pp
 
     # Load data
     try: 
-        raw_data = maxquant_file_reader(file)
+        raw_data = pgio.maxquant_file_reader(file)
     except:
-        raw_data = ftrs_reader(file)
+        raw_data = pgio.ftrs_reader(file)
     validation.validate_raw_data_df(raw_data)
 
     # Load masses database
-    theo_masses = theo_masses_reader(masses_file)
+    theo_masses = pgio.theo_masses_reader(masses_file)
     validation.validate_theo_masses_df(theo_masses)
 
     # Validate modifcations list
@@ -331,79 +328,6 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
     return consolidated_decay_df
 
-
-def ftrs_reader(filePath: str):
-    '''
-    Reads FTRS file from Byos
-    :param filePath:
-    :return dataframe:
-    '''
-
-    with sqlite3.connect(filePath) as db:
-
-        sql = "SELECT * FROM Features"
-        #Reads sql database into dataframe
-        ff = pd.read_sql(sql, db)
-        # adds inferredStructure column
-        ff['inferredStructure'] = np.nan
-        # adds theo_mwMonoisotopic column
-        ff['theo_mwMonoisotopic'] = np.nan
-        # Renames columns to expected column heading required for data_analysis function
-        ff.rename(columns={'Id': 'ID', 'apexRetentionTimeMinutes': 'rt', 'apexMwMonoisotopic': 'mwMonoisotopic', 'maxAveragineCorrelation': 'corrMax' }, inplace=True)
-        # Desired column order
-        cols_order = ['ID', 'xicStart', 'xicEnd', 'feature', 'corrMax', 'ionCount', 'chargeOrder', 'maxIsotopeCount',
-                      'rt', 'mwMonoisotopic','theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity', ]
-        # Reorder columns in dataframe to desired order.
-        ff = ff[cols_order]
-
-        return ff
-
-
-def maxquant_file_reader(filepath: str):
-    '''
-        Reads maxquant files and outputs data as a dataframe
-
-    :param filepath (file should be a text file):
-    :return dataframe:
-    '''
-
-    # reads file into dataframe
-    maxquant_df = pd.read_table(filepath, low_memory=False)
-    # adds inferredStructure column
-    maxquant_df['inferredStructure'] = np.nan
-    # adds theo_mwMonoisotopic column
-    maxquant_df['theo_mwMonoisotopic'] = np.nan
-    # insert dataframe index as a column
-    maxquant_df.reset_index(level=0, inplace=True)
-    # Renames columns to expected column heading required for data_analysis function
-    maxquant_df.rename(columns={'index': 'ID','Retention time': 'rt', 'Retention length': 'rt_length',
-                                'Mass': 'mwMonoisotopic', 'Intensity': "maxIntensity"},
-                               inplace=True)
-    # Keeps only essential columns, all extraneous columns are left out.
-    focused_maxquant_df = maxquant_df[['ID', 'mwMonoisotopic', 'rt', 'rt_length', 'maxIntensity', 'inferredStructure',
-                                       'theo_mwMonoisotopic']]
-    # Desired column order
-    cols_order = ['ID', 'rt', 'rt_length', 'mwMonoisotopic', 'theo_mwMonoisotopic', 'inferredStructure', 'maxIntensity']
-    # Reorder columns in dataframe to desired order.
-    focused_maxquant_df = focused_maxquant_df[cols_order]
-
-
-    return focused_maxquant_df
-
-
-def theo_masses_reader(filepath: str):
-
-    '''
-    Reads theoretical masses files (csv)
-    :param filepath:
-    :return dataframe:
-    '''
-    # reads csv files and converts to dataframe
-    theo_masses_df = pd.read_csv(filepath)
-
-    return theo_masses_df
-
-
 def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm = int):
 
     sugar = Decimal('203.0793')
@@ -498,8 +422,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     else:
         double_Anhydro_df = pd.DataFrame()
 
-
-
     master_frame = [obs_theo_df, adducts_potassium_df, adducts_sodium_df, anhydro_df, deac_anhy_df, deacetyl_df,
                     oacetyl_df, decay_df, nude_df, ami_df, deglyco_df, double_Anhydro_df]
     master_list = pd.concat(master_frame)
@@ -514,32 +436,3 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
 
     return cleaned_data_df
-
-def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.DataFrame):
-    '''
-    Writes dataframe to csv file at desired file location
-    :param save_filepath:
-    :param filename:
-    :param output_dataframe:
-    :return csv file:
-    '''
-
-    #Combine save location and desired file name with correct formatting for output as csv file.
-    write_location = save_filepath + '/' + filename + '.csv'
-    output_dataframe.to_csv(write_location, index=False)
-
-def dataframe_to_csv_metadata(save_filepath: str, output_dataframe: pd.DataFrame):
-    write_location = os.path.join(save_filepath, default_filename())
-
-    metadata_string = yaml.dump(output_dataframe.attrs['metadata'])
-
-    output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
-
-    output_dataframe.to_csv(write_location, index=False)
-
-def default_filename():
-    now = datetime.datetime.now()
-    date_time = now.strftime('%Y-%m-%d_%H-%M-%S')
-    filename = 'results_' + date_time + '.csv'
-    
-    return filename
