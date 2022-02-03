@@ -132,7 +132,7 @@ def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.Data
     write_location = save_filepath + '/' + filename + '.csv'
     output_dataframe.to_csv(write_location, index=False)
 
-def dataframe_to_csv_metadata(output_dataframe: pd.DataFrame, save_filepath: Union[str, Path], filename: Union[str, Path] = None) -> Union[str, Path]:
+def dataframe_to_csv_metadata(output_dataframe: pd.DataFrame, save_filepath: Union[str, Path] = None, filename: Union[str, Path] = None) -> Union[str, Path]:
     '''If save_filepath is specified return the relative path of the output file, including
     the filename, otherwise return the .csv in the form of a string.'''
 
