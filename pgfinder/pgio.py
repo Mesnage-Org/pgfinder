@@ -88,19 +88,23 @@ def dataframe_to_csv(save_filepath: str, filename:str, output_dataframe: pd.Data
     write_location = save_filepath + '/' + filename + '.csv'
     output_dataframe.to_csv(write_location, index=False)
 
-def dataframe_to_csv_metadata(save_filepath: Union[str, Path], output_dataframe: pd.DataFrame, filename: Union[str, Path] = None) -> Union[str, Path]:
-
-    filename = pathlib.Path(filename or default_filename())
-
-    write_location = os.path.join(save_filepath, filename)
+def dataframe_to_csv_metadata(output_dataframe: pd.DataFrame, save_filepath: Union[str, Path], filename: Union[str, Path] = None) -> Union[str, Path]:
+    '''If save_filepath is specified return the relative path of the output file, including
+    the filename, otherwise return the .csv in the form of a string.'''
 
     metadata_string = yaml.dump(output_dataframe.attrs['metadata'])
 
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
-    output_dataframe.to_csv(write_location, index=False)
+    if save_filepath: #We're going to actually save the file to disk
+        filename = pathlib.Path(filename or default_filename())
+        write_location = os.path.join(save_filepath, filename)
+        output_dataframe.to_csv(write_location, index=False)
+        output = write_location
+    else: #We're going to leave it in memory as a string
+        output = output_dataframe.to_csv(index=False)
 
-    return write_location
+    return output
 
 def default_filename():
     now = datetime.datetime.now()
