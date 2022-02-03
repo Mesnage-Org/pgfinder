@@ -1,7 +1,9 @@
+import tempfile
 from typing import Union
 import pathlib
 from pathlib import Path
 import datetime
+import io
 import os
 import pandas as pd
 import sqlite3
@@ -10,13 +12,35 @@ import yaml
 
 def ms_file_reader(file) -> pd.DataFrame:
     '''Read mass spec data.'''
+    filename = file
+
     if not file.find('ftrs') == -1:
-        return ftrs_reader(file)
+        return_df = ftrs_reader(file)
     elif not file.find('txt') == -1:
-        return maxquant_file_reader(file)
+        return_df = maxquant_file_reader(file)
     else:
         raise ValueError('Unknown file type.')
+
+    return_df.attrs['filename'] = filename
+    return return_df
     
+def ms_upload_reader(upload: dict) -> pd.DataFrame:
+    """For reading from an interactive jupyter notebook with a file upload widget"""
+    filename = list(upload.keys())[0]
+    file_contents = upload[list(upload.keys())[0]]['content'] # I hate this line of code
+    file_temp = tempfile.NamedTemporaryFile(delete=False)
+    file_temp.write(file_contents)
+    file = file_temp.name
+
+    if not filename.find('ftrs') == -1:
+        return_df = ftrs_reader(file)
+    elif not filename.find('txt') == -1:
+        return_df = maxquant_file_reader(file)
+    else:
+        raise ValueError('Unknown file type.')
+
+    return_df.attrs['filename'] = filename
+    return return_df
 
 def ftrs_reader(file):
     '''Reads FTRS file from Byos
@@ -53,6 +77,16 @@ def theo_masses_reader(filepath: str):
     theo_masses_df = pd.read_csv(filepath)
 
     return theo_masses_df
+
+def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
+    """For reading from an interactive jupyter notebook with a file upload widget"""
+    filename = list(upload.keys())[0]
+    file_contents = upload[list(upload.keys())[0]]['content'] # I hate this line of code
+
+    return_df = pd.read_csv(io.BytesIO(file_contents))
+
+    return_df.attrs['filename'] = filename
+    return return_df
 
 def maxquant_file_reader(filepath: str):
     '''
