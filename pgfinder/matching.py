@@ -26,10 +26,7 @@ def match(file: str, masses_file: str, rt_window: float, modifications: list, pp
     }
 
     # Load data
-    try:
-        raw_data = pgio.maxquant_file_reader(file)
-    except: # pylint: disable=bare-except
-        raw_data = pgio.ftrs_reader(file)
+    raw_data = pgio.ms_file_reader(file)
     validation.validate_raw_data_df(raw_data)
 
     # Load masses database

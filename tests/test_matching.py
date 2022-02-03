@@ -22,14 +22,14 @@ def theo_masses_filename():
 
 @pytest.fixture
 def raw_data(raw_data_filename):
-    my_raw_data = pgio.maxquant_file_reader(raw_data_filename)
+    my_raw_data = pgio.ms_file_reader(raw_data_filename)
     validation.validate_raw_data_df(my_raw_data)
     return my_raw_data
 
 
 @pytest.fixture
 def raw_data_no_match(raw_data_no_match_filename):
-    my_raw_data_no_match = pgio.maxquant_file_reader(raw_data_no_match_filename)
+    my_raw_data_no_match = pgio.ms_file_reader(raw_data_no_match_filename)
     validation.validate_raw_data_df(my_raw_data_no_match)
     return my_raw_data_no_match
 

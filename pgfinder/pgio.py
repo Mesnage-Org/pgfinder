@@ -8,6 +8,16 @@ import sqlite3
 import numpy as np
 import yaml
 
+def ms_file_reader(file) -> pd.DataFrame:
+    '''Read mass spec data.'''
+    if not file.find('ftrs') == -1:
+        return ftrs_reader(file)
+    elif not file.find('txt') == -1:
+        return maxquant_file_reader(file)
+    else:
+        raise ValueError('Unknown file type.')
+    
+
 def ftrs_reader(filePath: str):
     '''Reads FTRS file from Byos
     :param filePath:
