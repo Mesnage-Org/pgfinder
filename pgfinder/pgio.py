@@ -18,12 +18,12 @@ def ms_file_reader(file) -> pd.DataFrame:
         raise ValueError('Unknown file type.')
     
 
-def ftrs_reader(filePath: str):
+def ftrs_reader(file):
     '''Reads FTRS file from Byos
     :param filePath:
     :return dataframe:
     '''
-    with sqlite3.connect(filePath) as db:
+    with sqlite3.connect(file) as db:
 
         sql = "SELECT * FROM Features"
         #Reads sql database into dataframe
