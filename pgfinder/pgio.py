@@ -97,13 +97,13 @@ def theo_masses_reader(file):
 
     """
     Reads theoretical masses files (csv)
-    :param filepath:
+    :param file:
     :return dataframe:
     """
     # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(file)
 
-    theo_masses_df.attrs["filename"] = filename
+    theo_masses_df.attrs["filename"] = file
     return theo_masses_df
 
 
@@ -129,7 +129,7 @@ def maxquant_file_reader(file):
     """
 
     # reads file into dataframe
-    maxquant_df = pd.read_table(filepath, low_memory=False)
+    maxquant_df = pd.read_table(file, low_memory=False)
     # adds inferredStructure column
     maxquant_df["inferredStructure"] = np.nan
     # adds theo_mwMonoisotopic column
