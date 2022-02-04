@@ -396,8 +396,8 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
 
     metadata = {
-        'file': raw_data_df.attrs['filename'],
-        'masses_file': theo_masses_df.attrs['filename'],
+        'file': raw_data_df.attrs['file'],
+        'masses_file': theo_masses_df.attrs['file'],
         'rt_window': rt_window,
         'modifications': enabled_mod_list,
         'ppm': user_ppm

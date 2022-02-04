@@ -22,7 +22,7 @@ def ms_file_reader(file) -> pd.DataFrame:
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["filename"] = filename
+    return_df.attrs['file'] = filename
     return return_df
 
 
@@ -43,7 +43,7 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["filename"] = filename
+    return_df.attrs['file'] = filename
     return return_df
 
 
@@ -103,7 +103,7 @@ def theo_masses_reader(file):
     # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(file)
 
-    theo_masses_df.attrs["filename"] = file
+    theo_masses_df.attrs['file'] = file
     return theo_masses_df
 
 
@@ -116,7 +116,7 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 
     return_df = pd.read_csv(io.BytesIO(file_contents))
 
-    return_df.attrs["filename"] = filename
+    return_df.attrs['file'] = filename
     return return_df
 
 
