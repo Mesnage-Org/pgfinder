@@ -7,52 +7,6 @@ import pandas as pd
 import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
-def match(file: Union[str, pd.DataFrame], masses_file: Union[str, pd.DataFrame], rt_window: float, modifications: list, ppm: int) -> pd.DataFrame:
-    
-    '''
-    Matches a list of experimentally determined masses to a
-    list of theoretical masses we expect to find.
-    :param file: Location of experimental masses file, or a data frame containing the data with a 'filename' attribute.
-    :param masses_file: Location of theoretical masses database, or a data frame containing the data with a 'filename' attribute.
-    :param rt_window: Retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta).
-    :param modifications: Modifications to apply to theoretical masses when searching.
-    :param ppm: ppm tolerance value.
-    '''
-
-    # Load data
-    if isinstance(file, pd.DataFrame):
-        raw_data = file
-        file_name = raw_data.attrs['filename']
-    else:
-        raw_data = pgio.ms_file_reader(file)
-        file_name = file
-    validation.validate_raw_data_df(raw_data)
-
-    # Load masses database
-    if isinstance(masses_file, pd.DataFrame):
-        theo_masses = masses_file
-        masses_file_name = theo_masses.attrs['filename']
-    else:
-        theo_masses = pgio.theo_masses_reader(masses_file)
-        masses_file_name = masses_file
-    validation.validate_theo_masses_df(theo_masses)
-
-    # Validate modifcations list
-    validation.validate_enabled_mod_list(modifications)
-
-    results = data_analysis(raw_data, theo_masses, rt_window, modifications, ppm)
-
-    metadata = {
-        'file': file_name,
-        'masses_file': masses_file_name,
-        'rt_window': rt_window,
-        'modifications': modifications,
-        'ppm': ppm
-    }
-
-    results.attrs['metadata'] = metadata
-
-    return results
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     '''
@@ -344,9 +298,6 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     potassium = Decimal('37.9559')
     time_delta_window = rt_window #retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
 
-
-
-
     theo = theo_masses_df
     ff = raw_data_df
 
@@ -443,5 +394,15 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
+
+    metadata = {
+        'file': raw_data_df.attrs['filename'],
+        'masses_file': theo_masses_df.attrs['filename'],
+        'rt_window': rt_window,
+        'modifications': enabled_mod_list,
+        'ppm': user_ppm
+    }
+
+    cleaned_data_df.attrs['metadata'] = metadata
 
     return cleaned_data_df
