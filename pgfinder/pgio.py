@@ -93,7 +93,7 @@ def ftrs_reader(file):
         return ff
 
 
-def theo_masses_reader(filepath: str):
+def theo_masses_reader(file):
 
     """
     Reads theoretical masses files (csv)
@@ -101,8 +101,9 @@ def theo_masses_reader(filepath: str):
     :return dataframe:
     """
     # reads csv files and converts to dataframe
-    theo_masses_df = pd.read_csv(filepath)
+    theo_masses_df = pd.read_csv(file)
 
+    theo_masses_df.attrs["filename"] = filename
     return theo_masses_df
 
 
@@ -119,7 +120,7 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
     return return_df
 
 
-def maxquant_file_reader(filepath: str):
+def maxquant_file_reader(file):
     """
         Reads maxquant files and outputs data as a dataframe
 
