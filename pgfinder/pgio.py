@@ -197,7 +197,15 @@ def dataframe_to_csv_metadata(
     """If save_filepath is specified return the relative path of the output file, including
     the filename, otherwise return the .csv in the form of a string."""
 
-    metadata_string = yaml.dump(output_dataframe.attrs["metadata"])
+    metadata = {
+        'file': output_dataframe.attrs['file'],
+        'masses_file': output_dataframe.attrs['masses_file'],
+        'rt_window': output_dataframe.attrs['rt_window'],
+        'modifications': output_dataframe.attrs['modifications'],
+        'ppm': output_dataframe.attrs['ppm']
+    }
+
+    metadata_string = yaml.dump(metadata)
 
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 

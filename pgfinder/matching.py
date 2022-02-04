@@ -395,14 +395,11 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
 
     cleaned_data_df.sort_values('inferredStructure', inplace=True, ascending=True)
 
-    metadata = {
-        'file': raw_data_df.attrs['file'],
-        'masses_file': theo_masses_df.attrs['file'],
-        'rt_window': rt_window,
-        'modifications': enabled_mod_list,
-        'ppm': user_ppm
-    }
-
-    cleaned_data_df.attrs['metadata'] = metadata
+    # set metadata
+    cleaned_data_df.attrs['file'] = raw_data_df.attrs['file']
+    cleaned_data_df.attrs['masses_file'] = theo_masses_df.attrs['file']
+    cleaned_data_df.attrs['rt_window'] = rt_window
+    cleaned_data_df.attrs['modifications'] = enabled_mod_list
+    cleaned_data_df.attrs['ppm'] = user_ppm
 
     return cleaned_data_df
