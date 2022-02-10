@@ -21,7 +21,7 @@ def mod_test():
 def mq_file_name():
     return "data/maxquant_test_data.txt"
 
-@pytest.fixture 
+@pytest.fixture
 def mq_test_df(mq_file_name):
     return pgio.ms_file_reader(mq_file_name)
 
