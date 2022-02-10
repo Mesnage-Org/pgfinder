@@ -1,5 +1,6 @@
 import pgfinder.matching as matching
 import pgfinder.pgio as pgio
+import pgfinder.validation as validation
 
 # Set mass database and modifications
 csv_filepath = "data/masses/e_coli_monomer_masses.csv"
@@ -8,11 +9,15 @@ mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Dec
 
 # Generate maxquant baseline
 mq_filepath = "data/maxquant_test_data.txt"
-results = matching.match(mq_filepath, csv_filepath, 0.5, mod_test, 10)
+masses_mq = pgio.ms_file_reader(mq_filepath)
+validation.validate_raw_data_df(masses_mq)
+results = matching.data_analysis(masses_mq, theo_masses, 0.5, mod_test, 10)
 pgio.dataframe_to_csv_metadata(save_filepath='./data/', output_dataframe=results, filename='baseline_output_mq.csv')
 
 
 # Generate ftrs baseline
 ftrs_filepath = "data/ftrs_test_data.ftrs"
-results = matching.match(ftrs_filepath, csv_filepath, 0.5, mod_test, 10)
+masses_ftrs = pgio.ms_file_reader(ftrs_filepath)
+validation.validate_raw_data_df(masses_ftrs)
+results = matching.data_analysis(masses_ftrs, theo_masses, 0.5, mod_test, 10)
 pgio.dataframe_to_csv_metadata(save_filepath='./data/', output_dataframe=results, filename='baseline_output_ftrs.csv')
