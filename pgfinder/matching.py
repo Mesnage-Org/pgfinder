@@ -1,12 +1,6 @@
 from decimal import *
 
-from typing import Union
-
 import pandas as pd
-
-import pgfinder.pgio as pgio
-import pgfinder.validation as validation
-
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     '''
