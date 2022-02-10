@@ -19,6 +19,10 @@ conda activate pgfinder
 pip install git+https://github.com/Mesnage-Org/PGFinder.git
 ```
 
+## Data Dictionary
+
+The project [data dictionary](data_dictionary.md).
+
 ### Development
 
 Clone this repository:
