@@ -22,7 +22,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -e .
-          pip install pytest
+          pip install pytest pytest-cov
       - name: Test with pytest
         run: |
-          pytest
+          pytest --cov=pgfinder
+      - name: Determine coverage
+        run: |
+          coverage xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
