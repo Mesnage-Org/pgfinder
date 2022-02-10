@@ -27,7 +27,7 @@ def ms_file_reader(file) -> pd.DataFrame:
 
 
 def ms_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget"""
+    """For reading from an interactive jupyter notebook with a file upload widget."""
     filename = list(upload.keys())[0]
     file_contents = upload[list(upload.keys())[0]][
         "content"
@@ -49,6 +49,7 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
 
 def ftrs_reader(file):
     """Reads FTRS file from Byos
+
     :param filePath:
     :return dataframe:
     """
@@ -94,9 +95,9 @@ def ftrs_reader(file):
 
 
 def theo_masses_reader(file):
-
     """
     Reads theoretical masses files (csv)
+
     :param file:
     :return dataframe:
     """
@@ -196,7 +197,6 @@ def dataframe_to_csv_metadata(
 ) -> Union[str, Path]:
     """If save_filepath is specified return the relative path of the output file, including
     the filename, otherwise return the .csv in the form of a string."""
-
     metadata = {
         'file': output_dataframe.attrs['file'],
         'masses_file': output_dataframe.attrs['masses_file'],
