@@ -95,8 +95,7 @@ def ftrs_reader(file):
 
 
 def theo_masses_reader(file):
-    """
-    Reads theoretical masses files (csv)
+    """Reads theoretical masses files (csv)
 
     :param file:
     :return dataframe:
@@ -109,7 +108,7 @@ def theo_masses_reader(file):
 
 
 def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget"""
+    """For reading from an interactive jupyter notebook with a file upload widget."""
     filename = list(upload.keys())[0]
     file_contents = upload[list(upload.keys())[0]][
         "content"
@@ -195,8 +194,7 @@ def dataframe_to_csv_metadata(
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
 ) -> Union[str, Path]:
-    """If save_filepath is specified return the relative path of the output file, including
-    the filename, otherwise return the .csv in the form of a string."""
+    """If save_filepath is specified return the relative path of the output file, including the filename, otherwise return the .csv in the form of a string."""
     metadata = {
         'file': output_dataframe.attrs['file'],
         'masses_file': output_dataframe.attrs['masses_file'],
