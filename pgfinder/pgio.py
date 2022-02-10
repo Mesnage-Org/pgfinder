@@ -121,8 +121,7 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 
 
 def maxquant_file_reader(file):
-    """
-        Reads maxquant files and outputs data as a dataframe
+    """Reads maxquant files and outputs data as a dataframe.
 
     :param filepath (file should be a text file):
     :return dataframe:
