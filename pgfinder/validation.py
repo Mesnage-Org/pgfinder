@@ -17,9 +17,8 @@ def validate_raw_data_df(raw_data_df):
     if not isinstance(raw_data_df, pd.DataFrame):
         raise ValueError('raw_data_df must be a DataFrame.')
     
-    if isinstance(raw_data_df, pd.DataFrame):
-        print("File is okay")
-
+    if not raw_data_df.attrs['file']:
+        raise ValueError('raw_data_df must have a file attribute.')
 
     colnames = ['ID',
                 'rt',
@@ -36,6 +35,9 @@ def validate_theo_masses_df(theo_masses_df):
 
     if not isinstance(theo_masses_df, pd.DataFrame):
         raise ValueError('theo_masses_df must be a DataFrame.')
+
+    if not theo_masses_df.attrs['file']:
+        raise ValueError('theo_masses_df must have a file attribute.')
 
     colnames = ['Structure', 'Monoisotopicmass']
 
