@@ -17,7 +17,8 @@ E,Glutamicacid,129.04259
 Q,Glutamine,128.05858
 G,Glycine,57.02146
 H,Histidine,137.05891
-[I/L],Isoleucine/Leucine,113.08406
+I,Isoleucine,113.08406
+L,Leucine,113.08406
 J,meso-DAP,172.08479
 K,Lysine,128.09496
 M,Methionine,131.04049
