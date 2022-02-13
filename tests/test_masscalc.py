@@ -7,7 +7,6 @@ mass_list = pd.read_csv("data/masses/test_monomer_masses.csv")
 
 @pytest.fixture(params=mass_list["Structure"])
 def struct_mass(request):
-    #return mass_list.iloc[[request.param]]
     return(mass_list.loc[mass_list["Structure"] == request.param])
 
 
