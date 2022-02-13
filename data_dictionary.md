@@ -60,7 +60,12 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 |---|---|
 | file | Input data file |
 | masses_file | Mass list file |
-| modifications |
+| modifications | *See below* |
+| ppm | ppm tolerance |
+| rt_window | Window used for in-source decay correction (min) |
+
+| Modification | Description |
+|---|---|
 | Sodium	| Search for masses corresponding to sodium adducts |
 | Potassium	| Search for masses corresponding to potassium adducts |
 | Anh	| Search for anhydromuropeptides |
@@ -75,5 +80,3 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
 |Multimer Lac	| Search for lactyl-peptides multimers |
 |O-Ac	| Search for O-acetylated muropeptides |
-| ppm | ppm tolerance |
-| rt_window | Window used for in-source decay correction (min) |
