@@ -9,7 +9,10 @@ import pgfinder
 def component_masses() -> pd.DataFrame:
     """Returns a data frame with columns 'Code', 'Structure', 'Monoisotopicmass'."""
     file = resources.open_text(pgfinder, "component_masses.csv")
-    return pd.read_csv(file)
+    return pd.read_csv(
+        file,
+        dtype={"Code": "string", "Structure": "string", "Monoisotopicmass": "float64"},
+    )
 
 
 def component_regex(component_masses: pd.DataFrame) -> str:
@@ -21,6 +24,10 @@ def component_regex(component_masses: pd.DataFrame) -> str:
     return Code.str.cat(sep="|")
 
 
-def mass(code: str) -> float:
-    """Returns a 'Monoisotopicmass' given a 'Code'."""
-    return 0.000
+def mass(structure: str, component_masses: pd.DataFrame) -> float:
+    """Returns a 'Monoisotopicmass' given a 'Structure' and the masses of its components."""
+    regex = component_regex(component_masses)
+    components = re.findall(regex, structure)
+    components_df = pd.DataFrame(components, columns=["Code"], dtype="string")
+    component_masses_filtered = pd.merge(how='left', left=components_df, right=component_masses,left_on='Code', right_on='Code')
+    return component_masses_filtered.Monoisotopicmass.sum()
