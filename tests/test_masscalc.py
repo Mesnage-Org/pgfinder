@@ -34,3 +34,6 @@ def test_mass(struct_mass: pd.DataFrame):
     Structure = struct_mass["Structure"].iloc[0]
     Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0]
     assert masscalc.mass(Structure) == Monoisotopicmass
+
+def test_component_masses():
+    assert list(masscalc.component_masses().columns) == ['Code', 'Structure', 'Monoisotopicmass']
