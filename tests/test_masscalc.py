@@ -4,12 +4,15 @@ import pgfinder.masscalc as masscalc
 
 mass_list = pd.concat(
     [
-        pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
-        pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
+        #pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
+        #pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
         pd.read_csv("data/masses/test_monomer_masses.csv"),
     ]
 )
 
+@pytest.fixture
+def code_masses():
+    return masscalc.component_masses()
 
 @pytest.fixture(params=mass_list["Structure"])
 def struct_mass(request):
@@ -30,10 +33,10 @@ def test_data_integrity():
     pd.testing.assert_frame_equal(mass_group_struct, mass_group_all)
 
 
-def test_mass(struct_mass: pd.DataFrame):
+def test_mass(struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
     Structure = struct_mass["Structure"].iloc[0]
     Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0]
-    assert masscalc.mass(Structure) == Monoisotopicmass
+    assert masscalc.mass(Structure, code_masses) == Monoisotopicmass
 
 def test_component_masses():
     assert list(masscalc.component_masses().columns) == ['Code', 'Structure', 'Monoisotopicmass']
