@@ -4,8 +4,8 @@ import pgfinder.masscalc as masscalc
 
 mass_list = pd.concat(
     [
-        #pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
-        #pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
+        pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
+        pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
         pd.read_csv("data/masses/test_monomer_masses.csv"),
     ]
 )
