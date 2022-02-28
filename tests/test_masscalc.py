@@ -7,8 +7,7 @@ import pgfinder.masscalc as masscalc
 
 mass_list = pd.concat(
     [
-        pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
-        pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
+        pd.read_csv("data/masses/test_masses.csv"),
     ]
 )
 
@@ -40,7 +39,11 @@ def test_data_integrity():
 def test_mass(caplog, struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
     caplog.set_level(logging.INFO)
     Structure = struct_mass["Structure"].iloc[0]
-    Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0] # From test data file
+    Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0]  # From test data file
+    logging.info(
+        "Mass difference: "
+        + f"{(np.around(masscalc.mass(Structure, code_masses), decimals=4) - Monoisotopicmass):.14f}"
+    )  # Record mass difference
     assert (
         np.around(masscalc.mass(Structure, code_masses), decimals=4) == Monoisotopicmass
     )
