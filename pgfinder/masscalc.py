@@ -1,3 +1,4 @@
+import logging
 import importlib.resources as resources
 import re
 
@@ -20,15 +21,26 @@ def component_regex(component_masses: pd.DataFrame) -> str:
     component_masses = component_masses.sort_values(
         by="Code", ascending=False, key=lambda x: x.str.len()
     )  # Sort by code length high to low
-    Code = component_masses["Code"].apply(re.escape) 
+    Code = component_masses["Code"].apply(re.escape)
     return Code.str.cat(sep="|")
 
 
 def mass(structure: str, component_masses: pd.DataFrame) -> float:
     """Returns a 'Monoisotopicmass' given a 'Structure' and the masses of its components."""
-    structure = "H2O|" + structure # Always add water
+    structure = "H2O|" + structure  # Always add water
     regex = component_regex(component_masses)
     components = re.findall(regex, structure)
     components_df = pd.DataFrame(components, columns=["Code"], dtype="string")
-    component_masses_filtered = pd.merge(how='left', left=components_df, right=component_masses,left_on='Code', right_on='Code')
+    component_masses_filtered = pd.merge(
+        how="left",
+        left=components_df,
+        right=component_masses,
+        left_on="Code",
+        right_on="Code",
+    )
+    logging.info(
+        component_masses_filtered.to_string(
+            max_rows=component_masses_filtered.shape[0] + 1
+        )
+    )  # Log dataframe used in mass calc
     return component_masses_filtered.Monoisotopicmass.sum()

@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 import numpy as np
 import pandas as pd
@@ -35,7 +37,8 @@ def test_data_integrity():
     pd.testing.assert_frame_equal(mass_group_struct, mass_group_all)
 
 
-def test_mass(struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
+def test_mass(caplog, struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
+    caplog.set_level(logging.INFO)
     Structure = struct_mass["Structure"].iloc[0]
     Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0] # From test data file
     assert (
