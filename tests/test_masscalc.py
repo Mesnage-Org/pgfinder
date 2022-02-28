@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 import pandas as pd
 import pgfinder.masscalc as masscalc
 
@@ -6,13 +7,14 @@ mass_list = pd.concat(
     [
         pd.read_csv("data/masses/c_diff_monomer_masses.csv"),
         pd.read_csv("data/masses/e_coli_monomer_masses.csv"),
-        pd.read_csv("data/masses/test_monomer_masses.csv"),
     ]
 )
+
 
 @pytest.fixture
 def code_masses():
     return masscalc.component_masses()
+
 
 @pytest.fixture(params=mass_list["Structure"])
 def struct_mass(request):
@@ -35,8 +37,15 @@ def test_data_integrity():
 
 def test_mass(struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
     Structure = struct_mass["Structure"].iloc[0]
-    Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0]
-    assert masscalc.mass(Structure, code_masses) == Monoisotopicmass
+    Monoisotopicmass = struct_mass["Monoisotopicmass"].iloc[0] # From test data file
+    assert (
+        np.around(masscalc.mass(Structure, code_masses), decimals=4) == Monoisotopicmass
+    )
+
 
 def test_component_masses():
-    assert list(masscalc.component_masses().columns) == ['Code', 'Structure', 'Monoisotopicmass']
+    assert list(masscalc.component_masses().columns) == [
+        "Code",
+        "Structure",
+        "Monoisotopicmass",
+    ]
