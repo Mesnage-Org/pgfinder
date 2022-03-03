@@ -35,9 +35,11 @@ def test_mass(caplog, struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
         np.around(masscalc.mass(Structure, code_masses), decimals=4) == Monoisotopicmass
     )
 
+
 def test_mass_warning(caplog, code_masses: pd.DataFrame):
     with pytest.warns(UserWarning, match=r"Unmatched characters in structure"):
         masscalc.mass("gm-jvi", code_masses)
+
 
 def test_component_masses():
     assert list(masscalc.component_masses().columns) == [
