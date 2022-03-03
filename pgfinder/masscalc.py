@@ -1,6 +1,7 @@
 import logging
 import importlib.resources as resources
 import re
+import warnings
 
 import pandas as pd
 
@@ -29,6 +30,9 @@ def mass(structure: str, component_masses: pd.DataFrame) -> float:
     """Returns a 'Monoisotopicmass' given a 'Structure' and the masses of its components."""
     structure = "H2O|" + structure  # Always add water
     regex = component_regex(component_masses)
+    residual = re.sub(regex, "", structure)
+    if len(residual) > 0:
+        warnings.warn("Unmatched characters in structure: " + residual)
     components = re.findall(regex, structure)
     components_df = pd.DataFrame(components, columns=["Code"], dtype="string")
     component_masses_filtered = pd.merge(
