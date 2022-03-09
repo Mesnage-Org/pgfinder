@@ -54,7 +54,7 @@ def multimer_builder(theo_list, multimer_type: int = 0):
 
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
-            if len(row.Structure[:len(row.Structure)-2]) > 2: #Prevent dimer creation using just GM (input format is XX|n) X = letters n = number
+            if len(row.Structure[:len(row.Structure)-2]) > 2: #Prevent dimer creation using just gm (input format is XX|n) X = letters n = number
                 mw = row.Monoisotopicmass
                 acceptor = row.Structure[:len(row.Structure)-2]
                 donor = name
@@ -66,26 +66,26 @@ def multimer_builder(theo_list, multimer_type: int = 0):
 
     # Calculates multimers based on peptide bond through side chain
     if multimer_type == 0:
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
+        builder("gm-AEJA", Decimal('941.4075'), 2)
+        builder("gm-AEJ", Decimal('870.3704'), 2)
+        builder("gm-AEJ-gm-AEJ", Decimal('1722.7302'), 3)
+        builder("gm-AEJ-gm-AEJA", Decimal('1793.7673'), 3)
+        builder("gm-AEJA-gm-AEJA", Decimal('1864.8044'), 3)
 
     # Calculates multimers based on glycosidic bond through dissachrides & peptide bonds through side chains
     elif multimer_type == 1:
-        builder("GM-AE", Decimal('698.2858'), 2)
-        builder("GM-AEJA", Decimal('941.4075'), 2)
-        builder("GM-AEJ", Decimal('870.3704'), 2)
-        builder("GM-AEJ-GM-AEJ", Decimal('1722.7302'), 3)
-        builder("GM-AEJ-GM-AEJA", Decimal('1793.7673'), 3)
-        builder("GM-AEJA-GM-AEJA", Decimal('1864.8044'), 3)
+        builder("gm-AE", Decimal('698.2858'), 2)
+        builder("gm-AEJA", Decimal('941.4075'), 2)
+        builder("gm-AEJ", Decimal('870.3704'), 2)
+        builder("gm-AEJ-gm-AEJ", Decimal('1722.7302'), 3)
+        builder("gm-AEJ-gm-AEJA", Decimal('1793.7673'), 3)
+        builder("gm-AEJA-gm-AEJA", Decimal('1864.8044'), 3)
 
-        builder("GM-AEJA_(Glyco)",  Decimal('939.3919'), 2)
-        builder("GM-AEJ_(Glyco)", Decimal('868.3548'), 2)
-        builder("GM-AEJ-GM-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
-        builder("GM-AEJ-GM-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
-        builder("GM-AEJA-GM-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
+        builder("gm-AEJA_(Glyco)",  Decimal('939.3919'), 2)
+        builder("gm-AEJ_(Glyco)", Decimal('868.3548'), 2)
+        builder("gm-AEJ-gm-AEJ_(Glyco)",  Decimal('1720.7146'), 3)
+        builder("gm-AEJ-gm-AEJA_(Glyco)",  Decimal('1791.7517'), 3)
+        builder("gm-AEJA-gm-AEJA_(Glyco)",  Decimal('1862.7888'), 3)
 
     # Calculates multimers based on Lactyl peptides (peptide bond via side chain but no dissachrides on muropeptides)
     elif multimer_type == 2:
@@ -129,7 +129,7 @@ def modification_generator(filtered_theo_df, mod_type: str):
         mod_name = "K+"
     elif mod_type == "Nude":
         mod_mass = Decimal('478.1799')
-        mod_name = "GM-"
+        mod_name = "gm-"
     elif mod_type == "Amidated":
         mod_mass = Decimal('-0.9840')
         mod_name = "Amidated"
@@ -203,14 +203,14 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
     
     # Selector substrings for generating parent and adduct dataframes
     if mass_to_clean == sodiated:
-        parent = "^GM|^M|^Lac"
+        parent = "^gm|^m|^Lac"
         target = "^Na+"
     elif mass_to_clean == potassated:
-        parent = "^GM|^M|^Lac"
+        parent = "^gm|^m|^Lac"
         target = "^K+"
     elif mass_to_clean == decay:
-        parent = "^GM"
-        target = "^M"
+        parent = "^gm"
+        target = "^m"
 
     # Generate parent dataframe - contains parents
     parent_muropeptide_df = ftrs_df[
