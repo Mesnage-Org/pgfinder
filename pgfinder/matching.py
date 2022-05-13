@@ -1,6 +1,12 @@
+"""Matching functions"""
+import logging
 from decimal import *
 
 import pandas as pd
+
+from pgfinder.logs.logs import LOGGER_NAME
+
+LOGGER = logging.getLogger(LOGGER_NAME)
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
     '''
@@ -170,11 +176,11 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     :param set_ppm:
     :return raw_data - dataframe:
     '''
-
+    # print(f'ftrs_df : {ftrs_df}')
     raw_data = ftrs_df.copy()
-    #Data validation
+    # Data validation
     if ('Monoisotopicmass' not in matching_df.columns) | ('Structure' not in matching_df.columns):
-        print(
+        LOGGER.info(
             'Header of csv files must have column named "Monoisotopic mass" and another column named "Structure"!!!  Make note of capitalized letters and spacing!!!!')
 # Generates dataframe with matched structures
     for x, row in raw_data.iterrows():
@@ -225,15 +231,15 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
     # Status updates (prints to console)
     if parent_muropeptide_df.empty:
-        print("No ", parent ," muropeptides found")
+        LOGGER.info(f"No {parent}  muropeptides found")
     if adducted_muropeptide_df.empty:
-        print("No ", target ," found")
+        LOGGER.info(f"No {target} found")
     elif mass_to_clean == sodiated:
-        print("Processing", adducted_muropeptide_df.size, "Sodium Adducts")
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} Sodium Adducts")
     elif mass_to_clean == potassated:
-        print("Processing", adducted_muropeptide_df.size, "potassium adducts")
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} potassium adducts")
     elif mass_to_clean == decay:
-        print("Processing", adducted_muropeptide_df.size, "in source decay products")
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} in source decay products")
 
     # Consolidate adduct intensity with parent ions intensity
     for y, row in parent_muropeptide_df.iterrows():
@@ -281,7 +287,7 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
                                 consolidated_decay_df.at[idx, 'maxIntensity'] = consolidated_intensity
                                 consolidated_decay_df.drop(drop_idx, inplace=True)
                             except IndexError:
-                                print("drop idx: ", drop_idx, " has already been removed")
+                                LOGGER.info("drop idx: ", drop_idx, " has already been removed")
 
     return consolidated_decay_df
 
@@ -295,32 +301,32 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     theo = theo_masses_df
     ff = raw_data_df
 
-    print("Filtering Theo masses by observed masses")
+    LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo,user_ppm)
 
     if 'Multimers' in enabled_mod_list:
-        print("Building multimers from obs muropeptides")
+        LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
-        print("fitering theo multimers by observed")
+        LOGGER.info("Filtering theoretical multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df,user_ppm)
     elif 'multimers_Glyco' in enabled_mod_list:
-        print("Building multimers from obs muropeptides")
+        LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 1)
-        print("fitering theo multimers by observed")
+        LOGGER.info("Filtering theoretical multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
     elif 'Multimers_Lac' in enabled_mod_list:
-        print("Building multimers_Lac from obs muropeptides")
+        LOGGER.info("Building multimers_Lac from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 2)
-        print("fitering theo multimers by observed")
+        LOGGER.info("Filtering theoretical multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
     else:
         obs_multimers_df = pd.DataFrame()
 
-    print("building custom searh file")
+    LOGGER.info("Building custom search file")
     obs_frames = [obs_monomers_df, obs_multimers_df]
     obs_theo_df = pd.concat(obs_frames).reset_index(drop=True)
 
-    print("generating variants")
+    LOGGER.info("Generating variants")
 
     if 'Sodium' in enabled_mod_list:
         adducts_sodium_df = modification_generator(obs_theo_df, "Sodium")
@@ -380,9 +386,9 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
                     oacetyl_df, decay_df, nude_df, ami_df, deglyco_df, double_Anhydro_df]
     master_list = pd.concat(master_frame)
     master_list = master_list.astype({'Monoisotopicmass': float})
-    print("Matching")
+    LOGGER.info("Matching")
     matched_data_df = matching(ff, master_list, user_ppm)
-    print("Cleaning data")
+    LOGGER.info("Cleaning data")
     cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
     cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
     cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
