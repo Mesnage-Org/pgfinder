@@ -287,7 +287,7 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
                                 consolidated_decay_df.at[idx, 'maxIntensity'] = consolidated_intensity
                                 consolidated_decay_df.drop(drop_idx, inplace=True)
                             except IndexError:
-                                LOGGER.info("drop idx: ", drop_idx, " has already been removed")
+                                LOGGER.info(f"drop idx: {drop_idx} has already been removed")
 
     return consolidated_decay_df
 
