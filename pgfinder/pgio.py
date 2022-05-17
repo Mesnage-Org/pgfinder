@@ -1,6 +1,6 @@
+"""PG Finder I/O operations"""
 import tempfile
 from typing import Union
-import pathlib
 from pathlib import Path
 import datetime
 import io
@@ -11,11 +11,26 @@ import numpy as np
 import yaml
 
 
+from pgfinder.logs.logs import LOGGER_NAME
+
+LOGGER = logging.getLogger(LOGGER_NAME)
+
 def ms_file_reader(file) -> pd.DataFrame:
-    """Read mass spec data."""
+    """Read mass spec data.
+
+    Parameters
+    ----------
+    file: Union[str, Path]
+        Path to be loaded.
+
+    Returns
+    -------
+    pd.DataFrame
+        File loaded as Pandas Dataframe.
+    """
     filename = file
-    print(f'### file     : {file}')
-    print(f'### filename : {filename}')
+    LOGGER.info(f'### file     : {file}')
+    LOGGER.info(f'### filename : {filename}')
     if not str(file).find("ftrs") == -1:
         return_df = ftrs_reader(file)
     elif not str(file).find("txt") == -1:
@@ -28,7 +43,18 @@ def ms_file_reader(file) -> pd.DataFrame:
 
 
 def ms_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget."""
+    """For reading from an interactive jupyter notebook with a file upload widget.
+
+    Parameters
+    ----------
+    upload: dict
+        Dictionary of ???
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame of ???
+    """
     filename = list(upload.keys())[0]
     file_contents = upload[list(upload.keys())[0]][
         "content"
@@ -48,11 +74,18 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     return return_df
 
 
-def ftrs_reader(file):
-    """Reads FTRS file from Byos
+def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
+    """Reads Features file from Byos
 
-    :param filePath:
-    :return dataframe:
+    Parameters
+    ----------
+    file: Union[str, Path]
+        Feature file to be read.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame of features.
     """
     with sqlite3.connect(file) as db:
 
@@ -95,11 +128,16 @@ def ftrs_reader(file):
         return ff
 
 
-def theo_masses_reader(file):
+def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     """Reads theoretical masses files (csv)
 
-    :param file:
-    :return dataframe:
+    Parameters
+    ----------
+    file: Union[str, Path]
+
+    Returns
+    -------
+        Pandas DataFrame of theoretical masses.
     """
     # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(file)
@@ -109,7 +147,22 @@ def theo_masses_reader(file):
 
 
 def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget."""
+    """For reading theoretical masses from an interactive jupyter notebook with a file upload widget.
+
+    Parameters
+    ----------
+    upload: dict
+        Dictionary of masses to be uploaded.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas Dataframe of theoretical masses.
+    """
+    # FIXME : Not clear to me (NS) how or why a dictionary is supplied as a file, if its a file can/should use something
+    # like...
+    #
+    #    return_df = pd.read_json(file)
     filename = list(upload.keys())[0]
     file_contents = upload[list(upload.keys())[0]][
         "content"
@@ -124,8 +177,15 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 def maxquant_file_reader(file):
     """Reads maxquant files and outputs data as a dataframe.
 
-    :param filepath (file should be a text file):
-    :return dataframe:
+    Parameters
+    ----------
+    filepath: Union[str, Path]
+        Path to a text file.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas Data frame
     """
 
     # reads file into dataframe
@@ -175,13 +235,18 @@ def maxquant_file_reader(file):
     return focused_maxquant_df
 
 
-def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_dataframe: pd.DataFrame):
+def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_dataframe: pd.DataFrame) -> None:
     """
     Writes dataframe to csv file at desired file location
-    :param save_filepath:
-    :param filename:
-    :param output_dataframe:
-    :return csv file:
+
+    Parameters
+    ----------
+    save_filepath: Union[str, Path]
+        Directory to save tile to.
+    filename: str
+        Filename to save file to.
+    output_dataframe: pd.DataFrame
+        Pandas Dataframe to write to csv
     """
 
     # Combine save location and desired file name with correct formatting for output as csv file.
@@ -195,7 +260,21 @@ def dataframe_to_csv_metadata(
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
 ) -> Union[str, Path]:
-    """If save_filepath is specified return the relative path of the output file, including the filename, otherwise return the .csv in the form of a string."""
+    """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
+    return the .csv in the form of a string.
+
+    Parameters
+    ----------
+    output_dataframe: pd.DataFrame
+        Dataframe to output.
+    save_filepath: Union[str, Path]
+        Path to save to.
+    filename: Union[str, Path]
+        Filename to save to.
+    
+    Returns
+    -------
+    """
     metadata = {
         'file': str(output_dataframe.attrs['file']),
         'masses_file': str(output_dataframe.attrs['masses_file']),
@@ -209,17 +288,27 @@ def dataframe_to_csv_metadata(
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
     if save_filepath:  # We're going to actually save the file to disk
-        filename = pathlib.Path(filename or default_filename())
-        write_location = os.path.join(save_filepath, filename)
-        output_dataframe.to_csv(write_location, index=False)
-        output = write_location
+        # filename = Path(filename or default_filename())
+        # write_location = os.path.join(save_filepath, filename)
+        # output_dataframe.to_csv(write_location, index=False)
+        filename = filename if filename is not None else default_filename()
+        save_filepath = Path(save_filepath)
+        output_dataframe.to_csv(save_filepath / filename, index=False)
+        # output = write_location
     else:  # We're going to leave it in memory as a string
         output = output_dataframe.to_csv(index=False)
 
     return output
 
 
-def default_filename():
+def default_filename() -> str:
+    """Generate a default filename based on the current date/time.
+
+    Returns
+    -------
+    str
+        Filename with format 'results_YYYY-MM-DD-hh-mm-ss.csv'.
+    """
     now = datetime.datetime.now()
     date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
     filename = "results_" + date_time + ".csv"

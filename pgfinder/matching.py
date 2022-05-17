@@ -163,7 +163,7 @@ def modification_generator(filtered_theo_df, mod_type: str):
             lambda Structure: mod_name + Structure)
     else:
         obs_theo_muropeptides_df['Structure'] = obs_theo_muropeptides_df['Structure'].map(
-            lambda Structure:  Structure[:len(Structure)-2] + " " + "(" + mod_type + ")" + " " + Structure[len(Structure)-2:len(Structure)])
+            lambda Structure: Structure[:len(Structure)-2] + " " + "(" + mod_type + ")" + " " + Structure[len(Structure)-2:len(Structure)])
 
     return obs_theo_muropeptides_df
 
@@ -176,7 +176,6 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     :param set_ppm:
     :return raw_data - dataframe:
     '''
-    # print(f'ftrs_df : {ftrs_df}')
     raw_data = ftrs_df.copy()
     # Data validation
     if ('Monoisotopicmass' not in matching_df.columns) | ('Structure' not in matching_df.columns):
