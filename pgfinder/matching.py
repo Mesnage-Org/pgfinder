@@ -57,7 +57,7 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     cols = ["theo_mwMonoisotopic", "inferredStructure"]
     if filtered_df.empty == True:
         raise ValueError(
-            "NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
         )
     exploded_df = (
         pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
@@ -93,9 +93,8 @@ def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
     theo_mw = []
     theo_struct = []
 
-    # Builder sub function - calculates multimer mass and name
-
     # FIXME : Move this out to its own function so it can be tested.
+    # Builder sub function - calculates multimer mass and name
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if (
@@ -225,7 +224,6 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
             + " "
             + Structure[len(Structure) - 2 : len(Structure)]
         )
-
     return obs_theo_muropeptides_df
 
 
