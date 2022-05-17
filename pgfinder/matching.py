@@ -312,15 +312,9 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
 
     # Status updates (prints to console)
     if parent_muropeptide_df.empty:
-<<<<<<< HEAD
-        print("No ", parent, " muropeptides found")
-    if adducted_muropeptide_df.empty:
-        print("No ", target, " found")
-=======
         LOGGER.info(f"No {parent}  muropeptides found")
     if adducted_muropeptide_df.empty:
         LOGGER.info(f"No {target} found")
->>>>>>> 12b1935 (9 | Adding find_pg.py a command line script)
     elif mass_to_clean == sodiated:
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} Sodium Adducts")
     elif mass_to_clean == potassated:
@@ -408,19 +402,19 @@ def data_analysis(
     ff = raw_data_df
 
     LOGGER.info("Filtering theoretical masses by observed masses")
-    obs_monomers_df = filtered_theo(ff, theo,user_ppm)
+    obs_monomers_df = filtered_theo(ff, theo, user_ppm)
 
-    if 'Multimers' in enabled_mod_list:
+    if "Multimers" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df,user_ppm)
-    elif 'multimers_Glyco' in enabled_mod_list:
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+    elif "multimers_Glyco" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 1)
         LOGGER.info("Filtering theoretical multimers by observed")
         obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
-    elif 'Multimers_Lac' in enabled_mod_list:
+    elif "Multimers_Lac" in enabled_mod_list:
         LOGGER.info("Building multimers_Lac from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 2)
         LOGGER.info("Filtering theoretical multimers by observed")
@@ -503,7 +497,7 @@ def data_analysis(
         double_Anhydro_df,
     ]
     master_list = pd.concat(master_frame)
-    master_list = master_list.astype({'Monoisotopicmass': float})
+    master_list = master_list.astype({"Monoisotopicmass": float})
     LOGGER.info("Matching")
     matched_data_df = matching(ff, master_list, user_ppm)
     LOGGER.info("Cleaning data")

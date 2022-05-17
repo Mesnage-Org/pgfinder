@@ -15,6 +15,11 @@ from pgfinder.logs.logs import LOGGER_NAME
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
+from pgfinder.logs.logs import LOGGER_NAME
+
+LOGGER = logging.getLogger(LOGGER_NAME)
+
+
 def ms_file_reader(file) -> pd.DataFrame:
     """Read mass spec data.
 
@@ -265,7 +270,6 @@ def dataframe_to_csv_metadata(
         Path to save to.
     filename: Union[str, Path]
         Filename to save to.
-
     Returns
     -------
     """
