@@ -1,13 +1,9 @@
 """Run pgfinder at the command line."""
 import argparse as arg
-from functools import partial
 import logging
-from multiprocessing import Pool
 from pathlib import Path
-from typing import Union, Dict
+from typing import Union
 import warnings
-
-from tqdm import tqdm
 
 from pgfinder.matching import data_analysis
 from pgfinder.pgio import (
@@ -16,7 +12,6 @@ from pgfinder.pgio import (
     dataframe_to_csv,
     dataframe_to_csv_metadata,
 )
-from pgfinder.validation import validate_theo_masses_df
 from pgfinder.logs.logs import LOGGER_NAME
 from pgfinder.utils import update_config
 from pgfinder.io import read_yaml
@@ -68,7 +63,7 @@ def process_file(
         enabled_mod_list=mod_list,
         user_ppm=ppm_tolerance,
     )
-    LOGGER.info(f"Processing complete!")
+    LOGGER.info("Processing complete!")
     dataframe_to_csv_metadata(save_filepath=output_dir, output_dataframe=results)
     LOGGER.info(f"Metadata save to   : {output_dir}")
     dataframe_to_csv(save_filepath=output_dir, filename="results.csv", output_dataframe=results)

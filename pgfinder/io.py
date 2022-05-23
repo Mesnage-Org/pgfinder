@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from typing import Union, Dict
 
-import ruamel.yaml
 from ruamel.yaml import YAML, YAMLError
 
 from pgfinder.logs.logs import LOGGER_NAME
