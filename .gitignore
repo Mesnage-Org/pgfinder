@@ -22,6 +22,7 @@ pgfinder/debug_enviroment
 pgfinder/local_test.py
 *~
 \#*
+\#*\#
 
 #Testing
 cov*.xml
