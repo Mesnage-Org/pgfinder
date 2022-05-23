@@ -10,14 +10,14 @@ Example notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybin
 
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With conda installed, run the following commands to create the virtual environment and activate it:
 
-```
+```bash
 conda create --force -n pgfinder python=3.7
 conda activate pgfinder
 ```
 
 ### Normal Use
 
-```
+```bash
 pip install git+https://github.com/Mesnage-Org/PGFinder.git
 ```
 
@@ -38,6 +38,7 @@ Install for development:
 
 ```bash
 pip install -e .
+pip install -e .[tests]
 ```
 
 You're fine to use a different virtual environment, if you want!
@@ -55,7 +56,7 @@ You can also use the command line interface `find_pg.py` which works with a YAML
 <path/to/config.yaml>`, so to use the example config you would.
 
 ``` bash
-python find_pg.py -c config/example.py
+./find_pg.py -c config/example.yaml
 ```
 
 Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help` for more information.

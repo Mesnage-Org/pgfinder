@@ -1,21 +1,16 @@
 """PG Finder I/O operations"""
 import logging
 import tempfile
-from typing import Union
+from typing import Union, Dict
 from pathlib import Path
 from datetime import datetime
 import io
-import os
 import pandas as pd
 import sqlite3
 import numpy as np
 import yaml
 
-from pgfinder.logs.logs import LOGGER_NAME
-
-LOGGER = logging.getLogger(LOGGER_NAME)
-
-
+from ruamel.yaml import YAML, YAMLError
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -43,6 +38,7 @@ def ms_file_reader(file) -> pd.DataFrame:
         raise ValueError("Unknown file type.")
 
     return_df.attrs["file"] = filename
+    LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
     return return_df
 
 
@@ -145,6 +141,7 @@ def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     theo_masses_df = pd.read_csv(file)
 
     theo_masses_df.attrs["file"] = file
+    LOGGER.info(f"Theoretical masses loaded from      : {file}")
     return theo_masses_df
 
 
@@ -276,8 +273,8 @@ def dataframe_to_csv_metadata(
     -------
     """
     metadata = {
-        "file": output_dataframe.attrs["file"],
-        "masses_file": output_dataframe.attrs["masses_file"],
+        "file": str(output_dataframe.attrs["file"]),
+        "masses_file": str(output_dataframe.attrs["masses_file"]),
         "rt_window": output_dataframe.attrs["rt_window"],
         "modifications": output_dataframe.attrs["modifications"],
         "ppm": output_dataframe.attrs["ppm"],
@@ -288,11 +285,9 @@ def dataframe_to_csv_metadata(
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
     if save_filepath:  # We're going to actually save the file to disk
-        # filename = Path(filename or default_filename())
-        # write_location = os.path.join(save_filepath, filename)
-        # output_dataframe.to_csv(write_location, index=False)
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
+        save_filepath.mkdir(parents=True, exist_ok=True)
         output_dataframe.to_csv(save_filepath / filename, index=False)
         output = str(save_filepath / filename)
         # output = write_location
@@ -315,3 +310,25 @@ def default_filename() -> str:
     filename = "results_" + date_time + ".csv"
 
     return filename
+
+
+def read_yaml(filename: Union[str, Path]) -> Dict:
+    """Read a YAML file.
+
+    Parameters
+    ----------
+    filename: Union[str, Path]
+        YAML file to read.
+
+    Returns
+    -------
+    Dict
+        Dictionary of the file."""
+
+    with Path(filename).open() as f:
+        try:
+            yaml_file = YAML(typ="safe")
+            return yaml_file.load(f)
+        except YAMLError as exception:
+            LOGGER.error(exception)
+            return {}
