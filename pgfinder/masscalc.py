@@ -13,7 +13,13 @@ LOGGER = logging.getLogger(LOGGER_NAME)
 
 
 def component_masses() -> pd.DataFrame:
-    """Returns a data frame with columns 'Code', 'Structure', 'Monoisotopicmass'."""
+    """Returns a data frame with columns 'Code', 'Structure', 'Monoisotopicmass'.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame of component masses.
+    """
     file = resources.open_text(pgfinder, "component_masses.csv")
     return pd.read_csv(
         file,
@@ -22,7 +28,13 @@ def component_masses() -> pd.DataFrame:
 
 
 def component_regex(component_masses: pd.DataFrame) -> str:
-    """Returns a regular expression string capturing 'Codes' to be associated with masses."""
+    """Returns a regular expression string capturing 'Codes' to be associated with masses.
+
+    Returns
+    -------
+    str
+        String of the code associated with each mass.
+    """
     component_masses = component_masses.sort_values(
         by="Code", ascending=False, key=lambda x: x.str.len()
     )  # Sort by code length high to low
@@ -31,7 +43,20 @@ def component_regex(component_masses: pd.DataFrame) -> str:
 
 
 def mass(structure: str, component_masses: pd.DataFrame) -> float:
-    """Returns a 'Monoisotopicmass' given a 'Structure' and the masses of its components."""
+    """Returns a 'Monoisotopicmass' given a 'Structure' and the masses of its components.
+
+    Parameters
+    ----------
+    structure: str
+        The structure to search for.
+    component_masses: pd.DataFrame
+        Pandas DataFrame from which the mass is extracted.
+
+    Returns
+    -------
+    float
+        The mass associated with a given structure.
+    """
     structure = "H2O" + structure  # Always add water
     regex = component_regex(component_masses)
     residual = re.sub(regex, "", structure)
@@ -48,18 +73,14 @@ def mass(structure: str, component_masses: pd.DataFrame) -> float:
     )
 
     LOGGER.info(
-        component_masses_filtered.to_string(
-            max_rows=component_masses_filtered.shape[0] + 1
-        )
+        component_masses_filtered.to_string(max_rows=component_masses_filtered.shape[0] + 1)
     )  # Log dataframe used in mass calc
 
     # Count MurNAc
     # Take away two hydrogen per "internal" MurNAc (2 x 1.0078Da)
-    n_murnac = int(
-        component_masses_filtered.Structure[
-            component_masses_filtered.Structure.str.contains("MurN")
-        ].count()
-    ) - 1 # One MurNAc is terminal
+    n_murnac = (
+        int(component_masses_filtered.Structure[component_masses_filtered.Structure.str.contains("MurN")].count()) - 1
+    )  # One MurNAc is terminal
 
     murnac_mass_adjust = n_murnac * 2 * 1.0078
 

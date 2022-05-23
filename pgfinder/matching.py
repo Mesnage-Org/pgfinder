@@ -1,44 +1,60 @@
+"""Matching functions"""
+
 from decimal import *
 
 import pandas as pd
 
 
-def calc_ppm_tolerance(mw: float, ppm_tol: int = 10):
+# FIXME: descriptive variable names, what does mw mean?
+def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     """
-    Calculates ppm tolerance value
-    :param mw:
-    :param ppm_tol:
-    :return float:
+    Calculate ppm tolerance.
+
+    Parameters
+    ----------
+    mw: float
+        ????
+    ppm_tol: int
+        PPM tolerance
+
+    Returns
+    -------
+    float
+        PPM tolerance
     """
     return (mw * ppm_tol) / 1000000
 
 
-def filtered_theo(ftrs_df, theo_list, user_ppm: int):
+# FIXME: theo_list passed to matching() is actually a pd.DataFrame
+def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int) -> pd.DataFrame:
     """
-    Generate list of observed structures from theoretical masses dataframe to reduce search space
+    Generate list of observed structures from theoretical masses dataframe to reduce search space.
 
-    :param ftrs_df:
-    :param theo_list:
-    :param user_ppm:
-    :return dataframe:
+    Parameters
+    ----------
+    ftrs_df: pd.DataFrame
+        Features dataframe.
+    theo_list: pd.DataFrame
+        Theoretical dataframe.
+    user_ppm: int
+
+    Returns
+    -------
+    pd.DataFrame
     """
 
-    matched_df = matching(
-        ftrs_df, theo_list, user_ppm
-    )  # Match theoretical structures to raw data to generate a list of observed structures
-
-    filtered_df = matched_df.loc[
-        :, "theo_mwMonoisotopic":"inferredStructure"
-    ]  # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
-    filtered_df.dropna(
-        subset=["theo_mwMonoisotopic"], inplace=True
-    )  # Drop all rows with NaN values in the theo_mwMonoisotopic column
+    # Match theoretical structures to raw data to generate a list of observed structures
+    matched_df = matching(ftrs_df, theo_list, user_ppm)
+    # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
+    filtered_df = matched_df.loc[:, "theo_mwMonoisotopic":"inferredStructure"]
+    # Drop all rows with NaN values in the theo_mwMonoisotopic column
+    filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
 
     # Explode dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
     cols = ["theo_mwMonoisotopic", "inferredStructure"]
     if filtered_df.empty == True:
         raise ValueError(
-            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+            "NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
         )
     exploded_df = (
         pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
@@ -54,12 +70,21 @@ def filtered_theo(ftrs_df, theo_list, user_ppm: int):
     return exploded_df
 
 
-def multimer_builder(theo_list, multimer_type: int = 0):
+# FIXME This function seems incomplete, it doesn't appear to do anything?
+def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
     """
     Generate multimers (dimers & trimers) from observed monomers
-    :param theo_list:
-    :param multimer_type:
-    :return dataframe:
+
+    Parameters
+    ----------
+    theo_list: list
+        List of theoretical masses of monomers
+    multimer_type: int
+        ???
+    Returns
+    -------
+    pd.DataFrame
+        Pandas Dataframe of ???
     """
 
     theo_mw = []
@@ -67,6 +92,7 @@ def multimer_builder(theo_list, multimer_type: int = 0):
 
     # Builder sub function - calculates multimer mass and name
 
+    # FIXME : Move this out to its own function so it can be tested.
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if (
@@ -119,14 +145,23 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     return multimer_df
 
 
-def modification_generator(filtered_theo_df, mod_type: str):
-    """
-    Generates modified muropeptides (calculates new mass and add modification tag to structure name)
-    :param filtered_theo_df:
-    :param mod_type:
-    :return dataframe:
+def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.DataFrame:
+    """Generates modified muropeptides (calculates new mass and add modification tag to structure name).
+
+    Parameters
+    ----------
+    filtered_theo_df : pd.DataFrame
+        Pandas DataFrame of theoretical masses that have been filtered.
+    mod_type : str
+        Modification type ???.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame of ???
     """
 
+    # FIXME : Replace with data structure such as dictionary
     if mod_type == "Anhydro":
         mod_mass = Decimal("-20.0262")
     elif mod_type == "Double Anhydro":
@@ -233,7 +268,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     return raw_data
 
 
-def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
+def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
 
     Parameters
@@ -338,7 +373,22 @@ def clean_up(ftrs_df, mass_to_clean: Decimal, time_delta: float):
 
 def data_analysis(
     raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int
-):
+) -> pd.DataFrame:
+    """Perform analysis.
+
+    Parameters
+    ----------
+    raw_data_df : pd.DataFrame
+        User data as Pandas DataFrame.
+    theo_masses_df : pd.DataFrame
+        Theoretical masses as Pandas DataFrame.
+    rt_window : float
+        ???
+    enabled_mod_list : list
+        List of modules to enable.
+    user_ppm : ???
+        ???
+    """
 
     sugar = Decimal("203.0793")
     sodium = Decimal("21.9819")
