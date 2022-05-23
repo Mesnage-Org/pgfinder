@@ -2,7 +2,11 @@
 from argparse import Namespace
 import logging
 from pathlib import Path
-from typing import Union, List, Dict
+from typing import Union, Dict
+
+from pgfinder.logs.logs import LOGGER_NAME
+
+LOGGER = logging.getLogger(LOGGER_NAME)
 
 def convert_path(path: Union[str, Path]) -> Path:
     """Ensure path is Path object.
