@@ -1,4 +1,5 @@
 """PG Finder I/O operations"""
+import logging
 import tempfile
 from typing import Union
 from pathlib import Path
@@ -270,6 +271,7 @@ def dataframe_to_csv_metadata(
         Path to save to.
     filename: Union[str, Path]
         Filename to save to.
+
     Returns
     -------
     """
