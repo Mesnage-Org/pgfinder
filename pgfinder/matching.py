@@ -57,7 +57,7 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     cols = ["theo_mwMonoisotopic", "inferredStructure"]
     if filtered_df.empty == True:
         raise ValueError(
-            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+            "NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
         )
     exploded_df = (
         pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
@@ -95,6 +95,8 @@ def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
 
     # FIXME : Move this out to its own function so it can be tested.
     # Builder sub function - calculates multimer mass and name
+
+    # FIXME : Move this out to its own function so it can be tested.
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if (
