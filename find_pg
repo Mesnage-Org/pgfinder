@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Run pgfinder at the command line."""
 import argparse as arg
 import logging
@@ -14,7 +15,7 @@ from pgfinder.pgio import (
 )
 from pgfinder.logs.logs import LOGGER_NAME
 from pgfinder.utils import update_config
-from pgfinder.io import read_yaml
+from pgfinder.pgio import read_yaml
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
@@ -49,12 +50,10 @@ def process_file(
 ):
     """Process files"""
     df = ms_file_reader(input_file)
-    LOGGER.info(f"Loaded file from   : {input_file}")
 
     masses = theo_masses_reader(masses_file)
-    LOGGER.info(f"Loaded masses from : {masses_file}")
-    LOGGER.info(f"PPM Tolerance      : {ppm_tolerance}")
-    LOGGER.info(f"Time Delta         : {time_delta}")
+    LOGGER.info(f"PPM Tolerance                      : {ppm_tolerance}")
+    LOGGER.info(f"Time Delta                         : {time_delta}")
 
     results = data_analysis(
         raw_data_df=df,
@@ -65,9 +64,9 @@ def process_file(
     )
     LOGGER.info("Processing complete!")
     dataframe_to_csv_metadata(save_filepath=output_dir, output_dataframe=results)
-    LOGGER.info(f"Metadata save to   : {output_dir}")
+    LOGGER.info(f"Metadata save to                   : {output_dir}")
     dataframe_to_csv(save_filepath=output_dir, filename="results.csv", output_dataframe=results)
-    LOGGER.info(f"Results saved to   : {output_dir / 'results.csv'}")
+    LOGGER.info(f"Results saved to                   : {output_dir / 'results.csv'}")
 
 
 def main():
@@ -79,8 +78,8 @@ def main():
     config = read_yaml(args.config_file)
     config = update_config(config, args)
 
-    LOGGER.info(f"Configuration file loaded from    : {args.config_file}")
-    LOGGER.info(f'Input file                        : {config["input_file"]}')
+    LOGGER.info(f"Configuration file loaded from     : {args.config_file}")
+    LOGGER.info(f'Input file                         : {config["input_file"]}')
 
     # Optionally ignore all warnings or just show deprecation warnings
     if config["warnings"] == "ignore":
