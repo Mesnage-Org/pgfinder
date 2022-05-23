@@ -294,6 +294,7 @@ def dataframe_to_csv_metadata(
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
         output_dataframe.to_csv(save_filepath / filename, index=False)
+        output = str(save_filepath / filename)
         # output = write_location
     else:  # We're going to leave it in memory as a string
         output = output_dataframe.to_csv(index=False)
