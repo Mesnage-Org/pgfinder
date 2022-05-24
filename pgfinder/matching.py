@@ -333,17 +333,17 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         adducts_potassium_df = pd.DataFrame()
 
     if 'Anh' in enabled_mod_list:
-        anhydro_df = modification_generator(obs_theo_df, "Anhydro")
+        anhydro_df = modification_generator(obs_theo_df, "Anh")
     else:
         anhydro_df = pd.DataFrame()
 
     if 'DeAc' in enabled_mod_list:
-        deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
+        deacetyl_df = modification_generator(obs_theo_df, "DeAc")
     else:
         deacetyl_df = pd.DataFrame()
 
     if 'DeAc_Anh' in enabled_mod_list:
-        deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
+        deac_anhy_df = modification_generator(obs_theo_df, "DeAc_Anh")
     else:
         deac_anhy_df = pd.DataFrame()
     if 'O-Acetylated' in enabled_mod_list:
