@@ -109,15 +109,15 @@ def modification_generator(filtered_theo_df, mod_type: str):
     :return dataframe:
     '''
 
-    if mod_type == "Anhydro":
+    if mod_type == "Anh":
         mod_mass = Decimal('-20.0262')
-    elif mod_type == "Double Anhydro":
+    elif mod_type == "Double_Anh":
         mod_mass = Decimal('-40.0524')
-    elif mod_type == "Deacetyl":
+    elif mod_type == "DeAc":
         mod_mass = Decimal('-42.0105')
     elif mod_type == "O-Acetylated":
         mod_mass = Decimal('42.0105')
-    elif mod_type == "Deacetyl-Anhydro":
+    elif mod_type == "DeAc_Anh":
         mod_mass = Decimal('-62.0368')
     elif mod_type == "Decay":
         mod_mass = Decimal('-203.0793')
@@ -332,7 +332,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     else:
         adducts_potassium_df = pd.DataFrame()
 
-    if 'Anhydro' in enabled_mod_list:
+    if 'Anh' in enabled_mod_list:
         anhydro_df = modification_generator(obs_theo_df, "Anhydro")
     else:
         anhydro_df = pd.DataFrame()
@@ -342,7 +342,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
     else:
         deacetyl_df = pd.DataFrame()
 
-    if 'Deacetyl_Anhydro' in enabled_mod_list:
+    if 'DeAc_Anh' in enabled_mod_list:
         deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
     else:
         deac_anhy_df = pd.DataFrame()
@@ -372,7 +372,7 @@ def data_analysis(raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_wi
         deglyco_df = pd.DataFrame()
 
     if 'Double_Anh' in enabled_mod_list:
-        double_Anhydro_df = modification_generator(obs_theo_df, 'Double Anhydro')
+        double_Anhydro_df = modification_generator(obs_theo_df, 'Double_Anh')
     else:
         double_Anhydro_df = pd.DataFrame()
 
