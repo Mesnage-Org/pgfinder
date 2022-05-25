@@ -1,5 +1,6 @@
 """Functions for validation of data."""
-from typing import Union
+from pathlib import Path
+from typing import Union, List
 import io
 import pkgutil
 import numpy as np
