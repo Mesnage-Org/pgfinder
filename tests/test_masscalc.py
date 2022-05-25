@@ -31,9 +31,7 @@ def test_mass(caplog, struct_mass: pd.DataFrame, code_masses: pd.DataFrame):
         "Mass difference: "
         + f"{(np.around(masscalc.mass(Structure, code_masses), decimals=4) - Monoisotopicmass):.14f}"
     )  # Record mass difference
-    assert (
-        np.around(masscalc.mass(Structure, code_masses), decimals=4) == Monoisotopicmass
-    )
+    assert np.around(masscalc.mass(Structure, code_masses), decimals=4) == Monoisotopicmass
 
 
 def test_mass_warning(caplog, code_masses: pd.DataFrame):

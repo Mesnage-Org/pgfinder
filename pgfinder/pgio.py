@@ -3,7 +3,7 @@ import logging
 import tempfile
 from typing import Union, Dict
 from pathlib import Path
-import datetime
+from datetime import datetime
 import io
 import pandas as pd
 import sqlite3
@@ -306,7 +306,7 @@ def default_filename() -> str:
     str
         Filename with format 'results_YYYY-MM-DD-hh-mm-ss.csv'.
     """
-    now = datetime.datetime.now()
+    now = datetime.now()
     date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
     filename = "results_" + date_time + ".csv"
 
