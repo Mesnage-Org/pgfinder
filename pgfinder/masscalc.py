@@ -7,6 +7,10 @@ import pandas as pd
 
 import pgfinder
 
+from pgfinder.logs.logs import LOGGER_NAME
+
+LOGGER = logging.getLogger(LOGGER_NAME)
+
 
 def component_masses() -> pd.DataFrame:
     """Returns a data frame with columns 'Code', 'Structure', 'Monoisotopicmass'."""
@@ -43,7 +47,7 @@ def mass(structure: str, component_masses: pd.DataFrame) -> float:
         right_on="Code",
     )
 
-    logging.info(
+    LOGGER.info(
         component_masses_filtered.to_string(
             max_rows=component_masses_filtered.shape[0] + 1
         )
@@ -59,7 +63,7 @@ def mass(structure: str, component_masses: pd.DataFrame) -> float:
 
     murnac_mass_adjust = n_murnac * 2 * 1.0078
 
-    logging.info("Internal MurNAc: " + str(n_murnac))
-    logging.info("Mass adjustment for internal MurNAcs: -" + str(murnac_mass_adjust))
+    LOGGER.info("Internal MurNAc: " + str(n_murnac))
+    LOGGER.info("Mass adjustment for internal MurNAcs: -" + str(murnac_mass_adjust))
 
     return component_masses_filtered.Monoisotopicmass.sum() - murnac_mass_adjust
