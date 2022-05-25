@@ -53,13 +53,15 @@ python demo.py
 
 You can also use the command line interface `find_pg.py` which works with a YAML configuration file (see
 `config/example.yaml`) for an example which you can modify. You must supply at least one option on the command line `-c
-<path/to/config.yaml>`, so to use the example config you would.
+<path/to/config.yaml>`, so to use the example config you would...
 
 ``` bash
-./find_pg.py -c config/example.yaml
+./find_pg -c config/example.yaml
 ```
 
-Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help` for more information.
+Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help** for more information.
+
+**NB** - This will _not_ currently work under Microsoft Windows, but work is in the pipeline to address this.
 
 ## Testing
 
