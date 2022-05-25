@@ -31,7 +31,7 @@ def ms_file_reader(file) -> pd.DataFrame:
     filename = file
     if not str(file).find("ftrs") == -1:
         return_df = ftrs_reader(file)
-    elif not file.find("txt") == -1:
+    elif not str(file).find("txt") == -1:
         return_df = maxquant_file_reader(file)
     else:
         raise ValueError("Unknown file type.")
@@ -244,8 +244,9 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
     """
 
     # Combine save location and desired file name with correct formatting for output as csv file.
-    write_location = save_filepath + "/" + filename + ".csv"
-    output_dataframe.to_csv(write_location, index=False)
+    # write_location = save_filepath + "/" + filename + ".csv"
+    # output_dataframe.to_csv(write_location, index=False)
+    output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
 
 
 def dataframe_to_csv_metadata(
