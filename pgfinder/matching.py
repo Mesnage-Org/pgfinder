@@ -95,8 +95,6 @@ def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
 
     # FIXME : Move this out to its own function so it can be tested.
     # Builder sub function - calculates multimer mass and name
-
-    # FIXME : Move this out to its own function so it can be tested.
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if (
