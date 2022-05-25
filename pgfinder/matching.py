@@ -8,6 +8,7 @@ from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
+
 # FIXME: descriptive variable names, what does mw mean?
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     """

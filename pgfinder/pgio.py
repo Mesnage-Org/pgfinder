@@ -11,6 +11,7 @@ import numpy as np
 import yaml
 
 from ruamel.yaml import YAML, YAMLError
+
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
