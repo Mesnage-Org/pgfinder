@@ -9,6 +9,7 @@ Welcome to pgfinder's documentation!
     installation
     usage
     contributing
+    copying
 
 .. toctree::
    :maxdepth: 2
