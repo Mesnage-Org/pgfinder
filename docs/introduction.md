@@ -8,8 +8,8 @@
 
 ## Methods
 
-**FIXME** Will be useful to include a flow diagram similar to that on [slide 24](https://docs.google.com/presentation/d/1qoA56Wr2qJDOBp7v_lnNiYYFScitYRwo/edit#slide=id.p24**
+**FIXME** Will be useful to include a flow diagram similar to that on [slide 24](https://docs.google.com/presentation/d/1qoA56Wr2qJDOBp7v_lnNiYYFScitYRwo/edit#slide=id.p2)
 
 ## References
 
-**FIXME** Also include references/citations to published work
+* [PGFinder, a novel analysis pipeline for the consistent, reproducible, and high-resolution structural analysis of bacterial peptidoglycans | eLife](https://elifesciences.org/articles/70597)
