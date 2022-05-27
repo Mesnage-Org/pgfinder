@@ -10,14 +10,14 @@ Example notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybin
 
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With conda installed, run the following commands to create the virtual environment and activate it:
 
-```
+```bash
 conda create --force -n pgfinder python=3.7
 conda activate pgfinder
 ```
 
 ### Normal Use
 
-```
+```bash
 pip install git+https://github.com/Mesnage-Org/PGFinder.git
 ```
 
@@ -29,35 +29,51 @@ The project [data dictionary](data_dictionary.md).
 
 Clone this repository:
 
-```
+```bash
 git clone https://github.com/Mesnage-Org/PGFinder.git
 cd pgfinder
 ```
 
 Install for development:
 
-```
+```bash
 pip install -e .
+pip install -e .[tests]
 ```
 
 You're fine to use a different virtual environment, if you want!
+
 ## Usage
 
-```
+A demo is available with...
+
+```bash
 python demo.py
 ```
+
+You can also use the command line interface `find_pg.py` which works with a YAML configuration file (see
+`config/example.yaml`) for an example which you can modify. You must supply at least one option on the command line `-c
+<path/to/config.yaml>`, so to use the example config you would...
+
+``` bash
+./find_pg -c config/example.yaml
+```
+
+Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help** for more information.
+
+**NB** - This will _not_ currently work under Microsoft Windows, but work is in the pipeline to address this.
 
 ## Testing
 
 To run tests:
 
-```
+```bash
 pytest
 ```
 
 The tests check output against an expected baseline for [Maxquant](data/baseline_output.csv) or [FTRS](data/baseline_output_ftrs.csv). To recreate this (e.g. in response to improvements to the scientific "correctness" of the code ouput), use:
 
-```
+```bash
 python make_baseline.py
 ```
 
