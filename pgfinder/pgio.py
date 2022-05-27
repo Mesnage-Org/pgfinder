@@ -141,7 +141,6 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
     # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(input_file)
 
-    print(f"##### input_file : {}")
     theo_masses_df.attrs["file"] = input_file
     LOGGER.info(f"Theoretical masses loaded from      : {input_file}")
     return theo_masses_df
