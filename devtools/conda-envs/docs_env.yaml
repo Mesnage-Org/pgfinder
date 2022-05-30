@@ -11,11 +11,8 @@ dependencies:
   # This list is just an example
   - python=3.9
   - sphinx
-  - sphinx-rtd-theme
+  - sphinx_rtd_theme
   - pydata-sphinx-theme
-  - sphinx-rtd-theme
   - myst-parser
   - sphinx-markdown-tables
   - sphinxcontrib-mermaid
-  - recommonmark
-  - sphinx-markdown-tables
