@@ -3,7 +3,7 @@ import logging
 import tempfile
 from typing import Union, Dict
 from pathlib import Path
-import datetime
+from datetime import datetime
 import io
 import pandas as pd
 import sqlite3
@@ -127,22 +127,22 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         return ff
 
 
-def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
+def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
     """Reads theoretical masses files (csv)
 
     Parameters
     ----------
-    file: Union[str, Path]
+    input_file: Union[str, Path]
 
     Returns
     -------
         Pandas DataFrame of theoretical masses.
     """
     # reads csv files and converts to dataframe
-    theo_masses_df = pd.read_csv(file)
+    theo_masses_df = pd.read_csv(input_file)
 
-    theo_masses_df.attrs["file"] = file
-    LOGGER.info(f"Theoretical masses loaded from      : {file}")
+    theo_masses_df.attrs["file"] = input_file
+    LOGGER.info(f"Theoretical masses loaded from      : {input_file}")
     return theo_masses_df
 
 
@@ -306,7 +306,7 @@ def default_filename() -> str:
     str
         Filename with format 'results_YYYY-MM-DD-hh-mm-ss.csv'.
     """
-    now = datetime.datetime.now()
+    now = datetime.now()
     date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
     filename = "results_" + date_time + ".csv"
 
