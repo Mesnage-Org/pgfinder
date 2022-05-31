@@ -33,5 +33,6 @@ jobs:
         uses: ns-rse/action-sphinx-docs-to-gh-pages@main
         with:
           branch: ns-rse/32-readthedocs
-          dir_docs: docs
+          dir_docs:
+          sphinxapiexclude: '*setup* tests* *.ipynb demo.py make_baseline.py'
           sphinxopts: ''
