@@ -34,6 +34,4 @@ jobs:
         with:
           branch: ns-rse/32-readthedocs
           dir_docs: docs
-          sphinxapiopts: ''
-          sphinxapiexclude: '"../*setup*" "../*tests*"'
           sphinxopts: ''
