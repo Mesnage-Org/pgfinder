@@ -4,7 +4,7 @@ name: Sphinx docs to gh-pages
 on:
   push:
     branches:
-      - ns-rse/32-readthedocs
+      - master
 
 # workflow_dispatch:        # Un comment line if you also want to trigger action manually
 
@@ -30,10 +30,10 @@ jobs:
           pip3 install pydata_sphinx_theme sphinx_rtd_theme myst_parser sphinx_markdown_tables sphinxcontrib-mermaid
           pip3 install .
       - name: Running Sphinx to gh-pages Action
-        uses: ns-rse/action-sphinx-docs-to-gh-pages@main
+        uses: master
         with:
           branch: ns-rse/32-readthedocs
           dir_docs: docs
           sphinxapiexclude: '*setup* tests* *.ipynb demo.py make_baseline.py jupyter_notebook_config.py demo_ftrs.py'
-          sphinxapiopts: '-o . ../'
+          sphinxapiopts: '--separate -o . ../'
           sphinxopts: ''
