@@ -75,7 +75,7 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | Decay	| Correct output taking into account in-source decay products |
 | Amidation | Search for Amidated muropeptides |
 | Amidase	| Search for peptides resulting from amidase cleavage (GlcNAc-MurNAc loss) |
-| Double Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
+| Double_Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
 | Multimers	| Search for multimers resulting from 3-3 and 4-3 crosslinks |
 | Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
 |Multimer Lac	| Search for lactyl-peptides multimers |

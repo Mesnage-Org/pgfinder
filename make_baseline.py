@@ -5,7 +5,7 @@ import pgfinder.validation as validation
 # Set mass database and modifications
 csv_filepath = "data/masses/e_coli_monomer_masses.csv"
 theo_masses = pgio.theo_masses_reader(csv_filepath)
-mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
+mod_test = ['Sodium','Potassium','Anh','DeAc','DeAc_Anh','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
 
 # Generate maxquant baseline
 mq_filepath = "data/maxquant_test_data.txt"

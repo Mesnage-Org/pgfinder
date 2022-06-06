@@ -165,16 +165,17 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     """
 
     # FIXME : Replace with data structure such as dictionary
-    if mod_type == "Anhydro":
-        mod_mass = Decimal("-20.0262")
-    elif mod_type == "Double Anhydro":
-        mod_mass = Decimal("-40.0524")
-    elif mod_type == "Deacetyl":
-        mod_mass = Decimal("-42.0105")
+
+    if mod_type == "Anh":
+        mod_mass = Decimal('-20.0262')
+    elif mod_type == "Double_Anh":
+        mod_mass = Decimal('-40.0524')
+    elif mod_type == "DeAc":
+        mod_mass = Decimal('-42.0105')
     elif mod_type == "O-Acetylated":
-        mod_mass = Decimal("42.0105")
-    elif mod_type == "Deacetyl-Anhydro":
-        mod_mass = Decimal("-62.0368")
+        mod_mass = Decimal('42.0105')
+    elif mod_type == "DeAc_Anh":
+        mod_mass = Decimal('-62.0368')
     elif mod_type == "Decay":
         mod_mass = Decimal("-203.0793")
     elif mod_type == "Sodium":
@@ -437,18 +438,18 @@ def data_analysis(
     else:
         adducts_potassium_df = pd.DataFrame()
 
-    if "Anhydro" in enabled_mod_list:
-        anhydro_df = modification_generator(obs_theo_df, "Anhydro")
+    if 'Anh' in enabled_mod_list:
+        anhydro_df = modification_generator(obs_theo_df, "Anh")
     else:
         anhydro_df = pd.DataFrame()
 
-    if "DeAc" in enabled_mod_list:
-        deacetyl_df = modification_generator(obs_theo_df, "Deacetyl")
+    if 'DeAc' in enabled_mod_list:
+        deacetyl_df = modification_generator(obs_theo_df, "DeAc")
     else:
         deacetyl_df = pd.DataFrame()
 
-    if "Deacetyl_Anhydro" in enabled_mod_list:
-        deac_anhy_df = modification_generator(obs_theo_df, "Deacetyl-Anhydro")
+    if 'DeAc_Anh' in enabled_mod_list:
+        deac_anhy_df = modification_generator(obs_theo_df, "DeAc_Anh")
     else:
         deac_anhy_df = pd.DataFrame()
     if "O-Acetylated" in enabled_mod_list:
@@ -476,8 +477,9 @@ def data_analysis(
     else:
         deglyco_df = pd.DataFrame()
 
-    if "Double_Anh" in enabled_mod_list:
-        double_Anhydro_df = modification_generator(obs_theo_df, "Double Anhydro")
+    if 'Double_Anh' in enabled_mod_list:
+        double_Anhydro_df = modification_generator(obs_theo_df, 'Double_Anh')
+
     else:
         double_Anhydro_df = pd.DataFrame()
 
