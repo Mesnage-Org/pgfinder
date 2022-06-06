@@ -32,7 +32,7 @@ jobs:
       - name: Running Sphinx to gh-pages Action
         uses: master
         with:
-          branch: ns-rse/32-readthedocs
+          branch: master
           dir_docs: docs
           sphinxapiexclude: '*setup* tests* *.ipynb demo.py make_baseline.py jupyter_notebook_config.py demo_ftrs.py'
           sphinxapiopts: '--separate -o . ../'
