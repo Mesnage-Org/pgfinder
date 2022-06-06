@@ -27,7 +27,6 @@ def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     return (mw * ppm_tol) / 1000000
 
 
-# FIXME: theo_list passed to matching() is actually a pd.DataFrame
 def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int) -> pd.DataFrame:
     """Generate list of observed structures from theoretical masses dataframe to reduce search space.
 
