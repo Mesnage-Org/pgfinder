@@ -15,7 +15,7 @@ def theo_masses_df(theo_masses_file_name):
 @pytest.fixture
 def mod_test():
     """Modifications used in regression testing."""
-    return ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
+    return ['Sodium','Potassium','Anh','DeAc','DeAc_Anh','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
 
 @pytest.fixture
 def mq_file_name():

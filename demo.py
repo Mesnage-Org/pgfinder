@@ -11,7 +11,7 @@ validation.validate_raw_data_df(masses)
 theo_masses = pgio.theo_masses_reader(csv_filepath)
 validation.validate_theo_masses_df(theo_masses)
 
-mod_test = ['Sodium','Potassium','Anhydro','DeAc','Deacetyl_Anhydro','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
+mod_test = ['Sodium','Potassium','Anh','DeAc','DeAc_Anh','Nude','Decay','Amidation','Amidase','Double_Anh','multimers_Glyco']
 
 results = matching.data_analysis(masses, theo_masses, 0.5, mod_test, 10)
 
