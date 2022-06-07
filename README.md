@@ -4,11 +4,11 @@
 
 Full documentation will be available on ReadTheDocs (pending [#32](https://github.com/Mesnage-Org/pgfinder/issues/32))
 
-  * [Introduction](docs/introduction.md)
-  * [Installation](docs/installation.md)
-  * [Usage](docs/usage.md)
-  * [Contributing](docs/contributing.md)
-  * [Copying](docs/copying.md)
+  * [Introduction](https://mesnage-org.github.io/pgfinder/introduction.html)
+  * [Installation](https://mesnage-org.github.io/pgfinder/installation.html)
+  * [Usage](https://mesnage-org.github.io/pgfinder/usage.html)
+  * [Contributing](https://mesnage-org.github.io/pgfinder/contributing.html)
+  * [Copying](https://mesnage-org.github.io/pgfinder/copying.html)
 
 ## Links
 

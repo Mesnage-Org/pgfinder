@@ -1,4 +1,4 @@
-# Overview
+# Introduction
 
 This package is a product of work undertaken by the [Mesnage Lab](https://mesnagelab.weebly.com/) to improve the
 workflow for the analysis of bacterial peptidoglycans[[1]](#1)
@@ -10,6 +10,8 @@ workflow for the analysis of bacterial peptidoglycans[[1]](#1)
 **FIXME** Background information on Peptidoglycan analysis.
 
 ## Methods
+
+**FIXME** Mermaid diagram doesn't render when Sphinx documentation is built on GitHub.
 
 ``` mermaid
 graph TD;
