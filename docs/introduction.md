@@ -11,8 +11,6 @@ workflow for the analysis of bacterial peptidoglycans[[1]](#1)
 
 ## Methods
 
-**FIXME** Mermaid diagram doesn't render when Sphinx documentation is built on GitHub.
-
 ```{mermaid}
 graph TD;
 
@@ -49,7 +47,6 @@ graph TD;
     style O fill:#910007,stroke:#000000
 ```
 
-**FIXME** Will be useful to include a flow diagram similar to that on [slide 24](https://docs.google.com/presentation/d/1qoA56Wr2qJDOBp7v_lnNiYYFScitYRwo/edit#slide=id.p24)
 
 ## References
 
