@@ -13,7 +13,7 @@ workflow for the analysis of bacterial peptidoglycans[[1]](#1)
 
 **FIXME** Mermaid diagram doesn't render when Sphinx documentation is built on GitHub.
 
-``` mermaid
+```{mermaid}
 graph TD;
 
     A[Monomer Masses Database] --> C[Match monomers]

@@ -4,7 +4,7 @@ name: Sphinx docs to gh-pages
 on:
   push:
     branches:
-      - master
+      - ns-rse/32-readthedocs
 
 # workflow_dispatch:        # Un comment line if you also want to trigger action manually
 
@@ -16,24 +16,19 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Make conda environment
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.9    # Python version to build the html sphinx documentation
-          environment-file: devtools/conda-envs/docs_env.yaml    # Path to the documentation conda environment
-          auto-update-conda: false
-          auto-activate-base: false
-          show-channel-urls: true
+          python-version: 3.9
       - name: Installing the library
-        shell: bash -l {0}
         run: |
-          pip3 install pydata_sphinx_theme sphinx_rtd_theme myst_parser sphinx_markdown_tables sphinxcontrib-mermaid
-          pip3 install .
+          pip3 install sphinx pydata_sphinx_theme sphinx_rtd_theme myst_parser sphinx_markdown_tables sphinxcontrib-mermaid
+          pip3 install .[docs]
       - name: Running Sphinx to gh-pages Action
-        uses: master
+        uses: ns-rse/action-sphinx-docs-to-gh-pages@main
         with:
-          branch: master
+          branch: ns-rse/32-readthedocs
           dir_docs: docs
-          sphinxapiexclude: '*setup* tests* *.ipynb demo.py make_baseline.py jupyter_notebook_config.py demo_ftrs.py'
+          sphinxapiexclude: '../*setup* ../*tests* ../*.ipynb ../demo.py ../make_baseline.py ../jupyter_notebook_config.py ../demo_ftrs.py'
           sphinxapiopts: '--separate -o . ../'
           sphinxopts: ''

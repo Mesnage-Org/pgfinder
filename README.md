@@ -2,7 +2,8 @@
 
 ![CI Tests](https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg) [![codecov](https://codecov.io/gh/Mesnage-Org/pgfinder/branch/master/graph/badge.svg?token=5SM94G9Z6K)](https://codecov.io/gh/Mesnage-Org/pgfinder)
 
-Full documentation will be available on ReadTheDocs (pending [#32](https://github.com/Mesnage-Org/pgfinder/issues/32))
+Interactive notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder_interactive.ipynb)
+Example notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder.ipynb)
 
   * [Introduction](https://mesnage-org.github.io/pgfinder/introduction.html)
   * [Installation](https://mesnage-org.github.io/pgfinder/installation.html)
