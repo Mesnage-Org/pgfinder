@@ -73,19 +73,19 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     return exploded_df
 
 
-def multimer_builder(theo_list, multimer_type: int = 0):
+def multimer_builder(theo_list, multimer_type: int = 0) -> pd.DataFrame:
     """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
     theo_list:
-        ??? (is it a list or dataframe, that a pd.DataFrame is returned suggests it should be the later?)
+        ? (is it a list or dataframe, that iterrows() is used on it suggests its actually a pd.DataFrame)
     multimer_type: int
-
+        ? (what do these signify)
     Returns
     -------
     pd.DataFrame
-        ???
+        ? Description required
     """
 
     theo_mw = []
@@ -226,7 +226,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     return obs_theo_muropeptides_df
 
 
-def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
+def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int) -> pd.DataFrame:
     """Match theoretical masses to observed masses within ppm tolerance.
 
     Parameters
@@ -245,7 +245,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     raw_data = ftrs_df.copy()
     # Data validation
     if ("Monoisotopicmass" not in matching_df.columns) | ("Structure" not in matching_df.columns):
-        print(
+        LOGGER.info(
             'Header of csv files must have column named "Monoisotopic mass" and another column named "Structure"!!!  Make note of capitalized letters and spacing!!!!'
         )
 
