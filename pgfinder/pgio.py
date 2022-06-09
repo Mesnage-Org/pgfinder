@@ -105,28 +105,16 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             },
             inplace=True,
         )
-        # Keeps only essential columns, all extraneous columns are left out.
-        focused_ff = ff[
-            [
-                "ID",
-                "xicStart",
-                "xicEnd",
-                "ionCount",
-                "chargeOrder",
-                "rt",
-                "mwMonoisotopic",
-                "theo_mwMonoisotopic",
-                "inferredStructure",
-                "maxIntensity",
-            ]
-        ]
         # Desired column order
         cols_order = [
             "ID",
             "xicStart",
             "xicEnd",
+            "feature",
+            "corrMax",
             "ionCount",
             "chargeOrder",
+            "maxIsotopeCount",
             "rt",
             "mwMonoisotopic",
             "theo_mwMonoisotopic",
@@ -134,9 +122,9 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             "maxIntensity",
         ]
         # Reorder columns in dataframe to desired order.
-        focused_ff = focused_ff[cols_order]
+        ff = ff[cols_order]
 
-        return focused_ff
+        return ff
 
 
 def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
