@@ -49,12 +49,12 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of ???
+        Dictionary of ?
 
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame of ???
+        Pandas DataFrame of ?
     """
     filename = list(upload.keys())[0]
     file_contents = upload[list(upload.keys())[0]]["content"]  # I hate this line of code
@@ -136,6 +136,7 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
 
     Returns
     -------
+    pd.DataFrame
         Pandas DataFrame of theoretical masses.
     """
     # reads csv files and converts to dataframe
@@ -248,8 +249,6 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
     """
 
     # Combine save location and desired file name with correct formatting for output as csv file.
-    # write_location = save_filepath + "/" + filename + ".csv"
-    # output_dataframe.to_csv(write_location, index=False)
     output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
 
 
@@ -285,14 +284,15 @@ def dataframe_to_csv_metadata(
 
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
-    if save_filepath:  # We're going to actually save the file to disk
+    # We're going to actually save the file to disk
+    if save_filepath:
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
         save_filepath.mkdir(parents=True, exist_ok=True)
         output_dataframe.to_csv(save_filepath / filename, index=False)
         output = str(save_filepath / filename)
-        # output = write_location
-    else:  # We're going to leave it in memory as a string
+    # We're going to leave it in memory as a string
+    else:
         output = output_dataframe.to_csv(index=False)
 
     return output

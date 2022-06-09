@@ -9,30 +9,26 @@ from pgfinder.logs.logs import LOGGER_NAME
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-# FIXME: descriptive variable names, what does mw mean?
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
-    """
-    Calculate ppm tolerance.
+    """Calculates ppm tolerance value
 
     Parameters
     ----------
     mw: float
-        ????
+        ?
     ppm_tol: int
         PPM tolerance
 
     Returns
     -------
     float
-        PPM tolerance
+        ?
     """
     return (mw * ppm_tol) / 1000000
 
 
-# FIXME: theo_list passed to matching() is actually a pd.DataFrame
 def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int) -> pd.DataFrame:
-    """
-    Generate list of observed structures from theoretical masses dataframe to reduce search space.
+    """Generate list of observed structures from theoretical masses dataframe to reduce search space.
 
     Parameters
     ----------
@@ -45,20 +41,23 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     Returns
     -------
     pd.DataFrame
+        ?
     """
-
     # Match theoretical structures to raw data to generate a list of observed structures
     matched_df = matching(ftrs_df, theo_list, user_ppm)
+
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
     filtered_df = matched_df.loc[:, "theo_mwMonoisotopic":"inferredStructure"]
+
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
     filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
 
-    # Explode dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
+    # Expand dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
     cols = ["theo_mwMonoisotopic", "inferredStructure"]
+    # FIXME : Better to use try: ... except:
     if filtered_df.empty == True:
         raise ValueError(
-            "NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
         )
     exploded_df = (
         pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
@@ -74,28 +73,26 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     return exploded_df
 
 
-# FIXME This function seems incomplete, it doesn't appear to do anything?
-def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
-    """
-    Generate multimers (dimers & trimers) from observed monomers
+def multimer_builder(theo_list, multimer_type: int = 0):
+    """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
-    theo_list: list
-        List of theoretical masses of monomers
+    theo_list:
+        ??? (is it a list or dataframe, that a pd.DataFrame is returned suggests it should be the later?)
     multimer_type: int
-        ???
+
     Returns
     -------
     pd.DataFrame
-        Pandas Dataframe of ???
+        ???
     """
 
     theo_mw = []
     theo_struct = []
-
-    # FIXME : Move this out to its own function so it can be tested.
     # Builder sub function - calculates multimer mass and name
+
+    # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
             if (
@@ -149,7 +146,7 @@ def multimer_builder(theo_list: list, multimer_type: int = 0) -> pd.DataFrame:
 
 
 def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.DataFrame:
-    """Generates modified muropeptides (calculates new mass and add modification tag to structure name).
+    """Generates modified muropeptides (calculates new mass and add modification tag to structure name)
 
     Parameters
     ----------
@@ -167,15 +164,15 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     # FIXME : Replace with data structure such as dictionary
 
     if mod_type == "Anh":
-        mod_mass = Decimal('-20.0262')
+        mod_mass = Decimal("-20.0262")
     elif mod_type == "Double_Anh":
-        mod_mass = Decimal('-40.0524')
+        mod_mass = Decimal("-40.0524")
     elif mod_type == "DeAc":
-        mod_mass = Decimal('-42.0105')
+        mod_mass = Decimal("-42.0105")
     elif mod_type == "O-Acetylated":
-        mod_mass = Decimal('42.0105')
+        mod_mass = Decimal("42.0105")
     elif mod_type == "DeAc_Anh":
-        mod_mass = Decimal('-62.0368')
+        mod_mass = Decimal("-62.0368")
     elif mod_type == "Decay":
         mod_mass = Decimal("-203.0793")
     elif mod_type == "Sodium":
@@ -277,13 +274,16 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     Parameters
     ----------
     ftrs_df: pd.DataFrame
-        Features Dataframe to tidy.
-    mass_to_clean: float
-    time_delta: float
+        Features dataframe?
+    matching_df: pd.DataFrame
+        ?
+    set_ppm: int
+        ?
 
     Returns
     -------
-    pd.DataFrame
+    pd.DataFrame:
+        ?
     """
     # Mass values for adducts
     sodiated = Decimal("21.9819")
@@ -369,7 +369,7 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                                 consolidated_decay_df.at[idx, "maxIntensity"] = consolidated_intensity
                                 consolidated_decay_df.drop(drop_idx, inplace=True)
                             except IndexError:
-                                LOGGER.info(f"drop idx: {drop_idx} has already been removed")
+                                LOGGER.info(f"Already removed : {drop_idx}")
 
     return consolidated_decay_df
 
@@ -386,18 +386,24 @@ def data_analysis(
     theo_masses_df : pd.DataFrame
         Theoretical masses as Pandas DataFrame.
     rt_window : float
-        ???
+        ?
     enabled_mod_list : list
         List of modules to enable.
-    user_ppm : ???
-        ???
-    """
+    user_ppm : int
+        ?
 
+    Returns
+    -------
+    pd.DataFrame
+    """
     sugar = Decimal("203.0793")
     sodium = Decimal("21.9819")
     potassium = Decimal("37.9559")
-    time_delta_window = rt_window  # retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
+    # retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
+    time_delta_window = rt_window
 
+    # FIXME : Should these be .copy() since Pandas DataFrames will be modified by reference I think and so any change to
+    # theo or ff cascades back to theo_masses_df and raw_data_df automatically (unless that is the intention)?
     theo = theo_masses_df
     ff = raw_data_df
 
@@ -438,17 +444,17 @@ def data_analysis(
     else:
         adducts_potassium_df = pd.DataFrame()
 
-    if 'Anh' in enabled_mod_list:
+    if "Anh" in enabled_mod_list:
         anhydro_df = modification_generator(obs_theo_df, "Anh")
     else:
         anhydro_df = pd.DataFrame()
 
-    if 'DeAc' in enabled_mod_list:
+    if "DeAc" in enabled_mod_list:
         deacetyl_df = modification_generator(obs_theo_df, "DeAc")
     else:
         deacetyl_df = pd.DataFrame()
 
-    if 'DeAc_Anh' in enabled_mod_list:
+    if "DeAc_Anh" in enabled_mod_list:
         deac_anhy_df = modification_generator(obs_theo_df, "DeAc_Anh")
     else:
         deac_anhy_df = pd.DataFrame()
@@ -477,8 +483,8 @@ def data_analysis(
     else:
         deglyco_df = pd.DataFrame()
 
-    if 'Double_Anh' in enabled_mod_list:
-        double_Anhydro_df = modification_generator(obs_theo_df, 'Double_Anh')
+    if "Double_Anh" in enabled_mod_list:
+        double_Anhydro_df = modification_generator(obs_theo_df, "Double_Anh")
 
     else:
         double_Anhydro_df = pd.DataFrame()
