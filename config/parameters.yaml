@@ -1,0 +1,115 @@
+multimer:
+  peptide:
+    gm-AEJA:
+      mass: 941.4075
+      mult_num: 2
+    gm-AEJ:
+      mass: 870.3704
+      mult_num: 2
+    gm-AEJ-gm-AEJ:
+      mass: 1722.7302
+      mult_num: 3
+    gm-AEJ-gm-AEJA:
+      mass: 1793.7673
+      mult_num: 3
+    gm-AEJA-gm-AEJA:
+      mass: 1864.8044
+      mult_num: 3
+  gycosidic:
+    gm-AE:
+      mass: 698.2858
+      mult_num: 2
+    gm-AEJA:
+      mass: 941.4075
+      mult_num: 2
+    gm-AEJ:
+      mass: 870.3704
+      mult_num: 2
+    gm-AEJ-gm-AEJ:
+      mass: 1722.7302
+      mult_num: 3
+    gm-AEJ-gm-AEJA:
+      mass: 1793.7673
+      mult_num: 3
+    gm-AEJA-gm-AEJA:
+      mass: 1864.8044
+      mult_num: 3
+    gm-AEJA_(Glyco):
+      mass: 939.3919
+      mult_num: 2
+    gm-AEJ_(Glyco):
+      mass: 868.3548
+      mult_num: 2
+    gm-AEJ-gm-AEJ_(Glyco):
+      mass: 1720.7146
+      mult_num: 3
+    gm-AEJ-gm-AEJA_(Glyco):
+      mass: 1791.7517
+      mult_num: 3
+    gm-AEJA-gm-AEJA_(Glyco):
+      mass: 1862.7888
+      mult_num:  3
+  lactyl:
+    Lac-AEJA:
+      mass: 533.2333
+      mult_num: 2
+    Lac-AEJ:
+      mass: 462.1962
+      mult_num: 2
+    Lac-AEJ-Lac-AEJ:
+      mass: 906.3818
+      mult_num: 3
+    Lac-AEJ-Lac-AEJA:
+      mass: 977.4189
+      mult_num: 3
+    Lac-AEJA-Lac-AEJA:
+      mass: 1048.4560
+      mult_num: 3
+mod_type:
+  Anh:
+    mass: -20.0262
+    name:
+  Double_Anh:
+    mass: -40.0524
+    name:
+  DeAc:
+    mass: -42.0105
+    name:
+  O-Acetylated:
+    mass: 42.0105
+    name:
+  DeAc_Anh:
+    mass: -62.0368
+    name:
+  Decay:
+    mass: -203.0793
+    name:
+  Sodium:
+    mass: 21.9819
+    name: Na+
+  Potassium:
+    mass: 37.9559
+    name: K+
+  Nude:
+    mass: 478.1799
+    name: gm-
+  Amidated:
+    mass: -0.9840
+    name: Amidated
+  Amidase Product:
+    mass: -480.1955
+    name: (Amidase Product)
+  Lactyl:
+    mass: -408.1744
+    name: (Lactyl)
+
+mass_to_clean:
+  sodiated:
+    parent: ^gm|^m|^Lac
+    target: ^Na+
+  potassated:
+    parent: ^gm|^m|^Lac
+    target: ^K+
+  decay:
+    parent: ^gm
+    target: ^m
