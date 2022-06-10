@@ -2,7 +2,8 @@
 
 ![CI Tests](https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg) [![codecov](https://codecov.io/gh/Mesnage-Org/pgfinder/branch/master/graph/badge.svg?token=5SM94G9Z6K)](https://codecov.io/gh/Mesnage-Org/pgfinder)
 
-Interactive notebooks are available for different versions from the links below...
+Interactive notebooks are available for different versions from the links below. If you wish to use the latest changes
+and improvements select the Notebooks from the `master` version.
 
 | Version  | Interactive | Example |
 |----------|-------------|---------|
