@@ -1,7 +1,6 @@
 input_file: data/ftrs_test_data.ftrs
 # input_file: data/maxquant_test_data.txt
 masses_file: data/masses/e_coli_monomer_masses.csv
-parameters_file: config/parameters.yaml
 ppm_tolerance: 0.5
 time_delta: 10
 mod_list:
@@ -19,3 +18,4 @@ mod_list:
 output_dir: output
 warnings: ignore
 quiet: false
+float_format: 4
