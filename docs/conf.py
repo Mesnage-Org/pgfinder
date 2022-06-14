@@ -101,8 +101,16 @@ html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "show_nav_level": 2,
     "favicons": [
-        {"rel": "icon", "href": "https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg"},
-        {"rel": "icon", "href": "https://codecov.io/gh/Mesnage-Org/pgfinder"},
+        {
+            "rel": "icon",
+            "sizes": "156x20",
+            "href": "https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg",
+        },
+        {
+            "rel": "icon",
+            "sizes": "115x20",
+            "href": "https://codecov.io/gh/Mesnage-Org/pgfinder",
+        },
     ],
 }
 
