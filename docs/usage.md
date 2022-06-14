@@ -26,7 +26,7 @@ You can also use the command line interface `find_pg` which works with a YAML co
 <path/to/config.yaml>`, so to use the example config you would.
 
 ``` bash
-./find_pg -c config/example.yaml
+find_pg -c config/example.yaml
 ```
 
 Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help** for more
