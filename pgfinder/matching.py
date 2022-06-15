@@ -8,6 +8,8 @@ from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
+pd.set_option("display.max_rows", None)
+
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     """Calculates ppm tolerance value
@@ -208,16 +210,10 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
         t_df = matching_df[
             (matching_df["Monoisotopicmass"] >= mw - t_tol) & (matching_df["Monoisotopicmass"] <= mw + t_tol)
         ]
-
         # Populate inferred structure and theo_mwMonoisotopic columns with matched values
         if not t_df.empty:
             raw_data.loc[x, "inferredStructure"] = ",".join(t_df.Structure.values)
-            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join(map(str, t_df.Monoisotopicmass.values))
-
-    print(f"\n\nTHIS IS OUR 'MATCHED' DataFrame...")
-    print(f"raw_data.columns :\n{raw_data.columns}")
-    print(f"raw_data.head() :\n{raw_data[['mwMonoisotopic', 'theo_mwMonoisotopic']].head()}")
-    print(f"raw_data['mwMonoisotopic'].value_counts() :\n{raw_data['mwMonoisotopic'].value_counts()}")
+            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join([str(Decimal(x)) for x in t_df.Monoisotopicmass.values])
 
     return raw_data
 
@@ -269,17 +265,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     elif mass_to_clean == adducts["decay"]:
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} in source decay products")
 
-    # print("AAHHHAAA!!! PARENT AND ADDUCTED ARE BOTH FROM ftrs_df, which is")
-    # print("\n\nPARENT MUROPEPTIDE")
-    # print(f"parent_muropeptide_df.columns : \n{parent_muropeptide_df.columns}")
-    # print(
-    #     f"parent_muropeptide_df.head()  : \n{parent_muropeptide_df[['mwMonoisotopic', 'theo_mwMonoisotopic']].head()}"
-    # )
-    # print("\n\nADDUCTED MUROPEPTIDE")
-    # print(f"adducted_muropeptide_df.columns :\n{adducted_muropeptide_df.columns}")
-    # print(
-    #     f"adducted_muropeptide_df.head() :\n{adducted_muropeptide_df[['mwMonoisotopic', 'theo_mwMonoisotopic']].head()}"
-    # )
     # Consolidate adduct intensity with parent ions intensity
     for y, row in parent_muropeptide_df.iterrows():
         # Get retention time value from row
@@ -304,12 +289,9 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                 # Compare parent masses to adduct masses
                 for mass in intact_mw:
                     for mass_2 in ins_mw:
-                        # print(f"BEFORE mass : {mass}")
-                        # print(f"AFTER  mass : {Decimal(mass).quantize(Decimal('0.00001'))}")
                         mass_delta = abs(
                             Decimal(mass).quantize(Decimal("0.00001")) - Decimal(mass_2).quantize(Decimal("0.00001"))
                         )
-                        # print(f"mass_delta : {mass_delta}")
                         # Consolidate intensities
                         if mass_delta == mass_to_clean:
                             consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
@@ -464,16 +446,11 @@ def data_analysis(
     master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Monoisotopicmass": float})
     LOGGER.info("Matching")
-    print(f"master_frame.columns :\n{master_frame.columns}")
-    print(f"master_frame.head()  :\n{master_frame.head()}")
     matched_data_df = matching(ff, master_frame, user_ppm)
     LOGGER.info("Cleaning data")
-    cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
-    cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
-    cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
-    # getcontext().prec = 4
-    # cleaned_data_df["theo_mwMonoisotopic"] = cleaned_data_df["theo_mwMonoisotopic"].apply(str)
-    # cleaned_data_df["theo_mwMonoisotopic"] = cleaned_data_df["theo_mwMonoisotopic"].apply(Decimal)
+    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
+    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
+    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
     cleaned_data_df.sort_values("inferredStructure", inplace=True, ascending=True)
 
     # set metadata

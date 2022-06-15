@@ -35,7 +35,6 @@ def test_dict_to_decimal() -> None:
     decimal_dict = dict_to_decimal(SAMPLE_DICT)
 
     assert isinstance(decimal_dict, dict)
-    print(f"type(decimal_dict['a'])               : {type(decimal_dict['a'])}")
     assert isinstance(decimal_dict["a"], Decimal)
     assert isinstance(decimal_dict["b"]["c"], Decimal)
     assert isinstance(decimal_dict["d"], str)

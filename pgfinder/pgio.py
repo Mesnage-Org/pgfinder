@@ -123,6 +123,8 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         ]
         # Reorder columns in dataframe to desired order.
         ff = ff[cols_order]
+        # print(f"FEATURES : \n")
+        # print(f"{ff}")
 
         return ff
 

@@ -9,13 +9,13 @@ from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
-# FIXME : Set precision, ultimately this _shouldn't_ be handled at initialisation but instead moved to find_pg.py and
+# FIXME : Set precision, ultimately this _shouldn't_ be handled here but instead moved to find_pg.py and
 #         defined in the config.yaml that is read in, dirty hard-coded hack for now to get things working so I can
 #         implement the delta_ppm feature.
 #
-#         HOWEVER : You can't currently set this globally (at least not to 4) because in clean_up() the .quantize()
-#         method is used to round things up to "0.00001" which is currently hard coded. Thus the place to do the tidying
-#         is likely under clean_up() but it should be flexible and a user specified option rather than hard coded.
+#         HOWEVER : You can't currently set this globally because in clean_up() the .quantize() method is used to round
+#         things up to "0.00001" which is currently hard coded. Thus the place to do the tidying is likely under clean_up()
+#         but it should be flexible and a user specified option rather than hard coded.
 # getcontext().prec = 5
 
 
