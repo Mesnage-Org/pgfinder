@@ -8,8 +8,6 @@ from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
-pd.set_option("display.max_rows", None)
-
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     """Calculates ppm tolerance value
@@ -213,7 +211,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
         # Populate inferred structure and theo_mwMonoisotopic columns with matched values
         if not t_df.empty:
             raw_data.loc[x, "inferredStructure"] = ",".join(t_df.Structure.values)
-            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join([str(Decimal(x)) for x in t_df.Monoisotopicmass.values])
+            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join([f"{x:0.4f}" for x in t_df.Monoisotopicmass.values])
 
     return raw_data
 
