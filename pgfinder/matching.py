@@ -211,7 +211,9 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
         # Populate inferred structure and theo_mwMonoisotopic columns with matched values
         if not t_df.empty:
             raw_data.loc[x, "inferredStructure"] = ",".join(t_df.Structure.values)
-            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join([f"{x:0.4f}" for x in t_df.Monoisotopicmass.values])
+            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join(
+                [f"{x:0.4f}".rstrip("0") for x in t_df.Monoisotopicmass.values]
+            )
 
     return raw_data
 

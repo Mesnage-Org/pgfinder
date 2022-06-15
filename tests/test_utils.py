@@ -22,7 +22,6 @@ def test_update_config(caplog) -> None:
     NEW_VALUES = {"output_dir": "something new"}
     updated_config = update_config(SAMPLE_CONFIG, NEW_VALUES)
 
-    print(updated_config)
     assert isinstance(updated_config, dict)
     assert "Updated config config[output_dir] : here > something new" in caplog.text
     assert updated_config["output_dir"] == Path("something new")
