@@ -18,3 +18,4 @@ mod_list:
 output_dir: output
 warnings: ignore
 quiet: false
+float_format: 4

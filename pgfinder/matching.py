@@ -1,7 +1,7 @@
 """Matching functions"""
 import logging
 from decimal import *
-
+from pgfinder import MULTIMERS, MOD_TYPE, MASS_TO_CLEAN
 import pandas as pd
 
 from pgfinder.logs.logs import LOGGER_NAME
@@ -91,7 +91,6 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     theo_mw = []
     theo_struct = []
     # Builder sub function - calculates multimer mass and name
-
     # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
         for idx, row in theo_list.iterrows():
@@ -105,43 +104,22 @@ def multimer_builder(theo_list, multimer_type: int = 0):
                 theo_mw.append(Decimal(mw) + donor_mw + Decimal("-18.0106"))
                 theo_struct.append(acceptor + "-" + donor + "|" + str(mult_num))
 
-    # Calls builder subfunction with different arguements based on multimer type selected
-
-    # Calculates multimers based on peptide bond through side chain
-
+    # Call builder subfunction with different arguements based on multimer type selected
+    # and calculate multimers based on peptide bond through side chain
+    # if multimer_type is "peptide":
     if multimer_type == 0:
-        builder("gm-AEJA", Decimal("941.4075"), 2)
-        builder("gm-AEJ", Decimal("870.3704"), 2)
-        builder("gm-AEJ-gm-AEJ", Decimal("1722.7302"), 3)
-        builder("gm-AEJ-gm-AEJA", Decimal("1793.7673"), 3)
-        builder("gm-AEJA-gm-AEJA", Decimal("1864.8044"), 3)
-
-    # Calculates multimers based on glycosidic bond through dissachrides & peptide bonds through side chains
+        multimer = MULTIMERS["peptide"]
+    # elif multimer_type is "gycosidic":
     elif multimer_type == 1:
-        builder("gm-AE", Decimal("698.2858"), 2)
-        builder("gm-AEJA", Decimal("941.4075"), 2)
-        builder("gm-AEJ", Decimal("870.3704"), 2)
-        builder("gm-AEJ-gm-AEJ", Decimal("1722.7302"), 3)
-        builder("gm-AEJ-gm-AEJA", Decimal("1793.7673"), 3)
-        builder("gm-AEJA-gm-AEJA", Decimal("1864.8044"), 3)
-
-        builder("gm-AEJA_(Glyco)", Decimal("939.3919"), 2)
-        builder("gm-AEJ_(Glyco)", Decimal("868.3548"), 2)
-        builder("gm-AEJ-gm-AEJ_(Glyco)", Decimal("1720.7146"), 3)
-        builder("gm-AEJ-gm-AEJA_(Glyco)", Decimal("1791.7517"), 3)
-        builder("gm-AEJA-gm-AEJA_(Glyco)", Decimal("1862.7888"), 3)
-
-    # Calculates multimers based on Lactyl peptides (peptide bond via side chain but no dissachrides on muropeptides)
+        multimer = MULTIMERS["gycosidic"]
+    # elif multimer_type is "lactyl":
     elif multimer_type == 2:
-        builder("Lac-AEJA", Decimal("533.2333"), 2)
-        builder("Lac-AEJ", Decimal("462.1962"), 2)
-        builder("Lac-AEJ-Lac-AEJ", Decimal("906.3818"), 3)
-        builder("Lac-AEJ-Lac-AEJA", Decimal("977.4189"), 3)
-        builder("Lac-AEJA-Lac-AEJA", Decimal("1048.4560"), 3)
+        multimer = MULTIMERS["lactyl"]
+    LOGGER.info(f"Building features for multimer type : {multimer_type}")
+    [builder(molecule, Decimal(features["mass"]), features["mult_num"]) for molecule, features in multimer.items()]
 
     # converts lists to dataframe
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=["Monoisotopicmass", "Structure"])
-
     return multimer_df
 
 
@@ -162,37 +140,8 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     """
 
     # FIXME : Replace with data structure such as dictionary
-
-    if mod_type == "Anh":
-        mod_mass = Decimal("-20.0262")
-    elif mod_type == "Double_Anh":
-        mod_mass = Decimal("-40.0524")
-    elif mod_type == "DeAc":
-        mod_mass = Decimal("-42.0105")
-    elif mod_type == "O-Acetylated":
-        mod_mass = Decimal("42.0105")
-    elif mod_type == "DeAc_Anh":
-        mod_mass = Decimal("-62.0368")
-    elif mod_type == "Decay":
-        mod_mass = Decimal("-203.0793")
-    elif mod_type == "Sodium":
-        mod_mass = Decimal("21.9819")
-        mod_name = "Na+"
-    elif mod_type == "Potassium":
-        mod_mass = Decimal("37.9559")
-        mod_name = "K+"
-    elif mod_type == "Nude":
-        mod_mass = Decimal("478.1799")
-        mod_name = "gm-"
-    elif mod_type == "Amidated":
-        mod_mass = Decimal("-0.9840")
-        mod_name = "Amidated"
-    elif mod_type == "Amidase Product":
-        mod_mass = Decimal("-480.1955")
-        mod_name = "(Amidase Product)"
-    elif mod_type == "Lactyl":
-        mod_mass = Decimal("-408.1744")
-        mod_name = "(Lactyl)"
+    mod_mass = Decimal(MOD_TYPE[mod_type]["mass"])
+    mod_name = MOD_TYPE[mod_type]["name"]
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
     # Calculate new mass of modified structure
@@ -259,11 +208,12 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
         t_df = matching_df[
             (matching_df["Monoisotopicmass"] >= mw - t_tol) & (matching_df["Monoisotopicmass"] <= mw + t_tol)
         ]
-
         # Populate inferred structure and theo_mwMonoisotopic columns with matched values
         if not t_df.empty:
             raw_data.loc[x, "inferredStructure"] = ",".join(t_df.Structure.values)
-            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join(map(str, t_df.Monoisotopicmass.values))
+            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join(
+                [f"{x:0.4f}".rstrip("0") for x in t_df.Monoisotopicmass.values]
+            )
 
     return raw_data
 
@@ -285,27 +235,20 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     pd.DataFrame:
         ?
     """
-    # Mass values for adducts
-    sodiated = Decimal("21.9819")
-    potassated = Decimal("37.9559")
-    decay = Decimal("203.0793")
-
+    # Get the type of adduct based on the mass_to_clean (which is a float)
+    adducts = {"sodiated": Decimal("21.9819"), "potassated": Decimal("37.9559"), "decay": Decimal("203.0793")}
+    adducts_keys = list(adducts.keys())
+    adducts_values = list(adducts.values())
+    adduct = adducts_keys[adducts_values.index(mass_to_clean)]
     # Selector substrings for generating parent and adduct dataframes
-    if mass_to_clean == sodiated:
-        parent = "^gm|^m|^Lac"
-        target = "^Na+"
-    elif mass_to_clean == potassated:
-        parent = "^gm|^m|^Lac"
-        target = "^K+"
-    elif mass_to_clean == decay:
-        parent = "^gm"
-        target = "^m"
+    parent = MASS_TO_CLEAN[adduct]["parent"]
+    target = MASS_TO_CLEAN[adduct]["target"]
 
     # Generate parent dataframe - contains parents
-    parent_muropeptide_df = ftrs_df[ftrs_df["inferredStructure"].str.contains(parent, na=False)]
+    parent_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(parent, na=False)]
 
     # Generate adduct dataframe - contains adducts
-    adducted_muropeptide_df = ftrs_df[ftrs_df["inferredStructure"].str.contains(target, na=False)]
+    adducted_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(target, na=False)]
 
     # Generate copy of rawdata dataframe
     consolidated_decay_df = ftrs_df.copy()
@@ -315,11 +258,11 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         LOGGER.info(f"No {parent}  muropeptides found")
     if adducted_muropeptide_df.empty:
         LOGGER.info(f"No {target} found")
-    elif mass_to_clean == sodiated:
+    elif mass_to_clean == adducts["sodiated"]:
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} Sodium Adducts")
-    elif mass_to_clean == potassated:
+    elif mass_to_clean == adducts["potassated"]:
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} potassium adducts")
-    elif mass_to_clean == decay:
+    elif mass_to_clean == adducts["decay"]:
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} in source decay products")
 
     # Consolidate adduct intensity with parent ions intensity
@@ -337,39 +280,34 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         ins_constrained_df = adducted_muropeptide_df[
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
-
         if not ins_constrained_df.empty:
 
             for z, ins_row in ins_constrained_df.iterrows():
+                # Having cells with multiple values causes headaches! Use long format, reshape and concatenate at end if needed
                 ins_mw = list(str(ins_row.theo_mwMonoisotopic).split(","))
 
                 # Compare parent masses to adduct masses
                 for mass in intact_mw:
                     for mass_2 in ins_mw:
-
                         mass_delta = abs(
                             Decimal(mass).quantize(Decimal("0.00001")) - Decimal(mass_2).quantize(Decimal("0.00001"))
                         )
-
                         # Consolidate intensities
                         if mass_delta == mass_to_clean:
-
                             consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
-
                             insDecay_intensity = ins_row.maxIntensity
                             parent_intensity = row.maxIntensity
                             consolidated_intensity = insDecay_intensity + parent_intensity
-
                             ID = row.ID
                             drop_ID = ins_row.ID
-
                             idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
                             try:
                                 drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
                                 consolidated_decay_df.at[idx, "maxIntensity"] = consolidated_intensity
                                 consolidated_decay_df.drop(drop_idx, inplace=True)
                             except IndexError:
-                                LOGGER.info(f"Already removed : {drop_idx}")
+                                #     LOGGER.info(f"Already removed : {drop_idx}")
+                                pass
 
     return consolidated_decay_df
 
@@ -410,6 +348,8 @@ def data_analysis(
     LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo, user_ppm)
 
+    # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
+    #         possible that there are multiple types listed in the enbaled_mod_list?
     if "Multimers" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
@@ -489,7 +429,7 @@ def data_analysis(
     else:
         double_Anhydro_df = pd.DataFrame()
 
-    master_frame = [
+    master_list = [
         obs_theo_df,
         adducts_potassium_df,
         adducts_sodium_df,
@@ -503,15 +443,14 @@ def data_analysis(
         deglyco_df,
         double_Anhydro_df,
     ]
-    master_list = pd.concat(master_frame)
-    master_list = master_list.astype({"Monoisotopicmass": float})
+    master_frame = pd.concat(master_list)
+    master_frame = master_frame.astype({"Monoisotopicmass": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_list, user_ppm)
+    matched_data_df = matching(ff, master_frame, user_ppm)
     LOGGER.info("Cleaning data")
-    cleaned_df = clean_up(matched_data_df, sodium, time_delta_window)
-    cleaned_df = clean_up(cleaned_df, potassium, time_delta_window)
-    cleaned_data_df = clean_up(cleaned_df, sugar, time_delta_window)
-
+    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
+    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
+    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
     cleaned_data_df.sort_values("inferredStructure", inplace=True, ascending=True)
 
     # set metadata

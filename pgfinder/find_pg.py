@@ -36,6 +36,9 @@ def create_parser() -> arg.ArgumentParser:
     parser.add_argument("--output_dir", dest="output_dir", type=str, required=False, help="Output directory.")
     parser.add_argument("--warnings", dest="warnings", type=str, required=False, help="Whether to ignore warnings.")
     parser.add_argument("--quiet", dest="quiet", type=bool, required=False, help="Supress output.")
+    parser.add_argument(
+        "--float_format", dest="float_format", type=bool, required=False, help="Decimal places in output."
+    )
 
     return parser
 

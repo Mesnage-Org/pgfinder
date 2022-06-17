@@ -27,3 +27,4 @@ pgfinder/local_test.py
 #Testing
 cov*.xml
 .cov*
+*.log
