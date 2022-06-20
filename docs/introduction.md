@@ -3,11 +3,15 @@
 This package is a product of work undertaken by the [Mesnage Lab](https://mesnagelab.weebly.com/) to improve the
 workflow for the analysis of bacterial peptidoglycans[[1]](#1)
 
-**FIXME** : Write an introductory overview of what pgfinder does and how it works.
+~pgfinder~ automates the analysis pipeline of deconvoluted mass-spectroscopy data from <LAB MACHINE?> comparing peaks to
+a database of candidate monomers to identify potential matches. These candidate monomers form the basis of theoretical
+dimer and trimer masses which are in turn matched against possible candidates after determining possible
+modifications. A more detailed overview of the workflow is provided in the [methods](#methods).
 
 ## Background
 
-**FIXME** Background information on Peptidoglycan analysis.
+**FIXME** Background information on Peptidoglycan analysis. I've had a read of the Introduction to [[1]](#1) and think
+it would serve as a good basis to go here, but am unsure how much detail to include.
 
 ## Methods
 
@@ -30,21 +34,21 @@ graph TD;
     L --> M([Consolidate in source decay products + salt adducts])
     M --> N[Processed MS data]
     N --> O([Write to CSV file])
-    style A fill:#914800,stroke:#000000
-    style B fill:#914800,stroke:#000000
-    style C fill:#914800,stroke:#000000
-    style D fill:#914800,stroke:#000000
-    style E fill:#009110,stroke:#000000
-    style F fill:#009110,stroke:#000000
-    style G fill:#009110,stroke:#000000
-    style H fill:#009110,stroke:#000000
-    style I fill:#002191,stroke:#000000
-    style J fill:#002191,stroke:#000000
-    style K fill:#910007,stroke:#000000
-    style L fill:#910007,stroke:#000000
-    style M fill:#910007,stroke:#000000
-    style N fill:#910007,stroke:#000000
-    style O fill:#910007,stroke:#000000
+    style A fill:#FFBB33,stroke:#000000
+    style B fill:#FFBB33,stroke:#000000
+    style C fill:#FFBB33,stroke:#000000
+    style D fill:#FFBB33,stroke:#000000
+    style E fill:#95FF80,stroke:#000000
+    style F fill:#95FF80,stroke:#000000
+    style G fill:#95FF80,stroke:#000000
+    style H fill:#95FF80,stroke:#000000
+    style I fill:#33BBFF,stroke:#000000
+    style J fill:#33BBFF,stroke:#000000
+    style K fill:#FF6666,stroke:#000000
+    style L fill:#FF6666,stroke:#000000
+    style M fill:#FF6666,stroke:#000000
+    style N fill:#FF6666,stroke:#000000
+    style O fill:#FF6666,stroke:#000000
 ```
 
 
