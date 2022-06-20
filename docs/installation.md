@@ -16,14 +16,12 @@ You're fine to use a different virtual environment, if you want!
 
 ### PyPi
 
-A release to the [PyPi](https://pypi.org/) is planned which will make it possible to install pgFinder using
-[`pip`](https://pip.pypa.io/en/stable/).
+`pgfinder` is available via the [Python Package Index (PyPi)](https://pypi.org/) and the latest release can be installed
+under your virtual environment with [`pip`](https://pip.pypa.io/en/stable/).
 
 ``` bash
 pip install pgfinder
 ```
-
-For now though you will have to install the package from this Git repository.
 
 ### GitHub
 
