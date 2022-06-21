@@ -10,8 +10,17 @@ modifications. A more detailed overview of the workflow is provided in the [meth
 
 ## Background
 
-**FIXME** Background information on Peptidoglycan analysis. I've had a read of the Introduction to [[1]](#1) and think
-it would serve as a good basis to go here, but am unsure how much detail to include.
+Peptidoglycan is a ubiquitous and essential component of the bacterial cell envelope and its synthesis is the target of
+beta-lactams, the most widely used antibiotics. Peptidoglycan fragments represent a key mediator during pathogenesis and
+acute and chronic inflammation and their perception by the host contributes to the regulation of neurodevelopmental and
+psychiatric disorders in animal models. Studying the structure and composition of peptidoglycan is therefore of
+paramount importance to understand antibiotic resistance, chronic inflammatory diseases and neurodevelopmental and
+psychiatric disorders.
+
+Traditionally, peptidoglycan analysis involved a manual inspection of individual mass spectra to identify peptidoglycan
+fragments based on their theoretical mass. PGFinder is an open-source Python package that can be run through Jupyter
+notebooks or at the command line to perform an unbiased and automated analysis of LC-MS data. This enables a consistent
+and reproducible workflow, opening new perspectives to develop "peptidoglycomics" as a new discipline.
 
 ## Methods
 
