@@ -3,10 +3,10 @@
 This package is a product of work undertaken by the [Mesnage Lab](https://mesnagelab.weebly.com/) to improve the
 workflow for the analysis of bacterial peptidoglycans[[1]](#1)
 
-`pgfinder` automates the analysis pipeline of deconvoluted mass-spectroscopy data from <LAB MACHINE?> comparing peaks to
-a database of candidate monomers to identify potential matches. These candidate monomers form the basis of theoretical
-dimer and trimer masses which are in turn matched against possible candidates after determining possible
-modifications. A more detailed overview of the workflow is provided in the [methods](#methods).
+`pgfinder` automates the analysis pipeline of data from Liquid Chromatography Mass Spectrometry comparing deconvoluted
+masses to a database of theoretical monoisotopic masses. These candidate monomers form the basis of theoretical dimer
+and trimer masses which are in turn matched against possible candidates after determining possible modifications. A more
+detailed overview of the workflow is provided in the [methods](#methods).
 
 ## Background
 

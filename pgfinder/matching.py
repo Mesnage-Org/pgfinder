@@ -15,7 +15,7 @@ def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     Parameters
     ----------
     mw: float
-        ?
+        Molecular weight.
     ppm_tol: int
         PPM tolerance
 
@@ -226,8 +226,8 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     ftrs_df: pd.DataFrame
         Features dataframe?
     matching_df: pd.DataFrame
-        ?
-    set_ppm: int
+        Matching dataframe against which features are matched.
+    time_delta: int
         ?
 
     Returns
