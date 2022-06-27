@@ -4,7 +4,7 @@ This package is a product of work undertaken by the [Mesnage Lab](https://mesnag
 workflow for the analysis of bacterial peptidoglycans [[1]](#1)
 
 `PGFinder` automates the structural analysis of peptidoglycan LC-MS (Liquid Chromatography coupled to Mass Spectrometry) data. It compares  deconvoluted
-masses from LC-MS datasets to a database of theoretical monoisotopic masses corresponding to monomeric peptidoglycan fragments. Matched monomers are then used to build more complex databases made of theoretical multimeric and modified structures, in turn matched against observed masses. A 
+masses from LC-MS datasets to a database of theoretical monoisotopic masses corresponding to monomeric peptidoglycan fragments. Matched monomers are then used to build more complex databases made of theoretical multimeric and modified structures, in turn matched against observed masses. A
 detailed overview of the workflow is provided in the [methods](#methods).
 
 ## Background
@@ -35,41 +35,43 @@ tolerance between theoretical and observed masses. This data is then “cleaned 
 corresponding to in-source decay and salt adducts to those of parent ions. The final matched MS data is then written to
 a .csv file.
 
-```{mermaid}
-graph TD;
+![PGFinder Workflow](img/flow_diagram.png)
 
-    A[Monomer Masses Database] --> C[Match monomers]
-    B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
-    C --> D[DATABASE 1 Matched theoretical monomer masses]
-    D --> E([Calculate dimer & trimer masses])
-    D --> I([Calculate modified monomers, dimers & trimers])
-    D --> K([Match & annotate MS data -/+ ppm tolerance])
-    E --> F[DATABASE 2 Theoretical dimer & trimer masses library]
-    F --> G([Match dimers & trimers -/+ ppm tolerance])
-    G --> H[Matched theoretical dimers & trimers masses]
-    H --> I
-    I --> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library]
-    J --> K
-    K --> L[Raw matched MS data]
-    L --> M([Consolidate in source decay products + salt adducts])
-    M --> N[Processed MS data]
-    N --> O([Write to CSV file])
-    style A fill:#FFBB33
-    style B fill:#FFBB33
-    style C fill:#FFBB33
-    style D fill:#FFBB33
-    style E fill:#95FF80
-    style F fill:#95FF80
-    style G fill:#95FF80
-    style H fill:#95FF80
-    style I fill:#FF6666
-    style J fill:#FF6666
-    style K fill:#33BBFF
-    style L fill:#33BBFF
-    style M fill:#33BBFF
-    style N fill:#33BBFF
-    style O fill:#33BBFF
-```
+<!-- ```{mermaid} -->
+<!-- graph TD; -->
+
+<!--     A[Monomer Masses Database] -\-> C[Match monomers] -->
+<!--     B[Deconvoluted MS data] -\-> C([Match monomers -/+ ppm tolerance]) -->
+<!--     C -\-> D[DATABASE 1 Matched theoretical monomer masses] -->
+<!--     D -\-> E([Calculate dimer & trimer masses]) -->
+<!--     D -\-> I([Calculate modified monomers, dimers & trimers]) -->
+<!--     D -\-> K([Match & annotate MS data -/+ ppm tolerance]) -->
+<!--     E -\-> F[DATABASE 2 Theoretical dimer & trimer masses library] -->
+<!--     F -\-> G([Match dimers & trimers -/+ ppm tolerance]) -->
+<!--     G -\-> H[Matched theoretical dimers & trimers masses] -->
+<!--     H -\-> I -->
+<!--     I -\-> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library] -->
+<!--     J -\-> K -->
+<!--     K -\-> L[Raw matched MS data] -->
+<!--     L -\-> M([Consolidate in source decay products + salt adducts]) -->
+<!--     M -\-> N[Processed MS data] -->
+<!--     N -\-> O([Write to CSV file]) -->
+<!--     style A fill:#FFBB33 -->
+<!--     style B fill:#FFBB33 -->
+<!--     style C fill:#FFBB33 -->
+<!--     style D fill:#FFBB33 -->
+<!--     style E fill:#95FF80 -->
+<!--     style F fill:#95FF80 -->
+<!--     style G fill:#95FF80 -->
+<!--     style H fill:#95FF80 -->
+<!--     style I fill:#FF6666 -->
+<!--     style J fill:#FF6666 -->
+<!--     style K fill:#33BBFF -->
+<!--     style L fill:#33BBFF -->
+<!--     style M fill:#33BBFF -->
+<!--     style N fill:#33BBFF -->
+<!--     style O fill:#33BBFF -->
+<!-- ``` -->
 
 
 ## References

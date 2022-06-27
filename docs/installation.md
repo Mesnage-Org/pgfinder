@@ -1,4 +1,4 @@
-# Installing pgfinder
+# Installing PGFinder
 
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with
 [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With Conda installed,
@@ -12,11 +12,17 @@ conda activate pgfinder
 
 You're fine to use a different virtual environment, if you want!
 
+## SQLite3
+
+`PGFinder` uses [sqlite3](https://sqlite.org/index.html) in the background and you need this installed on your
+system. Unfortunately `PGFinder` can not install this for you. Please install the latest version from
+[here](https://sqlite.org/download.html) or use your Operating Systems package manager to install.
+
 ## Normal Use
 
 ### PyPi
 
-`pgfinder` is available via the [Python Package Index (PyPi)](https://pypi.org/) and the latest release can be installed
+`PGFinder` is available via the [Python Package Index (PyPi)](https://pypi.org/) and the latest release can be installed
 under your virtual environment with [`pip`](https://pip.pypa.io/en/stable/).
 
 ``` bash
@@ -25,7 +31,7 @@ pip install pgfinder
 
 ### GitHub
 
-If you do not intend to undertake any development on pgfinder and just wish to use it then you can install directly from
+If you do not intend to undertake any development on PGFinder and just wish to use it then you can install directly from
 the GitHub repository using `pip` under the virtual environment. The first method leverages `pip`'s ability to install
 directly from GitHub...
 
@@ -61,7 +67,7 @@ The project [data dictionary](data_dictionary.md).
 
 ### Development
 
-If you wish to contribute to the development of pgfinder you should clone this repository and install it in editable
+If you wish to contribute to the development of PGFinder you should clone this repository and install it in editable
 mode (`pip install -e`) with the following commands.
 
 
