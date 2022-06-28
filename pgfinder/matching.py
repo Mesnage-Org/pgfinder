@@ -217,6 +217,23 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
 
     return raw_data
 
+def matching_long(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
+    molecular_weights = list(ftrs_df["mwMonoisotopic"])
+    raw_data = ftrs_df.copy()
+    for mw in molecular_weights:
+        tolerance = calc_ppm_tolerance(mw, set_ppm)
+        # Find matches and select just the mass and structure which we rename
+        mw_matches = matching_df[
+            (matching_df["Monoisotopicmass"] >= mw - tolerance) & (matching_df["Monoisotopicmass"] <= mw + tolerance)]
+        
+       
+        mw_matches.columns = ["theo_mwMonoisotopic", "inferredStructure"]
+        # Add the molecular weight in so we can merge
+        # mw_matches["mw"] = mw
+
+        raw_data = mw_matches
+        #raw_data = raw_data.merge(mw_matches, how="left", on=["mw"])
+    return raw_data
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
