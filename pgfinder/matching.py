@@ -217,23 +217,26 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
 
     return raw_data
 
+
 def matching_long(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     molecular_weights = list(ftrs_df["mwMonoisotopic"])
-    raw_data = ftrs_df.copy()
+    raw_data = ftrs_df.drop(["theo_mwMonoisotopic", "inferredStructure"], axis=1)
+    matches_df = pd.DataFrame(columns=["theo_mwMonoisotopic", "inferredStructure"])
     for mw in molecular_weights:
         tolerance = calc_ppm_tolerance(mw, set_ppm)
-        # Find matches and select just the mass and structure which we rename
         mw_matches = matching_df[
-            (matching_df["Monoisotopicmass"] >= mw - tolerance) & (matching_df["Monoisotopicmass"] <= mw + tolerance)]
-        
-       
+            (matching_df["Monoisotopicmass"] >= mw - tolerance) & (matching_df["Monoisotopicmass"] <= mw + tolerance)
+        ].copy()
         mw_matches.columns = ["theo_mwMonoisotopic", "inferredStructure"]
-        # Add the molecular weight in so we can merge
-        # mw_matches["mw"] = mw
 
-        raw_data = mw_matches
-        #raw_data = raw_data.merge(mw_matches, how="left", on=["mw"])
-    return raw_data
+        # If we have matches add the molecular weight and append
+        if len(mw_matches.index) > 0:
+            mw_matches["mwMonoisotopic"] = mw
+            matches_df = pd.concat([matches_df, mw_matches])
+
+    # Merge with raw data
+    return raw_data.merge(matches_df, on=["mwMonoisotopic"], how="left")
+
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
