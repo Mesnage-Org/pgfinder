@@ -333,8 +333,8 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
 
 
 def data_analysis(
-    raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int
-) -> pd.DataFrame:
+    raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int,
+long_format: bool = False) -> pd.DataFrame:
     """Perform analysis.
 
     Parameters
@@ -466,7 +466,10 @@ def data_analysis(
     master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Monoisotopicmass": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_frame, user_ppm)
+    if long_format == False:
+        matched_data_df = matching(ff, master_frame, user_ppm)
+    elif long_format == True:
+        matched_data_df = matching_long(ff,master_frame,user_ppm)
     LOGGER.info("Cleaning data")
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
