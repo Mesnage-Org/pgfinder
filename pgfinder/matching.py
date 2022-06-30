@@ -331,6 +331,94 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
 
     return consolidated_decay_df
 
+def clean_up_long(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
+    """Clean up a DataFrame.
+
+    Parameters
+    ----------
+    ftrs_df: pd.DataFrame
+        Features dataframe?
+    matching_df: pd.DataFrame
+        ?
+    set_ppm: int
+        ?
+
+    Returns
+    -------
+    pd.DataFrame:
+        ?
+    """
+    # Get the type of adduct based on the mass_to_clean (which is a float)
+    adducts = {"sodiated": Decimal("21.9819"), "potassated": Decimal("37.9559"), "decay": Decimal("203.0793")}
+    adducts_keys = list(adducts.keys())
+    adducts_values = list(adducts.values())
+    adduct = adducts_keys[adducts_values.index(mass_to_clean)]
+    # Selector substrings for generating parent and adduct dataframes
+    parent = MASS_TO_CLEAN[adduct]["parent"]
+    target = MASS_TO_CLEAN[adduct]["target"]
+
+    # Generate parent dataframe - contains parents
+    parent_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(parent, na=False)]
+
+    # Generate adduct dataframe - contains adducts
+    adducted_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(target, na=False)]
+
+    print(parent_muropeptide_df)
+    print(adducted_muropeptide_df)
+
+    # Generate copy of rawdata dataframe
+    consolidated_decay_df = ftrs_df.copy()
+
+    # Status updates (prints to console)
+    if parent_muropeptide_df.empty:
+        LOGGER.info(f"No {parent}  muropeptides found")
+    if adducted_muropeptide_df.empty:
+        LOGGER.info(f"No {target} found")
+    elif mass_to_clean == adducts["sodiated"]:
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} Sodium Adducts")
+    elif mass_to_clean == adducts["potassated"]:
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} potassium adducts")
+    elif mass_to_clean == adducts["decay"]:
+        LOGGER.info(f"Processing {adducted_muropeptide_df.size} in source decay products")
+
+    # Consolidate adduct intensity with parent ions intensity
+    for x, row in parent_muropeptide_df.iterrows():
+        # Get retention time value from row
+        rt = row.rt
+        #Get parent structure
+        parent_structure = row.inferredStructure
+        #Get parent ID
+        parent_ID = row.ID
+        #Get parent intensity
+        parent_intensity = row.maxIntensity
+
+        # Work out rt window
+        upper_lim_rt = rt + time_delta
+        lower_lim_rt = rt - time_delta
+
+        # Get all adduct enteries within rt window
+        ins_constrained_df = adducted_muropeptide_df[
+            adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
+        ]
+        
+        if not ins_constrained_df.empty:
+            if target == "^m":
+                ins_constrained_df["inferredStructure"] = "g" + ins_constrained_df["inferredStructure"].astype(str)
+
+        for y, ins_row in ins_constrained_df.iterrows():
+            ins_structure = ins_row.inferredStructure
+            ins_intensity = ins_row.maxIntensity
+            if parent_structure == ins_structure:
+                #Get index to value to consolidate
+                idx = consolidated_decay_df.loc[consolidated_decay_df["inferredStructure"] == parent_structure].index[0]
+                #consolidate intensity value
+                consolidated_decay_df.at[idx, "maxIntensity"] = parent_intensity + ins_intensity
+                #get index of target to drop
+                drop_idx = ins_constrained_df.loc[ins_constrained_df["inferredStructure"] == ins_structure].index[0]
+                #Drop target row
+                consolidated_decay_df.drop(drop_idx, inplace=True)
+
+    return consolidated_decay_df
 
 def data_analysis(
     raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int,
@@ -471,9 +559,14 @@ long_format: bool = False) -> pd.DataFrame:
     elif long_format == True:
         matched_data_df = matching_long(ff,master_frame,user_ppm)
     LOGGER.info("Cleaning data")
-    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
-    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
-    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
+    if long_format == False:
+        cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
+        cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
+        cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
+    elif long_format == True:
+        cleaned_df = clean_up_long(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
+        cleaned_df = clean_up_long(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
+        cleaned_data_df = clean_up_long(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
     cleaned_data_df.sort_values("inferredStructure", inplace=True, ascending=True)
 
     # set metadata
