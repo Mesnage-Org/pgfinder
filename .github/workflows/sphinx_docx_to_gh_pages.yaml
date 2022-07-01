@@ -26,6 +26,7 @@ jobs:
       - name: Running Sphinx to gh-pages Action
         uses: ns-rse/action-sphinx-docs-to-gh-pages@main
         with:
+          # When testing set this branch to your branch, when working switch to master
           branch: ns-rse/105-intro-expansion
           dir_docs: docs
           sphinxapiexclude: '../*setup* ../*tests* ../*.ipynb ../demo.py ../make_baseline.py ../jupyter_notebook_config.py ../demo_ftrs.py'
