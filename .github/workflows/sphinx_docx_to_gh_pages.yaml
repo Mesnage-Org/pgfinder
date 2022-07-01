@@ -4,7 +4,7 @@ name: Sphinx docs to gh-pages
 on:
   push:
     branches:
-      - master
+#      - master
 
 # workflow_dispatch:        # Un comment line if you also want to trigger action manually
 
@@ -26,7 +26,7 @@ jobs:
       - name: Running Sphinx to gh-pages Action
         uses: ns-rse/action-sphinx-docs-to-gh-pages@main
         with:
-          branch: master
+#          branch: master
           dir_docs: docs
           sphinxapiexclude: '../*setup* ../*tests* ../*.ipynb ../demo.py ../make_baseline.py ../jupyter_notebook_config.py ../demo_ftrs.py'
           sphinxapiopts: '--separate -o . ../'
