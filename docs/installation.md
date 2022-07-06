@@ -12,11 +12,6 @@ conda activate pgfinder
 
 You're fine to use a different virtual environment, if you want!
 
-## SQLite3
-
-`PGFinder` uses [sqlite3](https://sqlite.org/index.html) in the background and you need this installed on your
-system. Unfortunately `PGFinder` can not install this for you. Please install the latest version from
-[here](https://sqlite.org/download.html) or use your Operating Systems package manager to install.
 
 ## Normal Use
 

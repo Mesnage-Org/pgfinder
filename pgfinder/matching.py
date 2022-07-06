@@ -225,9 +225,9 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     ----------
     ftrs_df: pd.DataFrame
         Features dataframe?
-    matching_df: pd.DataFrame
-        Matching dataframe against which features are matched.
-    time_delta: int
+    mass_to_clean: Decimal
+        Mass to be cleaned.
+    time_delta: float
         ?
 
     Returns
