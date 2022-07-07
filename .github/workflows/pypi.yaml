@@ -7,8 +7,8 @@ on:
 
 jobs:
   build-release:
-        runs-on: ubuntu-latest
-    name: Sphinx docs to gh-pages
+    runs-on: ubuntu-latest
+    name: Publish package to PyPi
     steps:
       - uses: actions/checkout@v2
         with:
