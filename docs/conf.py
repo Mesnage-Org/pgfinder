@@ -53,6 +53,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
     "myst_parser",
+    "numpydoc",
     "sphinx_markdown_tables",
     "sphinxcontrib.mermaid",
 ]
