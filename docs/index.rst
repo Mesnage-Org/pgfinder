@@ -15,7 +15,7 @@ Welcome to pgfinder's documentation!
    :maxdepth: 2
    :caption: API
 
-   pgfinder.masscalc
+   pgfinder.find_pg
    pgfinder.matching
    pgfinder.pgio
    pgfinder.validation
