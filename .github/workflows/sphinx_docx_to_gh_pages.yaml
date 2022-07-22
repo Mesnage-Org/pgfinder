@@ -23,6 +23,7 @@ jobs:
       - name: Installing the Documentation requirements
         run: |
           pip3 install .[docs]
+          pip install git+https://github.com/Dzordzu/sphinx-markdown-tables.git@markdown-patch
       - name: Running Sphinx to gh-pages Action
         uses: ns-rse/action-sphinx-docs-to-gh-pages@main
         with:
