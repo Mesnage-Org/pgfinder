@@ -126,10 +126,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         # print(f"FEATURES : \n")
         # print(f"{ff}")
 
-        ff.drop(columns = ["feature", 
-                           "corrMax", 
-                           "maxIsotopeCount"],
-                inplace = True)
+        ff.drop(columns=["feature", "corrMax", "maxIsotopeCount"], inplace=True)
 
         return ff
 
