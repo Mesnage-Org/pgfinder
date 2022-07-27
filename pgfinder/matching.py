@@ -185,6 +185,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     matching_df: pd.DataFrame
         Matching DataFrame
     set_ppm: int
+        Integer value used to calculate a upper and lower bound mass range for an observed value to be considered the same as a theoretical value
 
     Returns
     -------
@@ -227,7 +228,7 @@ def matching_long(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int
         mw_matches = matching_df[
             (matching_df["Monoisotopicmass"] >= mw - tolerance) & (matching_df["Monoisotopicmass"] <= mw + tolerance)
         ].copy()
-        mw_matches.columns = ["theo_mwMonoisotopic", "inferredStructure"]
+        mw_matches.columns = ["inferredStructure","theo_mwMonoisotopic"]
 
         # If we have matches add the molecular weight and append
         if len(mw_matches.index) > 0:
@@ -248,7 +249,7 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     matching_df: pd.DataFrame
         ?
     set_ppm: int
-        ?
+        Integer value used to calculate a upper and lower bound mass range for an observed value to be considered the same as a theoretical value
 
     Returns
     -------
@@ -341,7 +342,7 @@ def clean_up_long(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: flo
     matching_df: pd.DataFrame
         ?
     set_ppm: int
-        ?
+        Integer value used to calculate a upper and lower bound mass range for an observed value to be considered the same as a theoretical value
 
     Returns
     -------
@@ -356,6 +357,8 @@ def clean_up_long(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: flo
     # Selector substrings for generating parent and adduct dataframes
     parent = MASS_TO_CLEAN[adduct]["parent"]
     target = MASS_TO_CLEAN[adduct]["target"]
+
+
 
     # Generate parent dataframe - contains parents
     parent_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(parent, na=False)]
