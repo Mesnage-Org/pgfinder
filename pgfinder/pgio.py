@@ -128,7 +128,8 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
 
         ff.drop(columns = ["feature", 
                            "corrMax", 
-                           "maxIsotopeCount"])
+                           "maxIsotopeCount"],
+                inplace = True)
 
         return ff
 
