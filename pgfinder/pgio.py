@@ -123,8 +123,6 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         ]
         # Reorder columns in dataframe to desired order.
         ff = ff[cols_order]
-        # print(f"FEATURES : \n")
-        # print(f"{ff}")
 
         return ff
 
@@ -283,7 +281,8 @@ def dataframe_to_csv_metadata(
     }
 
     metadata_string = yaml.dump(metadata)
-
+    # Using pathlib we replace '\' if on Windows to '/' so tests pass
+    metadata_string = metadata_string.replace("\\", "/")
     output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
 
     # We're going to actually save the file to disk
