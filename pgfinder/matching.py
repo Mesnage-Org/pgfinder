@@ -73,19 +73,19 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     return exploded_df
 
 
-def multimer_builder(theo_list, multimer_type: int = 0):
+def multimer_builder(theo_df, multimer_type: int = 0):
     """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
-    theo_list:
-        ??? (is it a list or dataframe, that a pd.DataFrame is returned suggests it should be the later?)
+    theo_df:
+        dataframe containing theoretical monomerics structures and their corresponding masses
     multimer_type: int
 
     Returns
     -------
     pd.DataFrame
-        ???
+        dataframe containing theoretical multimers and thier corresponding masses
     """
 
     theo_mw = []
@@ -93,7 +93,7 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     # Builder sub function - calculates multimer mass and name
     # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
-        for idx, row in theo_list.iterrows():
+        for idx, row in theo_df.iterrows():
             if (
                 len(row.Structure[: len(row.Structure) - 2]) > 2
             ):  # Prevent dimer creation using just gm (input format is XX|n) X = letters n = number
