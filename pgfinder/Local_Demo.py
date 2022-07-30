@@ -42,5 +42,7 @@ def short():
 #pgio.dataframe_to_csv_metadata(save_filepath='./', output_dataframe=results)
 
 
-print(timeit.Timer(long).timeit(number=2))
-print(timeit.Timer(short).timeit(number=2))
+long_time = timeit.Timer(long).timeit(number=10)
+short_time = timeit.Timer(short).timeit(number=10)
+
+print (short_time, long_time, long_time/short_time)
