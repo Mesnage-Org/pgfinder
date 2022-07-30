@@ -15,7 +15,7 @@ def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
     Parameters
     ----------
     mw: float
-        ?
+        Molecular weight.
     ppm_tol: int
         PPM tolerance
 
@@ -249,10 +249,10 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     ----------
     ftrs_df: pd.DataFrame
         Features dataframe?
-    matching_df: pd.DataFrame
+    mass_to_clean: Decimal
+        Mass to be cleaned.
+    time_delta: float
         ?
-    set_ppm: int
-        Integer value used to calculate a upper and lower bound mass range for an observed value to be considered the same as a theoretical value
 
     Returns
     -------
