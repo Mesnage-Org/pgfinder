@@ -41,92 +41,84 @@ cell surface properties modulate antimicrobial resistance and host-pathogen
 interactions. The field of _Peptidoglycomics_ that seeks to model and determine
 the structure of these molecules based on laboratory based chromatography is in
 its infancy but progress will be greatly facilitated by development of software
-tools such as `PGFinder` which introduce streamlined workflow pipelines for
+tools such as `PGFinder` which introduces a streamlined workflow pipelines for
 analysing and working with laboratory generated data.
-<!-- The forces on stars, galaxies, and dark matter under external gravitational -->
-<!-- fields lead to the dynamical evolution of structures in the universe. The orbits -->
-<!-- of these bodies are therefore key to understanding the formation, history, and -->
-<!-- future state of galaxies. The field of "galactic dynamics," which aims to model -->
-<!-- the gravitating components of galaxies to study their structure and evolution, -->
-<!-- is now well-established, commonly taught, and frequently used in astronomy. -->
-<!-- Aside from toy problems and demonstrations, the majority of problems require -->
-<!-- efficient numerical tools, many of which require the same base code (e.g., for -->
-<!-- performing numerical orbit integration). -->
 
 # Statement of need
 
 The fields of Proteomics and Glycomics have many software solutions available,
-but none are currently suited analysis of peptidoglycan molecules which are made
-from a backbone of glycan chains with peptide side-chains each of which are
+but none are currently suited to the analysis of peptidoglycan molecules which are
+made from a backbone of glycan chains with peptide side-chains each of which are
 themselves composed of unusual sugars and amino acids. As a consequence researchers
 have traditionally relied on laborious and error prone manual analysis of data
-generated from reversed -phase High-Pressure Liquid Chromatography (rp-HPLC) and
-mass spectroscopy (MS) as no automated tools were available. `PGFinder` addresses
-this short-coming by introducing an automated workflow of PG structural analysis
-built on open-access principles that enable replicable and reproducible analyses
-to be undertaken and in turn peer-reviewed. As such `PGFinder` instantiates the
-field of peptidoglycomics on a firm footing.
-<!-- `Gala` is an Astropy-affiliated Python package for galactic dynamics. Python -->
-<!-- enables wrapping low-level languages (e.g., C) for speed without losing -->
-<!-- flexibility or ease-of-use in the user-interface. The API for `Gala` was -->
-<!-- designed to provide a class-based and user-friendly interface to fast (C or -->
-<!-- Cython-optimized) implementations of common operations such as gravitational -->
-<!-- potential and force evaluation, orbit integration, dynamical transformations, -->
-<!-- and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and -->
-<!-- interfaces well with the implementations of physical units and astronomical -->
-<!-- coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and -->
-<!-- `astropy.coordinates`). -->
+generated from reversed-phase High-Pressure Liquid Chromatography (rp-HPLC) and
+mass spectroscopy (MS) as no automated tools were available. `PGFinder` is
+implemented the popular Python language and addresses this short-coming by
+introducing an automated workflow of PG structural analysis built on open-access
+principles that enable replicable and reproducible analyses to be undertaken and in
+turn peer-reviewed. As such `PGFinder` instantiates the field of peptidoglycomics
+on a firm footing.
 
-<!-- `Gala` was designed to be used by both astronomical researchers and by -->
-<!-- students in courses on gravitational dynamics or astronomy. It has already been -->
-<!-- used in a number of scientific publications [@Pearson:2017] and has also been -->
-<!-- used in graduate courses on Galactic dynamics to, e.g., provide interactive -->
-<!-- visualizations of textbook material [@Binney:2008]. The combination of speed, -->
-<!-- design, and support for Astropy functionality in `Gala` will enable exciting -->
-<!-- scientific explorations of forthcoming data releases from the *Gaia* mission -->
-<!-- [@gaia] by students and experts alike. -->
+# Package Overview
 
-# Mathematics
+`PGFinder` takes as input a list of known masses for given set of molecules
+<**TODO** what molecules are included in the masses_file and how to describe them?>
+and a set of target molecules from rp-HPLC that contains a list of molecules of
+unknown components which may be monomers, dimers or trimers. The target molecules
+are then fuzzily matched itteratively to molecules of known size for a user specified
+set of modifications. An overview of this workflow is shown in figure **TODO**
+reference and link to figure.
 
-<!-- Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$ -->
+```{mermaid}
+graph TD;
 
-<!-- Double dollars make self-standing equations: -->
+    A[Monomer Masses Database] --> C[Match monomers]
+    B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
+    C --> D[DATABASE 1 Matched theoretical monomer masses]
+    D --> E([Calculate dimer & trimer masses])
+    D --> I([Calculate modified monomers, dimers & trimers])
+    D --> K([Match & annotate MS data -/+ ppm tolerance])
+    E --> F[DATABASE 2 Theoretical dimer & trimer masses library]
+    F --> G([Match dimers & trimers -/+ ppm tolerance])
+    G --> H[Matched theoretical dimers & trimers masses]
+    H --> I
+    I --> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library]
+    J --> K
+    K --> L[Raw matched MS data]
+    L --> M([Consolidate in source decay products + salt adducts])
+    M --> N[Processed MS data]
+    N --> O([Write to CSV file])
+    style A fill:#FFBB33
+    style B fill:#FFBB33
+    style C fill:#FFBB33
+    style D fill:#FFBB33
+    style E fill:#95FF80
+    style F fill:#95FF80
+    style G fill:#95FF80
+    style H fill:#95FF80
+    style I fill:#FF6666
+    style J fill:#FF6666
+    style K fill:#33BBFF
+    style L fill:#33BBFF
+    style M fill:#33BBFF
+    style N fill:#33BBFF
+    style O fill:#33BBFF
+```
 
-<!-- $$\Theta(x) = \left\{\begin{array}{l} -->
-<!-- 0\textrm{ if } x < 0\cr -->
-<!-- 1\textrm{ else} -->
-<!-- \end{array}\right.$$ -->
+# Resources and Examples
 
-<!-- You can also use plain \LaTeX for equations -->
-<!-- \begin{equation}\label{eq:fourier} -->
-<!-- \hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx -->
-<!-- \end{equation} -->
-<!-- and refer to \autoref{eq:fourier} from text. -->
+`PGFinder` is available on [PyPI]() and the development code is openly available on
+[GitHub](). Documentation is available [online]() and example Jupyter Notebooks are
+available in Google Colab for users to test and use.
 
 # Citations
 
-<!-- Citations to entries in paper.bib should be in -->
-<!-- [rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html) -->
-<!-- format. -->
-
-<!-- If you want to cite a software repository URL (e.g. something on GitHub without a preferred -->
-<!-- citation) then you can do it with the example BibTeX entry below for @fidgit. -->
-
-<!-- For a quick reference, the following citation commands can be used: -->
-<!-- - `@author:2001`  ->  "Author et al. (2001)" -->
-<!-- - `[@author:2001]` -> "(Author et al., 2001)" -->
-<!-- - `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)" -->
-
-# Figures
-
-<!-- Figures can be included like this: -->
-<!-- ![Caption for example figure.\label{fig:example}](figure.png) -->
-<!-- and referenced from text using \autoref{fig:example}. -->
-
-<!-- Figure sizes can be customized by adding an optional second parameter: -->
-<!-- ![Caption for example figure.](figure.png){ width=20% } -->
 
 # Acknowledgements
+
+Funding to develop and improve documentation and accessibility to `PGFinder` was
+provided by the [Unleash Your Data and Software](https://www.sheffield.ac.uk/library/rdm/unleashdatasoftware)
+initiative at The University of Sheffield.
 
 <!-- We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong -->
 <!-- Oh, and support from Kathryn Johnston during the genesis of this project. -->
