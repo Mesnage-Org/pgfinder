@@ -1,5 +1,5 @@
 ---
-title: PGFinder: A Python package for peptidoglycan analysis'
+title: PGFinder - A Python package for peptidoglycan analysis
 tags:
   - Python
   - proteins
@@ -7,12 +7,11 @@ tags:
   - amino acids
 authors:
   - name: Neil Shephard
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-8301-6857
     equal-contrib: true
     corresponding: true
     affiliation: 1
   - name: Robert Turner
-    orcid:
     equal-contrib: true
     affiliation: 1
   - name: Stéphane Mesnage
@@ -20,7 +19,6 @@ authors:
     equal-contrib: true
     affiliation: 2
   - name: Ankur Patel
-    orcid
     equal-contrib: true
     affiliation: 2
 affiliations:
