@@ -11,14 +11,15 @@ authors:
     equal-contrib: true
     corresponding: true
     affiliation: 1
+  - name: Ankur Patel
+    equal-contrib: true
+    affiliation: 2
   - name: Robert Turner
+    orcid: 0000-0002-1353-1404
     equal-contrib: true
     affiliation: 1
   - name: Stéphane Mesnage
     orcid: 0000-0003-1648-4890
-    equal-contrib: true
-    affiliation: 2
-  - name: Ankur Patel
     equal-contrib: true
     affiliation: 2
 affiliations:
