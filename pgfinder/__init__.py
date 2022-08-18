@@ -19,3 +19,6 @@ LOGGER.info("All parameters converted to decimal")
 MULTIMERS = PARAMETERS["multimer"]
 MOD_TYPE = PARAMETERS["mod_type"]
 MASS_TO_CLEAN = PARAMETERS["mass_to_clean"]
+
+from . import _version
+__version__ = _version.get_versions()['version']
