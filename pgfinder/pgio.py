@@ -123,6 +123,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         ]
         # Reorder columns in dataframe to desired order.
         ff = ff[cols_order]
+        ff.drop(columns=["feature", "corrMax", "maxIsotopeCount"], inplace=True)
 
         return ff
 
