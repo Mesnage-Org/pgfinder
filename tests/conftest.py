@@ -114,11 +114,6 @@ def mq_test_df(mq_file_name):
 
 
 @pytest.fixture
-def mq_baseline_df():
-    return pd.read_csv(DATA_DIR / "baseline_output_mq.csv", index_col=0)
-
-
-@pytest.fixture
 def ftrs_file_name():
     return str(DATA_DIR / "ftrs_test_data.ftrs")
 
@@ -126,8 +121,3 @@ def ftrs_file_name():
 @pytest.fixture
 def ftrs_test_df(ftrs_file_name):
     return pgio.ms_file_reader(ftrs_file_name)
-
-
-@pytest.fixture
-def ftrs_baseline_df():
-    return pd.read_csv(DATA_DIR / "baseline_output_ftrs.csv", index_col=0)

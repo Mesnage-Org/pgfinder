@@ -6,7 +6,9 @@ import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 
-def test_matching_mq_baseline(mq_test_df, theo_masses_df, mod_test, mq_baseline_df, tmp_path):
+def test_matching_mq_baseline(
+    regtest, mq_test_df: pd.DataFrame, theo_masses_df: pd.DataFrame, mod_test, tmp_path
+) -> None:
     """Test that output of the major function in the module is unchanged."""
 
     validation.validate_raw_data_df(mq_test_df)
@@ -19,10 +21,12 @@ def test_matching_mq_baseline(mq_test_df, theo_masses_df, mod_test, mq_baseline_
     )
     output_df = pd.read_csv(output_filepath, index_col=0)
 
-    pd.testing.assert_frame_equal(output_df, mq_baseline_df)
+    print(output_df.to_string(), file=regtest)
 
 
-def test_matching_ftrs_baseline(ftrs_test_df, theo_masses_df, mod_test, ftrs_baseline_df, tmp_path):
+def test_matching_ftrs_baseline(
+    regtest, ftrs_test_df: pd.DataFrame, theo_masses_df: pd.DataFrame, mod_test, tmp_path
+) -> None:
     """Test that output of the major function in the module is unchanged."""
 
     validation.validate_raw_data_df(ftrs_test_df)
@@ -36,4 +40,4 @@ def test_matching_ftrs_baseline(ftrs_test_df, theo_masses_df, mod_test, ftrs_bas
 
     output_df = pd.read_csv(output_filepath, index_col=0)
 
-    pd.testing.assert_frame_equal(output_df, ftrs_baseline_df)
+    print(output_df.to_string(), file=regtest)
