@@ -19,6 +19,7 @@ jobs:
           python-version: 3.9
       - name: Installing the package
         run: |
+          pip3 install git+https://github.com/python-versioneer/python-versioneer/pull/294/commits/0337a75f1cc781f4a7ea35baab9545ae964b0ec7
           pip3 install .
           pip3 install .[pypi]
       - name: Build package
