@@ -23,7 +23,7 @@ jobs:
           pip3 install .[pypi]
       - name: Build package
         run: |
-          python setup.py sdist bdist_wheel
+          python -m build --no-isolation
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
