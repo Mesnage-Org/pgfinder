@@ -19,7 +19,7 @@ jobs:
           python-version: 3.9
       - name: Installing the package
         run: |
-          pip install versioneer>=0.25
+          pip install "versioneer>=0.25"
           pip3 install .
           pip3 install .[pypi]
       - name: Build package
