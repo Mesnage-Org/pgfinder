@@ -45,32 +45,19 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     """
     # Match theoretical structures to raw data to generate a list of observed structures
     matched_df = matching(ftrs_df, theo_list, user_ppm)
-
+    
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
-    filtered_df = matched_df.loc[:, "theo_mwMonoisotopic":"inferredStructure"]
+    filtered_df = matched_df.filter(["theo_mwMonoisotopic","inferredStructure"], axis=1)
+
 
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
     filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
 
-    # Expand dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
-    cols = ["theo_mwMonoisotopic", "inferredStructure"]
-    # FIXME : Better to use try: ... except:
-    if filtered_df.empty == True:
-        raise ValueError(
-            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
-        )
-    exploded_df = (
-        pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
-        .stack()
-        .reset_index(level=1, drop=True)
-    )
-    exploded_df.drop_duplicates(subset="inferredStructure", keep="first", inplace=True)
-
-    exploded_df.rename(
+    filtered_df.rename(
         columns={"theo_mwMonoisotopic": "Monoisotopicmass", "inferredStructure": "Structure"}, inplace=True
     )
 
-    return exploded_df
+    return filtered_df
 
 
 def multimer_builder(theo_df, multimer_type: int = 0):
