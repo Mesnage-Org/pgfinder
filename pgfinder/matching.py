@@ -45,9 +45,9 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     """
     # Match theoretical structures to raw data to generate a list of observed structures
     matched_df = matching(ftrs_df, theo_list, user_ppm)
-    
+
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
-    filtered_df = matched_df.filter(["theo_mwMonoisotopic","inferredStructure"], axis=1)
+    filtered_df = matched_df.filter(["inferredStructure","theo_mwMonoisotopic"], axis=1)
 
 
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
