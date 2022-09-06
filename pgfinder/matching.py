@@ -311,6 +311,8 @@ long_format: bool = False) -> pd.DataFrame:
 
     LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo, user_ppm)
+    print(obs_monomers_df.dtypes)
+    print(obs_monomers_df.head)
 
     # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
     #         possible that there are multiple types listed in the enbaled_mod_list?
