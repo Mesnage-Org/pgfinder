@@ -45,28 +45,22 @@ analysing and working with laboratory generated data.
 
 # Statement of need
 
-The fields of Proteomics and Glycomics have many software solutions available,
-but none are currently suited to the analysis of peptidoglycan molecules which are
-made from a backbone of glycan chains with peptide side-chains each of which are
-themselves composed of unusual sugars and amino acids. As a consequence researchers
-have traditionally relied on laborious and error prone manual analysis of data
-generated from reversed-phase High-Pressure Liquid Chromatography (rp-HPLC) and
-mass spectroscopy (MS) as no automated tools were available. `PGFinder` is
-implemented the popular Python language and addresses this short-coming by
-introducing an automated workflow of PG structural analysis built on open-access
-principles that enable replicable and reproducible analyses to be undertaken and in
-turn peer-reviewed. As such `PGFinder` instantiates the field of peptidoglycomics
-on a firm footing.
+The fields of Proteomics and Glycomics have many software solutions available, but none are currently suited to the
+analysis of peptidoglycan molecules which are made from a backbone of glycan chains with peptide side-chains each of
+which are themselves composed of unusual sugars and amino acids. As a consequence researchers have traditionally relied
+on laborious and error prone manual analysis of data generated from reversed-phase High-Pressure Liquid Chromatography
+(rp-HPLC) and mass spectroscopy (MS) as no automated tools were available. `PGFinder` is implemented the popular Python
+language and addresses this short-coming by introducing an automated workflow of PG structural analysis built on
+open-access principles that enable replicable and reproducible analyses to be undertaken and in turn peer-reviewed. As
+such `PGFinder` instantiates the field of peptidoglycomics on a firm footing.
 
 # Package Overview
 
-`PGFinder` takes as input a list of known masses for given set of molecules
-<**TODO** what molecules are included in the masses_file and how to describe them?>
-and a set of target molecules from rp-HPLC that contains a list of molecules of
-unknown components which may be monomers, dimers or trimers. The target molecules
-are then fuzzily matched itteratively to molecules of known size for a user specified
-set of modifications. An overview of this workflow is shown in figure **TODO**
-reference and link to figure.
+`PGFinder` takes as input a list of known masses for given set of molecules <**TODO** what molecules are included in the
+masses_file and how to describe them?> and a set of target molecules from rp-HPLC and Mass spectroscopy that contains a
+list of molecules of unknown components which may be monomers, dimers or trimers. The target molecules are then fuzzily
+matched itteratively to molecules of known size for a user specified set of modifications. An overview of this workflow
+is shown in figure **TODO** reference and link to figure.
 
 ```{mermaid}
 graph TD;
@@ -106,9 +100,10 @@ graph TD;
 
 # Resources and Examples
 
-`PGFinder` is available on [PyPI]() and the development code is openly available on
-[GitHub](). Documentation is available [online]() and example Jupyter Notebooks are
-available in Google Colab for users to test and use.
+`PGFinder` is available on [PyPI](https://pypi.org/project/pgfinder/) and the development code is openly available on
+[GitHub](https://pypi.org/project/pgfinder/). Documentation is also available
+[online](https://mesnage-org.github.io/pgfinder/) and example Jupyter Notebooks are available in Google Colab for users
+to test and use.
 
 # Citations
 
