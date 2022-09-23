@@ -1,4 +1,4 @@
 [run]
 omit =
-  # Exclude versioneer
-  clarity/_versioneer.py
+# Exclude versioneer
+  pgfinder/_version.py

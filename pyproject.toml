@@ -19,3 +19,8 @@ filterwarnings = [
 
 [tool.black]
 line-length = 120
+
+[tool.coverage.run]
+omit = [
+    "pgfinder/_version.py"
+]
