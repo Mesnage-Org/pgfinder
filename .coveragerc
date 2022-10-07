@@ -1,0 +1,4 @@
+[run]
+omit =
+# Exclude versioneer
+  pgfinder/_version.py
