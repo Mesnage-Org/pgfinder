@@ -61,11 +61,8 @@ is shown in figure **TODO** reference and link to figure.
 
 ```mermaid
 %%{init: { 'theme': 'base',
-           'themeVariables': {
-               'primaryColor': '#ff0000'
-           }
-         }
-  }
+           'themeVariables': { 'primaryColor': '#ff0000'}
+         }}
 graph TD;
     A[Monomer Masses Database] --> C[Match monomers]
     B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
