@@ -59,9 +59,8 @@ list of molecules of unknown components which may be monomers, dimers or trimers
 matched itteratively to molecules of known size for a user specified set of modifications. An overview of this workflow
 is shown in figure **TODO** reference and link to figure.
 
-```{mermaid}
+```mermaid
 graph TD;
-
     A[Monomer Masses Database] --> C[Match monomers]
     B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
     C --> D[DATABASE 1 Matched theoretical monomer masses]
