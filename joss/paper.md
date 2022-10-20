@@ -60,8 +60,6 @@ matched itteratively to molecules of known size for a user specified set of modi
 is shown in figure **TODO** reference and link to figure.
 
 ```mermaid
-%%{init: { 'theme': 'base'
-         }}
 graph TD;
     A[Monomer Masses Database] --> C[Match monomers]
     B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
