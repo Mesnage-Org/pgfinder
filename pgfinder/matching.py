@@ -179,7 +179,9 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
             mw_matches["theo_mwMonoisotopic"] = round(m, 4)
             matches_df = pd.concat([matches_df, mw_matches])
 
-    return matches_df
+    # Merge with raw data
+    unmatched = ftrs_df[~ftrs_df.index.isin(matches_df.index)]
+    return pd.concat([matches_df, unmatched])
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
