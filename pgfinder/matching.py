@@ -165,19 +165,18 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
 
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
-    raw_data = ftrs_df.drop(["theo_mwMonoisotopic", "inferredStructure"], axis=1)
     matches_df = pd.DataFrame()
 
     for s, m in molecular_weights.itertuples(index=False):
         tolerance = calc_ppm_tolerance(m, set_ppm)
-        mw_matches = raw_data[
-            (raw_data["mwMonoisotopic"] >= m - tolerance) & (raw_data["mwMonoisotopic"] <= m + tolerance)
+        mw_matches = ftrs_df[
+            (ftrs_df["mwMonoisotopic"] >= m - tolerance) & (ftrs_df["mwMonoisotopic"] <= m + tolerance)
         ].copy()
 
         # If we have matches add the structure and molecular weight then append
         if len(mw_matches.index) > 0:
             mw_matches["inferredStructure"] = s
-            mw_matches["theo_mwMonoisotopic"] = m
+            mw_matches["theo_mwMonoisotopic"] = round(m, 4)
             matches_df = pd.concat([matches_df, mw_matches])
 
     return matches_df
