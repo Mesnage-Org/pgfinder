@@ -24,6 +24,8 @@ under your virtual environment with [`pip`](https://pip.pypa.io/en/stable/).
 pip install pgfinder
 ```
 
+Versions are released automatically when commits on GitHub are tagged.
+
 ### GitHub
 
 If you do not intend to undertake any development on PGFinder and just wish to use it then you can install directly from
@@ -42,6 +44,9 @@ cd pgfinder
 pip install .
 ```
 
+The current version when installed from GitHub is a combination of the most recent Git tag combined with the hash of the
+current `HEAD` of the branch and how commits away from the last tag it is. For further details on versioning please
+refer to [versioneer documentation](https://github.com/python-versioneer/python-versioneer).
 
 ## Binder Notebooks
 
