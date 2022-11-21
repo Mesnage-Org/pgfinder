@@ -49,9 +49,11 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
     filtered_df = matched_df.filter(["inferredStructure","theo_mwMonoisotopic"], axis=1)
 
-
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
     filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
+
+    # Drop duplicate structures and masses
+    filtered_df.drop_duplicates(inplace=True)
 
     filtered_df.rename(
         columns={"theo_mwMonoisotopic": "Monoisotopicmass", "inferredStructure": "Structure"}, inplace=True
@@ -162,24 +164,23 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     return obs_theo_muropeptides_df
 
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
-    molecular_weights = list(ftrs_df["mwMonoisotopic"])
+    molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
     raw_data = ftrs_df.drop(["theo_mwMonoisotopic", "inferredStructure"], axis=1)
-    matches_df = pd.DataFrame(columns=["inferredStructure","theo_mwMonoisotopic"])
-    for mw in molecular_weights:
-        tolerance = calc_ppm_tolerance(mw, set_ppm)
-        mw_matches = matching_df[
-            (matching_df["Monoisotopicmass"] >= mw - tolerance) & (matching_df["Monoisotopicmass"] <= mw + tolerance)
-        ].copy()
-        mw_matches.columns = ["inferredStructure","theo_mwMonoisotopic"]
+    matches_df = pd.DataFrame()
 
-        # If we have matches add the molecular weight and append
+    for s, m in molecular_weights.itertuples(index=False):
+        tolerance = calc_ppm_tolerance(m, set_ppm)
+        mw_matches = raw_data[
+            (raw_data["mwMonoisotopic"] >= m - tolerance) & (raw_data["mwMonoisotopic"] <= m + tolerance)
+        ].copy()
+
+        # If we have matches add the structure and molecular weight then append
         if len(mw_matches.index) > 0:
-            mw_matches["mwMonoisotopic"] = mw
+            mw_matches["inferredStructure"] = s
+            mw_matches["theo_mwMonoisotopic"] = m
             matches_df = pd.concat([matches_df, mw_matches])
 
-    # Merge with raw data
-    result = raw_data.merge(matches_df, on=["mwMonoisotopic"], how="left")
-    return(result)
+    return matches_df
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
