@@ -49,7 +49,7 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of properties of a file uploaded using [ipywidgets](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload)
+        Dictionary of properties of a file uploaded using `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
 
     Returns
     -------
