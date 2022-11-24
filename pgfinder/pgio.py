@@ -49,15 +49,15 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of ?
+        Dictionary of properties of a file uploaded using [ipywidgets](https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload)
 
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame of ?
+        Pandas DataFrame of mass information
     """
-    filename = upload[0]["name"]
-    file_contents = upload[0]["content"]
+    filename = upload["name"]
+    file_contents = upload["content"]
     file_temp = tempfile.NamedTemporaryFile(delete=False)
     file_temp.write(file_contents)
     file = file_temp.name
