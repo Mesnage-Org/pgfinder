@@ -56,8 +56,8 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     pd.DataFrame
         Pandas DataFrame of ?
     """
-    filename = list(upload.keys())[0]
-    file_contents = upload[list(upload.keys())[0]]["content"]  # I hate this line of code
+    filename = upload[0]["name"]
+    file_contents = upload[0]["content"]
     file_temp = tempfile.NamedTemporaryFile(delete=False)
     file_temp.write(file_contents)
     file = file_temp.name
