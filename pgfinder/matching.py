@@ -243,7 +243,7 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         # Get retention time value from row
         rt = row.rt
         # Get theoretical monoisotopic mass value from row as list of values
-        intact_mw = list(str(row.theo_mwMonoisotopic).split(","))
+        intact_mw = str(row.theo_mwMonoisotopic)
 
         # Work out rt window
         upper_lim_rt = rt + time_delta
@@ -257,30 +257,28 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
 
             for z, ins_row in ins_constrained_df.iterrows():
                 # Having cells with multiple values causes headaches! Use long format, reshape and concatenate at end if needed
-                ins_mw = list(str(ins_row.theo_mwMonoisotopic).split(","))
+                ins_mw = str(ins_row.theo_mwMonoisotopic)
 
                 # Compare parent masses to adduct masses
-                for mass in intact_mw:
-                    for mass_2 in ins_mw:
-                        mass_delta = abs(
-                            Decimal(mass).quantize(Decimal("0.00001")) - Decimal(mass_2).quantize(Decimal("0.00001"))
-                        )
-                        # Consolidate intensities
-                        if mass_delta == mass_to_clean:
-                            consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
-                            insDecay_intensity = ins_row.maxIntensity
-                            ID = row.ID
-                            drop_ID = ins_row.ID
-                            idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
-                            try:
-                                drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
-                                consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
-                                diff_ID = consolidated_decay_df.ID != ins_row.ID
-                                diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
-                                consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
-                            except IndexError:
-                                #     LOGGER.info(f"Already removed : {drop_idx}")
-                                pass
+                mass_delta = abs(
+                    Decimal(intact_mw).quantize(Decimal("0.00001")) - Decimal(ins_mw).quantize(Decimal("0.00001"))
+                )
+                # Consolidate intensities
+                if mass_delta == mass_to_clean:
+                    consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
+                    insDecay_intensity = ins_row.maxIntensity
+                    ID = row.ID
+                    drop_ID = ins_row.ID
+                    idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
+                    try:
+                        drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
+                        consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
+                        diff_ID = consolidated_decay_df.ID != ins_row.ID
+                        diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
+                        consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
+                    except IndexError:
+                        #     LOGGER.info(f"Already removed : {drop_idx}")
+                        pass
 
     return consolidated_decay_df
 
