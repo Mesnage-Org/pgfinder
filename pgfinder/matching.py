@@ -190,10 +190,10 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     ----------
     ftrs_df: pd.DataFrame
         Features dataframe?
-    matching_df: pd.DataFrame
+    mass_to_clean: Decimal
+        Mass to be cleaned.
+    time_delta: float
         ?
-    set_ppm: int
-        Integer value used to calculate a upper and lower bound mass range for an observed value to be considered the same as a theoretical value
 
     Returns
     -------
@@ -215,9 +215,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     # Generate adduct dataframe - contains adducts
     adducted_muropeptide_df = ftrs_df.loc[ftrs_df["inferredStructure"].str.contains(target, na=False)]
 
-    # print(parent_muropeptide_df)
-    # print(adducted_muropeptide_df)
-
     # Generate copy of rawdata dataframe
     consolidated_decay_df = ftrs_df.copy()
 
@@ -234,15 +231,11 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         LOGGER.info(f"Processing {adducted_muropeptide_df.size} in source decay products")
 
     # Consolidate adduct intensity with parent ions intensity
-    for x, row in parent_muropeptide_df.iterrows():
+    for y, row in parent_muropeptide_df.iterrows():
         # Get retention time value from row
         rt = row.rt
-        #Get parent structure
-        parent_structure = row.inferredStructure
-        #Get parent ID
-        parent_ID = row.ID
-        #Get parent intensity
-        parent_intensity = row.maxIntensity
+        # Get theoretical monoisotopic mass value from row as list of values
+        intact_mw = list(str(row.theo_mwMonoisotopic).split(","))
 
         # Work out rt window
         upper_lim_rt = rt + time_delta
@@ -253,25 +246,41 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
         if not ins_constrained_df.empty:
-            if target == "^m":
-                ins_constrained_df["inferredStructure"] = "g" + ins_constrained_df["inferredStructure"].astype(str)
-            if target == "^Na+":
-                ins_constrained_df["inferredStructure"] =  ins_constrained_df["inferredStructure"].str.replace("Na\+ ", "")
-            if target == "^K+":
-                ins_constrained_df["inferredStructure"] =  ins_constrained_df["inferredStructure"].str.replace("K\+ ", "")
 
-        for y, ins_row in ins_constrained_df.iterrows():
-            ins_structure = ins_row.inferredStructure
-            ins_intensity = ins_row.maxIntensity
-            if parent_structure == ins_structure:
-                #Get index to value to consolidate
-                idx = consolidated_decay_df.loc[consolidated_decay_df["inferredStructure"] == parent_structure].index[0]
-                #consolidate intensity value
-                consolidated_decay_df.at[idx, "maxIntensity"] = parent_intensity + ins_intensity
-                #get index of target to drop
-                drop_idx = ins_constrained_df.loc[ins_constrained_df["inferredStructure"] == ins_structure].index[0]
-                #Drop target row
-                consolidated_decay_df.drop(drop_idx, inplace=True)
+            for z, ins_row in ins_constrained_df.iterrows():
+                # Having cells with multiple values causes headaches! Use long format, reshape and concatenate at end if needed
+                ins_mw = list(str(ins_row.theo_mwMonoisotopic).split(","))
+
+                # Compare parent masses to adduct masses
+                for mass in intact_mw:
+                    for mass_2 in ins_mw:
+                        mass_delta = abs(
+                            Decimal(mass).quantize(Decimal("0.00001")) - Decimal(mass_2).quantize(Decimal("0.00001"))
+                        )
+                        # Consolidate intensities
+                        if mass_delta == mass_to_clean:
+                            consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
+                            insDecay_intensity = ins_row.maxIntensity
+                            parent_intensity = row.maxIntensity
+                            # FIXME: This might not sum all of the adducts,
+                            # instead just adding the intensity of the last
+                            consolidated_intensity = insDecay_intensity + parent_intensity
+                            ID = row.ID
+                            drop_ID = ins_row.ID
+                            # FIXME: This might cause a bit of an issue once
+                            # there are duplicate IDs from the long-format!
+                            # I should add the masses to *all* of the ID
+                            # matches here — get rid of `[0]`!
+                            idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
+                            try:
+                                drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
+                                consolidated_decay_df.at[idx, "maxIntensity"] = consolidated_intensity
+                                diff_ID = consolidated_decay_df.ID != ins_row.ID
+                                diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
+                                consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
+                            except IndexError:
+                                #     LOGGER.info(f"Already removed : {drop_idx}")
+                                pass
 
     return consolidated_decay_df
 
