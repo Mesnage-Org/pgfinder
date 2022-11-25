@@ -261,10 +261,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                         if mass_delta == mass_to_clean:
                             consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
                             insDecay_intensity = ins_row.maxIntensity
-                            parent_intensity = row.maxIntensity
-                            # FIXME: This might not sum all of the adducts,
-                            # instead just adding the intensity of the last
-                            consolidated_intensity = insDecay_intensity + parent_intensity
                             ID = row.ID
                             drop_ID = ins_row.ID
                             # FIXME: This might cause a bit of an issue once
@@ -274,7 +270,7 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                             idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
                             try:
                                 drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
-                                consolidated_decay_df.at[idx, "maxIntensity"] = consolidated_intensity
+                                consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
                                 diff_ID = consolidated_decay_df.ID != ins_row.ID
                                 diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
                                 consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
