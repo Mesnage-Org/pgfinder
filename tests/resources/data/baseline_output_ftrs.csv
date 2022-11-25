@@ -1,4 +1,4 @@
-file: data/ftrs_test_data.ftrs masses_file: data/masses/e_coli_monomer_masses.csv modifications: - Sodium - Potassium - Anh - DeAc - DeAc_Anh - Nude - Decay - Amidation - Amidase - Double_Anh - multimers_Glyco ppm: 10 rt_window: 0.5 ,ID,xicStart,xicEnd,ionCount,chargeOrder,rt,mwMonoisotopic,theo_mwMonoisotopic,inferredStructure,maxIntensity
+file: tests/resources/data/ftrs_test_data.ftrs masses_file: tests/resources/data/masses/e_coli_monomer_masses.csv modifications: - Sodium - Potassium - Anh - DeAc - DeAc_Anh - Nude - Decay - Amidation - Amidase - Double_Anh - multimers_Glyco ppm: 10 rt_window: 0.5 ,ID,xicStart,xicEnd,ionCount,chargeOrder,rt,mwMonoisotopic,theo_mwMonoisotopic,inferredStructure,maxIntensity
 ,961,15.526495,15.595495000000001,3,2,15.552172548799565,979.3558694297412,979.3636,K+ gm-AEJA|1,1750
 ,605,6.839016666666667,7.352026666666666,8,3;4,7.120650114904862,2666.1063741153152,2666.0936,Na+ gm-AEJ-gm-AEJ-gm-AEJA_(Glyco)|3,658327
 ,615,7.1893633333333336,7.606078333333334,10,4;3,7.354808828880112,2737.1447041934402,2737.1307,Na+ gm-AEJ-gm-AEJA-gm-AEJA_(Glyco)|3,1351712

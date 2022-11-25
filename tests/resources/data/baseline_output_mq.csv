@@ -1,4 +1,4 @@
-file: data/maxquant_test_data.txt masses_file: data/masses/e_coli_monomer_masses.csv modifications: - Sodium - Potassium - Anh - DeAc - DeAc_Anh - Nude - Decay - Amidation - Amidase - Double_Anh - multimers_Glyco ppm: 10 rt_window: 0.5 ,ID,rt,rt_length,mwMonoisotopic,theo_mwMonoisotopic,inferredStructure,maxIntensity
+file: tests/resources/data/maxquant_test_data.txt masses_file: tests/resources/data/masses/e_coli_monomer_masses.csv modifications: - Sodium - Potassium - Anh - DeAc - DeAc_Anh - Nude - Decay - Amidation - Amidase - Double_Anh - multimers_Glyco ppm: 10 rt_window: 0.5 ,ID,rt,rt_length,mwMonoisotopic,theo_mwMonoisotopic,inferredStructure,maxIntensity
 ,7269,9.781,31.705,2440.9548,2440.9613,K+ gm-AE-gm-AEJ-gm-AEJ|3,4081800.0
 ,2900,16.101,32.149,979.35655,979.3636,K+ gm-AEJA|1,11887.0
 ,3017,18.425,21.46,979.35809,979.3636,K+ gm-AEJA|1,9709.3

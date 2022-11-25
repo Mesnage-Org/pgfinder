@@ -59,6 +59,11 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
         columns={"theo_mwMonoisotopic": "Monoisotopicmass", "inferredStructure": "Structure"}, inplace=True
     )
 
+    if filtered_df.empty:
+        raise ValueError(
+            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+        )
+
     return filtered_df
 
 
@@ -263,10 +268,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                             insDecay_intensity = ins_row.maxIntensity
                             ID = row.ID
                             drop_ID = ins_row.ID
-                            # FIXME: This might cause a bit of an issue once
-                            # there are duplicate IDs from the long-format!
-                            # I should add the masses to *all* of the ID
-                            # matches here — get rid of `[0]`!
                             idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
                             try:
                                 drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
