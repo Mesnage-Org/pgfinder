@@ -173,6 +173,9 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     matches_df = pd.DataFrame()
 
     for s, m in molecular_weights.itertuples(index=False):
+        # FIXME: I'm not sure if it's better to convert everything to float or
+        # to convert everthing to Decimal instead
+        m = float(m)
         tolerance = calc_ppm_tolerance(m, set_ppm)
         mw_matches = ftrs_df[
             (ftrs_df["mwMonoisotopic"] >= m - tolerance) & (ftrs_df["mwMonoisotopic"] <= m + tolerance)
