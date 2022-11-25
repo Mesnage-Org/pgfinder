@@ -1,6 +1,6 @@
 """Matching functions"""
 import logging
-from decimal import *
+from decimal import Decimal
 from pgfinder import MULTIMERS, MOD_TYPE, MASS_TO_CLEAN
 import pandas as pd
 
