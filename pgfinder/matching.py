@@ -270,15 +270,13 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
                     ID = row.ID
                     drop_ID = ins_row.ID
                     idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
-                    try:
+                    if not consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].empty:
                         consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
                         diff_ID = consolidated_decay_df.ID != ins_row.ID
                         diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
                         consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
-                    except IndexError:
-                        #     LOGGER.info(f"Already removed : {drop_idx}")
-                        pass
 
+    # breakpoint()
     return consolidated_decay_df
 
 def data_analysis(
