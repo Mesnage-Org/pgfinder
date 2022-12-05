@@ -49,15 +49,15 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of ?
+        Dictionary of properties of a file uploaded using `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
 
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame of ?
+        Pandas DataFrame of mass information
     """
-    filename = list(upload.keys())[0]
-    file_contents = upload[list(upload.keys())[0]]["content"]  # I hate this line of code
+    filename = upload["name"]
+    file_contents = upload["content"]
     file_temp = tempfile.NamedTemporaryFile(delete=False)
     file_temp.write(file_contents)
     file = file_temp.name

@@ -28,3 +28,6 @@ pgfinder/local_test.py
 cov*.xml
 .cov*
 *.log
+
+#Built docs
+docs/_build/*
