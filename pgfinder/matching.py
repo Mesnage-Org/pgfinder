@@ -47,7 +47,7 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     matched_df = matching(ftrs_df, theo_list, user_ppm)
 
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
-    filtered_df = matched_df.filter(["inferredStructure","theo_mwMonoisotopic"], axis=1)
+    filtered_df = matched_df[["inferredStructure", "theo_mwMonoisotopic"]].copy()
 
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
     filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
@@ -79,7 +79,7 @@ def multimer_builder(theo_df, multimer_type: int = 0):
     Returns
     -------
     pd.DataFrame
-        dataframe containing theoretical multimers and thier corresponding masses
+        dataframe containing theoretical multimers and their corresponding masses
     """
 
     theo_mw = []
@@ -243,45 +243,63 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         # Get retention time value from row
         rt = row.rt
         # Get theoretical monoisotopic mass value from row as list of values
-        intact_mw = str(row.theo_mwMonoisotopic)
+        intact_mw = row.theo_mwMonoisotopic
 
         # Work out rt window
         upper_lim_rt = rt + time_delta
         lower_lim_rt = rt - time_delta
 
-        # Get all adduct enteries within rt window
+        # Get all adducts within rt window
         ins_constrained_df = adducted_muropeptide_df[
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
         if not ins_constrained_df.empty:
 
+            # Loop through each of the adducts in the RT window, the adducts
+            # themselves all have structures containing the `target` string
             for z, ins_row in ins_constrained_df.iterrows():
-                # Having cells with multiple values causes headaches! Use long format, reshape and concatenate at end if needed
-                ins_mw = str(ins_row.theo_mwMonoisotopic)
+                ins_mw = ins_row.theo_mwMonoisotopic
 
                 # Compare parent masses to adduct masses
                 mass_delta = abs(
                     Decimal(intact_mw).quantize(Decimal("0.00001")) - Decimal(ins_mw).quantize(Decimal("0.00001"))
                 )
-                # Consolidate intensities
+
+                # Is the mass delta the same mass as the target `mass_to_clean`?
+                # If so, it's the same structure but that gets its charge from
+                # the `target` ion instead of a proton as normal. In this case,
+                # consolidate the intensities of the parent (H+) and adduct
+                # (`target`+) ions so that the parent intensity has all of the
+                # adduct intensities added to it
                 if mass_delta == mass_to_clean:
-                    consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
                     insDecay_intensity = ins_row.maxIntensity
                     ID = row.ID
                     drop_ID = ins_row.ID
+                    # Because long format leads to rows with duplicate IDs, the ["ID"]
+                    # of a row is sometimes different from its index in the dataframe.
+                    # Because this is sometimes but not always the case, we need this
+                    # lookup line:
                     idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
+                    # Make sure the row we are trying to consolidate hasn't already
+                    # been consolidated and deleted!
                     if not consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].empty:
+                        # Transfer adduct intensity to the parent ion
                         consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
+                        # Because long format means both IDs and structures can be duplicated,
+                        # only ID + structure pairs can be considered unique. Find where IDs
+                        # or structures differ and retain only those in the dataframe. This is
+                        # the same as *filtering out* rows in which *both* the ID and structure
+                        # match the target from ins_row
                         diff_ID = consolidated_decay_df.ID != ins_row.ID
                         diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
                         consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
 
-    # breakpoint()
     return consolidated_decay_df
 
+
 def data_analysis(
-    raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int,
-long_format: bool = False) -> pd.DataFrame:
+    raw_data_df: pd.DataFrame, theo_masses_df: pd.DataFrame, rt_window: float, enabled_mod_list: list, user_ppm=int
+) -> pd.DataFrame:
     """Perform analysis.
 
     Parameters
@@ -314,8 +332,6 @@ long_format: bool = False) -> pd.DataFrame:
 
     LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ff, theo, user_ppm)
-    # print(obs_monomers_df.dtypes)
-    # print(obs_monomers_df.head)
 
     # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
     #         possible that there are multiple types listed in the enbaled_mod_list?
