@@ -54,6 +54,13 @@ def ipywidgets_upload_output(ftrs_file_name):
             'content': open(ftrs_file_name, 'rb').read(),
             'last_modified': datetime.datetime(2022, 2, 2, 11, 6, 9, 951000, tzinfo=datetime.timezone.utc)}
 
+@pytest.fixture
+def ipywidgets_upload_output_theo(theo_masses_file_name):
+    return {'name': 'e_coli_monomer_masses.csv',
+            'type': 'text/csv',
+            'size': 4975,
+            'content': open(theo_masses_file_name, 'rb').read(),
+            'last_modified': datetime.datetime(2022, 3, 13, 19, 47, 12, 102000, tzinfo=datetime.timezone.utc)}
 
 @pytest.fixture
 def ppm():

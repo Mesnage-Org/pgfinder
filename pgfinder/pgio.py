@@ -157,19 +157,16 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of masses to be uploaded.
+        Dictionary of properties of a file uploaded using `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
 
     Returns
     -------
     pd.DataFrame
         Pandas Dataframe of theoretical masses.
     """
-    # FIXME : Not clear to me (NS) how or why a dictionary is supplied as a file, if its a file can/should use something
-    # like...
-    #
-    #    return_df = pd.read_json(file)
-    filename = list(upload.keys())[0]
-    file_contents = upload[list(upload.keys())[0]]["content"]  # I hate this line of code
+
+    filename = upload["name"]
+    file_contents = upload["content"]
 
     return_df = pd.read_csv(io.BytesIO(file_contents))
 
