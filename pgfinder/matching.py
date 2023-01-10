@@ -169,6 +169,22 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     return obs_theo_muropeptides_df
 
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
+    """Match theoretical masses to observed masses within ppm tolerance.
+
+    Parameters
+    ----------
+    ftrs_df: pd.DataFrame
+        Features DataFrame
+    matching_df: pd.DataFrame
+        Matching DataFrame
+    set_ppm: int
+
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe of matches.
+    """
+    
     molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
     matches_df = pd.DataFrame()
 
