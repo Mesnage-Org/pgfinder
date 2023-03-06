@@ -55,56 +55,17 @@ such `PGFinder` instantiates the field of peptidoglycomics on a firm footing.
 # Package Overview
 
 An overview of the iterative search strategy used in the workflow is shown in figure \ref{fig:workflow}.`PGFinder` uses
- a list of theoretical masses for a given set of known molecules based on their molecular structure (Database
- 1). Experimental data from mass spectroscopy is matched to these within a defined tolerance to give the matched
- theoretical monomer masses (Library 1). This library forms the basis of a second _in silico_ database of possible
- dimers and trimers that may be formed (Database 2) and these were again compared to the observed masses to generate a
- second library of matched theoretical dimers and trimers (Library 2). A third library (Library 3) is then derived of
- possible modifications that may arise through modifications which contains only modified muropeptides of matched
- monomers, dimers and trimers. Further details of the molecular aspects are given in [@Patel2021Sep].
+ a list of theoretical masses for a given set of known molecules based on their molecular structure (Database 1).
+ Experimental data from mass spectroscopy is matched to these within a defined tolerance to give the matched theoretical
+ monomer masses (Library 1). This library forms the basis of a second _in silico_ database of possible dimers and
+ trimers that may be formed (Database 2) and these were again compared to the observed masses to generate a second
+ library of matched theoretical dimers and trimers (Library 2). A third library (Library 3) is then derived of possible
+ modifications that may arise through modifications which contains only modified muropeptides of matched monomers,
+ dimers and trimers. Further details of the molecular aspects are given in [@Patel2021Sep].
 
 **TODO** Please review the above, I've attempted to refine and simplify the second paragraph under _Results_ of [@Patel2021Sep].
 
-![Stages undertaken in processing samples using `PGFinder` \label{fig:workflow}](img/flow_diagram.png)
-
-**TODO** - Render flow diagram in PDF from Mermaid if possible (see
-[pandoc-mermaid-filter](https://github.com/timofurrer/pandoc-mermaid-filter) which requires
-[mermaid-cli](https://github.com/mermaid-js/mermaid-cli)).
-
-<!-- ```mermaid -->
-<!-- graph TD; -->
-<!--     A[Monomer Masses Database] -\-> C[Match monomers] -->
-<!--     B[Deconvoluted MS data] -\-> C([Match monomers -/+ ppm tolerance]) -->
-<!--     C -\-> D[DATABASE 1 Matched theoretical monomer masses] -->
-<!--     D -\-> E([Calculate dimer & trimer masses]) -->
-<!--     D -\-> I([Calculate modified monomers, dimers & trimers]) -->
-<!--     D -\-> K([Match & annotate MS data -/+ ppm tolerance]) -->
-<!--     E -\-> F[DATABASE 2 Theoretical dimer & trimer masses library] -->
-<!--     F -\-> G([Match dimers & trimers -/+ ppm tolerance]) -->
-<!--     G -\-> H[Matched theoretical dimers & trimers masses] -->
-<!--     H -\-> I -->
-<!--     I -\-> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library] -->
-<!--     J -\-> K -->
-<!--     K -\-> L[Raw matched MS data] -->
-<!--     L -\-> M([Consolidate in source decay products + salt adducts]) -->
-<!--     M -\-> N[Processed MS data] -->
-<!--     N -\-> O([Write to CSV file]) -->
-<!--     style A fill:#FFBB33 -->
-<!--     style B fill:#FFBB33 -->
-<!--     style C fill:#FFBB33 -->
-<!--     style D fill:#FFBB33 -->
-<!--     style E fill:#95FF80 -->
-<!--     style F fill:#95FF80 -->
-<!--     style G fill:#95FF80 -->
-<!--     style H fill:#95FF80 -->
-<!--     style I fill:#FF6666 -->
-<!--     style J fill:#FF6666 -->
-<!--     style K fill:#33BBFF -->
-<!--     style L fill:#33BBFF -->
-<!--     style M fill:#33BBFF -->
-<!--     style N fill:#33BBFF -->
-<!--     style O fill:#33BBFF -->
-<!-- ``` -->
+![Stages undertaken in processing samples using `PGFinder` \label{fig:workflow}](fig1.svg)
 
 # Resources and Examples
 
