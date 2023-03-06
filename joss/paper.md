@@ -71,8 +71,8 @@ An overview of the iterative search strategy used in the workflow is shown in fi
 
 `PGFinder` is available on [PyPI](https://pypi.org/project/pgfinder/) and the development code is openly available on
 [GitHub](https://pypi.org/project/pgfinder/). Documentation is also available
-[online](https://mesnage-org.github.io/pgfinder/) and example Jupyter Notebooks are available in Google Colab for users
-to test and use. An example of command line usage is provided below
+[online](https://mesnage-org.github.io/pgfinder/) and example Jupyter Notebooks are available for users to test and use.
+An example of command line usage is provided:
 
 ```bash
 $ pip install pgfinder
