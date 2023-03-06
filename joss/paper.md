@@ -33,12 +33,13 @@ bibliography: paper.bib
 
 # Summary
 
-Peptidoglycans are a key components in cell membrane of Gram-positive bacteria and mediate the exchange of DNA between
-cells and the response to anti-bacterial drugs. Understanding their biogenesis and structure is key to understanding how
-cell surface properties modulate antimicrobial resistance and host-pathogen interactions. The field of
-_Peptidoglycomics_ that seeks to model and determine the structure of these molecules based on laboratory based
-chromatography is in its infancy but progress will be greatly facilitated by development of software tools such as
-`PGFinder` which introduces a streamlined workflow pipelines for analysing and working with laboratory generated data.
+Peptidoglycan is a key components in the cell surface of bacteria with numerous essential roles including ensuring
+mechanical stability and mediating interactions with the environment and host. Understanding its biogenesis and
+structure is key to understanding how cell surface properties modulate antimicrobial resistance and host-pathogen
+interactions. The field of _Peptidoglycomics_ seeks to model and determine the structure of these molecules based on
+laboratory based chromatography is in its infancy but progress will be greatly facilitated by development of software
+tools such as `PGFinder` which introduces a streamlined workflow pipelines for analysing and working with laboratory
+generated data.
 
 # Statement of need
 
