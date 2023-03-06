@@ -77,29 +77,29 @@ An example of command line usage is provided:
 ```bash
 $ pip install pgfinder
 $ find_pg --config config/example.yaml
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Loaded parameters from file : config/parameters.yaml
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] All parameters converted to decimal
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Configuration file loaded from     : config/example.yaml
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Input file                         : data/ftrs_test_data.ftrs
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] NB : All warnings have been turned off for this run.
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Mass spectroscopy file loaded from : data/ftrs_test_data.ftrs
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Theoretical masses loaded from      : data/masses/e_coli_monomer_masses.csv
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] PPM Tolerance                      : 0.5
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Time Delta                         : 10
-[Fri, 04 Nov 2022 10:24:02] [INFO    ] [pgfinder] Filtering theoretical masses by observed masses
-[Fri, 04 Nov 2022 10:24:03] [INFO    ] [pgfinder] Building multimers from obs muropeptides
-[Fri, 04 Nov 2022 10:24:03] [INFO    ] [pgfinder] Building features for multimer type : 1
-[Fri, 04 Nov 2022 10:24:03] [INFO    ] [pgfinder] Filtering theoretical multimers by observed
-[Fri, 04 Nov 2022 10:24:06] [INFO    ] [pgfinder] Building custom search file
-[Fri, 04 Nov 2022 10:24:06] [INFO    ] [pgfinder] Generating variants
-[Fri, 04 Nov 2022 10:24:06] [INFO    ] [pgfinder] Matching
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Cleaning data
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Processing 13 Sodium Adducts
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] No ^K+ found
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Processing 26 in source decay products
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Processing complete!
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Metadata save to                   : output
-[Fri, 04 Nov 2022 10:24:08] [INFO    ] [pgfinder] Results saved to                   : output/results.csv
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Loaded parameters from file : config/parameters.yaml
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] All parameters converted to decimal
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Configuration file loaded from     : config/example.yaml
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Input file                         : data\ftrs_test_data.ftrs
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] NB : All warnings have been turned off for this run.
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Mass spectroscopy file loaded from : data\ftrs_test_data.ftrs
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Theoretical masses loaded from      : data\masses\e_coli_monomer_masses.csv
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] PPM Tolerance                      : 0.5
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Time Delta                         : 10
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Filtering theoretical masses by observed masses
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building multimers from obs muropeptides
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building features for multimer type : 1
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Filtering theoretical multimers by observed
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building custom search file
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Generating variants
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Matching
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Cleaning data
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Processing 10 Sodium Adducts
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] No ^K+ found
+[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Processing 20 in source decay products
+[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Processing complete!
+[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Metadata save to                   : output
+[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Results saved to                   : output\results.csv
 ```
 
 # Citations
