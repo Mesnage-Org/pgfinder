@@ -3,6 +3,7 @@
 ![CI Tests](https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Mesnage-Org/pgfinder/branch/master/graph/badge.svg?token=5SM94G9Z6K)](https://codecov.io/gh/Mesnage-Org/pgfinder)
 [![PyPI version](https://img.shields.io/pypi/v/pgfinder?color=blue)](https://pypi.org/project/pgfinder/)
+[![Docs](https://img.shields.io/badge/github.io-docs-green)](https://mesnage-org.github.io/pgfinder/)
 
 Interactive notebooks are available for different versions from the links below. For descriptions of the features of each version
 please refer to the [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the latest changes
