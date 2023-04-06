@@ -35,44 +35,41 @@ tolerance between theoretical and observed masses. This data is then “cleaned 
 corresponding to in-source decay and salt adducts to those of parent ions. The final matched MS data is then written to
 a .csv file.
 
-![PGFinder Workflow](img/flow_diagram.png)
+```{mermaid}
 
-<!-- ```{mermaid} -->
-<!-- graph TD; -->
-
-<!--     A[Monomer Masses Database] -\-> C[Match monomers] -->
-<!--     B[Deconvoluted MS data] -\-> C([Match monomers -/+ ppm tolerance]) -->
-<!--     C -\-> D[DATABASE 1 Matched theoretical monomer masses] -->
-<!--     D -\-> E([Calculate dimer & trimer masses]) -->
-<!--     D -\-> I([Calculate modified monomers, dimers & trimers]) -->
-<!--     D -\-> K([Match & annotate MS data -/+ ppm tolerance]) -->
-<!--     E -\-> F[DATABASE 2 Theoretical dimer & trimer masses library] -->
-<!--     F -\-> G([Match dimers & trimers -/+ ppm tolerance]) -->
-<!--     G -\-> H[Matched theoretical dimers & trimers masses] -->
-<!--     H -\-> I -->
-<!--     I -\-> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library] -->
-<!--     J -\-> K -->
-<!--     K -\-> L[Raw matched MS data] -->
-<!--     L -\-> M([Consolidate in source decay products + salt adducts]) -->
-<!--     M -\-> N[Processed MS data] -->
-<!--     N -\-> O([Write to CSV file]) -->
-<!--     style A fill:#FFBB33 -->
-<!--     style B fill:#FFBB33 -->
-<!--     style C fill:#FFBB33 -->
-<!--     style D fill:#FFBB33 -->
-<!--     style E fill:#95FF80 -->
-<!--     style F fill:#95FF80 -->
-<!--     style G fill:#95FF80 -->
-<!--     style H fill:#95FF80 -->
-<!--     style I fill:#FF6666 -->
-<!--     style J fill:#FF6666 -->
-<!--     style K fill:#33BBFF -->
-<!--     style L fill:#33BBFF -->
-<!--     style M fill:#33BBFF -->
-<!--     style N fill:#33BBFF -->
-<!--     style O fill:#33BBFF -->
-<!-- ``` -->
-
+    graph TD;
+        A[Monomer Masses Database] --> C[Match monomers]
+        B[Deconvoluted MS data] --> C([Match monomers -/+ ppm tolerance])
+        C --> D[DATABASE 1 Matched theoretical monomer masses]
+        D --> E([Calculate dimer & trimer masses])
+        D --> I([Calculate modified monomers, dimers & trimers])
+        D --> K([Match & annotate MS data -/+ ppm tolerance])
+        E --> F[DATABASE 2 Theoretical dimer & trimer masses library]
+        F --> G([Match dimers & trimers -/+ ppm tolerance])
+        G --> H[Matched theoretical dimers & trimers masses]
+        H --> I
+        I --> J[DATABASE 3 Theoertical modified monomers, dimers & trimers masses library]
+        J --> K
+        K --> L[Raw matched MS data]
+        L --> M([Consolidate in source decay products + salt adducts])
+        M --> N[Processed MS data]
+        N --> O([Write to CSV file])
+        style A fill:#FFBB33
+        style B fill:#FFBB33
+        style C fill:#FFBB33
+        style D fill:#FFBB33
+        style E fill:#95FF80
+        style F fill:#95FF80
+        style G fill:#95FF80
+        style H fill:#95FF80
+        style I fill:#FF6666
+        style J fill:#FF6666
+        style K fill:#33BBFF
+        style L fill:#33BBFF
+        style M fill:#33BBFF
+        style N fill:#33BBFF
+        style O fill:#33BBFF
+```
 
 ## References
 
