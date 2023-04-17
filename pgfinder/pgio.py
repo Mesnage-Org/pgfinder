@@ -248,7 +248,8 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
     output_dataframe: pd.DataFrame
         Pandas Dataframe to write to csv
     """
-
+    if "diff_mwMonoisotopic" not in output_dataframe.columns:
+        output_dataframe = _calculate_ppm_delta(df=output_dataframe)
     # Combine save location and desired file name with correct formatting for output as csv file.
     output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
 
@@ -291,13 +292,52 @@ def dataframe_to_csv_metadata(
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
         save_filepath.mkdir(parents=True, exist_ok=True)
+        output_dataframe = _calculate_ppm_delta(df=output_dataframe)
         output_dataframe.to_csv(save_filepath / filename, index=False)
         output = str(save_filepath / filename)
     # We're going to leave it in memory as a string
     else:
+        output_dataframe = _calculate_ppm_delta(df=output_dataframe)
         output = output_dataframe.to_csv(index=False)
 
     return output
+
+
+def _calculate_ppm_delta(
+    df: pd.DataFrame,
+    observed: str = "mwMonoisotopic",
+    theoretical: str = "theo_mwMonoisotopic",
+    diff: str = "diff_mwMonoisotopic",
+) -> pd.DataFrame:
+    """Calculate the difference in Parts Per Million between observed and theoretical masses.
+
+    The PPM difference between observed and theoretical mass is calculated as...
+
+    .. math:: (1000000 * (obs - theor)) / theor
+
+    The function ensures the column is placed after the theoretical mass column to facilitate its use.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Pandas DataFrame of results.
+    observed : str
+        Variable that defines the observed PPM.
+    theoretical : str
+        Variable that defines the theoretical PPM.
+    diff: str
+        Variable to be created that holds the difference in PPM.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame with difference noted in column diff_mwMonoisotopic.
+
+    """
+    column_order = list(df.columns)
+    theoretical_position = column_order.index(theoretical) + 1
+    df.insert(theoretical_position, diff, (1000000 * (df[observed] - df[theoretical])) / df[theoretical])
+    return df
 
 
 def default_filename() -> str:

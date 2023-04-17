@@ -67,7 +67,7 @@ def process_file(
     )
     LOGGER.info("Processing complete!")
     dataframe_to_csv_metadata(save_filepath=output_dir, output_dataframe=results)
-    LOGGER.info(f"Metadata save to                   : {output_dir}")
+    LOGGER.info(f"Metadata saved to                   : {output_dir}")
     dataframe_to_csv(save_filepath=output_dir, filename="results.csv", output_dataframe=results)
     LOGGER.info(f"Results saved to                   : {output_dir / 'results.csv'}")
 
