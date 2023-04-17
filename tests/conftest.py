@@ -1,4 +1,5 @@
 """Fixtures for various tests."""
+import datetime
 from pathlib import Path
 import pytest
 import pandas as pd
@@ -44,6 +45,22 @@ def theo_masses(theo_masses_filename):
     validation.validate_theo_masses_df(my_theo_masses)
     return my_theo_masses
 
+
+@pytest.fixture
+def ipywidgets_upload_output(ftrs_file_name):
+    return {'name': 'ftrs_test_data.ftrs',
+            'type': '',
+            'size': 14274560,
+            'content': open(ftrs_file_name, 'rb').read(),
+            'last_modified': datetime.datetime(2022, 2, 2, 11, 6, 9, 951000, tzinfo=datetime.timezone.utc)}
+
+@pytest.fixture
+def ipywidgets_upload_output_theo(theo_masses_file_name):
+    return {'name': 'e_coli_monomer_masses.csv',
+            'type': 'text/csv',
+            'size': 4975,
+            'content': open(theo_masses_file_name, 'rb').read(),
+            'last_modified': datetime.datetime(2022, 3, 13, 19, 47, 12, 102000, tzinfo=datetime.timezone.utc)}
 
 @pytest.fixture
 def ppm():

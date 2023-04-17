@@ -1,6 +1,6 @@
 """Matching functions"""
 import logging
-from decimal import *
+from decimal import Decimal
 from pgfinder import MULTIMERS, MOD_TYPE, MASS_TO_CLEAN
 import pandas as pd
 
@@ -47,45 +47,39 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_list: pd.DataFrame, user_ppm: int)
     matched_df = matching(ftrs_df, theo_list, user_ppm)
 
     # Create dataframe containing only theo_mwMonoisotopic & inferredStructure columsn from matched_df
-    filtered_df = matched_df.loc[:, "theo_mwMonoisotopic":"inferredStructure"]
+    filtered_df = matched_df[["inferredStructure", "theo_mwMonoisotopic"]].copy()
 
     # Drop all rows with NaN values in the theo_mwMonoisotopic column
     filtered_df.dropna(subset=["theo_mwMonoisotopic"], inplace=True)
 
-    # Expand dataframe so each inferred structure has its own row and corresponding theo_mwMonoisotopic value
-    cols = ["theo_mwMonoisotopic", "inferredStructure"]
-    # FIXME : Better to use try: ... except:
-    if filtered_df.empty == True:
-        raise ValueError(
-            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
-        )
-    exploded_df = (
-        pd.concat([filtered_df[col].str.split(",", expand=True) for col in cols], axis=1, keys=cols)
-        .stack()
-        .reset_index(level=1, drop=True)
-    )
-    exploded_df.drop_duplicates(subset="inferredStructure", keep="first", inplace=True)
+    # Drop duplicate structures and masses
+    filtered_df.drop_duplicates(inplace=True)
 
-    exploded_df.rename(
+    filtered_df.rename(
         columns={"theo_mwMonoisotopic": "Monoisotopicmass", "inferredStructure": "Structure"}, inplace=True
     )
 
-    return exploded_df
+    if filtered_df.empty:
+        raise ValueError(
+            "The error messages above indicate that NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
+        )
+
+    return filtered_df
 
 
-def multimer_builder(theo_list, multimer_type: int = 0):
+def multimer_builder(theo_df, multimer_type: int = 0):
     """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
-    theo_list:
-        ??? (is it a list or dataframe, that a pd.DataFrame is returned suggests it should be the later?)
+    theo_df:
+        dataframe containing theoretical monomerics structures and their corresponding masses
     multimer_type: int
 
     Returns
     -------
     pd.DataFrame
-        ???
+        dataframe containing theoretical multimers and their corresponding masses
     """
 
     theo_mw = []
@@ -93,7 +87,7 @@ def multimer_builder(theo_list, multimer_type: int = 0):
     # Builder sub function - calculates multimer mass and name
     # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
-        for idx, row in theo_list.iterrows():
+        for _, row in theo_df.iterrows():
             if (
                 len(row.Structure[: len(row.Structure) - 2]) > 2
             ):  # Prevent dimer creation using just gm (input format is XX|n) X = letters n = number
@@ -174,7 +168,6 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
         )
     return obs_theo_muropeptides_df
 
-
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     """Match theoretical masses to observed masses within ppm tolerance.
 
@@ -191,32 +184,28 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     pd.DataFrame
         Dataframe of matches.
     """
-    raw_data = ftrs_df.copy()
-    # Data validation
-    if ("Monoisotopicmass" not in matching_df.columns) | ("Structure" not in matching_df.columns):
-        print(
-            'Header of csv files must have column named "Monoisotopic mass" and another column named "Structure"!!!  Make note of capitalized letters and spacing!!!!'
-        )
+    
+    molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
+    matches_df = pd.DataFrame()
 
-    # Generates dataframe with matched structures
-    for x, row in raw_data.iterrows():
-        # Observed monoisotopic mass
-        mw = row.mwMonoisotopic
-        # ppm tolerance value
-        t_tol = calc_ppm_tolerance(mw, set_ppm)
-        # create dataframe with values from matching_df within tolerance to observed monoisotopic mass
-        t_df = matching_df[
-            (matching_df["Monoisotopicmass"] >= mw - t_tol) & (matching_df["Monoisotopicmass"] <= mw + t_tol)
-        ]
-        # Populate inferred structure and theo_mwMonoisotopic columns with matched values
-        if not t_df.empty:
-            raw_data.loc[x, "inferredStructure"] = ",".join(t_df.Structure.values)
-            raw_data.loc[x, "theo_mwMonoisotopic"] = ",".join(
-                [f"{x:0.4f}".rstrip("0") for x in t_df.Monoisotopicmass.values]
-            )
+    for s, m in molecular_weights.itertuples(index=False):
+        # FIXME: I'm not sure if it's better to convert everything to float or
+        # to convert everthing to Decimal instead
+        m = float(m)
+        tolerance = calc_ppm_tolerance(m, set_ppm)
+        mw_matches = ftrs_df[
+            (ftrs_df["mwMonoisotopic"] >= m - tolerance) & (ftrs_df["mwMonoisotopic"] <= m + tolerance)
+        ].copy()
 
-    return raw_data
+        # If we have matches add the structure and molecular weight then append
+        if len(mw_matches.index) > 0:
+            mw_matches["inferredStructure"] = s
+            mw_matches["theo_mwMonoisotopic"] = round(m, 4)
+            matches_df = pd.concat([matches_df, mw_matches])
 
+    # Merge with raw data
+    unmatched = ftrs_df[~ftrs_df.index.isin(matches_df.index)]
+    return pd.concat([matches_df, unmatched])
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
@@ -270,44 +259,56 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
         # Get retention time value from row
         rt = row.rt
         # Get theoretical monoisotopic mass value from row as list of values
-        intact_mw = list(str(row.theo_mwMonoisotopic).split(","))
+        intact_mw = row.theo_mwMonoisotopic
 
         # Work out rt window
         upper_lim_rt = rt + time_delta
         lower_lim_rt = rt - time_delta
 
-        # Get all adduct enteries within rt window
+        # Get all adducts within rt window
         ins_constrained_df = adducted_muropeptide_df[
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
         if not ins_constrained_df.empty:
 
+            # Loop through each of the adducts in the RT window, the adducts
+            # themselves all have structures containing the `target` string
             for z, ins_row in ins_constrained_df.iterrows():
-                # Having cells with multiple values causes headaches! Use long format, reshape and concatenate at end if needed
-                ins_mw = list(str(ins_row.theo_mwMonoisotopic).split(","))
+                ins_mw = ins_row.theo_mwMonoisotopic
 
                 # Compare parent masses to adduct masses
-                for mass in intact_mw:
-                    for mass_2 in ins_mw:
-                        mass_delta = abs(
-                            Decimal(mass).quantize(Decimal("0.00001")) - Decimal(mass_2).quantize(Decimal("0.00001"))
-                        )
-                        # Consolidate intensities
-                        if mass_delta == mass_to_clean:
-                            consolidated_decay_df.sort_values("ID", inplace=True, ascending=True)
-                            insDecay_intensity = ins_row.maxIntensity
-                            parent_intensity = row.maxIntensity
-                            consolidated_intensity = insDecay_intensity + parent_intensity
-                            ID = row.ID
-                            drop_ID = ins_row.ID
-                            idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
-                            try:
-                                drop_idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].index[0]
-                                consolidated_decay_df.at[idx, "maxIntensity"] = consolidated_intensity
-                                consolidated_decay_df.drop(drop_idx, inplace=True)
-                            except IndexError:
-                                #     LOGGER.info(f"Already removed : {drop_idx}")
-                                pass
+                mass_delta = abs(
+                    Decimal(intact_mw).quantize(Decimal("0.00001")) - Decimal(ins_mw).quantize(Decimal("0.00001"))
+                )
+
+                # Is the mass delta the same mass as the target `mass_to_clean`?
+                # If so, it's the same structure but that gets its charge from
+                # the `target` ion instead of a proton as normal. In this case,
+                # consolidate the intensities of the parent (H+) and adduct
+                # (`target`+) ions so that the parent intensity has all of the
+                # adduct intensities added to it
+                if mass_delta == mass_to_clean:
+                    insDecay_intensity = ins_row.maxIntensity
+                    ID = row.ID
+                    drop_ID = ins_row.ID
+                    # Because long format leads to rows with duplicate IDs, the ["ID"]
+                    # of a row is sometimes different from its index in the dataframe.
+                    # Because this is sometimes but not always the case, we need this
+                    # lookup line:
+                    idx = consolidated_decay_df.loc[consolidated_decay_df["ID"] == ID].index[0]
+                    # Make sure the row we are trying to consolidate hasn't already
+                    # been consolidated and deleted!
+                    if not consolidated_decay_df.loc[consolidated_decay_df["ID"] == drop_ID].empty:
+                        # Transfer adduct intensity to the parent ion
+                        consolidated_decay_df.at[idx, "maxIntensity"] += insDecay_intensity
+                        # Because long format means both IDs and structures can be duplicated,
+                        # only ID + structure pairs can be considered unique. Find where IDs
+                        # or structures differ and retain only those in the dataframe. This is
+                        # the same as *filtering out* rows in which *both* the ID and structure
+                        # match the target from ins_row
+                        diff_ID = consolidated_decay_df.ID != ins_row.ID
+                        diff_Structure = consolidated_decay_df.inferredStructure != ins_row.inferredStructure
+                        consolidated_decay_df = consolidated_decay_df[diff_ID | diff_Structure]
 
     return consolidated_decay_df
 
@@ -448,6 +449,8 @@ def data_analysis(
     LOGGER.info("Matching")
     matched_data_df = matching(ff, master_frame, user_ppm)
     LOGGER.info("Cleaning data")
+
+
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
     cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)

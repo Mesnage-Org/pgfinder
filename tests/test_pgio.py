@@ -2,10 +2,20 @@
 from pathlib import Path
 from unittest import TestCase
 
+import pandas as pd
+
+from pgfinder.pgio import ms_upload_reader
+from pgfinder.pgio import theo_masses_upload_reader
 from pgfinder.pgio import read_yaml
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"
+
+def test_ms_upload_reader(ipywidgets_upload_output):
+    assert isinstance(ms_upload_reader(ipywidgets_upload_output), pd.DataFrame)
+
+def test_theo_masses_upload_reader(ipywidgets_upload_output_theo):
+    assert isinstance(theo_masses_upload_reader(ipywidgets_upload_output_theo), pd.DataFrame)
 
 
 CONFIG = {
