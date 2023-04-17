@@ -15,9 +15,12 @@ Welcome to pgfinder's documentation!
    :maxdepth: 2
    :caption: API
 
+   pgfinder.logs 
    pgfinder.find_pg
+   pgfinder.io
    pgfinder.matching
    pgfinder.pgio
+   pgfinder.utils
    pgfinder.validation
 
 Indices and tables
