@@ -248,7 +248,7 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
     output_dataframe: pd.DataFrame
         Pandas Dataframe to write to csv
     """
-    if "diff_mwMonoisotopic" not in output_dataframe.columns:
+    if "diff_ppm" not in output_dataframe.columns:
         output_dataframe = _calculate_ppm_delta(df=output_dataframe)
     # Combine save location and desired file name with correct formatting for output as csv file.
     output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
@@ -307,7 +307,7 @@ def _calculate_ppm_delta(
     df: pd.DataFrame,
     observed: str = "mwMonoisotopic",
     theoretical: str = "theo_mwMonoisotopic",
-    diff: str = "diff_mwMonoisotopic",
+    diff: str = "diff_ppm",
 ) -> pd.DataFrame:
     """Calculate the difference in Parts Per Million between observed and theoretical masses.
 
@@ -331,7 +331,7 @@ def _calculate_ppm_delta(
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame with difference noted in column diff_mwMonoisotopic.
+        Pandas DataFrame with difference noted in column diff_ppm.
 
     """
     column_order = list(df.columns)
