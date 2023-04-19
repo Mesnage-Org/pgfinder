@@ -48,46 +48,35 @@ def theo_masses(theo_masses_filename):
 
 @pytest.fixture
 def ipywidgets_upload_output(ftrs_file_name):
-    return {'name': 'ftrs_test_data.ftrs',
-            'type': '',
-            'size': 14274560,
-            'content': open(ftrs_file_name, 'rb').read(),
-            'last_modified': datetime.datetime(2022, 2, 2, 11, 6, 9, 951000, tzinfo=datetime.timezone.utc)}
+    return {
+        "name": "ftrs_test_data.ftrs",
+        "type": "",
+        "size": 14274560,
+        "content": open(ftrs_file_name, "rb").read(),
+        "last_modified": datetime.datetime(2022, 2, 2, 11, 6, 9, 951000, tzinfo=datetime.timezone.utc),
+    }
+
 
 @pytest.fixture
 def ipywidgets_upload_output_theo(theo_masses_file_name):
-    return {'name': 'e_coli_monomer_masses.csv',
-            'type': 'text/csv',
-            'size': 4975,
-            'content': open(theo_masses_file_name, 'rb').read(),
-            'last_modified': datetime.datetime(2022, 3, 13, 19, 47, 12, 102000, tzinfo=datetime.timezone.utc)}
+    return {
+        "name": "e_coli_monomer_masses.csv",
+        "type": "text/csv",
+        "size": 4975,
+        "content": open(theo_masses_file_name, "rb").read(),
+        "last_modified": datetime.datetime(2022, 3, 13, 19, 47, 12, 102000, tzinfo=datetime.timezone.utc),
+    }
+
 
 @pytest.fixture
 def ppm():
     return 10
 
 
-# test_ fixtures
 @pytest.fixture
 def obs_theoretical_molecular_weights() -> pd.DataFrame:
     """Provides a simple list of theoretical and observed molecular weights for testing calculate_delta_ppm()."""
     return pd.DataFrame({"mwMonoisotopic": [10, 20, 300], "theo_mwMonoisotopic": [9, "15, 21", "298, 300, 301"]})
-
-
-@pytest.fixture
-def target_delta_ppm() -> pd.DataFrame:
-    """The target dataframe that calculate_delta_ppm() should produce."""
-    return pd.DataFrame(
-        {
-            "mwMonoisotopic": [10, 20, 300],
-            "theo_mwMonoisotopic": [9, "15, 21", "298, 300, 301"],
-            "delta_ppm": [
-                -111111.11111111111,
-                "-333333.3333333333,47619.04761904762",
-                "-6711.4093959731545,0.0,3322.2591362126245",
-            ],
-        }
-    )
 
 
 # test_regression.py fixtures

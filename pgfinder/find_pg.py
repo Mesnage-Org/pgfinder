@@ -14,7 +14,7 @@ from pgfinder.pgio import (
     dataframe_to_csv_metadata,
 )
 from pgfinder.logs.logs import LOGGER_NAME
-from pgfinder.utils import update_config
+from pgfinder.utils import update_config, calculate_ppm_delta
 from pgfinder.pgio import read_yaml
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -65,6 +65,7 @@ def process_file(
         enabled_mod_list=mod_list,
         user_ppm=ppm_tolerance,
     )
+    results = calculate_ppm_delta(df=results)
     LOGGER.info("Processing complete!")
     dataframe_to_csv_metadata(save_filepath=output_dir, output_dataframe=results)
     LOGGER.info(f"Metadata saved to                   : {output_dir}")

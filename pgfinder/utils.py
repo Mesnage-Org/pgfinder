@@ -5,6 +5,8 @@ import logging
 from pathlib import Path
 from typing import Union, Dict
 
+import pandas as pd
+
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -85,3 +87,41 @@ def dict_to_decimal(dictionary: dict) -> dict:
             except:
                 pass
     return dictionary
+
+
+def calculate_ppm_delta(
+    df: pd.DataFrame,
+    observed: str = "mwMonoisotopic",
+    theoretical: str = "theo_mwMonoisotopic",
+    diff: str = "diff_ppm",
+) -> pd.DataFrame:
+    """Calculate the difference in Parts Per Million between observed and theoretical masses.
+
+    The PPM difference between observed and theoretical mass is calculated as...
+
+    .. math:: (1000000 * (obs - theor)) / theor
+
+    The function ensures the column is placed after the theoretical mass column to facilitate its use.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Pandas DataFrame of results.
+    observed : str
+        Variable that defines the observed PPM.
+    theoretical : str
+        Variable that defines the theoretical PPM.
+    diff: str
+        Variable to be created that holds the difference in PPM.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame with difference noted in column diff_ppm.
+
+    """
+    column_order = list(df.columns)
+    theoretical_position = column_order.index(theoretical) + 1
+    df.insert(theoretical_position, diff, (1000000 * (df[observed] - df[theoretical])) / df[theoretical])
+    LOGGER.info("Difference in PPM calculated.")
+    return df
