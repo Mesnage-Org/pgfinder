@@ -290,7 +290,6 @@ def dataframe_to_csv_metadata(
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
         save_filepath.mkdir(parents=True, exist_ok=True)
-        output_dataframe = _calculate_ppm_delta(df=output_dataframe)
         output_dataframe.to_csv(save_filepath / filename, index=False)
         output = str(save_filepath / filename)
     # We're going to leave it in memory as a string

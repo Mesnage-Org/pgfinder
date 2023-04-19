@@ -4,6 +4,7 @@ from decimal import Decimal
 from pgfinder import MULTIMERS, MOD_TYPE, MASS_TO_CLEAN
 import pandas as pd
 
+from pgfinder.utils import calculate_ppm_delta
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -84,6 +85,7 @@ def multimer_builder(theo_df, multimer_type: int = 0):
 
     theo_mw = []
     theo_struct = []
+
     # Builder sub function - calculates multimer mass and name
     # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
@@ -168,6 +170,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
         )
     return obs_theo_muropeptides_df
 
+
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     """Match theoretical masses to observed masses within ppm tolerance.
 
@@ -184,7 +187,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     pd.DataFrame
         Dataframe of matches.
     """
-    
+
     molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
     matches_df = pd.DataFrame()
 
@@ -206,6 +209,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     # Merge with raw data
     unmatched = ftrs_df[~ftrs_df.index.isin(matches_df.index)]
     return pd.concat([matches_df, unmatched])
+
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
@@ -270,7 +274,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
         if not ins_constrained_df.empty:
-
             # Loop through each of the adducts in the RT window, the adducts
             # themselves all have structures containing the `target` string
             for z, ins_row in ins_constrained_df.iterrows():
@@ -450,6 +453,7 @@ def data_analysis(
     matched_data_df = matching(ff, master_frame, user_ppm)
     LOGGER.info("Cleaning data")
 
+    matched_data_df = calculate_ppm_delta(df=matched_data_df)
 
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
