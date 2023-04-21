@@ -248,7 +248,6 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
     output_dataframe: pd.DataFrame
         Pandas Dataframe to write to csv
     """
-
     # Combine save location and desired file name with correct formatting for output as csv file.
     output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
 
