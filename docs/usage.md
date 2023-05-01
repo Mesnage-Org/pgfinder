@@ -14,6 +14,14 @@ have not yet been released.
 | `current` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder.ipynb) |
 | `v0.1.0` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder.ipynb) |
 
+**NB** It is essential that you wait for file uploads to complete before attempting to run your analysis. This is most
+relevant when uploading `.ftrs` files during **Step 1**. You can tell that your uploads (whether that is `.ftrs` or
+`.csv` files at **Step 1** or **Step 3**) have completed because the filename will be listed beside the upload button in
+the Notebook as highlighted in the image below.
+
+![](img/binder_upload.png)
+
+
 ## Command Line
 
 If you wish to use the command line version you will have to follow the [installation](installation.md) instructions to
