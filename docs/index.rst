@@ -8,6 +8,7 @@ Welcome to pgfinder's documentation!
     introduction
     installation
     usage
+    data_dictionary
     contributing
     copying
 

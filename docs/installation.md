@@ -60,16 +60,10 @@ have not yet been released.
 | `current` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder.ipynb) |
 | `v0.1.0` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder.ipynb) |
 
-
-## Data Dictionary
-
-The project [data dictionary](data_dictionary.md).
-
 ### Development
 
 If you wish to contribute to the development of PGFinder you should clone this repository and install it in editable
 mode (`pip install -e`) with the following commands.
-
 
 ```bash
 # Clone the repository
