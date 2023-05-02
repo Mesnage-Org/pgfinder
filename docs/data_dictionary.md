@@ -1,8 +1,8 @@
 # Data Dictionary
 
-*This document is a work in progress.*
+## Inputs
 
-## Mass Lists
+### Mass Lists
 
 Format: `CSV` (`.csv`)
 
@@ -11,15 +11,15 @@ Format: `CSV` (`.csv`)
 | Structure        | Structure code    | NA               |
 | Monoisotopicmass | Monoisotopic mass | atomic mass unit |
 
-## FTRS Input Files
+### FTRS Files
 
 Format: `.ftrs`
 
-## MaxQuant Input Files
+### MaxQuant Files
 
 Format: `TSV` (`.txt`)
 
-## Modifications
+### Modifications
 
 | Modification | Description |
 |---|---|
@@ -38,7 +38,9 @@ Format: `TSV` (`.txt`)
 |Multimer Lac	| Search for lactyl-peptides multimers |
 |O-Ac	| Search for O-acetylated muropeptides |
 
-## FTRS Output Files
+## Outputs
+
+### FTRS Output Files
 
 Format: `CSV` (`.csv`)
 
@@ -57,7 +59,7 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | inferredStructure   | Inferred muropeptide structure                                                 | NA   |
 | maxIntensity        | Signal intensity calculated from Extracted Ion Chromatograms                   | NA   |
 
-## MaxQuant Output Files
+### MaxQuant Output Files
 
 Format: `CSV` (`.csv`)
 
@@ -73,7 +75,7 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | inferredStructure | Inferred muropeptide structure | NA |
 | maxIntensity | Signal intensity calculated from Extracted Ion Chromatograms  | NA |
 
-## Embedded Metadata
+### Embedded Metadata
 
 | Data | Description |
 |---|---|
