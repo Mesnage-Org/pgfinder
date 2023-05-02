@@ -51,9 +51,9 @@ with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia col
 
 ## Outputs
 
-### FTRS Output Files
+`pgfinder` outputs `CSV` (`.csv`) files. The columns in these files depend on the input file format.
 
-Format: `CSV` (`.csv`)
+### FTRS Output Files
 
 The column name of the first column contains [embedded metadata](#embedded-metadata) on the provenance of the file. Subsequent columns are defined as follows:
 
@@ -71,8 +71,6 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | maxIntensity        | Signal intensity calculated from Extracted Ion Chromatograms                   | NA   |
 
 ### MaxQuant Output Files
-
-Format: `CSV` (`.csv`)
 
 The column name of the first column contains [embedded metadata](#embedded-metadata) on the provenance of the file. Subsequent columns are defined as follows:
 
@@ -92,6 +90,6 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 |---|---|
 | file | Input data file |
 | masses_file | Mass list file |
-| modifications | *See below* |
+| modifications | List of [modifications](#modifications) |
 | ppm | ppm tolerance |
 | rt_window | Window used for in-source decay correction (min) |
