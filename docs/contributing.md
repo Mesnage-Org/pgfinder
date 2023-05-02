@@ -6,6 +6,21 @@ There are a few ways to contribute:
 - Fork the repository and make a pull request to suggest changes to the code.
 - If you'd like to contribute a mass database, please do this by [raising an issue](https://github.com/Mesnage-Org/pgfinder/issues).
 
+## Development Installation
+
+If you wish to contribute to the development of PGFinder you should clone (your fork of) this repository and install it in editable
+mode (`pip install -e`) with the following commands.
+
+```bash
+# Clone the repository
+git clone https://github.com/Mesnage-Org/PGFinder.git
+cd pgfinder
+# Install in editable mode
+pip install -e .
+# Install test dependencies
+pip install -e .[tests]
+```
+
 ## Testing
 
 To run unit tests:

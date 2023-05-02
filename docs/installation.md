@@ -48,6 +48,8 @@ The current version when installed from GitHub is a combination of the most rece
 current `HEAD` of the branch and how commits away from the last tag it is. For further details on versioning please
 refer to [versioneer documentation](https://github.com/python-versioneer/python-versioneer).
 
+Developers should follow the [developer installation instructions](contributing.md).
+
 ## Binder Notebooks
 
 Interactive notebooks are available for different versions from the links below. For descriptions of the features of each version
@@ -59,18 +61,3 @@ have not yet been released.
 |----------|-------------|---------|
 | `current` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder.ipynb) |
 | `v0.1.0` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder.ipynb) |
-
-### Development
-
-If you wish to contribute to the development of PGFinder you should clone this repository and install it in editable
-mode (`pip install -e`) with the following commands.
-
-```bash
-# Clone the repository
-git clone https://github.com/Mesnage-Org/PGFinder.git
-cd pgfinder
-# Install in editable mode
-pip install -e .
-# Install test dependencies
-pip install -e .[tests]
-```
