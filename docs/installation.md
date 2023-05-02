@@ -26,27 +26,11 @@ pip install pgfinder
 
 Versions are released automatically when commits on GitHub are tagged.
 
-### GitHub
-
-If you do not intend to undertake any development on PGFinder and just wish to use it then you can install directly from
-the GitHub repository using `pip` under the virtual environment. The first method leverages `pip`'s ability to install
-directly from GitHub...
-
-```bash
-pip install git+https://github.com/Mesnage-Org/PGFinder.git
-```
-
-Alternatively you can clone the repository and then install it...
+To install the most recent pre-release version, use:
 
 ``` bash
-git clone git@github.com:Mesnage-Org/pgfinder.git
-cd pgfinder
-pip install .
+pip install git+https://github.com/Mesnage-Org/PGFinder.git
 ```
-
-The current version when installed from GitHub is a combination of the most recent Git tag combined with the hash of the
-current `HEAD` of the branch and how commits away from the last tag it is. For further details on versioning please
-refer to [versioneer documentation](https://github.com/python-versioneer/python-versioneer).
 
 Developers should follow the [developer installation instructions](contributing.md).
 
