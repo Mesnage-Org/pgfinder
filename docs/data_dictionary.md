@@ -1,6 +1,11 @@
 # Data Dictionary
 
+Effective use of `pgfinder` requires an understanding of the inputs and outputs of the software.
+
 ## Inputs
+
+`pgfinder` takes data from mass spectrometry instruments, as well as a "database" of expected 
+masses and some user specified modifications.
 
 ### FTRS Files
 
@@ -8,9 +13,13 @@ Format: `.ftrs`
 
 ### MaxQuant Files
 
-Format: `TSV` (`.txt`)
+MaxQuant Files are output by the [MaxQuant](https://www.maxquant.org/) software. They are
+tab separated value (`TSV`) files with a `.txt` extension.
 
 ### Modifications
+
+Any number of modifications can be selected to enrich the search space of the database of masses
+to which the input data is being compared. Allowed mofifications are:
 
 | Modification | Description |
 |---|---|
@@ -26,12 +35,14 @@ Format: `TSV` (`.txt`)
 | Double_Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
 | Multimers	| Search for multimers resulting from 3-3 and 4-3 crosslinks |
 | Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
-|Multimer Lac	| Search for lactyl-peptides multimers |
-|O-Ac	| Search for O-acetylated muropeptides |
+| Multimer Lac	| Search for lactyl-peptides multimers |
+| O-Ac	| Search for O-acetylated muropeptides |
 
-### Mass Lists
+### Mass Databases (Lists)
 
-Format: `CSV` (`.csv`)
+Mass databases are lists of structures and their associated mass. They are in `CSV` format
+with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia coli* and 
+*Clostridium difficle*, but can take a different mass list as an input.
 
 | Column           | Description       | Unit             |
 |------------------|-------------------|------------------|
