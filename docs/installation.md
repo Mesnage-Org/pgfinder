@@ -1,5 +1,7 @@
 # Installing PGFinder
 
+## Virtual Environment
+
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with
 [anaconda](https://docs.anaconda.com/anaconda/install/), but we do not need the extra packages). With Conda installed,
 run the following commands to create the virtual environment and activate it:
@@ -12,12 +14,9 @@ conda activate pgfinder
 
 You're fine to use a different virtual environment, if you want!
 
+## PyPI
 
-## Normal Use
-
-### PyPi
-
-`PGFinder` is available via the [Python Package Index (PyPi)](https://pypi.org/) and the latest release can be installed
+`PGFinder` is available via the [Python Package Index (PyPI)](https://pypi.org/) and the latest release can be installed
 under your virtual environment with [`pip`](https://pip.pypa.io/en/stable/).
 
 ``` bash
