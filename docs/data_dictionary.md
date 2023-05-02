@@ -2,15 +2,6 @@
 
 ## Inputs
 
-### Mass Lists
-
-Format: `CSV` (`.csv`)
-
-| Column           | Description       | Unit             |
-|------------------|-------------------|------------------|
-| Structure        | Structure code    | NA               |
-| Monoisotopicmass | Monoisotopic mass | atomic mass unit |
-
 ### FTRS Files
 
 Format: `.ftrs`
@@ -37,6 +28,15 @@ Format: `TSV` (`.txt`)
 | Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
 |Multimer Lac	| Search for lactyl-peptides multimers |
 |O-Ac	| Search for O-acetylated muropeptides |
+
+### Mass Lists
+
+Format: `CSV` (`.csv`)
+
+| Column           | Description       | Unit             |
+|------------------|-------------------|------------------|
+| Structure        | Structure code    | NA               |
+| Monoisotopicmass | Monoisotopic mass | atomic mass unit |
 
 ## Outputs
 
