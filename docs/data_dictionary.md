@@ -19,6 +19,25 @@ Format: `.ftrs`
 
 Format: `TSV` (`.txt`)
 
+## Modifications
+
+| Modification | Description |
+|---|---|
+| Sodium	| Search for masses corresponding to sodium adducts |
+| Potassium	| Search for masses corresponding to potassium adducts |
+| Anh	| Search for anhydromuropeptides |
+| DeAc	| Search for deacetylated muropeptides |
+| DeAc_Anh	| Search for deacetylated anhydromuropeptides |
+| Nude	| Search for muropeptides with an extra GlcNAc-MurNAc disaccharide |
+| Decay	| Correct output taking into account in-source decay products |
+| Amidation | Search for Amidated muropeptides |
+| Amidase	| Search for peptides resulting from amidase cleavage (GlcNAc-MurNAc loss) |
+| Double_Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
+| Multimers	| Search for multimers resulting from 3-3 and 4-3 crosslinks |
+| Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
+|Multimer Lac	| Search for lactyl-peptides multimers |
+|O-Ac	| Search for O-acetylated muropeptides |
+
 ## FTRS Output Files
 
 Format: `CSV` (`.csv`)
@@ -63,20 +82,3 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | modifications | *See below* |
 | ppm | ppm tolerance |
 | rt_window | Window used for in-source decay correction (min) |
-
-| Modification | Description |
-|---|---|
-| Sodium	| Search for masses corresponding to sodium adducts |
-| Potassium	| Search for masses corresponding to potassium adducts |
-| Anh	| Search for anhydromuropeptides |
-| DeAc	| Search for deacetylated muropeptides |
-| DeAc_Anh	| Search for deacetylated anhydromuropeptides |
-| Nude	| Search for muropeptides with an extra GlcNAc-MurNAc disaccharide |
-| Decay	| Correct output taking into account in-source decay products |
-| Amidation | Search for Amidated muropeptides |
-| Amidase	| Search for peptides resulting from amidase cleavage (GlcNAc-MurNAc loss) |
-| Double_Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
-| Multimers	| Search for multimers resulting from 3-3 and 4-3 crosslinks |
-| Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
-|Multimer Lac	| Search for lactyl-peptides multimers |
-|O-Ac	| Search for O-acetylated muropeptides |
