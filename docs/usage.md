@@ -1,6 +1,7 @@
 # Usage
 
-There are two approaches to using PGFinder, Notebooks or at the Command Line.
+There are two approaches to using PGFinder, Notebooks or at the Command Line. The [Data Dictionary](data_dictionary.md) 
+describes software inputs and outputs.
 
 ## Notebooks
 
