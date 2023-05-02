@@ -35,4 +35,12 @@ Developers should follow the [developer installation instructions](contributing.
 
 ## Binder Notebooks
 
-[Online, interactive notebooks are available for different versions of pgfinder](usage.md).
+[Online, interactive notebooks are available for different versions of pgfinder](usage.md). 
+
+To install these locally, use:
+
+``` bash
+pip install pgfinder[notebooks]
+```
+
+*This command does not currently work and will be enabled in a later version.*
