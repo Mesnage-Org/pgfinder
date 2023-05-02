@@ -65,8 +65,6 @@ An overview of the iterative search strategy used in the workflow is shown in fi
 
 **TODO** Please review the above, I've attempted to refine and simplify the second paragraph under _Results_ of [@Patel2021Sep].
 
-![Stages undertaken in processing samples using `PGFinder` \label{fig:workflow}](fig1.svg)
-
 # Resources and Examples
 
 `PGFinder` is available on [PyPI](https://pypi.org/project/pgfinder/) and the development code is openly available on
