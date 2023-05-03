@@ -15,17 +15,6 @@ have not yet been released.
 | `current` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/master?urlpath=tree/pgfinder.ipynb) |
 | `v0.1.0` | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder_interactive.ipynb) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mesnage-Org/PGFinder/v0.1.0?urlpath=tree/pgfinder.ipynb) |
 
-## Offline Notebooks
-
-If myBinder runs too slowly, or you otherwise want to work offline, [install pgfinder with the notebooks option](installation.md)
-and then use this commend to launch the interactive notebook:
-
-``` bash
-jupyter notebook --config="confg\jupyter_notebook_config.py" .\pgfinder_interactive.ipynb
-```
-
-*This command does not currently work and will be enabled in a later version.*
-
 ## Command Line
 
 If you wish to use the command line version you will have to follow the [installation](installation.md) instructions to

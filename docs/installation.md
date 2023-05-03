@@ -32,15 +32,3 @@ pip install git+https://github.com/Mesnage-Org/PGFinder.git
 ```
 
 Developers should follow the [developer installation instructions](contributing.md).
-
-## Notebooks
-
-[Online, interactive notebooks are available for different versions of pgfinder](usage.md). 
-
-To install these locally, use:
-
-``` bash
-pip install pgfinder[notebooks]
-```
-
-*This command does not currently work and will be enabled in a later version.*
