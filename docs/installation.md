@@ -1,5 +1,9 @@
 # Installing PGFinder
 
+## Online Notebooks
+
+There is no need to install `pgfinder` - you can [run it online using myBinder](useage.md).
+
 ## Virtual Environment
 
 Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (it also works with
