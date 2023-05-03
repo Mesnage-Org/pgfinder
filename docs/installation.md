@@ -2,7 +2,7 @@
 
 ## Online Notebooks
 
-There is no need to install `pgfinder` - you can [run it online using myBinder](useage.md).
+There is no need to install `pgfinder` - you can [run it online using myBinder](usage.md).
 
 ## Virtual Environment
 
