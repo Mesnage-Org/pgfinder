@@ -33,7 +33,7 @@ pip install git+https://github.com/Mesnage-Org/PGFinder.git
 
 Developers should follow the [developer installation instructions](contributing.md).
 
-## Binder Notebooks
+## Notebooks
 
 [Online, interactive notebooks are available for different versions of pgfinder](usage.md). 
 

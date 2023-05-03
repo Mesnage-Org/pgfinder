@@ -3,7 +3,7 @@
 There are two approaches to using PGFinder, Notebooks or at the Command Line. The [Data Dictionary](data_dictionary.md) 
 describes software inputs and outputs.
 
-## Notebooks
+## Online Notebooks
 
 Interactive notebooks are available for different versions from the links below. For descriptions of the features of each version
 please refer to the [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the latest changes
