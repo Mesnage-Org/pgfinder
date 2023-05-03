@@ -1,5 +1,11 @@
 # Data Dictionary
 
+---
+
+*We are currently updating the nomenclature of many of the data in `pgfinder`. For now, use this page with caution.*
+
+---
+
 Effective use of `pgfinder` requires an understanding of the inputs and outputs of the software.
 
 ## Inputs
