@@ -2,7 +2,6 @@
 from decimal import Decimal
 from pathlib import Path
 
-import numpy as np
 
 from pgfinder.utils import convert_path, update_config, dict_to_decimal
 

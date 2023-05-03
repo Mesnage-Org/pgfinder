@@ -84,6 +84,7 @@ def multimer_builder(theo_df, multimer_type: int = 0):
 
     theo_mw = []
     theo_struct = []
+
     # Builder sub function - calculates multimer mass and name
     # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
@@ -168,6 +169,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
         )
     return obs_theo_muropeptides_df
 
+
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     """Match theoretical masses to observed masses within ppm tolerance.
 
@@ -184,7 +186,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     pd.DataFrame
         Dataframe of matches.
     """
-    
+
     molecular_weights = matching_df[["Structure", "Monoisotopicmass"]]
     matches_df = pd.DataFrame()
 
@@ -206,6 +208,7 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int):
     # Merge with raw data
     unmatched = ftrs_df[~ftrs_df.index.isin(matches_df.index)]
     return pd.concat([matches_df, unmatched])
+
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
     """Clean up a DataFrame.
@@ -270,7 +273,6 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
             adducted_muropeptide_df["rt"].between(lower_lim_rt, upper_lim_rt, inclusive="both")
         ]
         if not ins_constrained_df.empty:
-
             # Loop through each of the adducts in the RT window, the adducts
             # themselves all have structures containing the `target` string
             for z, ins_row in ins_constrained_df.iterrows():
@@ -450,6 +452,7 @@ def data_analysis(
     matched_data_df = matching(ff, master_frame, user_ppm)
     LOGGER.info("Cleaning data")
 
+    matched_data_df = calculate_ppm_delta(df=matched_data_df)
 
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
@@ -464,3 +467,41 @@ def data_analysis(
     cleaned_data_df.attrs["ppm"] = user_ppm
 
     return cleaned_data_df
+
+
+def calculate_ppm_delta(
+    df: pd.DataFrame,
+    observed: str = "mwMonoisotopic",
+    theoretical: str = "theo_mwMonoisotopic",
+    diff: str = "diff_ppm",
+) -> pd.DataFrame:
+    """Calculate the difference in Parts Per Million between observed and theoretical masses.
+
+    The PPM difference between observed and theoretical mass is calculated as...
+
+    .. math:: (1000000 * (obs - theor)) / theor
+
+    The function ensures the column is placed after the theoretical mass column to facilitate its use.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Pandas DataFrame of results.
+    observed : str
+        Variable that defines the observed PPM.
+    theoretical : str
+        Variable that defines the theoretical PPM.
+    diff: str
+        Variable to be created that holds the difference in PPM.
+
+    Returns
+    -------
+    pd.DataFrame
+        Pandas DataFrame with difference noted in column diff_ppm.
+
+    """
+    column_order = list(df.columns)
+    theoretical_position = column_order.index(theoretical) + 1
+    df.insert(theoretical_position, diff, (1000000 * (df[observed] - df[theoretical])) / df[theoretical])
+    LOGGER.info("Difference in PPM calculated.")
+    return df
