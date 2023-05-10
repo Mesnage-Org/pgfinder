@@ -1,8 +1,9 @@
 # Usage
 
-There are two approaches to using PGFinder, Notebooks or at the Command Line.
+There are two approaches to using PGFinder, Notebooks or at the Command Line. The [Data Dictionary](data_dictionary.md) 
+describes software inputs and outputs.
 
-## Notebooks
+## Online Notebooks
 
 Interactive notebooks are available for different versions from the links below. For descriptions of the features of each version
 please refer to the [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the latest changes
@@ -43,23 +44,3 @@ find_pg -c config/example.yaml
 
 Each option in the configuration file can be over-ridden at the command line, see `pythong find_pg.py --help** for more
 information.
-
-
-## Testing
-
-To run unit tests:
-
-```bash
-pytest
-```
-
-The tests check output against an expected baseline for [Maxquant](data/baseline_output.csv) or
-[FTRS](data/baseline_output_ftrs.csv). To recreate this (e.g. in response to improvements to the scientific
-"correctness" of the code ouput), use:
-
-
-```bash
-python make_baseline.py
-```
-
-...and replace the existing file.
