@@ -4,9 +4,7 @@ import pytest
 import pandas as pd
 
 import pgfinder.matching as matching
-import pgfinder.pgio as pgio
-import pgfinder.validation as validation
-from pgfinder.matching import calculate_ppm_delta
+from pgfinder.matching import calculate_ppm_delta, determine_most_likely_structure
 
 
 def test_filtered_theo(raw_data, theo_masses, ppm):
@@ -23,10 +21,14 @@ def test_filtered_theo_no_match(raw_data_no_match, theo_masses, ppm):
         matching.filtered_theo(raw_data_no_match, theo_masses, ppm)
 
 
-def test_calculate_ppm_delta() -> None:
+def test_calculate_ppm_delta(sample_df: pd.DataFrame, df_diff_ppm: pd.DataFrame) -> None:
     """Test addition of PPM column."""
-    SAMPLE_DF = pd.DataFrame({"obs": [5645.35435454, 1, 879546.3924093], "exp": [3954.49849514, 2, 879546.8974916]})
-    DELTA_DF = pd.DataFrame({"diff_ppm": [427577.82345296827, -500000.0, -0.5742528357381609]})
-    TARGET_DF = pd.concat([SAMPLE_DF, DELTA_DF], axis=1)
+    pd.testing.assert_frame_equal(calculate_ppm_delta(sample_df, observed="obs", theoretical="exp"), df_diff_ppm)
 
-    pd.testing.assert_frame_equal(calculate_ppm_delta(SAMPLE_DF, observed="obs", theoretical="exp"), TARGET_DF)
+
+def test_determine_most_likely_structure(df_diff_ppm: pd.DataFrame, df_lowest_ppm: pd.DataFrame) -> None:
+    """Test determining the most likely structure."""
+    pd.testing.assert_frame_equal(
+        determine_most_likely_structure(df=df_diff_ppm, observed_id="id", diff="∆ppm", intensity="intensity"),
+        df_lowest_ppm,
+    )

@@ -1,4 +1,5 @@
 """PG Finder I/O operations"""
+from importlib.metadata import version
 import logging
 import tempfile
 from typing import Union, Dict
@@ -8,11 +9,12 @@ import io
 import pandas as pd
 import sqlite3
 import numpy as np
-import yaml
 
 from ruamel.yaml import YAML, YAMLError
 
 from pgfinder.logs.logs import LOGGER_NAME
+
+# from pgfinder.matching import check_df
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
@@ -49,7 +51,8 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of properties of a file uploaded using `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
+        Dictionary of properties of a file uploaded using
+       `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
 
     Returns
     -------
@@ -70,6 +73,7 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
         raise ValueError("Unknown file type.")
 
     return_df.attrs["file"] = filename
+    LOGGER.info(f"Mass spectroscopy file loaded from  : {filename}")
     return return_df
 
 
@@ -87,52 +91,47 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         Pandas DataFrame of features.
     """
     with sqlite3.connect(file) as db:
-
         sql = "SELECT * FROM Features"
         # Reads sql database into dataframe
         ff = pd.read_sql(sql, db)
-        # adds inferredStructure column
-        ff["inferredStructure"] = np.nan
-        # adds theo_mwMonoisotopic column
-        ff["theo_mwMonoisotopic"] = np.nan
+        # Adds empty "Inferred structure" and "Theo (Da)" columns
+        ff["Inferred structure"] = np.nan
+        ff["Theo (Da)"] = np.nan
         # Renames columns to expected column heading required for data_analysis function
         ff.rename(
             columns={
                 "Id": "ID",
-                "apexRetentionTimeMinutes": "rt",
-                "apexMwMonoisotopic": "mwMonoisotopic",
+                "ionCount": "Ion count",
+                "chargeOrder": "Charge state",
+                "xicStart": "XIC start (min)",
+                "xicEnd": "XIC end (min)",
+                "apexRetentionTimeMinutes": "RT (min)",
+                "apexMwMonoisotopic": "Obs (Da)",
+                "maxIntensity": "Intensity",
                 "maxAveragineCorrelation": "corrMax",
             },
             inplace=True,
         )
-        # Desired column order
+        # Reorder columns in dataframe to desired order, dropping unwanted columns
         cols_order = [
             "ID",
-            "xicStart",
-            "xicEnd",
-            "feature",
-            "corrMax",
-            "ionCount",
-            "chargeOrder",
-            "maxIsotopeCount",
-            "rt",
-            "mwMonoisotopic",
-            "theo_mwMonoisotopic",
-            "inferredStructure",
-            "maxIntensity",
+            "Ion count",
+            "Charge state",
+            "XIC start (min)",
+            "XIC end (min)",
+            "RT (min)",
+            "Obs (Da)",
+            "Theo (Da)",
+            "Inferred structure",
+            "Intensity",
         ]
-        # Reorder columns in dataframe to desired order.
         ff = ff[cols_order]
-        # print(f"FEATURES : \n")
-        # print(f"{ff}")
-
-        ff.drop(columns=["feature", "corrMax", "maxIsotopeCount"], inplace=True)
 
         return ff
 
 
 def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
-    """Reads theoretical masses files (csv)
+    """Reads theoretical masses files (csv) returning a Panda Dataframe
 
     Parameters
     ----------
@@ -143,11 +142,10 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
     pd.DataFrame
         Pandas DataFrame of theoretical masses.
     """
-    # reads csv files and converts to dataframe
     theo_masses_df = pd.read_csv(input_file)
-
+    theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     theo_masses_df.attrs["file"] = input_file
-    LOGGER.info(f"Theoretical masses loaded from      : {input_file}")
+    LOGGER.info(f"Theoretical masses loaded from     : {input_file}")
     return theo_masses_df
 
 
@@ -157,7 +155,8 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
     Parameters
     ----------
     upload: dict
-        Dictionary of properties of a file uploaded using `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
+        Dictionary of properties of a file uploaded using
+        `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
 
     Returns
     -------
@@ -168,10 +167,11 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
     filename = upload["name"]
     file_contents = upload["content"]
 
-    return_df = pd.read_csv(io.BytesIO(file_contents))
-
-    return_df.attrs["file"] = filename
-    return return_df
+    theo_masses_df = pd.read_csv(io.BytesIO(file_contents))
+    theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
+    theo_masses_df.attrs["file"] = filename
+    LOGGER.info(f"Theoretical masses loaded from     : {filename}")
+    return theo_masses_df
 
 
 def maxquant_file_reader(file):
@@ -191,51 +191,46 @@ def maxquant_file_reader(file):
     # reads file into dataframe
     maxquant_df = pd.read_table(file, low_memory=False)
     # adds inferredStructure column
-    maxquant_df["inferredStructure"] = np.nan
+    maxquant_df["Inferred structure"] = np.nan
     # adds theo_mwMonoisotopic column
-    maxquant_df["theo_mwMonoisotopic"] = np.nan
+    maxquant_df["Theo (Da)"] = np.nan
     # insert dataframe index as a column
     maxquant_df.reset_index(level=0, inplace=True)
     # Renames columns to expected column heading required for data_analysis function
     maxquant_df.rename(
         columns={
             "index": "ID",
-            "Retention time": "rt",
-            "Retention length": "rt_length",
-            "Mass": "mwMonoisotopic",
-            "Intensity": "maxIntensity",
+            "Retention time": "RT (min)",
+            "Retention length": "RT (length)",
+            "Mass": "Obs (Da)",
+            "Intensity": "Intensity",
         },
         inplace=True,
     )
-    # Keeps only essential columns, all extraneous columns are left out.
-    focused_maxquant_df = maxquant_df[
-        [
-            "ID",
-            "mwMonoisotopic",
-            "rt",
-            "rt_length",
-            "maxIntensity",
-            "inferredStructure",
-            "theo_mwMonoisotopic",
-        ]
-    ]
-    # Desired column order
+    # Desired variables and order
     cols_order = [
         "ID",
-        "rt",
-        "rt_length",
-        "mwMonoisotopic",
-        "theo_mwMonoisotopic",
-        "inferredStructure",
-        "maxIntensity",
+        "RT (min)",
+        "RT (length)",
+        "Obs (Da)",
+        "Theo (Da)",
+        "Inferred structure",
+        "Intensity",
     ]
     # Reorder columns in dataframe to desired order.
-    focused_maxquant_df = focused_maxquant_df[cols_order]
+    maxquant_df = maxquant_df[cols_order]
 
-    return focused_maxquant_df
+    return maxquant_df
 
 
-def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_dataframe: pd.DataFrame) -> None:
+def dataframe_to_csv(
+    save_filepath: Union[str, Path],
+    filename: str,
+    output_dataframe: pd.DataFrame,
+    float_format: str = "%.4f",
+    wide: bool = False,
+    **kwargs,
+) -> None:
     """
     Writes dataframe to csv file at desired file location
 
@@ -247,15 +242,28 @@ def dataframe_to_csv(save_filepath: Union[str, Path], filename: str, output_data
         Filename to save file to.
     output_dataframe: pd.DataFrame
         Pandas Dataframe to write to csv
+    float_format: str
+        Format for floating point numbers (default 4 decimal places)
+    wide: bool
+        Whether to reshape the data to wide format before writing to CSV.
+    **kwargs
+        Dictionary of keyword args passed to pd.to_csv()
     """
-    # Combine save location and desired file name with correct formatting for output as csv file.
-    output_dataframe.to_csv(Path(save_filepath) / filename, index=False)
+    if wide:
+        output_dataframe = long_to_wide(df=output_dataframe.copy())
+    # Ensure "index" isn't a column and output as csv file.
+    if "index" in output_dataframe.columns:
+        output_dataframe.drop(columns=["index"], inplace=True)
+    output_dataframe.to_csv(Path(save_filepath) / filename, index=False, float_format=float_format)
 
 
 def dataframe_to_csv_metadata(
     output_dataframe: pd.DataFrame,
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
+    float_format: str = "%.4f",
+    wide: bool = False,
+    **kwargs,
 ) -> Union[str, Path]:
     """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
     return the .csv in the form of a string.
@@ -268,38 +276,46 @@ def dataframe_to_csv_metadata(
         Path to save to.
     filename: Union[str, Path]
         Filename to save to.
+    float_format: str
+        Format for floating point numbers (default 4 decimal places)
+    wide: bool
+        Whether to reshape the data to wide format before writing to CSV.
+    **kwargs
+        Dictionary of keyword args passed to pd.to_csv()
 
     Returns
     -------
     """
-    metadata = {
-        "file": str(output_dataframe.attrs["file"]),
-        "masses_file": str(output_dataframe.attrs["masses_file"]),
-        "rt_window": output_dataframe.attrs["rt_window"],
-        "modifications": output_dataframe.attrs["modifications"],
-        "ppm": output_dataframe.attrs["ppm"],
-    }
+    release = version("pgfinder")
+    _version = ".".join(release.split("."[:2]))
 
-    metadata_string = yaml.dump(metadata)
-    # Using pathlib we replace '\' if on Windows to '/' so tests pass
-    metadata_string = metadata_string.replace("\\", "/")
-    output_dataframe.insert(0, metadata_string.replace("\n", " "), "")
-
-    # We're going to actually save the file to disk
+    metadata = [
+        f"file : {str(output_dataframe.attrs['file'])}",
+        f"masses_file : {str(output_dataframe.attrs['masses_file'])}",
+        f"rt_window : {output_dataframe.attrs['rt_window']}",
+        f"modifications : {output_dataframe.attrs['modifications']}",
+        f"ppm : {output_dataframe.attrs['ppm']}",
+        f"version : {_version}",
+    ]
+    if wide:
+        output_dataframe = long_to_wide(df=output_dataframe.copy())
+    # Add Metadata as first column
+    output_dataframe = pd.concat([pd.DataFrame({"Metadata": metadata}), output_dataframe], axis=1)
+    # Save the file to disk
     if save_filepath:
         filename = filename if filename is not None else default_filename()
         save_filepath = Path(save_filepath)
         save_filepath.mkdir(parents=True, exist_ok=True)
-        output_dataframe.to_csv(save_filepath / filename, index=False)
+        output_dataframe.to_csv(save_filepath / filename, index=False, float_format=float_format)
         output = str(save_filepath / filename)
-    # We're going to leave it in memory as a string
+    # Store in memory as a string for returning to Notebook
     else:
-        output = output_dataframe.to_csv(index=False)
+        output = output_dataframe.to_csv(index=False, float_format=float_format)
 
     return output
 
 
-def default_filename() -> str:
+def default_filename(prefix: str = "results_") -> str:
     """Generate a default filename based on the current date/time.
 
     Returns
@@ -309,7 +325,7 @@ def default_filename() -> str:
     """
     now = datetime.now()
     date_time = now.strftime("%Y-%m-%d_%H-%M-%S")
-    filename = "results_" + date_time + ".csv"
+    filename = prefix + date_time + ".csv"
 
     return filename
 
@@ -334,3 +350,98 @@ def read_yaml(filename: Union[str, Path]) -> Dict:
         except YAMLError as exception:
             LOGGER.error(exception)
             return {}
+
+
+def long_to_wide(
+    df: pd.DataFrame,
+    id: str = "ID",
+    structure_var: str = "Inferred structure",
+    intensity_var: str = "Intensity",
+) -> pd.DataFrame:
+    """Convert long to wide format based on user specified id."""
+    # Subset the variables that are to be kept in long format for subsequent merging, adding counters so we don't end
+    # up with duplicates from merging long with wide format data based on id var.
+    keep_columns = [
+        id,
+        "Ion count",
+        "Charge state",
+        "XIC start (min)",
+        "XIC end (min)",
+        "RT (min)",
+        "Obs (Da)",
+        "Theo (Da)",
+        "∆ppm",
+        structure_var,
+        intensity_var,
+    ]
+    keep_other = df[keep_columns].copy()
+    # keep_other.rename({intensity_var: intensity_var + " (All)"}, axis=1, inplace=True)
+    keep_other["match"] = keep_other.groupby(id).cumcount() + 1
+
+    # Subset the variables that need reshaping, adding counters
+    keep_reshape = [
+        id,
+        structure_var,
+        intensity_var,
+    ]
+    to_reshape = df[df[structure_var].notna()][keep_reshape]
+    to_reshape["match"] = to_reshape.groupby(id).cumcount() + 1
+
+    # Retain only those instances where there is an intensity_var, this removes secondary (tertiary or quarternay etc.)
+    # matches without the lowest detla-ppm. Need to track how many tied matches there are for tidying up.
+    to_reshape = to_reshape[to_reshape[intensity_var].notna()]
+    total_duplicate_matches = to_reshape["match"].max()
+    to_reshape["match"] = to_reshape["match"].apply(str)
+
+    # Reshape to wide _only_ instances where there are two or more candidate matches,
+    # rename columns, drop the uneeded duplicate intensity columns
+    wide_df = pd.pivot(to_reshape, index=id, values=[structure_var, intensity_var], columns="match")
+    wide_df.columns = [" ".join(col).strip() for col in wide_df.columns.values]
+    wide_df.reset_index(inplace=True)
+    for x in range(2, total_duplicate_matches + 1):
+        wide_df.drop(" ".join([intensity_var, str(x)]), axis=1, inplace=True)
+    wide_df["match"] = 1
+    to_concatenate = [x for x in wide_df.columns if structure_var in x]
+    wide_df["Inferred structure (consolidated)"] = wide_df[to_concatenate].apply(
+        lambda row: ",   ".join(row.values.astype(str)), axis=1
+    )
+    wide_df["Inferred structure (consolidated)"] = wide_df["Inferred structure (consolidated)"].str.replace(
+        ",   nan", ""
+    )
+    wide_df.rename({"Intensity 1": "Intensity (consolidated)"}, axis=1, inplace=True)
+    wide_df.drop(columns=to_concatenate, inplace=True)
+
+    # Merge with long format data
+    wide_df = keep_other.merge(wide_df, on=[id, "match"], how="outer")
+    wide_df.drop("match", axis=1, inplace=True)
+    # Remove instances where there are multiuple matches with the same delta-ppm
+    # Code commented, originally wasn't done, then was, now back to original
+    # wide_df.drop_duplicates(
+    #     subset=[
+    #         id,
+    #         "∆ppm",
+    #     ],
+    #     inplace=True,
+    # )
+    wide_df.reset_index(drop=True, inplace=True)
+    # Forward-fill Intensity where there are differences in ppm (deliberately blank in long so not reshaped)
+    wide_df[intensity_var] = wide_df.groupby("ID")[intensity_var].ffill()
+    # Hack to get desired column order
+    wide_df = wide_df[
+        [
+            "ID",
+            "Ion count",
+            "Charge state",
+            "XIC start (min)",
+            "XIC end (min)",
+            "RT (min)",
+            "Obs (Da)",
+            "Theo (Da)",
+            "∆ppm",
+            structure_var,
+            intensity_var,
+            "Inferred structure (consolidated)",
+            "Intensity (consolidated)",
+        ]
+    ]
+    return wide_df

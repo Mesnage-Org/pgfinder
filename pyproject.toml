@@ -1,16 +1,93 @@
 [build-system]
 requires = [
-  "setuptools >= 40.9.0",
-  "wheel",
-  "versioneer"
+  "setuptools >= 45",
+  "setuptools_scm[toml]>=6.2",
+  "wheel"
   ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pgfinder"
+description = "Peptidoglycan analysis"
+readme = "README.md"
+license = {text = "GNU Lesser GPLv3"}
+dynamic = ["version"]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research"
+]
+keywords = [
+  ""
+]
+requires-python = ">3.7"
+dependencies = [
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "ruamel.yaml",
+  "pyyaml"
+]
+
+[project.urls]
+Source = "https://github.com/Mesnage-Org/pgfinder"
+Bug_Tracker = "https://github.com/Mesnage-Org/pgfinder/issues"
+Documentation = "https://mesnage-org.github.io/pgfinder/"
+
+
+[project.optional-dependencies]
+tests = [
+  "py",
+  "pytest>=7.0",
+  "pytest-cov",
+  "pytest-mpl",
+  "pytest-regtest"
+]
+docs = [
+  "sphinx<5.0",
+  "myst_parser",
+  "numpydoc",
+  "pydata_sphinx_theme",
+  "sphinx_markdown_tables",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-mermaid",
+  "sphinxcontrib-napoleon",
+  "sphinx-autodoc-typehints"
+]
+dev = [
+  "black",
+  "ruff"
+]
+pypi = [
+  "build",
+  "versioneer>=0.26",
+  "wheel"
+]
+notebooks = [
+  "jupyter",
+  "ipysheet"
+]
+
+[tools.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pgfinder"]
+exclude = ["tests"]
+
+[tools.setuptools.package-data]
+pgfinder = ["*.yaml"]
+
+[tool.setuptools_scm]
+write_to = "pgfinder/_version.py"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "--cov=pgfinder"
 testpaths = [
-    "tests",
+    "tests"
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
@@ -19,8 +96,52 @@ filterwarnings = [
 
 [tool.black]
 line-length = 120
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.venv
+  )/
+)
+'''
 
 [tool.coverage.run]
 omit = [
     "pgfinder/_version.py"
 ]
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+# per-file-ignores = []
+line-length = 120
+target-version = "py38"
+# FIXME : Add isort ("I001") back in
+select = ["B", "E", "F", "W"]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "R", "S", "W", "U"]
+
+[project.scripts]
+find_pg = "pgfinder.find_pg:main"

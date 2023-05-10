@@ -2,12 +2,15 @@
 import datetime
 from pathlib import Path
 import pytest
+
+import numpy as np
 import pandas as pd
 
 import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 DATA_DIR = Path("tests/resources/data")
+
 
 # test_matching.py fixtures
 @pytest.fixture
@@ -127,3 +130,91 @@ def ftrs_file_name():
 @pytest.fixture
 def ftrs_test_df(ftrs_file_name):
     return pgio.ms_file_reader(ftrs_file_name)
+
+
+@pytest.fixture
+def sample_df() -> pd.DataFrame:
+    """Return a dummy data frame for tests."""
+    return pd.DataFrame(
+        {
+            "id": [1, 1, 2, 2, 3, 4, 4],
+            "obs": [1, 5645.35435454, 879546.3924093, 789.3, 6541321.2, 10, 10],
+            "exp": [2, 3954.49849514, 879546.8974916, 780.4, 6541329.7, 11, 11],
+            "inferred": ["A", "B", "C", "D", "E", "F", "G"],
+            "intensity": [1, 2, 3, 4, 5, 6, 6],
+        }
+    ).convert_dtypes()
+
+
+@pytest.fixture
+def df_diff_ppm(sample_df: pd.DataFrame) -> pd.DataFrame:
+    """Return a target data frame for tests with diff_pm included."""
+    DELTA_DF = pd.DataFrame(
+        {
+            "∆ppm": [
+                -500000.0,
+                427577.82345296827,
+                -0.5742528357381609,
+                11404.407996,
+                -1.299430,
+                -90909.09090909091,
+                -90909.09090909091,
+            ]
+        }
+    )
+    DELTA_DF = pd.concat([sample_df, DELTA_DF], axis=1)
+    DELTA_DF = DELTA_DF.convert_dtypes()
+    return DELTA_DF[["id", "obs", "exp", "∆ppm", "inferred", "intensity"]]
+
+
+@pytest.fixture
+def df_lowest_ppm(df_diff_ppm: pd.DataFrame) -> pd.DataFrame:
+    """Return a target data frame for tests with lowest_pm included."""
+    LOWEST_DF = pd.DataFrame(
+        {
+            "lowest ppm": [
+                np.nan,
+                427577.82345296827,
+                -0.5742528357381609,
+                np.nan,
+                -1.299430,
+                -90909.09090909091,
+                -90909.09090909091,
+            ],
+            "Inferred Max Intensity": [np.nan, 2.0, 3.0, np.nan, 5.0, 6.0, 6.0],
+        }
+    )
+    LOWEST_DF = pd.concat([df_diff_ppm, LOWEST_DF], axis=1)
+    # Test data deliberately setup to require re-ordering so need to reorder target df
+    LOWEST_DF = LOWEST_DF.loc[[1, 0, 2, 3, 4, 5, 6], :]
+    LOWEST_DF = LOWEST_DF.convert_dtypes()
+    return LOWEST_DF
+
+
+@pytest.fixture
+def df_likely_structure() -> pd.DataFrame:
+    """Return a data frame with the lowest ppm differences and their intensity derived."""
+    return pd.DataFrame(
+        {
+            "id": [1, 1, 2, 2, 3, 4, 4],
+            "obs": [5645.354355, 1.0, 879546.392409, 789.3, 6541321.2, 10.0, 10.0],
+            "exp": [3954.498495, 2.0, 879546.897492, 780.4, 6541329.7, 11.0, 11.0],
+            "diff_ppm": [427577.823453, -500000.0, -0.574253, 11404.407996, -1.29943, -90909.090909, -90909.090909],
+            "inferred": ["B", "A", "C", "D", "E", "F", "G"],
+            "intensity": [2, 1, 3, 4, 5, 6, 6],
+            "lowest ppm": [427577.823453, np.nan, -0.574253, np.nan, -1.29943, -90909.090909, -90909.090909],
+            "Inferred Max Intensity": [2.0, np.nan, 3.0, np.nan, 5.0, 6.0, 6.0],
+        }
+    )
+
+
+@pytest.fixture
+def consolidated() -> pd.DataFrame:
+    """Return an expected consoldiated dataframe to test against."""
+    return pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4],
+            "lowest ppm": ["B", "C", "E", "F,   G"],
+            "Inferred Max Intensity": [2.0, 3.0, 5.0, 6.0],
+        }
+    )

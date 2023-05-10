@@ -15,7 +15,10 @@ mod_list:
 #  - Amidation
 #  - Amidase
 #  - Double_Anh
+#  - Multimers
 #  - multimers_Glyco
+#  - Multimers_Lac
+#  - O-Acetylated
 output_dir: output
 warnings: ignore
 quiet: false
