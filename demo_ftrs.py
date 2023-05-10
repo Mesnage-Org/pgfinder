@@ -15,7 +15,11 @@ mod_test = ['Sodium','Potassium','Anh','DeAc','DeAc_Anh','Nude','Decay','Amidati
 
 results = matching.data_analysis(masses, theo_masses, 0.5, mod_test, 10)
 
-print(results.attrs['metadata'])
+print(f"File            : {results.attrs['file']}")
+print(f"Masses File     : {results.attrs['file']}")
+print(f"rt_window       : {results.attrs['rt_window']}")
+print(f"modifications   : {results.attrs['modifications']}")
+print(f"ppm             : {results.attrs['ppm']}")
 print(results)
 
 pgio.dataframe_to_csv_metadata(save_filepath='./', output_dataframe=results)
