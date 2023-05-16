@@ -172,7 +172,7 @@ def df_lowest_ppm(df_diff_ppm: pd.DataFrame) -> pd.DataFrame:
     """Return a target data frame for tests with lowest_pm included."""
     LOWEST_DF = pd.DataFrame(
         {
-            "lowest ppm": [
+            "lowest ∆ppm": [
                 np.nan,
                 427577.82345296827,
                 -0.5742528357381609,
@@ -181,7 +181,7 @@ def df_lowest_ppm(df_diff_ppm: pd.DataFrame) -> pd.DataFrame:
                 -90909.09090909091,
                 -90909.09090909091,
             ],
-            "Inferred Max Intensity": [np.nan, 2.0, 3.0, np.nan, 5.0, 6.0, 6.0],
+            "Intensity": [np.nan, 2.0, 3.0, np.nan, 5.0, 6.0, 6.0],
         }
     )
     LOWEST_DF = pd.concat([df_diff_ppm, LOWEST_DF], axis=1)
