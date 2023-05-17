@@ -540,12 +540,12 @@ def determine_most_likely_structure(
     df["Intensity"] = np.where(df[diff] == df["min_ppm"], df[intensity], np.nan)
     # Remove temporary variables and sort (NaN > anything else)
     df["abs_diff"] = df[diff].abs()
-    df["has_inferred_structure"] = np.where(df["Inferred structure"].notna(), 1, 2)
+    df["has_inferred_structure"] = np.where(df[inferred_structure].notna(), 1, 2)
     df["has_ppm"] = np.where(df["lowest ∆ppm"].notna(), 1, 2)
     df.sort_values(
         by=[
             "has_inferred_structure",
-            "ID",
+            observed_id,
             "has_ppm",
             "min_abs_diff",
         ],
