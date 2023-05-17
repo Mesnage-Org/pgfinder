@@ -40,7 +40,7 @@ def ms_file_reader(file) -> pd.DataFrame:
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["file"] = PurePath(filename)
+    return_df.attrs["file"] = PurePath(filename).name
     LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
     return return_df
 
@@ -72,7 +72,7 @@ def ms_upload_reader(upload: dict) -> pd.DataFrame:
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["file"] = PurePath(filename)
+    return_df.attrs["file"] = PurePath(filename).name
     LOGGER.info(f"Mass spectroscopy file loaded from  : {filename}")
     return return_df
 
@@ -144,7 +144,7 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
     """
     theo_masses_df = pd.read_csv(input_file)
     theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
-    theo_masses_df.attrs["file"] = PurePath(input_file)
+    theo_masses_df.attrs["file"] = PurePath(input_file).name
     LOGGER.info(f"Theoretical masses loaded from     : {input_file}")
     return theo_masses_df
 
@@ -169,7 +169,7 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 
     theo_masses_df = pd.read_csv(io.BytesIO(file_contents))
     theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
-    theo_masses_df.attrs["file"] = PurePath(filename)
+    theo_masses_df.attrs["file"] = PurePath(filename).name
     LOGGER.info(f"Theoretical masses loaded from     : {filename}")
     return theo_masses_df
 
