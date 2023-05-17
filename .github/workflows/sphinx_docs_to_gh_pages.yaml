@@ -32,3 +32,5 @@ jobs:
           sphinxapiexclude: '../*setup* ../*tests* ../*.ipynb ../demo.py ../make_baseline.py ../jupyter_notebook_config.py ../demo_ftrs.py'
           sphinxapiopts: '--separate -o . ../'
           sphinxopts: ''
+          multiversion: true
+          multiversionopts: ''

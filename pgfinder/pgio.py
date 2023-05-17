@@ -14,8 +14,6 @@ from ruamel.yaml import YAML, YAMLError
 
 from pgfinder.logs.logs import LOGGER_NAME
 
-# from pgfinder.matching import check_df
-
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
@@ -414,15 +412,6 @@ def long_to_wide(
     # Merge with long format data
     wide_df = keep_other.merge(wide_df, on=[id, "match"], how="outer")
     wide_df.drop("match", axis=1, inplace=True)
-    # Remove instances where there are multiuple matches with the same delta-ppm
-    # Code commented, originally wasn't done, then was, now back to original
-    # wide_df.drop_duplicates(
-    #     subset=[
-    #         id,
-    #         "∆ppm",
-    #     ],
-    #     inplace=True,
-    # )
     wide_df.reset_index(drop=True, inplace=True)
     # Forward-fill Intensity where there are differences in ppm (deliberately blank in long so not reshaped)
     wide_df[intensity_var] = wide_df.groupby("ID")[intensity_var].ffill()

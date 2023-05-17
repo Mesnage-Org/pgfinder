@@ -50,10 +50,12 @@ docs = [
   "numpydoc",
   "pydata_sphinx_theme",
   "sphinx_markdown_tables",
+  "sphinx-autoapi",
+  "sphinx-autodoc-typehints",
+  "sphinx-multiversion",
   "sphinx_rtd_theme",
   "sphinxcontrib-mermaid",
   "sphinxcontrib-napoleon",
-  "sphinx-autodoc-typehints"
 ]
 dev = [
   "black",

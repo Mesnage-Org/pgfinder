@@ -76,7 +76,10 @@ def process_file(
     to_csv: dict
        Dictionary of options to pass to pd.to_csv(), primarly used to overwrite existing files.
     """
+    input_file = Path(input_file)
+    masses_file = Path(masses_file)
     output_dir = Path(output_dir)
+
     df = ms_file_reader(input_file)
 
     masses = theo_masses_reader(masses_file)
