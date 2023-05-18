@@ -461,7 +461,7 @@ def calculate_ppm_delta(
     df: pd.DataFrame,
     observed: str = "Obs (Da)",
     theoretical: str = "Theo (Da)",
-    diff: str = "∆ppm",
+    diff: str = "Delta ppm",
 ) -> pd.DataFrame:
     """Calculate the difference in Parts Per Million between observed and theoretical masses.
 
@@ -499,7 +499,7 @@ def determine_most_likely_structure(
     df: pd.DataFrame,
     observed_id: str = "ID",
     inferred_structure: str = "Inferred structure",
-    diff: str = "∆ppm",
+    diff: str = "Delta ppm",
     intensity: str = "Intensity",
 ) -> pd.DataFrame:
     """Determine the most likely structure.
@@ -514,7 +514,7 @@ def determine_most_likely_structure(
         Variable (column) within dataframe that defines the molecule identifier.
     diff: str
         Variable (column) within the dataframe that defines the difference in Parts Per Million (PPM). Default
-    '∆ppm'.
+    'Delta ppm'.
     intensity: str
         Variable (column) within dataframe that defines the intensity associated with matches.
 
@@ -527,7 +527,7 @@ def determine_most_likely_structure(
     # Find the absolute smallest ppm, retaining whether values are negative
     abs_ppm = df[[observed_id, inferred_structure, diff]].copy()
     abs_ppm["abs_diff"] = abs_ppm[diff].abs()
-    df["neg"] = np.where(df["∆ppm"] < 0, -1, 1)
+    df["neg"] = np.where(df[diff] < 0, -1, 1)
     min_ppm = abs_ppm[[observed_id, "abs_diff"]].groupby([observed_id]).min("abs_diff").reset_index()
     min_ppm.columns = [observed_id, "min_abs_diff"]
     abs_ppm = abs_ppm.merge(min_ppm[[observed_id, "min_abs_diff"]], on=observed_id, how="left")
@@ -536,12 +536,12 @@ def determine_most_likely_structure(
     # Restore the sign of the smallest ppm and merge with original data
     df["min_ppm"] = df["min_abs_diff"] * df["neg"]
     # Derive the 'lowest ppm' and associated 'Inferred Max Intensity'
-    df["lowest ∆ppm"] = np.where(df[diff] == df["min_ppm"], df[diff], np.nan)
+    df["lowest Delta ppm"] = np.where(df[diff] == df["min_ppm"], df[diff], np.nan)
     df["Intensity"] = np.where(df[diff] == df["min_ppm"], df[intensity], np.nan)
     # Remove temporary variables and sort (NaN > anything else)
     df["abs_diff"] = df[diff].abs()
     df["has_inferred_structure"] = np.where(df[inferred_structure].notna(), 1, 2)
-    df["has_ppm"] = np.where(df["lowest ∆ppm"].notna(), 1, 2)
+    df["has_ppm"] = np.where(df["lowest Delta ppm"].notna(), 1, 2)
     df.sort_values(
         by=[
             "has_inferred_structure",

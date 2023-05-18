@@ -368,7 +368,7 @@ def long_to_wide(
         "RT (min)",
         "Obs (Da)",
         "Theo (Da)",
-        "∆ppm",
+        "Delta ppm",
         structure_var,
         intensity_var,
     ]
@@ -426,7 +426,7 @@ def long_to_wide(
             "RT (min)",
             "Obs (Da)",
             "Theo (Da)",
-            "∆ppm",
+            "Delta ppm",
             structure_var,
             intensity_var,
             "Inferred structure (consolidated)",

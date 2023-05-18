@@ -1,5 +1,0 @@
-ID,Ion count,Charge state,XIC start (min),XIC end (min),RT (min),Obs (Da),Theo (Da),∆ppm,Inferred structure,lowest ∆ppm Inferred structure,lowest ∆ppm Intensity
-1414,3,2,5.2970,5.3263,5.3128,1042.4283,1042.4191,8.8430,gm-AEJDG|1,gm-AEJDG|1,75496
-1442,21,2;1,5.3557,5.5316,5.4292,984.4119,984.4136,-1.7272,gm-AEJGG|1,"gm-AEJGG|1,   gm-AEJN|1",718331
-1952,9,2,6.4997,6.6171,6.5544,1056.4330,1056.4347,-1.6500,gm-AEJEG|1,gm-AEJEG|1,140192
-1952,9,2,6.4997,6.6171,6.5544,1056.4330,1056.4348,-1.7447,gm-AEJDA|1,,
