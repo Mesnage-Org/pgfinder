@@ -105,14 +105,6 @@ def process_file(
     LOGGER.info(f"Results with metadata saved to      : {output_dir}/{filename}")
     dataframe_to_csv(
         save_filepath=output_dir,
-        filename="results_long.csv",
-        output_dataframe=results,
-        float_format=f"%.{float_format}f",
-        wide=False,
-    )
-    LOGGER.info(f"Long format results saved to        : {output_dir / 'results_long.csv'}")
-    dataframe_to_csv(
-        save_filepath=output_dir,
         filename="results.csv",
         output_dataframe=results,
         float_format=f"%.{float_format}f",
