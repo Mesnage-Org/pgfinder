@@ -53,6 +53,7 @@ docs = [
   "sphinx-autoapi",
   "sphinx-autodoc-typehints",
   "sphinx-multiversion",
+  "sphinx_rtd_theme",
   "sphinxcontrib-mermaid",
   "sphinxcontrib-napoleon",
 ]
