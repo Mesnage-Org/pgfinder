@@ -52,10 +52,10 @@ def validate_raw_data_df(raw_data_df: pd.DataFrame) -> Union[None, ValueError]:
     if not raw_data_df.attrs["file"]:
         raise ValueError("raw_data_df must have a file attribute.")
 
-    colnames = ["ID", "rt", "mwMonoisotopic", "theo_mwMonoisotopic", "inferredStructure", "maxIntensity"]
+    colnames = ["ID", "RT (min)", "Obs (Da)", "Theo (Da)", "Inferred structure", "Intensity"]
 
     if not set(colnames).issubset(set(raw_data_df.columns.to_list())):
-        raise ("raw_data_df column names are incorrect")
+        raise ValueError("raw_data_df column names are incorrect")
 
 
 def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> Union[None, ValueError]:
@@ -83,7 +83,7 @@ def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> Union[None, ValueEr
     if not theo_masses_df.attrs["file"]:
         raise ValueError("theo_masses_df must have a file attribute.")
 
-    colnames = ["Structure", "Monoisotopicmass"]
+    colnames = ["Inferred structure", "Theo (Da)"]
 
     if theo_masses_df.columns.to_list() != colnames:
         raise ValueError("theo_masses_df column names are incorrect")

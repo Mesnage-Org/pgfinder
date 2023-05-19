@@ -1,8 +1,8 @@
 """Package initialisation"""
+from importlib.metadata import version
 import logging
 import yaml
 from pkgutil import get_data
-from pgfinder.pgio import read_yaml
 from pgfinder.logs.logs import setup_logger, LOGGER_NAME
 from pgfinder.utils import dict_to_decimal
 
@@ -20,5 +20,5 @@ MULTIMERS = PARAMETERS["multimer"]
 MOD_TYPE = PARAMETERS["mod_type"]
 MASS_TO_CLEAN = PARAMETERS["mass_to_clean"]
 
-from . import _version
-__version__ = _version.get_versions()['version']
+release = version("pgfinder")
+__version__ = ".".join(release.split("."[:2]))

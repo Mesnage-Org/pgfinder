@@ -12,10 +12,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from importlib.metadata import version
 import os
 import sys
 
-import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -30,9 +30,8 @@ copyright = "2022, pgFinder authors"
 author = "pgFinder authors"
 
 # The short X.Y version
-version = ""
-# The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = version("pgfinder")
+version = ".".join(release.split(".")[:2])
 
 
 # -- General configuration ---------------------------------------------------
@@ -129,7 +128,14 @@ html_static_path = [""]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+templates_path = [
+    "_templates",
+]
+html_sidebars = {
+    "**": [
+        "versioning.html",
+    ],
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -199,3 +205,19 @@ epub_exclude_files = ["search.html"]
 
 
 # -- Extension configuration -------------------------------------------------
+# sphinx-autoapi https://sphinx-autoapi.readthedocs.io/en/latest/
+autoapi_dirs = ["../pgfinder"]
+
+# sphinx-multiversion https://holzhaus.github.io/sphinx-multiversion/master/configuration.html
+smv_tag_whitelist = r"^v\d+.*$"  # Tags begining with v#
+smv_branch_whitelist = r"^master$"  # main branch
+# If testing changes locally comment out the above and the smv_branch_whitelist below instead. Replace the branch name
+# you are working on ("ns-rse/466-doc-versions" in the example below) with the branch you are working on and run...
+#
+# cd docs
+# sphinx-multiversion . _build/html
+#
+# smv_branch_whitelist = r"^(main|ns-rse/466-doc-versions)$"  # main branch
+smv_released_pattern = r"^tags/.*$"  # Tags only
+# smv_released_pattern = r"^(/.*)|(main).*$"  # Tags and HEAD of main
+smv_outputdir_format = "{ref.name}"
