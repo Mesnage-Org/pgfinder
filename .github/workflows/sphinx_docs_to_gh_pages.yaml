@@ -33,4 +33,5 @@ jobs:
           sphinxapiopts: '--separate -o . ../'
           sphinxopts: ''
           multiversion: true
+          multiversion_redirect: master
           multiversionopts: ''
