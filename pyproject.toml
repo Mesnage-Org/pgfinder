@@ -45,7 +45,7 @@ tests = [
   "pytest-regtest"
 ]
 docs = [
-  "sphinx<5.0",
+  "sphinx",
   "myst_parser",
   "numpydoc",
   "pydata_sphinx_theme",
