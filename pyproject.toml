@@ -63,6 +63,7 @@ dev = [
 ]
 pypi = [
   "build",
+  "setuptools_scm[toml]>=6.2",
   "versioneer>=0.26",
   "wheel"
 ]
