@@ -10,7 +10,13 @@ import pandas as pd
 import sqlite3
 import numpy as np
 
-from ruamel.yaml import YAML, YAMLError
+import yaml
+from yaml.error import YAMLError
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 
 from pgfinder.logs.logs import LOGGER_NAME
 
@@ -343,8 +349,7 @@ def read_yaml(filename: Union[str, Path]) -> Dict:
 
     with Path(filename).open() as f:
         try:
-            yaml_file = YAML(typ="safe")
-            return yaml_file.load(f)
+            return yaml.load(f, Loader=Loader)
         except YAMLError as exception:
             LOGGER.error(exception)
             return {}

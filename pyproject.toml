@@ -42,7 +42,8 @@ tests = [
   "pytest>=7.0",
   "pytest-cov",
   "pytest-mpl",
-  "pytest-regtest"
+  "pytest-regtest",
+  "pytest-xdist"
 ]
 docs = [
   "sphinx",
@@ -59,6 +60,7 @@ docs = [
 ]
 dev = [
   "black",
+  "pre-commit",
   "ruff"
 ]
 pypi = [
