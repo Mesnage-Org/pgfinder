@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch:
 
 jobs:
   build-release:
@@ -14,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4.3.0
         with:
           python-version: 3.9
       - name: Installing the package
@@ -23,6 +24,7 @@ jobs:
           pip3 install .[pypi]
       - name: Build package
         run: |
+          pip3 install --upgrade setuptools
           export DEB_PYTHON_INSTALL_LAYOUT=deb_system
           python -m build --no-isolation
       - name: Publish package to PyPI
