@@ -12,8 +12,8 @@ Interactive Notebooks are implemented via
 ### IMPORTANT - Clearing Cache
 
 This implementation of Notebooks is relatively new and it is important that your browser has loaded the
-page anew and not used a cached version from a previous visit you have made to the site. How you do this will depend on
-the browser.
+page anew **each and every time you wish to run analyses** so that it does not use a cached version from a previous
+visit you have made to the site. How you do this will depend on the browser you are using.
 
 #### Firefox
 
