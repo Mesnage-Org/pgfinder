@@ -5,7 +5,6 @@ import logging
 from pathlib import Path
 from typing import Union, Dict
 
-import pandas as pd
 
 from pgfinder.logs.logs import LOGGER_NAME
 
