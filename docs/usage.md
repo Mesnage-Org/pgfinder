@@ -83,7 +83,8 @@ see a Notebook cell with the line `%pip install pgfinder` in it. If the release 
 
 ![JupyterLite Explicit Version](img/jupyter_lite_pgfinder_notebook_explicit_version.png)
 
-You can now  _Kernel > Restart Kernel and Run All Cells_ and the features in the candidate release will be run.
+You can now restart the kernel (_Kernel > Restart Kernel and Run All Cells_) and run your analysis and the features in
+the candidate release will be run.
 
 
 ## Command Line
