@@ -2,7 +2,7 @@
 
 ## Online Notebooks
 
-There is no need to install `pgfinder` - you can [run it online using myBinder](usage.md).
+There is no need to install `pgfinder` - you can [run it online](usage.md).
 
 ## Virtual Environment
 
@@ -12,7 +12,7 @@ run the following commands to create the virtual environment and activate it:
 
 
 ```bash
-conda create --force -n pgfinder python=3.7
+conda create --force -n pgfinder python=3.10
 conda activate pgfinder
 ```
 
