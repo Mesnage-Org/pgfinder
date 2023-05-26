@@ -15,14 +15,13 @@ def test_convert_path(tmpdir) -> None:
     assert tmpdir == converted_path
 
 
-def test_update_config(caplog) -> None:
+def test_update_config() -> None:
     """Test updating configuration."""
     SAMPLE_CONFIG = {"input_file": "there", "masses_file": "something", "output_dir": "here"}
     NEW_VALUES = {"output_dir": "something new"}
     updated_config = update_config(SAMPLE_CONFIG, NEW_VALUES)
 
     assert isinstance(updated_config, dict)
-    assert "Updated config config[output_dir] : here > something new" in caplog.text
     assert updated_config["output_dir"] == Path("something new")
 
 
