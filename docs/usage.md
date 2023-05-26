@@ -7,7 +7,7 @@ describes software inputs and outputs.
 
 Interactive Notebooks are implemented via
 [pgfinder-jupyterlite](https://github.com/Mesnage-Org/pgfinder-jupyterlite). To use these go to
-[mesnage-org.github.io/pgfinder-jupyterlite](https://mesnage-org.github.io/pgfinder-jupyterlite/).
+[mesnage-org.github.io/pgfinder-jupyterlite](https://mesnage-org.github.io/pgfinder-jupyterlite/lab?path=pgfinder_interactive.ipynb).
 
 ### IMPORTANT - Clearing Cache
 
@@ -37,14 +37,7 @@ button. Then refresh the page by pressing `F5`.
 
 ### Running Analyses
 
-Once the page is loaded you will see the following [JupyterLab](https://jupyter.org/) layout and need to start the
-Notebook by double-clicking on `pgfinder_interative.ipynb` (**NB** the name may be hidden but it is blue row highlighted
-in the column on the left of the image below).
-
-
-![JupyterLite Launch Page](img/jupyter_lite_front_page.png)
-
-This will launch the Notebook and you will see the following page.
+Once the page is loaded you will see the following [JupyterLab](https://jupyter.org/) layout.
 
 ![JupyterLite Notebook Launched](img/jupyter_lite_pgfinder_notebook_launch.png)
 

@@ -7,9 +7,10 @@
 [![](https://img.shields.io/badge/ORDA--DOI-10.15131%2Fshef.data.20101751.v1-lightgrey)](https://doi.org/10.15131/shef.data.20101751.v1)
 
 Interactive notebooks are available for use at
-[pgfinder-jupyterlite](https://mesnage-org.github.io/pgfinder-jupyterlite). For descriptions of the features of each
-version please refer to the [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the
-candidate releases please refer to the [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html).
+[pgfinder-jupyterlite](https://mesnage-org.github.io/pgfinder-jupyterlite/lab?path=pgfinder_interactive.ipynb). For
+descriptions of the features of each version please refer to the
+[Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the candidate releases please
+refer to the [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html).
 
 
 * [Introduction](https://mesnage-org.github.io/pgfinder/master/introduction.html)
