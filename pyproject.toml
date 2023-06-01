@@ -70,6 +70,7 @@ pypi = [
 ]
 notebooks = [
   "jupyter",
+  "ipywidgets",
   "ipysheet"
 ]
 
