@@ -23,8 +23,6 @@ keywords = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-  "ipywidgets",
-  "ipysheet",
   "matplotlib",
   "numpy",
   "pandas",
@@ -72,6 +70,7 @@ pypi = [
 ]
 notebooks = [
   "jupyter",
+  "ipywidgets",
   "ipysheet"
 ]
 
