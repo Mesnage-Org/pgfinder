@@ -10,8 +10,7 @@ There are a few ways to contribute:
 ## Development Installation
 
 The current version when installed from GitHub is a combination of the most recent Git tag combined with the hash of the
-current `HEAD` of the branch and how many commits away from the last tag it is. For further details on versioning please
-refer to [versioneer documentation](https://github.com/python-versioneer/python-versioneer).
+current `HEAD` of the branch and how many commits away from the last tag it is.
 
 If you wish to contribute to the development of PGFinder you should clone (your fork of) this repository and install it
 in editable mode (`pip install -e`) with the following commands which install additional dependencies for tests,
