@@ -1,6 +1,6 @@
 """Utilities"""
 from argparse import Namespace
-from decimal import *
+from decimal import Decimal, InvalidOperation
 import logging
 from pathlib import Path
 from typing import Union, Dict
@@ -15,8 +15,8 @@ LOGGER = logging.getLogger(LOGGER_NAME)
 #         implement the delta_ppm feature.
 #
 #         HOWEVER : You can't currently set this globally because in clean_up() the .quantize() method is used to round
-#         things up to "0.00001" which is currently hard coded. Thus the place to do the tidying is likely under clean_up()
-#         but it should be flexible and a user specified option rather than hard coded.
+#         things up to "0.00001" which is currently hard coded. Thus the place to do the tidying is likely under
+#         clean_up() but it should be flexible and a user specified option rather than hard coded.
 # getcontext().prec = 5
 
 
@@ -83,6 +83,8 @@ def dict_to_decimal(dictionary: dict) -> dict:
         else:
             try:
                 dictionary[key] = Decimal(value)
-            except:
+            except InvalidOperation:
+                pass
+            except TypeError:
                 pass
     return dictionary
