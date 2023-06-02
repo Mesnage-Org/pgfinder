@@ -370,7 +370,7 @@
 
 ## Supply overrides for the tornado.web.Application that the Jupyter notebook
 #  uses.
-c.NotebookApp.tornado_settings = {"websocket_max_message_size": 100 * 1024 * 1024}
+c.NotebookApp.tornado_settings = {"websocket_max_message_size": 100 * 1024 * 1024}  # noqa: F821
 
 ## Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
 #  For headerssent by the upstream reverse proxy. Necessary if the proxy handles

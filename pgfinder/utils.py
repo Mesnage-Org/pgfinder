@@ -1,6 +1,6 @@
 """Utilities"""
 from argparse import Namespace
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 import logging
 from pathlib import Path
 from typing import Union, Dict
@@ -83,8 +83,6 @@ def dict_to_decimal(dictionary: dict) -> dict:
         else:
             try:
                 dictionary[key] = Decimal(value)
-            except InvalidOperation:
-                pass
-            except TypeError:
+            except:  # noqa: E722
                 pass
     return dictionary

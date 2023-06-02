@@ -15,10 +15,11 @@ from pgfinder.pgio import (
     dataframe_to_csv,
     dataframe_to_csv_metadata,
 )
-from pgfinder.logs.logs import LOGGER_NAME
+from pgfinder.logs.logs import LOGGER_NAME, setup_logger
 from pgfinder.utils import update_config
 from pgfinder.pgio import read_yaml, default_filename
 
+LOGGER = setup_logger()
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
