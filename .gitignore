@@ -15,6 +15,7 @@ results*.csv
 #IDE
 .vscode/
 .idea/
+.venv/
 data/test_ms_data 10ppm test.csv
 data/test_ms_data 5ppm test.csv
 data/test_ms_data.ftrs
