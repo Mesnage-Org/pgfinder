@@ -23,7 +23,6 @@ keywords = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-  "matplotlib",
   "numpy",
   "pandas",
   "pyyaml"
