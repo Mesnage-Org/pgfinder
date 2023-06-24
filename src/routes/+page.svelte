@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { ProgressBar } from '@skeletonlabs/skeleton';
 	import MsDataUploader from './MsDataUploader.svelte';
 	import MassLibraryUploader from './MassLibraryUploader.svelte';
 	import AdvancedOptions from './AdvancedOptions.svelte';
 	import type { PyodideInterface } from 'pyodide';
 	import fileDownload from 'js-file-download';
-	import { debug } from 'svelte/internal';
-	let pgfinderReady = false;
 	// FIXME: Need to write a proper typescript definitition for this...
 	let pyodide: PyodideInterface;
 	type Pyio = {
@@ -18,8 +17,14 @@
 		massLibrary: undefined
 	};
 
+	let loading = true;
+	let processing = false;
+	let ready = false;
+
 	let allowedModifications: Array<string>;
 	let massLibraries: Map<string, string>;
+
+	$: ready = !loading && !processing && pyio.msData.length !== 0 && pyio.massLibrary !== undefined;
 
 	async function initPyodide() {
 		// Not being able to use Pyodide as a node module is god-awful...
@@ -40,7 +45,7 @@
 		proxy = await pyodide.runPythonAsync('pgio.mass_libraries()');
 		massLibraries = proxy.toJs();
 		proxy.destroy();
-		pgfinderReady = true;
+		loading = false;
 	}
 	onMount(initPyodide);
 
@@ -60,7 +65,6 @@ def analyze(virt_file):
 {f['name']: analyze(f) for f in msData.to_py()}`);
 		const csvFiles = proxy.toJs();
 		proxy.destroy();
-		console.log(csvFiles);
 		csvFiles.forEach((csv: string, file: string) => {
 			const blob = new Blob([csv], { type: 'text/csv' });
 			let fileparts = file.split('.');
@@ -75,8 +79,14 @@ def analyze(virt_file):
 		<section class="flex flex-col space-y-4 justify-center p-4">
 			<MsDataUploader bind:value={pyio.msData} />
 			<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />
+			<!-- Add modifications here! -->
 			<AdvancedOptions />
-			<button type="button" class="btn variant-filled" on:click={runPython}>Run Analysis</button>
+			<button type="button" class="btn variant-filled" on:click={runPython} disabled={!ready}>
+				Run Analysis
+			</button>
+			{#if processing}
+				<ProgressBar />
+			{/if}
 		</section>
 	</div>
 </div>
