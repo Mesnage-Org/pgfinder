@@ -1,6 +1,6 @@
 input_file: data/ftrs_test_data.ftrs
 # input_file: data/maxquant_test_data.txt
-masses_file: data/masses/e_coli_monomer_masses.csv
+masses_file: pgfinder/masses/e_coli_monomer_masses.csv
 ppm_tolerance: 10
 time_delta: 0.5
 mod_list:
