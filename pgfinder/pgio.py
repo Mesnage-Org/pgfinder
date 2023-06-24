@@ -36,7 +36,7 @@ def mass_libraries() -> Dict:
         A dictionary of filenames and paths to read from
     """
     mass_lib_path = Path(sys.modules[__package__].__file__).parent / "masses"
-    return {path.name: str(path) for path in mass_lib_path.iterdir()}
+    return {path.stem: str(path) for path in mass_lib_path.iterdir()}
 
 
 def ms_file_reader(file) -> pd.DataFrame:
