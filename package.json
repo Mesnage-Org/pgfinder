@@ -39,5 +39,9 @@
 		"vite": "^4.3.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"js-file-download": "^0.4.12",
+		"pyodide": "^0.23.3"
+	}
 }
