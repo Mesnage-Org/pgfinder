@@ -12,5 +12,7 @@ MULTIMERS = PARAMETERS["multimer"]
 MOD_TYPE = PARAMETERS["mod_type"]
 MASS_TO_CLEAN = PARAMETERS["mass_to_clean"]
 
+E_COLI_MASSES = get_data(__package__, "masses/e_coli_monomer_masses.csv")
+
 release = version("pgfinder")
 __version__ = ".".join(release.split("."[:2]))
