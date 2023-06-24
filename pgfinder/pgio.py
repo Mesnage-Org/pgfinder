@@ -6,6 +6,7 @@ from typing import Union, Dict
 from pathlib import Path, PurePath
 from datetime import datetime
 import io
+import sys
 import pandas as pd
 import sqlite3
 import numpy as np
@@ -21,6 +22,8 @@ except ImportError:
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
+MASS_LIBRARIES = Path(sys.modules[__package__].__file__).parent / "masses"
+MASS_LIBRARIES = {path.name: open(path, "rb").read() for path in MASS_LIBRARIES.iterdir()}
 
 
 def ms_file_reader(file) -> pd.DataFrame:
