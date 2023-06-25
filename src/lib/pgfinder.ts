@@ -14,14 +14,12 @@ const pyio: Pyio = {
 	// FIXME: Think about a Vite plugin that bundles the node module!
 	// That would mean I don't have to serve things from this indexURL?
 	pyodide = await loadPyodide({
-		indexURL: `${import.meta.env.BASE_URL}/pyodide`
+		indexURL: '/pgfinder-gui/pyodide'
 	});
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install(
-		`${import.meta.env.BASE_URL}/pgfinder-0.0.4.dev30+g8a8f6ef.d20230624-py3-none-any.whl`
-	);
+	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev30+g8a8f6ef.d20230624-py3-none-any.whl');
 	await pyodide.runPythonAsync('from pgfinder import matching, pgio, validation');
 
 	let proxy = await pyodide.runPythonAsync('validation.allowed_modifications()');
