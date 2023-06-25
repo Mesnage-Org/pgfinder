@@ -20,7 +20,7 @@
 
 <div class="flex flex-col items-center">
 	<h5 class="pb-1 h5">Mass Library</h5>
-	<TabGroup justify="justify-center">
+	<TabGroup class="w-full" justify="justify-center">
 		<Tab bind:group={customMassLibrary} name="built-in" value={false}>Built-In</Tab>
 		<Tab bind:group={customMassLibrary} name="custom" value={true}>Custom</Tab>
 		<svelte:fragment slot="panel">

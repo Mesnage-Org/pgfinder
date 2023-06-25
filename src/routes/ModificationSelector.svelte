@@ -1,0 +1,22 @@
+<script lang="ts">
+	import { ListBox, ListBoxItem, ProgressRadial } from '@skeletonlabs/skeleton';
+	export let value: Array<string>;
+	export let allowedModifications: Array<string> | undefined;
+</script>
+
+<div class="flex flex-col items-center">
+	<h5 class="pb-1 h5">Modifications</h5>
+	{#if allowedModifications !== undefined}
+		<ListBox class="w-full max-h-36 overflow-auto rounded-container-token" multiple>
+			{#each [...allowedModifications] as name}
+				<ListBoxItem bind:group={value} name="enabled-modifications" value={name}>
+					{name}
+				</ListBoxItem>
+			{/each}
+		</ListBox>
+	{:else}
+		<div class="flex justify-center">
+			<ProgressRadial />
+		</div>
+	{/if}
+</div>

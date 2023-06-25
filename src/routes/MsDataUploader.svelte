@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FileDropzone } from '@skeletonlabs/skeleton';
-	export let value: Array<VirtFile>;
+	export let value: Array<VirtFile> | undefined;
 
 	let files: FileList;
 
@@ -15,7 +15,7 @@
 	<h5 class="pb-1 h5">MS Datasets</h5>
 	<FileDropzone name="ms-data" bind:files on:change={dataUploaded} multiple>
 		<svelte:fragment slot="message">
-			{#if !value.length}
+			{#if !value}
 				<p><b>Upload a file</b> or drag and drop</p>
 			{:else}
 				<ol class="list">

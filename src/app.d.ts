@@ -10,8 +10,9 @@ declare namespace App {
 
 declare type VirtFile = { name: string; content: ArrayBuffer };
 declare type Pyio = {
-	msData: Array<VirtFile>;
+	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
+	enabledModifications: Array<string>;
 };
 
 declare type MsgType = 'Ready' | 'Result';

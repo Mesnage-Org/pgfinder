@@ -1,9 +1,11 @@
 import { loadPyodide, type PyodideInterface } from 'pyodide';
 
 let pyodide: PyodideInterface;
+// FIXME: This initialisation is duplicated... Make it a class with an initialiser?
 const pyio: Pyio = {
-	msData: [],
-	massLibrary: undefined
+	msData: undefined,
+	massLibrary: undefined,
+	enabledModifications: []
 };
 
 // Maybe someday (once top-level await is even more universal), I should get
@@ -42,13 +44,13 @@ onmessage = async ({ data }) => {
 	// FIXME: Move Python code to separately loaded files?
 	// FIXME: The subfunction here should be moved to PGFinder!
 	const proxy = await pyodide.runPythonAsync(`
-from pyio import msData, massLibrary
+from pyio import msData, massLibrary, enabledModifications
 theo_masses = pgio.theo_masses_upload_reader(massLibrary.to_py())
 
 
 def analyze(virt_file):
   ms_data = pgio.ms_upload_reader(virt_file)
-  matched = matching.data_analysis(ms_data, theo_masses, 0.5, [], 10)
+  matched = matching.data_analysis(ms_data, theo_masses, 0.5, enabledModifications, 10)
   return pgio.dataframe_to_csv_metadata(matched, wide = True)
 
 {f['name']: analyze(f) for f in msData.to_py()}`);
