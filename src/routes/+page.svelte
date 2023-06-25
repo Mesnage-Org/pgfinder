@@ -5,13 +5,14 @@
 	import MassLibraryUploader from './MassLibraryUploader.svelte';
 	import AdvancedOptions from './AdvancedOptions.svelte';
 	import type { PyodideInterface } from 'pyodide';
+	import { loadPyodide } from 'pyodide';
 	import fileDownload from 'js-file-download';
 	// TODO:
-  // 1) Move Pyodide processing to a WebWorker
-  // 2) Add a modification selector
-  // 3) Add custom mass library support
-  // 4) Style and restrict formats of file upload widgets
-  // 5) Add advanced options (with defaults)!
+	// 1) Move Pyodide processing to a WebWorker
+	// 2) Add a modification selector
+	// 3) Add custom mass library support
+	// 4) Style and restrict formats of file upload widgets
+	// 5) Add advanced options (with defaults)!
 	let pyodide: PyodideInterface;
 	type Pyio = {
 		msData: Array<VirtFile>;
@@ -32,10 +33,11 @@
 	$: ready = !loading && !processing && pyio.msData.length !== 0 && pyio.massLibrary !== undefined;
 
 	async function initPyodide() {
-		// Not being able to use Pyodide as a node module is god-awful...
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		pyodide = await loadPyodide();
+		// FIXME: Think about a Vite plugin that bundles the node module!
+		// That would mean I don't have to serve things from this indexURL?
+		pyodide = await loadPyodide({
+			indexURL: 'pyodide'
+		});
 		pyodide.registerJsModule('pyio', pyio);
 		await pyodide.loadPackage(['micropip', 'sqlite3']);
 		const micropip = pyodide.pyimport('micropip');
