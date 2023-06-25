@@ -10,6 +10,7 @@
 	// 3) Add custom mass library support
 	// 4) Style and restrict formats of file upload widgets
 	// 5) Add advanced options (with defaults)!
+	// 6) Add a README and some automated CI checks
 	let pgfinder: Worker | undefined;
 	onMount(() => {
 		pgfinder = new PGFinder();

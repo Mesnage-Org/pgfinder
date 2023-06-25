@@ -1,4 +1,3 @@
-import { base } from '$app/paths';
 import { loadPyodide, type PyodideInterface } from 'pyodide';
 
 let pyodide: PyodideInterface;
@@ -15,12 +14,12 @@ const pyio: Pyio = {
 	// FIXME: Think about a Vite plugin that bundles the node module!
 	// That would mean I don't have to serve things from this indexURL?
 	pyodide = await loadPyodide({
-		indexURL: `${base}/pyodide`
+		indexURL: '/pyodide'
 	});
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install(`${base}/pgfinder-0.0.4.dev30+g8a8f6ef.d20230624-py3-none-any.whl`);
+	await micropip.install('/pgfinder-0.0.4.dev30+g8a8f6ef.d20230624-py3-none-any.whl');
 	await pyodide.runPythonAsync('from pgfinder import matching, pgio, validation');
 
 	let proxy = await pyodide.runPythonAsync('validation.allowed_modifications()');
