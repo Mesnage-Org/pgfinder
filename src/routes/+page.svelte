@@ -6,7 +6,12 @@
 	import AdvancedOptions from './AdvancedOptions.svelte';
 	import type { PyodideInterface } from 'pyodide';
 	import fileDownload from 'js-file-download';
-	// FIXME: Need to write a proper typescript definitition for this...
+	// TODO:
+  // 1) Move Pyodide processing to a WebWorker
+  // 2) Add a modification selector
+  // 3) Add custom mass library support
+  // 4) Style and restrict formats of file upload widgets
+  // 5) Add advanced options (with defaults)!
 	let pyodide: PyodideInterface;
 	type Pyio = {
 		msData: Array<VirtFile>;
@@ -32,8 +37,7 @@
 		// @ts-ignore
 		pyodide = await loadPyodide();
 		pyodide.registerJsModule('pyio', pyio);
-		await pyodide.loadPackage('micropip');
-		await pyodide.loadPackage('sqlite3');
+		await pyodide.loadPackage(['micropip', 'sqlite3']);
 		const micropip = pyodide.pyimport('micropip');
 		await micropip.install('pgfinder-0.0.4.dev30+g8a8f6ef.d20230624-py3-none-any.whl');
 		await pyodide.runPythonAsync('from pgfinder import matching, pgio, validation');
