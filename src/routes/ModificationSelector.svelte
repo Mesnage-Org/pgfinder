@@ -7,7 +7,7 @@
 <div class="flex flex-col items-center">
 	<h5 class="pb-1 h5">Modifications</h5>
 	{#if allowedModifications !== undefined}
-		<ListBox class="w-full max-h-36 overflow-auto rounded-container-token" multiple>
+		<ListBox class="w-full max-h-32 overflow-auto rounded-container-token" multiple>
 			{#each [...allowedModifications] as name}
 				<ListBoxItem bind:group={value} name="enabled-modifications" value={name}>
 					{name}

@@ -5,7 +5,9 @@ let pyodide: PyodideInterface;
 const pyio: Pyio = {
 	msData: undefined,
 	massLibrary: undefined,
-	enabledModifications: []
+	enabledModifications: [],
+	ppmTolerance: 10,
+	cleanupWindow: 0.5
 };
 
 // Maybe someday (once top-level await is even more universal), I should get
@@ -44,13 +46,13 @@ onmessage = async ({ data }) => {
 	// FIXME: Move Python code to separately loaded files?
 	// FIXME: The subfunction here should be moved to PGFinder!
 	const proxy = await pyodide.runPythonAsync(`
-from pyio import msData, massLibrary, enabledModifications
+from pyio import msData, massLibrary, enabledModifications, ppmTolerance, cleanupWindow
 theo_masses = pgio.theo_masses_upload_reader(massLibrary.to_py())
 
 
 def analyze(virt_file):
   ms_data = pgio.ms_upload_reader(virt_file)
-  matched = matching.data_analysis(ms_data, theo_masses, 0.5, enabledModifications, 10)
+  matched = matching.data_analysis(ms_data, theo_masses, cleanupWindow, enabledModifications, ppmTolerance)
   return pgio.dataframe_to_csv_metadata(matched, wide = True)
 
 {f['name']: analyze(f) for f in msData.to_py()}`);

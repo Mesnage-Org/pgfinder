@@ -7,9 +7,7 @@
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import fileDownload from 'js-file-download';
 	// TODO:
-	// 3) Add custom mass library support
 	// 4) Style and restrict formats of file upload widgets
-	// 5) Add advanced options (with defaults)!
 	// 6) Add a README and some automated CI checks
 	let pgfinder: Worker | undefined;
 	onMount(() => {
@@ -29,7 +27,9 @@
 	let pyio: Pyio = {
 		msData: undefined,
 		massLibrary: undefined,
-		enabledModifications: []
+		enabledModifications: [],
+		ppmTolerance: 10,
+		cleanupWindow: 0.5
 	};
 
 	let loading = true;
@@ -53,6 +53,8 @@
 			<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />
 			<AdvancedOptions
 				bind:enabledModifications={pyio.enabledModifications}
+				bind:ppmTolerance={pyio.ppmTolerance}
+				bind:cleanupWindow={pyio.cleanupWindow}
 				{allowedModifications}
 			/>
 			<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>

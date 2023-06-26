@@ -13,6 +13,8 @@ declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
 	enabledModifications: Array<string>;
+	ppmTolerance: number;
+	cleanupWindow: number;
 };
 
 declare type MsgType = 'Ready' | 'Result';
