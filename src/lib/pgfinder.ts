@@ -1,20 +1,14 @@
 import { loadPyodide, type PyodideInterface } from 'pyodide';
 import runAnalysis from '$lib/run_analysis.py?raw';
+import { defaultPyio } from '$lib/constants';
 
 let pyodide: PyodideInterface;
-// FIXME: This initialisation is duplicated... Make it a class with an initialiser?
-const pyio: Pyio = {
-	msData: undefined,
-	massLibrary: undefined,
-	enabledModifications: [],
-	ppmTolerance: 10,
-	cleanupWindow: 0.5
-};
+const pyio: Pyio = { ...defaultPyio };
 
 // Maybe someday (once top-level await is even more universal), I should get
 // rid of this useless, immediately-called function...
 (async () => {
-	// FIXME: Think about a Vite plugin that bundles the node module!
+	// TODO: Think about a Vite plugin that bundles the node module!
 	// That would mean I don't have to serve things from this indexURL?
 	pyodide = await loadPyodide({
 		indexURL: '/pgfinder-gui/pyodide'

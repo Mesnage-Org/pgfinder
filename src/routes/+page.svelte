@@ -5,6 +5,7 @@
 	import MassLibraryUploader from './MassLibraryUploader.svelte';
 	import AdvancedOptions from './AdvancedOptions.svelte';
 	import PGFinder from '$lib/pgfinder.ts?worker';
+	import { defaultPyio } from '$lib/constants';
 	import fileDownload from 'js-file-download';
 	// TODO:
 	// 4) Style and restrict formats of file upload widgets
@@ -24,13 +25,7 @@
 		};
 	});
 
-	let pyio: Pyio = {
-		msData: undefined,
-		massLibrary: undefined,
-		enabledModifications: [],
-		ppmTolerance: 10,
-		cleanupWindow: 0.5
-	};
+	let pyio: Pyio = { ...defaultPyio };
 
 	let loading = true;
 	let processing = false;
@@ -47,7 +42,7 @@
 </script>
 
 <div class="h-full flex flex-col justify-center items-center">
-	<div class="card">
+	<div class="card min-w-[20rem]">
 		<section class="flex flex-col space-y-4 justify-center p-4">
 			<MsDataUploader bind:value={pyio.msData} />
 			<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />

@@ -9,6 +9,7 @@ declare namespace App {
 }
 
 declare type VirtFile = { name: string; content: ArrayBuffer };
+
 declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
