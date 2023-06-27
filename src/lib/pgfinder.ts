@@ -1,4 +1,5 @@
 import { loadPyodide, type PyodideInterface } from 'pyodide';
+import runAnalysis from '$lib/run_analysis.py?raw';
 
 let pyodide: PyodideInterface;
 // FIXME: This initialisation is duplicated... Make it a class with an initialiser?
@@ -43,19 +44,7 @@ const pyio: Pyio = {
 
 onmessage = async ({ data }) => {
 	Object.assign(pyio, data);
-	// FIXME: Move Python code to separately loaded files?
-	// FIXME: The subfunction here should be moved to PGFinder!
-	const proxy = await pyodide.runPythonAsync(`
-from pyio import msData, massLibrary, enabledModifications, ppmTolerance, cleanupWindow
-theo_masses = pgio.theo_masses_upload_reader(massLibrary.to_py())
-
-
-def analyze(virt_file):
-  ms_data = pgio.ms_upload_reader(virt_file)
-  matched = matching.data_analysis(ms_data, theo_masses, cleanupWindow, enabledModifications, ppmTolerance)
-  return pgio.dataframe_to_csv_metadata(matched, wide = True)
-
-{f['name']: analyze(f) for f in msData.to_py()}`);
+	const proxy = await pyodide.runPythonAsync(runAnalysis);
 	const csvFiles = proxy.toJs();
 	proxy.destroy();
 	csvFiles.forEach((csv: string, file: string) => {
