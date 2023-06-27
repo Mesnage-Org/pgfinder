@@ -25,12 +25,17 @@
 		<Tab bind:group={customMassLibrary} name="custom" value={true}>Custom</Tab>
 		<svelte:fragment slot="panel">
 			{#if customMassLibrary}
-				<FileDropzone name="mass-library" bind:files on:change={dataUploaded}>
+				<FileDropzone name="mass-library" bind:files on:change={dataUploaded} accept=".csv">
 					<svelte:fragment slot="message">
 						{#if value === undefined}
 							<p><b>Upload a file</b> or drag and drop</p>
 						{:else}
 							<p>{value.name}</p>
+						{/if}
+					</svelte:fragment>
+					<svelte:fragment slot="meta">
+						{#if !value}
+							PGFinder Mass Library (.csv)
 						{/if}
 					</svelte:fragment>
 				</FileDropzone>
