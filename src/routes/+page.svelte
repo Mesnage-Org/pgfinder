@@ -8,7 +8,6 @@
 	import { defaultPyio } from '$lib/constants';
 	import fileDownload from 'js-file-download';
 	// TODO:
-	// 4) Style and restrict formats of file upload widgets
 	// 6) Add a README and some automated CI checks
 	let pgfinder: Worker | undefined;
 	onMount(() => {
