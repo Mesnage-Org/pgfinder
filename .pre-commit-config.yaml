@@ -33,7 +33,10 @@ repos:
         additional_dependencies:
           - eslint
           - typescript
+          - svelte
+          - svelte-eslint-parser
           - eslint-plugin-svelte
+          - eslint-config-prettier
           - '@typescript-eslint/eslint-plugin'
           - '@typescript-eslint/parser'
 
