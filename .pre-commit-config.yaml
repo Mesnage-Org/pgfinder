@@ -30,9 +30,9 @@ repos:
     hooks:
       - id: nbstripout
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
+  - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: "v0.0.275"
+    rev: "v0.0.276"
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
