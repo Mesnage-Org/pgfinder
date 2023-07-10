@@ -1,0 +1,7 @@
+File,Name,Species,Description
+e_coli_monomers_complex.csv,Complex,Escherichia coli,"Contains all structures of the form gm-AEJXX, where X can be any of the 20 canonical amino acids"
+c_diff_monomers_complex.csv,Complex,Clostridium difficile,"Contains all structures of the form gm(-Ac)-AEJXX, where X can be any of the 20 canonical amino acids"
+e_coli_monomers_non_redundant.csv,Non-Redundant,Escherichia coli,Removes mass coincidences where the fourth and fifth stem residues are swapped. Also removes leucine in favour of isoleucine.  
+c_diff_monomers_non_redundant.csv,Non-Redundant,Clostridium difficile,Removes mass coincidences where the fourth and fifth stem residues are swapped. Also removes leucine in favour of isoleucine.  
+e_coli_monomers_simple.csv,Simple,Escherichia coli,"Contains all structures of the form gm-AEJAX, where X can be any of the 20 canonical amino acids"
+c_diff_monomers_simple.csv,Simple,Clostridium difficile,"Contains all structures of the form gm(-Ac)-AEJAX, where X can be any of the 20 canonical amino acids"
