@@ -24,7 +24,7 @@ from pgfinder.logs.logs import LOGGER_NAME
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-def mass_libraries() -> Dict:
+def mass_libraries() -> list:
     """
     Loads built-in mass libraries from csv files as a dictionary.
 
@@ -32,8 +32,8 @@ def mass_libraries() -> Dict:
 
     Returns
     -------
-    dict
-        A dictionary of filenames and paths to read from
+    list
+        A list of dicts coupling mass libraries with metadata like species name and complexity
     """
     mass_lib_dir = Path(sys.modules[__package__].__file__).parent / "masses"
     mass_libs = pd.read_csv(mass_lib_dir / "index.csv").to_dict(orient="records")
