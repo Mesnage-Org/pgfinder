@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { Accordion, AccordionItem, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import { Accordion, AccordionItem, popup } from '@skeletonlabs/skeleton';
 	import ModificationSelector from './ModificationSelector.svelte';
 	export let enabledModifications: Array<string>;
 	export let allowedModifications: Array<string> | undefined;
 	export let ppmTolerance: number;
 	export let cleanupWindow: number;
-
-	function tooltip(target: string): PopupSettings {
-		return { event: 'hover', target, placement: 'top' };
-	}
-	const cleanupTooltip: PopupSettings = tooltip('cleanupTooltip');
 </script>
 
 <Accordion class="w-full">
@@ -26,7 +21,7 @@
 				<h5 class="pb-1 h5">Cleanup Window</h5>
 				<input
 					bind:value={cleanupWindow}
-					use:popup={cleanupTooltip}
+					use:popup={{ event: 'hover', target: 'cleanupTooltip', placement: 'top' }}
 					class="input"
 					type="number"
 					step="0.1"

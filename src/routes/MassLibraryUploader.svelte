@@ -1,14 +1,10 @@
 <script lang="ts">
-	import {
-		FileDropzone,
-		TabGroup,
-		Tab,
-		ListBox,
-		ListBoxItem,
-		ProgressRadial
-	} from '@skeletonlabs/skeleton';
+	import { FileDropzone, TabGroup, Tab, ProgressRadial } from '@skeletonlabs/skeleton';
+	import BuiltinLibrarySelector from './BuiltinLibrarySelector.svelte';
 	export let value: VirtFile | undefined;
 	export let massLibraries: Map<string, string> | undefined;
+
+	$: console.log(massLibraries);
 
 	let files: FileList;
 	let customMassLibrary = false;
@@ -40,17 +36,7 @@
 					</svelte:fragment>
 				</FileDropzone>
 			{:else if massLibraries !== undefined}
-				<ListBox>
-					{#each [...massLibraries] as [name, content]}
-						<ListBoxItem
-							bind:group={value}
-							name="mass-library"
-							value={{ name: name + '.csv', content }}
-						>
-							{name}
-						</ListBoxItem>
-					{/each}
-				</ListBox>
+				<BuiltinLibrarySelector bind:value {massLibraries} />
 			{:else}
 				<div class="flex justify-center">
 					<ProgressRadial />

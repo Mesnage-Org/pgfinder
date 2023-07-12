@@ -1,6 +1,6 @@
 {
   "name": "pyodide",
-  "version": "0.23.3",
+  "version": "0.23.4",
   "description": "The Pyodide JavaScript package",
   "keywords": [
     "python",
@@ -48,7 +48,8 @@
   "exports": {
     ".": {
       "require": "./pyodide.js",
-      "import": "./pyodide.mjs"
+      "import": "./pyodide.mjs",
+      "types": "./pyodide.d.ts"
     },
     "./pyodide.asm.wasm": "./pyodide.asm.wasm",
     "./pyodide.asm.js": "./pyodide.asm.js",

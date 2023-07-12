@@ -1,0 +1,49 @@
+<script lang="ts">
+	import { Accordion, AccordionItem, ListBox, ListBoxItem, popup } from '@skeletonlabs/skeleton';
+	import Fa from 'svelte-fa/src/fa.svelte';
+	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+	export let value: VirtFile | undefined;
+	export let massLibraries: Map<string, string> | undefined;
+
+	$: console.log(massLibraries);
+</script>
+
+<Accordion autocollapse class="w-full">
+	{#each [...massLibraries] as [species, libraries], speciesId}
+		<AccordionItem>
+			<svelte:fragment slot="summary">{species}</svelte:fragment>
+			<svelte:fragment slot="content">
+				<ListBox>
+					{#each libraries as library, libraryId}
+						<ListBoxItem
+							bind:group={value}
+							name="mass-library"
+							value={{ name: library.get('File'), content: library.get('Content') }}
+						>
+							<div class="flex items-center">
+								<p class="grow">{library.get('Name')}</p>
+								<div
+									class="[&>*]:pointer-events-none"
+									use:popup={{
+										event: 'hover',
+										target: `library${speciesId}${libraryId}`,
+										placement: 'top'
+									}}
+								>
+									<Fa icon={faCircleInfo} />
+								</div>
+							</div>
+							<div
+								class="card p-4 variant-filled-secondary max-w-md"
+								data-popup="library{speciesId}{libraryId}"
+							>
+								<p class="text-center">{library.get('Description')}</p>
+								<div class="arrow variant-filled-secondary" />
+							</div>
+						</ListBoxItem>
+					{/each}
+				</ListBox>
+			</svelte:fragment>
+		</AccordionItem>
+	{/each}
+</Accordion>
