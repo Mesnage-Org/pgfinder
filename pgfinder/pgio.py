@@ -24,8 +24,7 @@ from pgfinder.logs.logs import LOGGER_NAME
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-# FIXME: Needs type and docstring updated to dict
-def mass_libraries() -> list:
+def mass_libraries() -> Dict:
     """
     Loads built-in mass libraries from csv files as a dictionary.
 
@@ -33,17 +32,23 @@ def mass_libraries() -> list:
 
     Returns
     -------
-    list
-        A list of dicts coupling mass libraries with metadata like species name and complexity
+    Dict
+        A dictionary mapping species name to mass libraries and their metadata
     """
     mass_lib_dir = Path(sys.modules[__package__].__file__).parent / "masses"
     mass_libs = pd.read_csv(mass_lib_dir / "index.csv").groupby("Species")
     return {
-        group: [
+        species: [
+            # Each dictionary (a row of the index representing a single mass
+            # library) is extended with the "Content" field, containing the
+            # actual mass data for each library
             {**ml, "Content": open(mass_lib_dir / ml["File"], "rb").read()}
-            for ml in mass_libs.get_group(group).to_dict(orient="records")
+            # The libraries are looked up by group / species name, then each
+            # row is converted to a dictionary of column-name to data
+            for ml in mass_libs.get_group(species).to_dict(orient="records")
         ]
-        for (group, _) in mass_libs.groups.items()
+        # Each group here represents a single species
+        for species in mass_libs.groups.keys()
     }
 
 
