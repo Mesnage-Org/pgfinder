@@ -141,7 +141,7 @@ def sample_df() -> pd.DataFrame:
             "obs": [1, 5645.35435454, 879546.3924093, 789.3, 6541321.2, 10, 10],
             "exp": [2, 3954.49849514, 879546.8974916, 780.4, 6541329.7, 11, 11],
             "inferred": ["A", "B", "C", "D", "E", "F", "G"],
-            "intensity": [1, 2, 3, 4, 5, 6, 6],
+            "intensity": [2, 2, 3, 3, 5, 6, 6],
         }
     ).convert_dtypes()
 
@@ -181,7 +181,7 @@ def df_lowest_ppm(df_diff_ppm: pd.DataFrame) -> pd.DataFrame:
                 -90909.09090909091,
                 -90909.09090909091,
             ],
-            "Intensity": [np.nan, 2.0, 3.0, np.nan, 5.0, 6.0, 6.0],
+            "Intensity": [2.0, 2.0, 3.0, 3.0, 5.0, 6.0, 6.0],
         }
     )
     LOWEST_DF = pd.concat([df_diff_ppm, LOWEST_DF], axis=1)

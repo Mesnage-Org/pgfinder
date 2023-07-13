@@ -535,9 +535,10 @@ def determine_most_likely_structure(
     df = df.merge(abs_ppm, on=observed_id, how="outer")
     # Restore the sign of the smallest ppm and merge with original data
     df["min_ppm"] = df["min_abs_diff"] * df["neg"]
-    # Derive the 'lowest ppm' and associated 'Inferred Max Intensity'
+    # Derive the 'lowest ppm' — note that intensity is always the same for rows
+    # with the same ID, so there is no need select a "matching" intensity value
     df["lowest Delta ppm"] = np.where(df[diff] == df["min_ppm"], df[diff], np.nan)
-    df["Intensity"] = np.where(df[diff] == df["min_ppm"], df[intensity], np.nan)
+    df["Intensity"] = df[intensity]
     # Remove temporary variables and sort (NaN > anything else)
     df["abs_diff"] = df[diff].abs()
     df["has_inferred_structure"] = np.where(df[inferred_structure].notna(), 1, 2)
