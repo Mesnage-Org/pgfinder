@@ -12,16 +12,66 @@ descriptions of the features of each version please refer to the
 [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the candidate releases please
 refer to the [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html).
 
+For an introduction to Peptidoglycan analysis please refer to the
+[documentation](https://mesnage-org.github.io/pgfinder/master/introduction.html).
 
-* [Introduction](https://mesnage-org.github.io/pgfinder/master/introduction.html)
-* [Installation](https://mesnage-org.github.io/pgfinder/master/installation.html)
-* [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html)
-* [Contributing](https://mesnage-org.github.io/pgfinder/master/contributing.html)
-* [Copying](https://mesnage-org.github.io/pgfinder/master/copying.html)
+## Usage
+
+PGFinder is available in two forms a web-based User Interface (WebUI) at
+[mesnage-org.github.io/pgfinder-gui/](https://mesnage-org.github.io/pgfinder-gui/) or a command line interface (CLI)
+Python package.
+
+
+A command-line programme (`find_pg`) is included which takes a YAML configuration file as input.
+
+``` bash
+find_pg -c config.yaml
+```
+
+For details of using the CLI version including the configuration file please refer to the
+[Usage](https://mesnage-org.github.io/pgfinder/master/usage.html) section of the Documentation.
+
+## Installation
+
+Detailed installation instructions can be found in the
+[Installation](https://mesnage-org.github.io/pgfinder/master/installation.html) section of the Documentation.
+
+PGFinder is available from [PyPI](https://pypi.org/project/pgfinder/) so can be installed with `pip`.
+
+``` bash
+pip install pgfinder
+```
+
+It can also be installed directly from this repository
+
+``` bash
+pip install git+https://github.com/Mesnage-Org/PGFinder.git
+```
+
+Or you can clone the repository and install it.
+
+``` bash
+git clone https://github.com/Mesnage-Org/pgfinder.git
+cd pgfinder
+pip install -e .
+```
+
+## Contributing
+
+Contributions are welcome, please refer to the detailed
+[Contributing](https://mesnage-org.github.io/pgfinder/master/contributing.html) section of the Documentation which
+details how to setup and install all components and setup/configure the development tools such as `pre-commit`.
+
+## Copying
+
+This software is licensed as specified by the GPL License and LGPL License. Please refer to the
+[`COPYING`](https://github.com/Mesnage-Org/pgfinder/blob/master/COPYING) and
+[COPYING.LESSER](https://github.com/Mesnage-Org/pgfinder/blob/master/COPYING.LESSER) files for further details.
 
 ## Links
 
 * [Mesnage Lab](https://mesnagelab.weebly.com/)
+* [PGFinder On-Line](https://mesnage-org.github.io/pgfinder-gui/)
 
 ## References
 
