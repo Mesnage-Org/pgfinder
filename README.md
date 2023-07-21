@@ -6,11 +6,11 @@
 [![Docs](https://img.shields.io/badge/github.io-docs-green)](https://mesnage-org.github.io/pgfinder/)
 [![](https://img.shields.io/badge/ORDA--DOI-10.15131%2Fshef.data.20101751.v1-lightgrey)](https://doi.org/10.15131/shef.data.20101751.v1)
 
-Interactive notebooks are available for use at
-[pgfinder-jupyterlite](https://mesnage-org.github.io/pgfinder-jupyterlite/lab?path=pgfinder_interactive.ipynb). For
+A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder-gui/). For
 descriptions of the features of each version please refer to the
-[Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the candidate releases please
-refer to the [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html).
+[Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the development version please
+refer to the [Insatllation](https://mesnage-org.github.io/pgfinder/master/installation.html) and
+[Usage](https://mesnage-org.github.io/pgfinder/master/usage.html) documentation.
 
 For an introduction to Peptidoglycan analysis please refer to the
 [documentation](https://mesnage-org.github.io/pgfinder/master/introduction.html).
@@ -22,7 +22,7 @@ PGFinder is available in two forms a web-based User Interface (WebUI) at
 Python package.
 
 
-A command-line programme (`find_pg`) is included which takes a YAML configuration file as input.
+Thecommand-line programme (`find_pg`) uses a YAML configuration file as input.
 
 ``` bash
 find_pg -c config.yaml
