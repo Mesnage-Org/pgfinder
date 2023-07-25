@@ -1,13 +1,13 @@
 # Usage
 
-There are two approaches to using PGFinder, online WebUI or at the Command Line. The [Data Dictionary](data_dictionary.md)
-describes software inputs and outputs.
+Two options are available to run PGFinder: (i) an online Web User Interface (WebUI) or (ii) a Command Line Interface. 
+The [Data Dictionary](data_dictionary.md) describes software inputs and outputs.
 
 ## WebUI
 
 An interactive web-page for running your analysis is available at
 [mesnage-org.github.io/pgfinder-gui/](https://mesnage-org.github.io/pgfinder-gui/). On first visiting the page you will
-have to wait a few minutes whilst it sets up in the background (for those curious or interested it is using
+have to wait a whilst it sets up in the background (for those curious or interested it is using
 [pyodide](mesnage-org.github.io/pgfinder-gui/) a [Web Assembly language (WASM)](https://webassembly.org/) in the
 background to install PGFinder and all its Python dependencies). Once loaded the page should look like the image below.
 
@@ -16,7 +16,9 @@ background to install PGFinder and all its Python dependencies). Once loaded the
 ### Upload a file
 
 You should click on the large button with a dashed border to **Upload a file** and select your Byos (`.ftrs`) or
-MaxQuant (`.txt`) file that you wish to analyse.
+MaxQuant (`.txt`) file that you wish to analyse. Please note that the versions currently supported for Byos is 3.11 and MaxQuant is 2.4.2.0. 
+Please note that this WebUI allows you to upload multiple deconvoluted datasets to perform several searches with the same database in one go. 
+Each search output will be downloaded as an individual .csv file.  
 
 ### Choose a Mass Library
 
