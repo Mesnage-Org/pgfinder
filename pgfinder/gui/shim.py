@@ -1,13 +1,12 @@
 import json
 from typing import Dict, List
 
-from pgfinder_gui.internal import (
+from pgfinder import matching, pgio, validation
+from pgfinder.gui.internal import (
     MASS_LIB_DIR,
     ms_upload_reader,
     theo_masses_upload_reader,
 )
-
-from pgfinder import matching, pgio, validation
 
 
 def mass_library_index() -> Dict:
