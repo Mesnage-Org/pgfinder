@@ -2,9 +2,7 @@
 	import { FileDropzone, TabGroup, Tab, ProgressRadial } from '@skeletonlabs/skeleton';
 	import BuiltinLibrarySelector from './BuiltinLibrarySelector.svelte';
 	export let value: VirtFile | undefined;
-	export let massLibraries: Map<string, string> | undefined;
-
-	$: console.log(massLibraries);
+	export let massLibraries: MassLibraryIndex | undefined;
 
 	let files: FileList;
 	let customMassLibrary = false;

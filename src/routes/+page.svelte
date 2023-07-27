@@ -31,7 +31,7 @@
 	let ready = false;
 
 	let allowedModifications: Array<string>;
-	let massLibraries: Map<string, string>;
+	let massLibraries: MassLibraryIndex;
 
 	$: ready = !loading && !processing && pyio.msData !== undefined && pyio.massLibrary !== undefined;
 	function runAnalysis() {

@@ -3,9 +3,7 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 	export let value: VirtFile | undefined;
-	export let massLibraries: Map<string, string> | undefined;
-
-	$: console.log(massLibraries);
+	export let massLibraries: MassLibraryIndex;
 </script>
 
 <Accordion autocollapse class="w-full">
@@ -14,14 +12,14 @@
 			<svelte:fragment slot="summary">{species}</svelte:fragment>
 			<svelte:fragment slot="content">
 				<ListBox>
-					{#each libraries as library, libraryId}
+					{#each [...libraries] as [name, library], libraryId}
 						<ListBoxItem
 							bind:group={value}
 							name="mass-library"
-							value={{ name: library.get('File'), content: library.get('Content') }}
+							value={{ name: library.get('File'), content: null }}
 						>
 							<div class="flex items-center">
-								<p class="grow">{library.get('Name')}</p>
+								<p class="grow">{name}</p>
 								<div
 									class="[&>*]:pointer-events-none"
 									use:popup={{

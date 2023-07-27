@@ -19,9 +19,10 @@ declare type Pyio = {
 };
 
 declare type MsgType = 'Ready' | 'Result';
+declare type MassLibraryIndex = Map<string, Map<string, Map<string, string>>>;
 declare type ReadyMsg = {
 	allowedModifications: Array<string>;
-	massLibraries: Map<string, string>;
+	massLibraries: MassLibraryIndex;
 };
 declare type ResultMsg = {
 	filename: string;

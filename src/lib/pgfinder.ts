@@ -1,5 +1,4 @@
 import { loadPyodide, type PyodideInterface } from 'pyodide';
-import runAnalysis from '$lib/run_analysis.py?raw';
 import { defaultPyio } from '$lib/constants';
 
 let pyodide: PyodideInterface;
@@ -16,14 +15,14 @@ const pyio: Pyio = { ...defaultPyio };
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev57+g581bf71-py3-none-any.whl');
-	await pyodide.runPythonAsync('from pgfinder import matching, pgio, validation');
+	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev51+g3b9749e-py3-none-any.whl');
+	await pyodide.runPythonAsync('from pgfinder.gui.shim import *');
 
-	let proxy = await pyodide.runPythonAsync('validation.allowed_modifications()');
+	let proxy = await pyodide.runPythonAsync('allowed_modifications()');
 	const allowedModifications = proxy.toJs();
 	proxy.destroy();
 
-	proxy = await pyodide.runPythonAsync('pgio.mass_libraries()');
+	proxy = await pyodide.runPythonAsync('mass_library_index()');
 	const massLibraries = proxy.toJs();
 	proxy.destroy();
 
@@ -38,7 +37,7 @@ const pyio: Pyio = { ...defaultPyio };
 
 onmessage = async ({ data }) => {
 	Object.assign(pyio, data);
-	const proxy = await pyodide.runPythonAsync(runAnalysis);
+	const proxy = await pyodide.runPythonAsync('run_analysis()');
 	const csvFiles = proxy.toJs();
 	proxy.destroy();
 	csvFiles.forEach((csv: string, file: string) => {
