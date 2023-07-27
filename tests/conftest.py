@@ -1,10 +1,10 @@
 """Fixtures for various tests."""
 import datetime
 from pathlib import Path
-import pytest
 
 import numpy as np
 import pandas as pd
+import pytest
 
 import pgfinder.pgio as pgio
 import pgfinder.validation as validation

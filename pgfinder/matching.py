@@ -5,7 +5,7 @@ from decimal import Decimal
 import numpy as np
 import pandas as pd
 
-from pgfinder import MULTIMERS, MOD_TYPE, MASS_TO_CLEAN
+from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)

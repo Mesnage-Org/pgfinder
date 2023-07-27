@@ -1,7 +1,9 @@
 """Package initialisation"""
 from importlib.metadata import version
-import yaml
 from pkgutil import get_data
+
+import yaml
+
 from pgfinder.utils import dict_to_decimal
 
 PARAMETERS_FILE = "config/parameters.yaml"

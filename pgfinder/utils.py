@@ -1,10 +1,9 @@
 """Utilities"""
+import logging
 from argparse import Namespace
 from decimal import Decimal
-import logging
 from pathlib import Path
-from typing import Union, Dict
-
+from typing import Dict, Union
 
 from pgfinder.logs.logs import LOGGER_NAME
 

@@ -1,17 +1,15 @@
 """PG Finder I/O operations"""
-from importlib.metadata import version
-import logging
-import tempfile
-from typing import Union, Dict
-from pathlib import Path, PurePath
-from datetime import datetime
 import io
-import sys
-import pandas as pd
+import logging
 import sqlite3
-import numpy as np
+import tempfile
+from datetime import datetime
+from importlib.metadata import version
+from pathlib import Path, PurePath
+from typing import Dict, Union
 
-import json
+import numpy as np
+import pandas as pd
 import yaml
 from yaml.error import YAMLError
 
@@ -23,29 +21,6 @@ except ImportError:
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
-
-
-def mass_libraries() -> Dict:
-    """
-    Loads built-in mass libraries from csv files as a dictionary.
-
-    `.csv` is chosen for consistency of data storage over the project.
-
-    Returns
-    -------
-    Dict
-        A dictionary mapping species name to mass libraries and their metadata
-    """
-    mass_lib_dir = Path(sys.modules[__package__].__file__).parent / "masses"
-    mass_lib_index = json.load(open(mass_lib_dir / "index.json"))
-    for species, libraries in mass_lib_index.items():
-        for library, data in libraries.items():
-            mass_lib_index[species][library]["Content"] = open(mass_lib_dir / data["File"], "rb").read()
-    breakpoint()
-
-
-# FIXME: Murder me...
-mass_libraries()
 
 
 def ms_file_reader(file) -> pd.DataFrame:

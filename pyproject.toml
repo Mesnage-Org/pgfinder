@@ -74,7 +74,7 @@ notebooks = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["pgfinder"]
+include = ["pgfinder", "pgfinder-gui"]
 exclude = ["tests"]
 
 [tool.setuptools_scm]
@@ -103,6 +103,9 @@ exclude = '''
   )/
 )
 '''
+
+[tool.isort]
+profile = "black"
 
 [tool.coverage.run]
 omit = [

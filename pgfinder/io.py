@@ -1,7 +1,7 @@
 """Functions for reading and writing data."""
 import logging
 from pathlib import Path
-from typing import Union, Dict
+from typing import Dict, Union
 
 from ruamel.yaml import YAML, YAMLError
 
