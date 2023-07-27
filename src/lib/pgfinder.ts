@@ -15,16 +15,15 @@ const pyio: Pyio = { ...defaultPyio };
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev51+g3b9749e-py3-none-any.whl');
+	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev52+gaaf2541-py3-none-any.whl');
 	await pyodide.runPythonAsync('from pgfinder.gui.shim import *');
 
-	let proxy = await pyodide.runPythonAsync('allowed_modifications()');
+	const proxy = await pyodide.runPythonAsync('allowed_modifications()');
 	const allowedModifications = proxy.toJs();
 	proxy.destroy();
 
-	proxy = await pyodide.runPythonAsync('mass_library_index()');
-	const massLibraries = proxy.toJs();
-	proxy.destroy();
+	const json = await pyodide.runPythonAsync('mass_library_index()');
+	const massLibraries = JSON.parse(json);
 
 	postMessage({
 		type: 'Ready',

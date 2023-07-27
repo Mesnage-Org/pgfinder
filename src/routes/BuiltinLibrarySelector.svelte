@@ -7,16 +7,16 @@
 </script>
 
 <Accordion autocollapse class="w-full">
-	{#each [...massLibraries] as [species, libraries], speciesId}
+	{#each Object.entries(massLibraries) as [species, libraries], speciesId}
 		<AccordionItem>
 			<svelte:fragment slot="summary">{species}</svelte:fragment>
 			<svelte:fragment slot="content">
 				<ListBox>
-					{#each [...libraries] as [name, library], libraryId}
+					{#each Object.entries(libraries) as [name, library], libraryId}
 						<ListBoxItem
 							bind:group={value}
 							name="mass-library"
-							value={{ name: library.get('File'), content: null }}
+							value={{ name: library['File'], content: null }}
 						>
 							<div class="flex items-center">
 								<p class="grow">{name}</p>
@@ -35,7 +35,7 @@
 								class="card p-4 variant-filled-secondary max-w-md"
 								data-popup="library{speciesId}{libraryId}"
 							>
-								<p class="text-center">{library.get('Description')}</p>
+								<p class="text-center">{library['Description']}</p>
 								<div class="arrow variant-filled-secondary" />
 							</div>
 						</ListBoxItem>

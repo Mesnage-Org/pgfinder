@@ -19,7 +19,14 @@ declare type Pyio = {
 };
 
 declare type MsgType = 'Ready' | 'Result';
-declare type MassLibraryIndex = Map<string, Map<string, Map<string, string>>>;
+declare type MassLibraryIndex = {
+	[index: string]: {
+		[index: string]: {
+			File: string;
+			Description: string;
+		};
+	};
+};
 declare type ReadyMsg = {
 	allowedModifications: Array<string>;
 	massLibraries: MassLibraryIndex;
