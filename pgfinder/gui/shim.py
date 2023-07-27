@@ -1,4 +1,3 @@
-import json
 from typing import Dict, List
 
 from pgfinder import matching, pgio, validation
@@ -10,7 +9,7 @@ from pgfinder.gui.internal import (
 
 
 def mass_library_index() -> Dict:
-    return json.load(open(MASS_LIB_DIR / "index.json"))
+    return open(MASS_LIB_DIR / "index.json").read()
 
 
 def allowed_modifications() -> List:
