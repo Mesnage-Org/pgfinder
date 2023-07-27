@@ -4,9 +4,10 @@ from unittest import TestCase
 
 import pandas as pd
 
+from pgfinder.gui.internal import ms_upload_reader, theo_masses_upload_reader
+
 # FIXME: Don't let this stick around!
 from pgfinder.pgio import long_to_wide, read_yaml
-from pgfinder_gui.shim import ms_upload_reader, theo_masses_upload_reader
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"

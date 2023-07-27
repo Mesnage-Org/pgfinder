@@ -7,7 +7,7 @@ import pandas as pd
 
 from pgfinder import pgio
 
-MASS_LIB_DIR = Path(sys.modules["pgfinder"].__file__).parent / "masses"
+MASS_LIB_DIR = Path(sys.modules[__package__].__file__).parent / "masses"
 
 
 def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
