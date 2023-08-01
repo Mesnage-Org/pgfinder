@@ -11,20 +11,6 @@ MASS_LIB_DIR = Path(sys.modules["pgfinder"].__file__).parent / "masses"
 
 
 def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading theoretical masses from an interactive jupyter notebook with a file upload widget.
-
-    Parameters
-    ----------
-    upload: dict
-        Dictionary of properties of a file uploaded using
-        `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
-
-    Returns
-    -------
-    pd.DataFrame
-        Pandas Dataframe of theoretical masses.
-    """
-
     filename = upload["name"]
     file_contents = open(MASS_LIB_DIR / filename, "rb").read() if upload["content"] is None else upload["content"]
 
@@ -35,19 +21,6 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 
 
 def ms_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget.
-
-    Parameters
-    ----------
-    upload: dict
-        Dictionary of properties of a file uploaded using
-       `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
-
-    Returns
-    -------
-    pd.DataFrame
-        Pandas DataFrame of mass information
-    """
     filename = upload["name"]
     file_contents = upload["content"]
     file_temp = tempfile.NamedTemporaryFile(delete=False)
