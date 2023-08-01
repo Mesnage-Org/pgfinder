@@ -1,15 +1,13 @@
 """PG Finder I/O operations"""
-from importlib.metadata import version
 import logging
-import tempfile
-from typing import Union, Dict
-from pathlib import Path, PurePath
-from datetime import datetime
-import io
-import pandas as pd
 import sqlite3
-import numpy as np
+from datetime import datetime
+from importlib.metadata import version
+from pathlib import Path, PurePath
+from typing import Dict, Union
 
+import numpy as np
+import pandas as pd
 import yaml
 from yaml.error import YAMLError
 
@@ -46,38 +44,6 @@ def ms_file_reader(file) -> pd.DataFrame:
 
     return_df.attrs["file"] = PurePath(filename).name
     LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
-    return return_df
-
-
-def ms_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading from an interactive jupyter notebook with a file upload widget.
-
-    Parameters
-    ----------
-    upload: dict
-        Dictionary of properties of a file uploaded using
-       `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
-
-    Returns
-    -------
-    pd.DataFrame
-        Pandas DataFrame of mass information
-    """
-    filename = upload["name"]
-    file_contents = upload["content"]
-    file_temp = tempfile.NamedTemporaryFile(delete=False)
-    file_temp.write(file_contents)
-    file = file_temp.name
-
-    if not filename.find("ftrs") == -1:
-        return_df = ftrs_reader(file)
-    elif not filename.find("txt") == -1:
-        return_df = maxquant_file_reader(file)
-    else:
-        raise ValueError("Unknown file type.")
-
-    return_df.attrs["file"] = PurePath(filename).name
-    LOGGER.info(f"Mass spectroscopy file loaded from  : {filename}")
     return return_df
 
 
@@ -150,31 +116,6 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
     theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     theo_masses_df.attrs["file"] = PurePath(input_file).name
     LOGGER.info(f"Theoretical masses loaded from     : {input_file}")
-    return theo_masses_df
-
-
-def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
-    """For reading theoretical masses from an interactive jupyter notebook with a file upload widget.
-
-    Parameters
-    ----------
-    upload: dict
-        Dictionary of properties of a file uploaded using
-        `ipywidgets <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20List.html#File-Upload>`_
-
-    Returns
-    -------
-    pd.DataFrame
-        Pandas Dataframe of theoretical masses.
-    """
-
-    filename = upload["name"]
-    file_contents = upload["content"]
-
-    theo_masses_df = pd.read_csv(io.BytesIO(file_contents))
-    theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
-    theo_masses_df.attrs["file"] = PurePath(filename).name
-    LOGGER.info(f"Theoretical masses loaded from     : {filename}")
     return theo_masses_df
 
 

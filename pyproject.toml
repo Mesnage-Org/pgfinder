@@ -72,16 +72,10 @@ notebooks = [
   "ipysheet"
 ]
 
-[tools.setuptools]
-include-package-data = true
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pgfinder"]
 exclude = ["tests"]
-
-[tools.setuptools.package-data]
-pgfinder = ["*.yaml"]
 
 [tool.setuptools_scm]
 write_to = "pgfinder/_version.py"
@@ -109,6 +103,9 @@ exclude = '''
   )/
 )
 '''
+
+[tool.isort]
+profile = "black"
 
 [tool.coverage.run]
 omit = [

@@ -2,8 +2,7 @@
 from decimal import Decimal
 from pathlib import Path
 
-
-from pgfinder.utils import convert_path, update_config, dict_to_decimal
+from pgfinder.utils import convert_path, dict_to_decimal, update_config
 
 
 def test_convert_path(tmpdir) -> None:

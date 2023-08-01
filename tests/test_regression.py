@@ -1,5 +1,6 @@
 """Regression test"""
 import pandas as pd
+
 import pgfinder.matching as matching
 import pgfinder.pgio as pgio
 import pgfinder.validation as validation

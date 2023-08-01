@@ -1,7 +1,6 @@
 """Test the matching process"""
-import pytest
-
 import pandas as pd
+import pytest
 
 import pgfinder.matching as matching
 from pgfinder.matching import calculate_ppm_delta, determine_most_likely_structure

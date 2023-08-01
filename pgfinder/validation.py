@@ -1,16 +1,19 @@
 """Functions for validation of data."""
-import logging
-from pathlib import Path
-from typing import Union, List
 import io
+import logging
 import pkgutil
+from pathlib import Path
+from typing import List, Union
+
 import numpy as np
 import pandas as pd
+
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
+# FIXME: This function doesn't even use its argument!
 def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifications.csv") -> List:
     """
     Loads allowable modifications from a csv file as a list.
