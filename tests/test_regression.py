@@ -17,7 +17,7 @@ def test_matching_mq_baseline(
     results = matching.data_analysis(mq_test_df, theo_masses_df, 0.5, mod_test, 10)
 
     output_filepath = pgio.dataframe_to_csv_metadata(
-        save_filepath=tmp_path, output_dataframe=results, filename="output_mq.csv"
+        save_filepath=tmp_path, output_dataframe=results, filename="output_mq.csv", wide=True
     )
     output_df = pd.read_csv(output_filepath, index_col=None)
     # Because versions change based on commits due to setuptools_scm we fix the version so tests are consistent
@@ -37,7 +37,7 @@ def test_matching_ftrs_baseline(
     results = matching.data_analysis(ftrs_test_df, theo_masses_df, 0.5, mod_test, 10)
 
     output_filepath = pgio.dataframe_to_csv_metadata(
-        save_filepath=tmp_path, output_dataframe=results, filename="output_ftrs.csv"
+        save_filepath=tmp_path, output_dataframe=results, filename="output_ftrs.csv", wide=True
     )
 
     output_df = pd.read_csv(output_filepath, index_col=None)
