@@ -35,11 +35,6 @@ repos:
       - id: isort
         args: ["--profile", "black", "--filter-files"]
   
-  - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.1
-    hooks:
-      - id: nbstripout
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: "v0.0.281"
