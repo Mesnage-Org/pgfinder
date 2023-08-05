@@ -104,9 +104,6 @@ exclude = '''
 )
 '''
 
-[tool.isort]
-profile = "black"
-
 [tool.coverage.run]
 omit = [
     "pgfinder/_version.py"
@@ -138,10 +135,9 @@ exclude = [
 # per-file-ignores = []
 line-length = 120
 target-version = "py38"
-# FIXME : Add isort ("I001") back in
-select = ["B", "E", "F", "W"]
+select = ["B", "E", "F", "W", "I001"]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["A", "B", "C", "D", "E", "F", "R", "S", "W", "U"]
+fixable = ["A", "B", "C", "D", "E", "F", "R", "S", "W", "U", "I001"]
 
 [project.scripts]
 find_pg = "pgfinder.find_pg:main"
