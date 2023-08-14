@@ -71,10 +71,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         ff.rename(
             columns={
                 "Id": "ID",
-                "ionCount": "Ion count",
-                "chargeOrder": "Charge state",
-                "xicStart": "XIC start (min)",
-                "xicEnd": "XIC end (min)",
+                "chargeOrder": "Charge",
                 "apexRetentionTimeMinutes": "RT (min)",
                 "apexMwMonoisotopic": "Obs (Da)",
                 "maxIntensity": "Intensity",
@@ -85,11 +82,8 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         # Reorder columns in dataframe to desired order, dropping unwanted columns
         cols_order = [
             "ID",
-            "Ion count",
-            "Charge state",
-            "XIC start (min)",
-            "XIC end (min)",
             "RT (min)",
+            "Charge",
             "Obs (Da)",
             "Theo (Da)",
             "Inferred structure",
@@ -146,9 +140,7 @@ def maxquant_file_reader(file):
         columns={
             "index": "ID",
             "Retention time": "RT (min)",
-            "Retention length": "RT (length)",
             "Mass": "Obs (Da)",
-            "Intensity": "Intensity",
         },
         inplace=True,
     )
@@ -156,7 +148,7 @@ def maxquant_file_reader(file):
     cols_order = [
         "ID",
         "RT (min)",
-        "RT (length)",
+        "Charge",
         "Obs (Da)",
         "Theo (Da)",
         "Inferred structure",
@@ -307,10 +299,7 @@ def long_to_wide(
     # up with duplicates from merging long with wide format data based on id var.
     keep_columns = [
         id,
-        "Ion count",
-        "Charge state",
-        "XIC start (min)",
-        "XIC end (min)",
+        "Charge",
         "RT (min)",
         "Obs (Da)",
         "Theo (Da)",
@@ -365,11 +354,8 @@ def long_to_wide(
     wide_df = wide_df[
         [
             "ID",
-            "Ion count",
-            "Charge state",
-            "XIC start (min)",
-            "XIC end (min)",
             "RT (min)",
+            "Charge",
             "Obs (Da)",
             "Theo (Da)",
             "Delta ppm",
