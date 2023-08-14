@@ -1,10 +1,10 @@
 Structure,Monoisotopicmass
 g(-Ac)m|0,456.195525
-g(-Ac)m~gm|0,934.375400
-g(-Ac)m~g(-Ac)m|0,892.364835
-g(-Ac)m~gm~gm|0,1412.555275
-g(-Ac)m~g(-Ac)m~gm|0,1370.544710
-g(-Ac)m~g(-Ac)m~g(-Ac)m|0,1328.534145
+g(-Ac)mgm|0,934.375400
+g(-Ac)mg(-Ac)m|0,892.364835
+g(-Ac)mgmgm|0,1412.555275
+g(-Ac)mg(-Ac)mgm|0,1370.544710
+g(-Ac)mg(-Ac)mg(-Ac)m|0,1328.534145
 g(-Ac)m-A|1,527.232639
 g(-Ac)m-AE|1,656.275232
 g(-Ac)m-AEJ|1,828.360024
