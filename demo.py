@@ -3,7 +3,7 @@ import pgfinder.pgio as pgio
 import pgfinder.validation as validation
 
 mq_filepath = "data/maxquant_test_data.txt"
-csv_filepath = "data/masses/e_coli_monomer_masses.csv"
+csv_filepath = "pgfinder/masses/e_coli_monomers_simple.csv"
 
 masses = pgio.ms_file_reader(mq_filepath)
 validation.validate_raw_data_df(masses)

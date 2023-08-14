@@ -85,7 +85,6 @@ def obs_theoretical_molecular_weights() -> pd.DataFrame:
 # test_regression.py fixtures
 @pytest.fixture
 def theo_masses_file_name():
-    #    return "data/masses/e_coli_monomer_masses.csv"
     return str(DATA_DIR / "masses" / "e_coli_monomer_masses.csv")
 
 
