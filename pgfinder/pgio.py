@@ -352,7 +352,7 @@ def long_to_wide(
     to_reshape["match"] = to_reshape.groupby(id).cumcount() + 1
 
     # Retain only those instances where there is an intensity_var, this removes secondary (tertiary or quarternay etc.)
-    # matches without the lowest detla-ppm. Need to track how many tied matches there are for tidying up.
+    # matches without the lowest delta-ppm. Need to track how many tied matches there are for tidying up.
     to_reshape = to_reshape[to_reshape[intensity_var].notna()]
     total_duplicate_matches = to_reshape["match"].max()
     to_reshape["match"] = to_reshape["match"].apply(str)
