@@ -218,7 +218,7 @@ def dataframe_to_csv(
         Dictionary of keyword args passed to pd.to_csv()
     """
     if wide:
-        output_dataframe = long_to_wide(df=output_dataframe.copy())
+        output_dataframe = pick_most_likely_structures(df=output_dataframe.copy())
     # Ensure "index" isn't a column and output as csv file.
     if "index" in output_dataframe.columns:
         output_dataframe.drop(columns=["index"], inplace=True)
@@ -266,7 +266,7 @@ def dataframe_to_csv_metadata(
         f"version : {_version}",
     ]
     if wide:
-        output_dataframe = long_to_wide(df=output_dataframe.copy())
+        output_dataframe = pick_most_likely_structures(df=output_dataframe.copy())
     # Add Metadata as first column
     output_dataframe = pd.concat([pd.DataFrame({"Metadata": metadata}), output_dataframe], axis=1)
     # Save the file to disk
@@ -319,80 +319,31 @@ def read_yaml(filename: Union[str, Path]) -> Dict:
             return {}
 
 
-def long_to_wide(
+def pick_most_likely_structures(
     df: pd.DataFrame,
+    min_ppm_distance: float = 1.0,
     id: str = "ID",
     structure_var: str = "Inferred structure",
     intensity_var: str = "Intensity",
 ) -> pd.DataFrame:
     """Convert long to wide format based on user specified id."""
-    # Subset the variables that are to be kept in long format for subsequent merging, adding counters so we don't end
-    # up with duplicates from merging long with wide format data based on id var.
-    keep_columns = [
-        id,
-        "Charge",
-        "RT (min)",
-        "Obs (Da)",
-        "Theo (Da)",
-        "Delta ppm",
-        structure_var,
-        intensity_var,
-    ]
-    keep_other = df[keep_columns].copy()
-    keep_other["match"] = keep_other.groupby(id).cumcount() + 1
 
-    # Subset the variables that need reshaping, adding counters
-    keep_reshape = [
-        id,
-        structure_var,
-        intensity_var,
-    ]
-    to_reshape = df[df[structure_var].notna()][keep_reshape]
-    to_reshape["match"] = to_reshape.groupby(id).cumcount() + 1
+    def add_most_likely_structure(group):
+        group.sort_values(by="Delta ppm", key=abs, inplace=True)
+        group.reset_index(drop=True, inplace=True)
 
-    # Retain only those instances where there is an intensity_var, this removes secondary (tertiary or quarternay etc.)
-    # matches without the lowest delta-ppm. Need to track how many tied matches there are for tidying up.
-    to_reshape = to_reshape[to_reshape[intensity_var].notna()]
-    total_duplicate_matches = to_reshape["match"].max()
-    to_reshape["match"] = to_reshape["match"].apply(str)
+        abs_min_ppm = group["Delta ppm"].loc[0]
+        abs_min_intensity = group["Intensity"].loc[0]
 
-    # Reshape to wide _only_ instances where there are two or more candidate matches,
-    # rename columns, drop the uneeded duplicate intensity columns
-    wide_df = pd.pivot(to_reshape, index=id, values=[structure_var, intensity_var], columns="match")
-    wide_df.columns = [" ".join(col).strip() for col in wide_df.columns.values]
-    wide_df.reset_index(inplace=True)
-    for x in range(2, total_duplicate_matches + 1):
-        wide_df.drop(" ".join([intensity_var, str(x)]), axis=1, inplace=True)
-    wide_df["match"] = 1
-    to_concatenate = [x for x in wide_df.columns if structure_var in x]
-    wide_df["Inferred structure (consolidated)"] = wide_df[to_concatenate].apply(
-        lambda row: ",   ".join(row.values.astype(str)), axis=1
-    )
-    wide_df["Inferred structure (consolidated)"] = wide_df["Inferred structure (consolidated)"].str.replace(
-        ",   nan", ""
-    )
-    wide_df.rename({"Intensity 1": "Intensity (consolidated)"}, axis=1, inplace=True)
-    wide_df.drop(columns=to_concatenate, inplace=True)
+        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < min_ppm_distance
+        min_ppm_structures = ",   ".join(group[structure_var].loc[min_ppm_structure_idxs])
 
-    # Merge with long format data
-    wide_df = keep_other.merge(wide_df, on=[id, "match"], how="outer")
-    wide_df.drop("match", axis=1, inplace=True)
-    wide_df.reset_index(drop=True, inplace=True)
-    # Forward-fill Intensity where there are differences in ppm (deliberately blank in long so not reshaped)
-    wide_df[intensity_var] = wide_df.groupby("ID")[intensity_var].ffill()
-    # Hack to get desired column order
-    wide_df = wide_df[
-        [
-            "ID",
-            "RT (min)",
-            "Charge",
-            "Obs (Da)",
-            "Theo (Da)",
-            "Delta ppm",
-            structure_var,
-            intensity_var,
-            "Inferred structure (consolidated)",
-            "Intensity (consolidated)",
-        ]
-    ]
-    return wide_df
+        group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
+        group.at[0, "Intensity (consolidated)"] = abs_min_intensity
+
+        return group
+
+    grouped_df = df.groupby("ID", as_index=False, sort=False)
+    most_likely = grouped_df.apply(add_most_likely_structure)
+
+    return most_likely.reset_index(drop=True)

@@ -5,7 +5,7 @@ from unittest import TestCase
 import pandas as pd
 
 from pgfinder.gui.internal import ms_upload_reader, theo_masses_upload_reader
-from pgfinder.pgio import long_to_wide, ms_file_reader, read_yaml
+from pgfinder.pgio import pick_most_likely_structures, ms_file_reader, read_yaml
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"
@@ -46,6 +46,6 @@ def test_long_to_wide() -> None:
     long_df = pd.read_csv(RESOURCES / "long_results.csv")
     wide_df = pd.read_csv(RESOURCES / "wide_results.csv")
 
-    reshaped_long_df = long_to_wide(long_df)
+    reshaped_long_df = pick_most_likely_structures(long_df)
 
     pd.testing.assert_frame_equal(reshaped_long_df, wide_df, check_dtype=False)

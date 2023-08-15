@@ -2,7 +2,6 @@
 import logging
 from decimal import Decimal
 
-import numpy as np
 import pandas as pd
 
 from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
@@ -440,7 +439,6 @@ def data_analysis(
     LOGGER.info("Cleaning data")
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
-    matched_data_df = determine_most_likely_structure(matched_data_df.reset_index(drop=True))
 
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
@@ -492,79 +490,4 @@ def calculate_ppm_delta(
     theoretical_position = column_order.index(theoretical) + 1
     df.insert(theoretical_position, diff, (1000000 * (df[observed] - df[theoretical])) / df[theoretical])
     LOGGER.info("Difference in PPM calculated.")
-    return df
-
-
-def determine_most_likely_structure(
-    df: pd.DataFrame,
-    observed_id: str = "ID",
-    inferred_structure: str = "Inferred structure",
-    diff: str = "Delta ppm",
-    intensity: str = "Intensity",
-) -> pd.DataFrame:
-    """Determine the most likely structure.
-
-    Parameters
-    ----------
-    df: pd.DataFrame
-        Pandas Data frame for modification.
-    observed_id: str
-        Variable (column) within dataframe that defines the ID of observed molecules.
-    inferred_structure: str
-        Variable (column) within dataframe that defines the molecule identifier.
-    diff: str
-        Variable (column) within the dataframe that defines the difference in Parts Per Million (PPM). Default
-    'Delta ppm'.
-    intensity: str
-        Variable (column) within dataframe that defines the intensity associated with matches.
-
-    Returns
-    -------
-    pd.DataFrame
-        Pandas Dataframe augmented with columns showing the most likely match (`lowest_ppm`) and the associated maximum
-    intensity. The rows are sorted by molecule ID and ordered by the absolute difference in PPM within each molecule.
-    """
-    # Find the absolute smallest ppm, retaining whether values are negative
-    abs_ppm = df[[observed_id, inferred_structure, diff]].copy()
-    abs_ppm["abs_diff"] = abs_ppm[diff].abs()
-    df["neg"] = np.where(df[diff] < 0, -1, 1)
-    min_ppm = abs_ppm[[observed_id, "abs_diff"]].groupby([observed_id]).min("abs_diff").reset_index()
-    min_ppm.columns = [observed_id, "min_abs_diff"]
-    abs_ppm = abs_ppm.merge(min_ppm[[observed_id, "min_abs_diff"]], on=observed_id, how="left")
-    abs_ppm = abs_ppm[[observed_id, "min_abs_diff"]].drop_duplicates()
-    df = df.merge(abs_ppm, on=observed_id, how="outer")
-    # Restore the sign of the smallest ppm and merge with original data
-    df["min_ppm"] = df["min_abs_diff"] * df["neg"]
-    # Derive the 'lowest ppm' — note that intensity is always the same for rows
-    # with the same ID, so there is no need select a "matching" intensity value
-    df["lowest Delta ppm"] = np.where(df[diff] == df["min_ppm"], df[diff], np.nan)
-    df["Intensity"] = df[intensity]
-    # Remove temporary variables and sort (NaN > anything else)
-    df["abs_diff"] = df[diff].abs()
-    df["has_inferred_structure"] = np.where(df[inferred_structure].notna(), 1, 2)
-    df["has_ppm"] = np.where(df["lowest Delta ppm"].notna(), 1, 2)
-    df.sort_values(
-        by=[
-            "has_inferred_structure",
-            observed_id,
-            "has_ppm",
-            "min_abs_diff",
-        ],
-        inplace=True,
-        ascending=[True, True, True, False],
-    )
-    df.drop(
-        [
-            "neg",
-            "min_abs_diff",
-            "min_ppm",
-            "abs_diff",
-            "has_inferred_structure",
-            "has_ppm",
-        ],
-        axis=1,
-        inplace=True,
-    )
-    # Convert data types
-    df = df.convert_dtypes()
     return df
