@@ -339,7 +339,6 @@ def long_to_wide(
         intensity_var,
     ]
     keep_other = df[keep_columns].copy()
-    # keep_other.rename({intensity_var: intensity_var + " (All)"}, axis=1, inplace=True)
     keep_other["match"] = keep_other.groupby(id).cumcount() + 1
 
     # Subset the variables that need reshaping, adding counters
