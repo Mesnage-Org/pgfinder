@@ -83,35 +83,6 @@ j`.
 The results have the same name as the input file but with the extension `.csv`. This can be opened in statistical
 software or spreadsheets for subsequent viewing.
 
-### Clearing Cache
-
-This implementation using Pyodide/WASM is relatively new and in doing so the browser caches (stores a locally copy) of
-the Python environment it has installed and will load this again when you revisit the site as its faster. If you
-encounter problems or know that a new version of PGFinder has been released to PyPI (see [Releases]() for details) you
-should clear the cache of your browser which will force PGFinder and its dependencies to be installed anew from PyPI.
-
-#### Firefox
-
-Instructions on clearing the cache for a single site for [Firefox](https://superuser.com/a/733154). Alternatively
-click on the padlock to the left of the address bar and select `Clear cookies and site data...`. Then refresh the page
-by pressing `F5`.
-
-
-#### Chrome/Chromium
-
-Instructions on clearing the cache for a single site for
-[Chrome/Chromium](https://www.guidingtech.com/clear-chrome-cookies-cache-one-site-only/) areavaiable, but you can use
-the shortcut of pressing `Shift + F5`
-
-#### Opera
-
-Instructions on clearing the cache for a single site for [Opera](https://forums.opera.com/post/229032). Alternatively
-clock on the padlock to the left of the address bar and select `Site settings` then clock on the `Clear data`
-button. Then refresh the page by pressing `F5`.
-
-
-
-
 ## Command Line
 
 If you wish to use the command line version you will have to follow the [installation](installation.md) instructions to
