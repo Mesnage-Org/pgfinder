@@ -68,7 +68,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         ff["Inferred structure"] = np.nan
         ff["Theo (Da)"] = np.nan
         # Renames columns to expected column heading required for data_analysis function
-        byos_52_columns = [
+        ftrs_52_columns = [
             "Id",
             "apexRetentionTime",
             "charges",
@@ -76,7 +76,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             "apexIntensity",
         ]
 
-        byos_311_columns = [
+        ftrs_311_columns = [
             "Id",
             "apexRetentionTimeMinutes",
             "chargeOrder",
@@ -92,22 +92,22 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             "Intensity",
         ]
 
-        is_byos_52 = set(byos_52_columns).issubset(ff.columns)
-        is_byos_311 = set(byos_311_columns).issubset(ff.columns)
+        is_ftrs_52 = set(ftrs_52_columns).issubset(ff.columns)
+        is_ftrs_311 = set(ftrs_311_columns).issubset(ff.columns)
 
-        if is_byos_52:
+        if is_ftrs_52:
             ff.rename(
-                columns=dict(zip(byos_52_columns, pgfinder_columns)),
+                columns=dict(zip(ftrs_52_columns, pgfinder_columns)),
                 inplace=True,
             )
-        elif is_byos_311:
+        elif is_ftrs_311:
             ff.rename(
-                columns=dict(zip(byos_311_columns, pgfinder_columns)),
+                columns=dict(zip(ftrs_311_columns, pgfinder_columns)),
                 inplace=True,
             )
         else:
             raise ValueError(
-                "The supplied FTRS file could not be read! Did it come from an unsupported version of Byos?"
+                "The supplied FTRS file could not be read! Did it come from an unsupported version of ftrs?"
             )
 
         # Reorder columns in dataframe to desired order, dropping unwanted columns
