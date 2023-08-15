@@ -107,7 +107,7 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             )
         else:
             raise ValueError(
-                "The supplied FTRS file could not be read! Did it come from an unsupported version of ftrs?"
+                "The supplied FTRS file could not be read! Did it come from an unsupported version of Byos?"
             )
 
         # Reorder columns in dataframe to desired order, dropping unwanted columns
