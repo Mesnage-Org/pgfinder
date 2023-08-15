@@ -5,10 +5,14 @@ from unittest import TestCase
 import pandas as pd
 
 from pgfinder.gui.internal import ms_upload_reader, theo_masses_upload_reader
-from pgfinder.pgio import long_to_wide, read_yaml
+from pgfinder.pgio import long_to_wide, ms_file_reader, read_yaml
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"
+
+
+def test_ms_file_reader(ftrs_file_name):
+    assert isinstance(ms_file_reader(ftrs_file_name), pd.DataFrame)
 
 
 def test_ms_upload_reader(ipywidgets_upload_output):
