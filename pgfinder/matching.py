@@ -451,7 +451,8 @@ def data_analysis(
     cleaned_data_df.attrs["modifications"] = enabled_mod_list
     cleaned_data_df.attrs["ppm"] = user_ppm
 
-    cleaned_data_df.reset_index(inplace=True)
+    cleaned_data_df.sort_values(by=["Intensity"], ascending=False, inplace=True)
+    cleaned_data_df.reset_index(drop=True, inplace=True)
 
     # Apply some post-processing to the results
     final_df = pick_most_likely_structures(cleaned_data_df)
@@ -520,7 +521,12 @@ def pick_most_likely_structures(
 
         return group
 
-    grouped_df = df.groupby("ID", as_index=False, sort=False)
+    matched_rows = df[df["Inferred structure"].notnull()]
+    unmatched_rows = df[df["Inferred structure"].isnull()]
+
+    grouped_df = matched_rows.groupby("ID", as_index=False, sort=False)
     most_likely = grouped_df.apply(add_most_likely_structure)
 
-    return most_likely.reset_index(drop=True)
+    merged_df = pd.concat([most_likely, unmatched_rows])
+
+    return merged_df.reset_index(drop=True)
