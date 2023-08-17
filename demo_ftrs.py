@@ -28,7 +28,7 @@ mod_test = [
 results = matching.data_analysis(masses, theo_masses, 0.5, mod_test, 10)
 
 print(f"File            : {results.attrs['file']}")
-print(f"Masses File     : {results.attrs['file']}")
+print(f"Masses File     : {results.attrs['masses_file']}")
 print(f"rt_window       : {results.attrs['rt_window']}")
 print(f"modifications   : {results.attrs['modifications']}")
 print(f"ppm             : {results.attrs['ppm']}")

@@ -121,9 +121,9 @@ def mq_test_df(mq_file_name):
     return pgio.ms_file_reader(mq_file_name)
 
 
-@pytest.fixture
-def ftrs_file_name():
-    return str(DATA_DIR / "ftrs_test_data.ftrs")
+@pytest.fixture(params=["ftrs_test_data_5.2.ftrs", "ftrs_test_data_3.11.ftrs"])
+def ftrs_file_name(request):
+    return str(DATA_DIR / request.param)
 
 
 @pytest.fixture
