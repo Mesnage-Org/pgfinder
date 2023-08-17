@@ -504,7 +504,27 @@ def pick_most_likely_structures(
     structure_var: str = "Inferred structure",
     intensity_var: str = "Intensity",
 ) -> pd.DataFrame:
-    """Convert long to wide format based on user specified id."""
+    """Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        DataFrame of structures to be processed.
+    min_ppm_distance: float
+        Minimum Parts Per Million tolerance distinguishing matches.
+    id: str
+        Variable defining the identity.
+    structure_var: str
+        Structure variable name.
+    intensity_var: str
+        Intensity variable name.
+
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe of matches within the specified tolerance. Candidates that are not matched are included
+        in the file for completeness.
+    """
 
     def add_most_likely_structure(group):
         group.sort_values(by="Delta ppm", key=abs, inplace=True)
