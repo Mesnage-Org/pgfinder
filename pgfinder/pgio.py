@@ -196,7 +196,6 @@ def dataframe_to_csv_metadata(
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
     float_format: str = "%.4f",
-    **kwargs,
 ) -> Union[str, Path]:
     """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
     return the .csv in the form of a string.
@@ -211,8 +210,6 @@ def dataframe_to_csv_metadata(
         Filename to save to.
     float_format: str
         Format for floating point numbers (default 4 decimal places)
-    **kwargs
-        Dictionary of keyword args passed to pd.to_csv()
 
     Returns
     -------

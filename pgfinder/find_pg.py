@@ -102,7 +102,6 @@ def process_file(
         output_dataframe=results,
         filename=filename,
         float_format=f"%.{float_format}f",
-        wide=True,
     )
     LOGGER.info(f"Results with metadata saved to      : {output_dir}/{filename}")
 
