@@ -12,7 +12,6 @@ import yaml
 from pgfinder.logs.logs import LOGGER_NAME, setup_logger
 from pgfinder.matching import data_analysis
 from pgfinder.pgio import (
-    dataframe_to_csv,
     dataframe_to_csv_metadata,
     default_filename,
     ms_file_reader,
@@ -106,14 +105,6 @@ def process_file(
         wide=True,
     )
     LOGGER.info(f"Results with metadata saved to      : {output_dir}/{filename}")
-    dataframe_to_csv(
-        save_filepath=output_dir,
-        filename="results.csv",
-        output_dataframe=results,
-        float_format=f"%.{float_format}f",
-        wide=True,
-    )
-    LOGGER.info(f"Results saved to                    : {output_dir / 'results.csv'}")
 
 
 def main():

@@ -452,7 +452,10 @@ def data_analysis(
     cleaned_data_df.attrs["ppm"] = user_ppm
 
     cleaned_data_df.reset_index(inplace=True)
-    return cleaned_data_df
+
+    # Apply some post-processing to the results
+    final_df = pick_most_likely_structures(cleaned_data_df)
+    return final_df
 
 
 def calculate_ppm_delta(
@@ -491,3 +494,33 @@ def calculate_ppm_delta(
     df.insert(theoretical_position, diff, (1000000 * (df[observed] - df[theoretical])) / df[theoretical])
     LOGGER.info("Difference in PPM calculated.")
     return df
+
+
+def pick_most_likely_structures(
+    df: pd.DataFrame,
+    min_ppm_distance: float = 1.0,
+    id: str = "ID",
+    structure_var: str = "Inferred structure",
+    intensity_var: str = "Intensity",
+) -> pd.DataFrame:
+    """Convert long to wide format based on user specified id."""
+
+    def add_most_likely_structure(group):
+        group.sort_values(by="Delta ppm", key=abs, inplace=True)
+        group.reset_index(drop=True, inplace=True)
+
+        abs_min_ppm = group["Delta ppm"].loc[0]
+        abs_min_intensity = group["Intensity"].loc[0]
+
+        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < min_ppm_distance
+        min_ppm_structures = ",   ".join(group[structure_var].loc[min_ppm_structure_idxs])
+
+        group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
+        group.at[0, "Intensity (consolidated)"] = abs_min_intensity
+
+        return group
+
+    grouped_df = df.groupby("ID", as_index=False, sort=False)
+    most_likely = grouped_df.apply(add_most_likely_structure)
+
+    return most_likely.reset_index(drop=True)

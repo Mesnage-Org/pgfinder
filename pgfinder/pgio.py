@@ -191,46 +191,11 @@ def maxquant_file_reader(file):
     return maxquant_df
 
 
-def dataframe_to_csv(
-    save_filepath: Union[str, Path],
-    filename: str,
-    output_dataframe: pd.DataFrame,
-    float_format: str = "%.4f",
-    wide: bool = False,
-    **kwargs,
-) -> None:
-    """
-    Writes dataframe to csv file at desired file location
-
-    Parameters
-    ----------
-    save_filepath: Union[str, Path]
-        Directory to save tile to.
-    filename: str
-        Filename to save file to.
-    output_dataframe: pd.DataFrame
-        Pandas Dataframe to write to csv
-    float_format: str
-        Format for floating point numbers (default 4 decimal places)
-    wide: bool
-        Whether to reshape the data to wide format before writing to CSV.
-    **kwargs
-        Dictionary of keyword args passed to pd.to_csv()
-    """
-    if wide:
-        output_dataframe = pick_most_likely_structures(df=output_dataframe.copy())
-    # Ensure "index" isn't a column and output as csv file.
-    if "index" in output_dataframe.columns:
-        output_dataframe.drop(columns=["index"], inplace=True)
-    output_dataframe.to_csv(Path(save_filepath) / filename, index=False, float_format=float_format)
-
-
 def dataframe_to_csv_metadata(
     output_dataframe: pd.DataFrame,
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
     float_format: str = "%.4f",
-    wide: bool = False,
     **kwargs,
 ) -> Union[str, Path]:
     """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
@@ -246,8 +211,6 @@ def dataframe_to_csv_metadata(
         Filename to save to.
     float_format: str
         Format for floating point numbers (default 4 decimal places)
-    wide: bool
-        Whether to reshape the data to wide format before writing to CSV.
     **kwargs
         Dictionary of keyword args passed to pd.to_csv()
 
@@ -265,8 +228,6 @@ def dataframe_to_csv_metadata(
         f"ppm : {output_dataframe.attrs['ppm']}",
         f"version : {_version}",
     ]
-    if wide:
-        output_dataframe = pick_most_likely_structures(df=output_dataframe.copy())
     # Add Metadata as first column
     output_dataframe = pd.concat([pd.DataFrame({"Metadata": metadata}), output_dataframe], axis=1)
     # Save the file to disk
@@ -317,33 +278,3 @@ def read_yaml(filename: Union[str, Path]) -> Dict:
         except YAMLError as exception:
             LOGGER.error(exception)
             return {}
-
-
-def pick_most_likely_structures(
-    df: pd.DataFrame,
-    min_ppm_distance: float = 1.0,
-    id: str = "ID",
-    structure_var: str = "Inferred structure",
-    intensity_var: str = "Intensity",
-) -> pd.DataFrame:
-    """Convert long to wide format based on user specified id."""
-
-    def add_most_likely_structure(group):
-        group.sort_values(by="Delta ppm", key=abs, inplace=True)
-        group.reset_index(drop=True, inplace=True)
-
-        abs_min_ppm = group["Delta ppm"].loc[0]
-        abs_min_intensity = group["Intensity"].loc[0]
-
-        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < min_ppm_distance
-        min_ppm_structures = ",   ".join(group[structure_var].loc[min_ppm_structure_idxs])
-
-        group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
-        group.at[0, "Intensity (consolidated)"] = abs_min_intensity
-
-        return group
-
-    grouped_df = df.groupby("ID", as_index=False, sort=False)
-    most_likely = grouped_df.apply(add_most_likely_structure)
-
-    return most_likely.reset_index(drop=True)
