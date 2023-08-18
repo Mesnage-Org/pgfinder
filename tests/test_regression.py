@@ -14,7 +14,7 @@ def test_matching_mq_baseline(
     validation.validate_raw_data_df(mq_test_df)
     validation.validate_theo_masses_df(theo_masses_df)
 
-    results = matching.data_analysis(mq_test_df, theo_masses_df, 0.5, mod_test, 10)
+    results = matching.data_analysis(mq_test_df, theo_masses_df, 0.5, mod_test, 10, 1)
 
     output_filepath = pgio.dataframe_to_csv_metadata(
         save_filepath=tmp_path, output_dataframe=results, filename="output_mq.csv"
@@ -34,7 +34,7 @@ def test_matching_ftrs_baseline(
     validation.validate_raw_data_df(ftrs_test_df)
     validation.validate_theo_masses_df(theo_masses_df)
 
-    results = matching.data_analysis(ftrs_test_df, theo_masses_df, 0.5, mod_test, 10)
+    results = matching.data_analysis(ftrs_test_df, theo_masses_df, 0.5, mod_test, 10, 1)
 
     output_filepath = pgio.dataframe_to_csv_metadata(
         save_filepath=tmp_path, output_dataframe=results, filename="output_ftrs.csv"

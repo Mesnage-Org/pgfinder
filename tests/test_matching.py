@@ -35,6 +35,6 @@ def test_pick_most_likely_structures() -> None:
     long_df = pd.read_csv(RESOURCES / "long_results.csv")
     wide_df = pd.read_csv(RESOURCES / "wide_results.csv")
 
-    reshaped_long_df = pick_most_likely_structures(long_df)
+    reshaped_long_df = pick_most_likely_structures(long_df, 1)
 
     pd.testing.assert_frame_equal(reshaped_long_df, wide_df, check_dtype=False)

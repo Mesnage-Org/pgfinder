@@ -34,6 +34,13 @@ def create_parser() -> arg.ArgumentParser:
     )
     parser.add_argument("--input_file", dest="input_file", required=False, help="Input File")
     parser.add_argument("--ppm_tolerance", dest="ppm_tolerance", type=float, required=False, help="PPM Toleraance.")
+    parser.add_argument(
+        "--consolidation_ppm",
+        dest="consolidation_ppm",
+        type=float,
+        required=False,
+        help="Minimum ppm distance for likely-structure picking.",
+    )
     parser.add_argument("--masses_file", dest="masses_file", type=str, required=False, help="Theoretical masses file.")
     parser.add_argument("--time_delta", dest="time_delta", type=int, required=False, help="Time delta.")
     parser.add_argument("--mod_list", dest="mod_list", type=list, required=False, help="Module List.")
@@ -51,8 +58,9 @@ def process_file(
     input_file: Union[str, Path],
     masses_file: Union[str, Path],
     mod_list: list,
-    ppm_tolerance: float = 0.5,
-    time_delta: int = 10,
+    ppm_tolerance: float = 10,
+    consolidation_ppm: float = 1,
+    time_delta: int = 0.5,
     output_dir: Union[str, Path] = "./",
     float_format: int = 4,
     to_csv: dict = None,
@@ -93,7 +101,8 @@ def process_file(
         theo_masses_df=masses,
         rt_window=time_delta,
         enabled_mod_list=mod_list,
-        user_ppm=ppm_tolerance,
+        ppm_tolerance=ppm_tolerance,
+        consolidation_ppm=consolidation_ppm,
     )
     LOGGER.info("Processing complete!")
     filename = default_filename()
@@ -140,11 +149,11 @@ def main():
         input_file=config["input_file"],
         masses_file=config["masses_file"],
         ppm_tolerance=config["ppm_tolerance"],
+        consolidation_ppm=config["consolidation_ppm"],
         time_delta=config["time_delta"],
         mod_list=config["mod_list"],
         output_dir=config["output_dir"],
         float_format=config["float_format"],
-        # to_csv=config["to_csv"],
     )
 
 

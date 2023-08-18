@@ -303,7 +303,8 @@ def data_analysis(
     theo_masses_df: pd.DataFrame,
     rt_window: float,
     enabled_mod_list: list,
-    user_ppm=int,
+    ppm_tolerance: float,
+    consolidation_ppm: float,
 ) -> pd.DataFrame:
     """Perform analysis.
 
@@ -317,8 +318,10 @@ def data_analysis(
         ?
     enabled_mod_list : list
         List of modules to enable.
-    user_ppm : int
-        ?
+    ppm_tolerance : float
+        The ppm tolerance used when matching the theoretical masses of structures to observed ions
+    consolidation_ppm : float
+        The minimum ppm difference between two matches before one is picked as "most likely" over the other
 
     Returns
     -------
@@ -336,7 +339,7 @@ def data_analysis(
     ff = raw_data_df
 
     LOGGER.info("Filtering theoretical masses by observed masses")
-    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=user_ppm)
+    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=ppm_tolerance)
     # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
     #         possible that there are multiple types listed in the enbaled_mod_list?
     # FIXME : Tests of the impacts here are poor.
@@ -344,17 +347,17 @@ def data_analysis(
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     elif "multimers_Glyco" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 1)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     elif "Multimers_Lac" in enabled_mod_list:
         LOGGER.info("Building multimers_Lac from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 2)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     else:
         obs_multimers_df = pd.DataFrame()
 
@@ -436,7 +439,7 @@ def data_analysis(
     master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Theo (Da)": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_frame, user_ppm)
+    matched_data_df = matching(ff, master_frame, ppm_tolerance)
     LOGGER.info("Cleaning data")
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
@@ -450,13 +453,13 @@ def data_analysis(
     cleaned_data_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
     cleaned_data_df.attrs["rt_window"] = rt_window
     cleaned_data_df.attrs["modifications"] = enabled_mod_list
-    cleaned_data_df.attrs["ppm"] = user_ppm
+    cleaned_data_df.attrs["ppm"] = ppm_tolerance
 
     cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
     cleaned_data_df.reset_index(drop=True, inplace=True)
 
     # Apply some post-processing to the results
-    final_df = pick_most_likely_structures(cleaned_data_df)
+    final_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
     return final_df
 
 
@@ -500,7 +503,7 @@ def calculate_ppm_delta(
 
 def pick_most_likely_structures(
     df: pd.DataFrame,
-    min_ppm_distance: float = 1.0,
+    consolidation_ppm: float,
 ) -> pd.DataFrame:
     """Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
 
@@ -508,7 +511,7 @@ def pick_most_likely_structures(
     ----------
     df: pd.DataFrame
         DataFrame of structures to be processed.
-    min_ppm_distance: float
+    consolidation_ppm: float
         Minimum Parts Per Million tolerance distinguishing matches.
 
     Returns
@@ -532,7 +535,7 @@ def pick_most_likely_structures(
         abs_min_ppm = group["Delta ppm"].loc[0]
         abs_min_intensity = group["Intensity"].loc[0]
 
-        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < min_ppm_distance
+        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < consolidation_ppm
         min_ppm_structures = ",   ".join(group["Inferred structure"].loc[min_ppm_structure_idxs])
 
         group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
