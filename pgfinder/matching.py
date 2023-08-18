@@ -501,9 +501,6 @@ def calculate_ppm_delta(
 def pick_most_likely_structures(
     df: pd.DataFrame,
     min_ppm_distance: float = 1.0,
-    id: str = "ID",
-    structure_var: str = "Inferred structure",
-    intensity_var: str = "Intensity",
 ) -> pd.DataFrame:
     """Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
 
@@ -513,12 +510,6 @@ def pick_most_likely_structures(
         DataFrame of structures to be processed.
     min_ppm_distance: float
         Minimum Parts Per Million tolerance distinguishing matches.
-    id: str
-        Variable defining the identity.
-    structure_var: str
-        Structure variable name.
-    intensity_var: str
-        Intensity variable name.
 
     Returns
     -------
@@ -542,7 +533,7 @@ def pick_most_likely_structures(
         abs_min_intensity = group["Intensity"].loc[0]
 
         min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < min_ppm_distance
-        min_ppm_structures = ",   ".join(group[structure_var].loc[min_ppm_structure_idxs])
+        min_ppm_structures = ",   ".join(group["Inferred structure"].loc[min_ppm_structure_idxs])
 
         group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
         group.at[0, "Intensity (consolidated)"] = abs_min_intensity
