@@ -452,7 +452,7 @@ def data_analysis(
     cleaned_data_df.attrs["modifications"] = enabled_mod_list
     cleaned_data_df.attrs["ppm"] = user_ppm
 
-    cleaned_data_df.sort_values(by=["Intensity"], ascending=False, inplace=True)
+    cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
     cleaned_data_df.reset_index(drop=True, inplace=True)
 
     # Apply some post-processing to the results
