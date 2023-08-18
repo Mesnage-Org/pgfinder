@@ -3,6 +3,7 @@ import logging
 from decimal import Decimal
 
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 
 from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
 from pgfinder.logs.logs import LOGGER_NAME
@@ -527,7 +528,14 @@ def pick_most_likely_structures(
     """
 
     def add_most_likely_structure(group):
-        group.sort_values(by="Delta ppm", key=abs, inplace=True)
+        # Sort by lowest absolute ppm first, then break ties with structures (short to long)
+        group.sort_values(
+            by=["Delta ppm", "Inferred structure"],
+            ascending=[True, False],
+            key=lambda k: abs(k) if is_numeric_dtype(k) else k,
+            inplace=True,
+            kind="stable",
+        )
         group.reset_index(drop=True, inplace=True)
 
         abs_min_ppm = group["Delta ppm"].loc[0]
