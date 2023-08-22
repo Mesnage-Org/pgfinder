@@ -535,7 +535,7 @@ def pick_most_likely_structures(
         abs_min_ppm = group["Delta ppm"].loc[0]
         abs_min_intensity = group["Intensity"].loc[0]
 
-        min_ppm_structure_idxs = abs(abs_min_ppm - group["Delta ppm"]) < consolidation_ppm
+        min_ppm_structure_idxs = abs(abs(abs_min_ppm) - abs(group["Delta ppm"])) < consolidation_ppm
         min_ppm_structures = ",   ".join(group["Inferred structure"].loc[min_ppm_structure_idxs])
 
         group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
