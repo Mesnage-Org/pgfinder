@@ -39,7 +39,7 @@ def create_parser() -> arg.ArgumentParser:
         dest="consolidation_ppm",
         type=float,
         required=False,
-        help="Minimum ppm distance for likely-structure picking.",
+        help="Maximum absolute ppm distance between consolidated structures.",
     )
     parser.add_argument("--masses_file", dest="masses_file", type=str, required=False, help="Theoretical masses file.")
     parser.add_argument("--time_delta", dest="time_delta", type=int, required=False, help="Time delta.")
