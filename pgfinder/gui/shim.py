@@ -33,6 +33,6 @@ def run_analysis():
         matched = matching.data_analysis(
             ms_data, theo_masses, cleanupWindow, enabledModifications, ppmTolerance, consolidationPpm
         )
-        return pgio.dataframe_to_csv_metadata(matched, wide=True)
+        return pgio.dataframe_to_csv_metadata(matched)
 
     return {f["name"]: analyze(f) for f in msData.to_py()}
