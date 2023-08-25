@@ -16,6 +16,7 @@ declare type Pyio = {
 	enabledModifications: Array<string>;
 	ppmTolerance: number;
 	cleanupWindow: number;
+	consolidationPpm: number;
 };
 
 declare type MsgType = 'Ready' | 'Result';

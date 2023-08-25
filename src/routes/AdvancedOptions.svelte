@@ -5,6 +5,7 @@
 	export let allowedModifications: Array<string> | undefined;
 	export let ppmTolerance: number;
 	export let cleanupWindow: number;
+	export let consolidationPpm: number;
 </script>
 
 <Accordion class="w-full">
@@ -27,8 +28,30 @@
 					step="0.1"
 					min="0"
 				/>
-				<div class="card p-4 variant-filled-secondary" data-popup="cleanupTooltip">
+				<div class="card p-4 variant-filled-secondary max-w-md" data-popup="cleanupTooltip">
 					<p>Set time window for in-source decay and salt adduct cleanup</p>
+					<div class="arrow variant-filled-secondary" />
+				</div>
+			</div>
+
+			<div class="flex flex-col items-center">
+				<h5 class="pb-1 h5">Consolidation PPM</h5>
+				<input
+					bind:value={consolidationPpm}
+					use:popup={{ event: 'hover', target: 'consolidationTooltip', placement: 'top' }}
+					class="input"
+					type="number"
+					step="1"
+					min="0"
+					max={ppmTolerance}
+				/>
+				<div class="card p-4 variant-filled-secondary max-w-md" data-popup="consolidationTooltip">
+					<p>
+						During consolidation, structures with the lowest absolute ppm are selected over those
+						farther from the theoretical mass — if two or more matches are nearly equidistant from
+						the theoretical mass, less than the Consolidation PPM apart, then both matches are
+						retained
+					</p>
 					<div class="arrow variant-filled-secondary" />
 				</div>
 			</div>

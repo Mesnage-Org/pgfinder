@@ -49,6 +49,7 @@
 				bind:enabledModifications={pyio.enabledModifications}
 				bind:ppmTolerance={pyio.ppmTolerance}
 				bind:cleanupWindow={pyio.cleanupWindow}
+				bind:consolidationPpm={pyio.consolidationPpm}
 				{allowedModifications}
 			/>
 			<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>

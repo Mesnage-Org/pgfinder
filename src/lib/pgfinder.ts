@@ -15,7 +15,7 @@ const pyio: Pyio = { ...defaultPyio };
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev101+g8791d77-py3-none-any.whl');
+	await micropip.install('/pgfinder-gui/pgfinder-0.0.4.dev113+gac9830b-py3-none-any.whl');
 	await pyodide.runPythonAsync('from pgfinder.gui.shim import *');
 
 	const proxy = await pyodide.runPythonAsync('allowed_modifications()');
