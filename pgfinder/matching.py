@@ -321,7 +321,7 @@ def data_analysis(
     ppm_tolerance : float
         The ppm tolerance used when matching the theoretical masses of structures to observed ions
     consolidation_ppm : float
-        The minimum ppm difference between two matches before one is picked as "most likely" over the other
+        The minimum absolute ppm difference between two matches before one is picked as "most likely" over the other
 
     Returns
     -------
