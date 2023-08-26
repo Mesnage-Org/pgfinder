@@ -191,47 +191,11 @@ def maxquant_file_reader(file):
     return maxquant_df
 
 
-def dataframe_to_csv(
-    save_filepath: Union[str, Path],
-    filename: str,
-    output_dataframe: pd.DataFrame,
-    float_format: str = "%.4f",
-    wide: bool = False,
-    **kwargs,
-) -> None:
-    """
-    Writes dataframe to csv file at desired file location
-
-    Parameters
-    ----------
-    save_filepath: Union[str, Path]
-        Directory to save tile to.
-    filename: str
-        Filename to save file to.
-    output_dataframe: pd.DataFrame
-        Pandas Dataframe to write to csv
-    float_format: str
-        Format for floating point numbers (default 4 decimal places)
-    wide: bool
-        Whether to reshape the data to wide format before writing to CSV.
-    **kwargs
-        Dictionary of keyword args passed to pd.to_csv()
-    """
-    if wide:
-        output_dataframe = long_to_wide(df=output_dataframe.copy())
-    # Ensure "index" isn't a column and output as csv file.
-    if "index" in output_dataframe.columns:
-        output_dataframe.drop(columns=["index"], inplace=True)
-    output_dataframe.to_csv(Path(save_filepath) / filename, index=False, float_format=float_format)
-
-
 def dataframe_to_csv_metadata(
     output_dataframe: pd.DataFrame,
     save_filepath: Union[str, Path] = None,
     filename: Union[str, Path] = None,
     float_format: str = "%.4f",
-    wide: bool = False,
-    **kwargs,
 ) -> Union[str, Path]:
     """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
     return the .csv in the form of a string.
@@ -246,10 +210,6 @@ def dataframe_to_csv_metadata(
         Filename to save to.
     float_format: str
         Format for floating point numbers (default 4 decimal places)
-    wide: bool
-        Whether to reshape the data to wide format before writing to CSV.
-    **kwargs
-        Dictionary of keyword args passed to pd.to_csv()
 
     Returns
     -------
@@ -265,8 +225,6 @@ def dataframe_to_csv_metadata(
         f"ppm : {output_dataframe.attrs['ppm']}",
         f"version : {_version}",
     ]
-    if wide:
-        output_dataframe = long_to_wide(df=output_dataframe.copy())
     # Add Metadata as first column
     output_dataframe = pd.concat([pd.DataFrame({"Metadata": metadata}), output_dataframe], axis=1)
     # Save the file to disk
@@ -317,83 +275,3 @@ def read_yaml(filename: Union[str, Path]) -> Dict:
         except YAMLError as exception:
             LOGGER.error(exception)
             return {}
-
-
-def long_to_wide(
-    df: pd.DataFrame,
-    id: str = "ID",
-    structure_var: str = "Inferred structure",
-    intensity_var: str = "Intensity",
-) -> pd.DataFrame:
-    """Convert long to wide format based on user specified id."""
-    # Subset the variables that are to be kept in long format for subsequent merging, adding counters so we don't end
-    # up with duplicates from merging long with wide format data based on id var.
-    keep_columns = [
-        id,
-        "Charge",
-        "RT (min)",
-        "Obs (Da)",
-        "Theo (Da)",
-        "Delta ppm",
-        structure_var,
-        intensity_var,
-    ]
-    keep_other = df[keep_columns].copy()
-    # keep_other.rename({intensity_var: intensity_var + " (All)"}, axis=1, inplace=True)
-    keep_other["match"] = keep_other.groupby(id).cumcount() + 1
-
-    # Subset the variables that need reshaping, adding counters
-    keep_reshape = [
-        id,
-        structure_var,
-        intensity_var,
-    ]
-    to_reshape = df[df[structure_var].notna()][keep_reshape]
-    to_reshape["match"] = to_reshape.groupby(id).cumcount() + 1
-
-    # Retain only those instances where there is an intensity_var, this removes secondary (tertiary or quarternay etc.)
-    # matches without the lowest detla-ppm. Need to track how many tied matches there are for tidying up.
-    to_reshape = to_reshape[to_reshape[intensity_var].notna()]
-    total_duplicate_matches = to_reshape["match"].max()
-    to_reshape["match"] = to_reshape["match"].apply(str)
-
-    # Reshape to wide _only_ instances where there are two or more candidate matches,
-    # rename columns, drop the uneeded duplicate intensity columns
-    wide_df = pd.pivot(to_reshape, index=id, values=[structure_var, intensity_var], columns="match")
-    wide_df.columns = [" ".join(col).strip() for col in wide_df.columns.values]
-    wide_df.reset_index(inplace=True)
-    for x in range(2, total_duplicate_matches + 1):
-        wide_df.drop(" ".join([intensity_var, str(x)]), axis=1, inplace=True)
-    wide_df["match"] = 1
-    to_concatenate = [x for x in wide_df.columns if structure_var in x]
-    wide_df["Inferred structure (consolidated)"] = wide_df[to_concatenate].apply(
-        lambda row: ",   ".join(row.values.astype(str)), axis=1
-    )
-    wide_df["Inferred structure (consolidated)"] = wide_df["Inferred structure (consolidated)"].str.replace(
-        ",   nan", ""
-    )
-    wide_df.rename({"Intensity 1": "Intensity (consolidated)"}, axis=1, inplace=True)
-    wide_df.drop(columns=to_concatenate, inplace=True)
-
-    # Merge with long format data
-    wide_df = keep_other.merge(wide_df, on=[id, "match"], how="outer")
-    wide_df.drop("match", axis=1, inplace=True)
-    wide_df.reset_index(drop=True, inplace=True)
-    # Forward-fill Intensity where there are differences in ppm (deliberately blank in long so not reshaped)
-    wide_df[intensity_var] = wide_df.groupby("ID")[intensity_var].ffill()
-    # Hack to get desired column order
-    wide_df = wide_df[
-        [
-            "ID",
-            "RT (min)",
-            "Charge",
-            "Obs (Da)",
-            "Theo (Da)",
-            "Delta ppm",
-            structure_var,
-            intensity_var,
-            "Inferred structure (consolidated)",
-            "Intensity (consolidated)",
-        ]
-    ]
-    return wide_df

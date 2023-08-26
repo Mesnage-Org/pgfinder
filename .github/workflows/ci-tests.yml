@@ -34,4 +34,4 @@ jobs:
       - name: Checking CLI entry-point works
         run: |
           pip install -e .
-          find_pg --config config/example.yaml
+          find_pg --config pgfinder/default_config.yaml

@@ -1,9 +1,14 @@
 """Test the matching process"""
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
 import pgfinder.matching as matching
-from pgfinder.matching import calculate_ppm_delta, determine_most_likely_structure
+from pgfinder.matching import calculate_ppm_delta, pick_most_likely_structures
+
+BASE_DIR = Path.cwd()
+RESOURCES = BASE_DIR / "tests" / "resources"
 
 
 def test_filtered_theo(raw_data, theo_masses, ppm):
@@ -25,11 +30,11 @@ def test_calculate_ppm_delta(sample_df: pd.DataFrame, df_diff_ppm: pd.DataFrame)
     pd.testing.assert_frame_equal(calculate_ppm_delta(sample_df, observed="obs", theoretical="exp"), df_diff_ppm)
 
 
-def test_determine_most_likely_structure(df_diff_ppm: pd.DataFrame, df_lowest_ppm: pd.DataFrame) -> None:
-    """Test determining the most likely structure."""
-    pd.testing.assert_frame_equal(
-        determine_most_likely_structure(
-            df=df_diff_ppm, observed_id="id", diff="Delta ppm", inferred_structure="inferred", intensity="intensity"
-        ),
-        df_lowest_ppm,
-    )
+def test_pick_most_likely_structures() -> None:
+    """Test picking the most likely structure based on ppm"""
+    long_df = pd.read_csv(RESOURCES / "long_results.csv")
+    wide_df = pd.read_csv(RESOURCES / "wide_results.csv")
+
+    reshaped_long_df = pick_most_likely_structures(long_df, 1)
+
+    pd.testing.assert_frame_equal(reshaped_long_df, wide_df, check_dtype=False)

@@ -2,8 +2,8 @@
 import logging
 from decimal import Decimal
 
-import numpy as np
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 
 from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
 from pgfinder.logs.logs import LOGGER_NAME
@@ -303,7 +303,8 @@ def data_analysis(
     theo_masses_df: pd.DataFrame,
     rt_window: float,
     enabled_mod_list: list,
-    user_ppm=int,
+    ppm_tolerance: float,
+    consolidation_ppm: float,
 ) -> pd.DataFrame:
     """Perform analysis.
 
@@ -317,8 +318,10 @@ def data_analysis(
         ?
     enabled_mod_list : list
         List of modules to enable.
-    user_ppm : int
-        ?
+    ppm_tolerance : float
+        The ppm tolerance used when matching the theoretical masses of structures to observed ions
+    consolidation_ppm : float
+        The minimum absolute ppm difference between two matches before one is picked as "most likely" over the other
 
     Returns
     -------
@@ -336,7 +339,7 @@ def data_analysis(
     ff = raw_data_df
 
     LOGGER.info("Filtering theoretical masses by observed masses")
-    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=user_ppm)
+    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=ppm_tolerance)
     # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
     #         possible that there are multiple types listed in the enbaled_mod_list?
     # FIXME : Tests of the impacts here are poor.
@@ -344,17 +347,17 @@ def data_analysis(
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     elif "multimers_Glyco" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 1)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     elif "Multimers_Lac" in enabled_mod_list:
         LOGGER.info("Building multimers_Lac from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 2)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, user_ppm)
+        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
     else:
         obs_multimers_df = pd.DataFrame()
 
@@ -436,11 +439,10 @@ def data_analysis(
     master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Theo (Da)": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_frame, user_ppm)
+    matched_data_df = matching(ff, master_frame, ppm_tolerance)
     LOGGER.info("Cleaning data")
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
-    matched_data_df = determine_most_likely_structure(matched_data_df.reset_index(drop=True))
 
     cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
@@ -451,10 +453,14 @@ def data_analysis(
     cleaned_data_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
     cleaned_data_df.attrs["rt_window"] = rt_window
     cleaned_data_df.attrs["modifications"] = enabled_mod_list
-    cleaned_data_df.attrs["ppm"] = user_ppm
+    cleaned_data_df.attrs["ppm"] = ppm_tolerance
 
-    cleaned_data_df.reset_index(inplace=True)
-    return cleaned_data_df
+    cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
+    cleaned_data_df.reset_index(drop=True, inplace=True)
+
+    # Apply some post-processing to the results
+    final_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
+    return final_df
 
 
 def calculate_ppm_delta(
@@ -495,76 +501,54 @@ def calculate_ppm_delta(
     return df
 
 
-def determine_most_likely_structure(
+def pick_most_likely_structures(
     df: pd.DataFrame,
-    observed_id: str = "ID",
-    inferred_structure: str = "Inferred structure",
-    diff: str = "Delta ppm",
-    intensity: str = "Intensity",
+    consolidation_ppm: float,
 ) -> pd.DataFrame:
-    """Determine the most likely structure.
+    """Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
 
     Parameters
     ----------
     df: pd.DataFrame
-        Pandas Data frame for modification.
-    observed_id: str
-        Variable (column) within dataframe that defines the ID of observed molecules.
-    inferred_structure: str
-        Variable (column) within dataframe that defines the molecule identifier.
-    diff: str
-        Variable (column) within the dataframe that defines the difference in Parts Per Million (PPM). Default
-    'Delta ppm'.
-    intensity: str
-        Variable (column) within dataframe that defines the intensity associated with matches.
+        DataFrame of structures to be processed.
+    consolidation_ppm: float
+        Minimum Parts Per Million tolerance distinguishing matches.
 
     Returns
     -------
     pd.DataFrame
-        Pandas Dataframe augmented with columns showing the most likely match (`lowest_ppm`) and the associated maximum
-    intensity. The rows are sorted by molecule ID and ordered by the absolute difference in PPM within each molecule.
+        Dataframe of matches within the specified tolerance. Candidates that are not matched are included
+        in the file for completeness.
     """
-    # Find the absolute smallest ppm, retaining whether values are negative
-    abs_ppm = df[[observed_id, inferred_structure, diff]].copy()
-    abs_ppm["abs_diff"] = abs_ppm[diff].abs()
-    df["neg"] = np.where(df[diff] < 0, -1, 1)
-    min_ppm = abs_ppm[[observed_id, "abs_diff"]].groupby([observed_id]).min("abs_diff").reset_index()
-    min_ppm.columns = [observed_id, "min_abs_diff"]
-    abs_ppm = abs_ppm.merge(min_ppm[[observed_id, "min_abs_diff"]], on=observed_id, how="left")
-    abs_ppm = abs_ppm[[observed_id, "min_abs_diff"]].drop_duplicates()
-    df = df.merge(abs_ppm, on=observed_id, how="outer")
-    # Restore the sign of the smallest ppm and merge with original data
-    df["min_ppm"] = df["min_abs_diff"] * df["neg"]
-    # Derive the 'lowest ppm' — note that intensity is always the same for rows
-    # with the same ID, so there is no need select a "matching" intensity value
-    df["lowest Delta ppm"] = np.where(df[diff] == df["min_ppm"], df[diff], np.nan)
-    df["Intensity"] = df[intensity]
-    # Remove temporary variables and sort (NaN > anything else)
-    df["abs_diff"] = df[diff].abs()
-    df["has_inferred_structure"] = np.where(df[inferred_structure].notna(), 1, 2)
-    df["has_ppm"] = np.where(df["lowest Delta ppm"].notna(), 1, 2)
-    df.sort_values(
-        by=[
-            "has_inferred_structure",
-            observed_id,
-            "has_ppm",
-            "min_abs_diff",
-        ],
-        inplace=True,
-        ascending=[True, True, True, False],
-    )
-    df.drop(
-        [
-            "neg",
-            "min_abs_diff",
-            "min_ppm",
-            "abs_diff",
-            "has_inferred_structure",
-            "has_ppm",
-        ],
-        axis=1,
-        inplace=True,
-    )
-    # Convert data types
-    df = df.convert_dtypes()
-    return df
+
+    def add_most_likely_structure(group):
+        # Sort by lowest absolute ppm first, then break ties with structures (short to long)
+        group.sort_values(
+            by=["Delta ppm", "Inferred structure"],
+            ascending=[True, False],
+            key=lambda k: abs(k) if is_numeric_dtype(k) else k,
+            inplace=True,
+            kind="stable",
+        )
+        group.reset_index(drop=True, inplace=True)
+
+        abs_min_ppm = group["Delta ppm"].loc[0]
+        abs_min_intensity = group["Intensity"].loc[0]
+
+        min_ppm_structure_idxs = abs(abs(abs_min_ppm) - abs(group["Delta ppm"])) < consolidation_ppm
+        min_ppm_structures = ",   ".join(group["Inferred structure"].loc[min_ppm_structure_idxs])
+
+        group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
+        group.at[0, "Intensity (consolidated)"] = abs_min_intensity
+
+        return group
+
+    matched_rows = df[df["Inferred structure"].notnull()]
+    unmatched_rows = df[df["Inferred structure"].isnull()]
+
+    grouped_df = matched_rows.groupby("ID", as_index=False, sort=False)
+    most_likely = grouped_df.apply(add_most_likely_structure)
+
+    merged_df = pd.concat([most_likely, unmatched_rows])
+
+    return merged_df.reset_index(drop=True)

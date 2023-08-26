@@ -167,30 +167,6 @@ def df_diff_ppm(sample_df: pd.DataFrame) -> pd.DataFrame:
 
 
 @pytest.fixture
-def df_lowest_ppm(df_diff_ppm: pd.DataFrame) -> pd.DataFrame:
-    """Return a target data frame for tests with lowest_pm included."""
-    LOWEST_DF = pd.DataFrame(
-        {
-            "lowest Delta ppm": [
-                np.nan,
-                427577.82345296827,
-                -0.5742528357381609,
-                np.nan,
-                -1.299430,
-                -90909.09090909091,
-                -90909.09090909091,
-            ],
-            "Intensity": [2.0, 2.0, 3.0, 3.0, 5.0, 6.0, 6.0],
-        }
-    )
-    LOWEST_DF = pd.concat([df_diff_ppm, LOWEST_DF], axis=1)
-    # Test data deliberately setup to require re-ordering so need to reorder target df
-    LOWEST_DF = LOWEST_DF.loc[[1, 0, 2, 3, 4, 5, 6], :]
-    LOWEST_DF = LOWEST_DF.convert_dtypes()
-    return LOWEST_DF
-
-
-@pytest.fixture
 def df_likely_structure() -> pd.DataFrame:
     """Return a data frame with the lowest ppm differences and their intensity derived."""
     return pd.DataFrame(
