@@ -13,7 +13,6 @@ from pgfinder.logs.logs import LOGGER_NAME
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-# FIXME: This function doesn't even use its argument!
 def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifications.txt") -> List:
     """
     Loads allowable modifications from a csv file as a list.
@@ -28,7 +27,7 @@ def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifi
     list
         List of permissible modifications.
     """
-    data = pkgutil.get_data(__name__, "config/allowed_modifications.txt")
+    data = pkgutil.get_data(__name__, config_file)
     return io.BytesIO(data).readlines()
 
 
