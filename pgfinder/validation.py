@@ -14,25 +14,22 @@ LOGGER = logging.getLogger(LOGGER_NAME)
 
 
 # FIXME: This function doesn't even use its argument!
-def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifications.csv") -> List:
+def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifications.txt") -> List:
     """
     Loads allowable modifications from a csv file as a list.
-
-    `.csv` is chosen for consistency of data storage over the project.
 
     Parameters
     ----------
     config_file: Union[str, Path]
-        Path to a configuration file. Default 'config/allowed_modifications.csv'
+        Path to a configuration file. Default 'config/allowed_modifications.txt'
 
     Returns
     -------
     list
         List of permissible modifications.
     """
-    data = pkgutil.get_data(__name__, "config/allowed_modifications.csv")
-    allowed_modifications_df = pd.read_csv(io.BytesIO(data), header=None)
-    return allowed_modifications_df[0].tolist()
+    data = pkgutil.get_data(__name__, "config/allowed_modifications.txt")
+    return io.BytesIO(data).readlines()
 
 
 def validate_raw_data_df(raw_data_df: pd.DataFrame) -> Union[None, ValueError]:
