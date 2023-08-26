@@ -1,68 +1,59 @@
 multimer:
   peptide:
-    gm-AEJA:
-      mass: 941.4075
+    gm-AE:
+      mass: 698.2858
       mult_num: 2
     gm-AEJ:
       mass: 870.3704
       mult_num: 2
-    gm-AEJ-gm-AEJ:
+    gm-AEJA:
+      mass: 941.4075
+      mult_num: 2
+    gm-AEJ=gm-AEJ:
       mass: 1722.7302
       mult_num: 3
-    gm-AEJ-gm-AEJA:
+    gm-AEJ=gm-AEJA:
       mass: 1793.7673
       mult_num: 3
-    gm-AEJA-gm-AEJA:
+    gm-AEJA=gm-AEJA:
       mass: 1864.8044
       mult_num: 3
   gycosidic:
     gm-AE:
-      mass: 698.2858
-      mult_num: 2
-    gm-AEJA:
-      mass: 941.4075
+      mass: 696.2702
       mult_num: 2
     gm-AEJ:
-      mass: 870.3704
-      mult_num: 2
-    gm-AEJ-gm-AEJ:
-      mass: 1722.7302
-      mult_num: 3
-    gm-AEJ-gm-AEJA:
-      mass: 1793.7673
-      mult_num: 3
-    gm-AEJA-gm-AEJA:
-      mass: 1864.8044
-      mult_num: 3
-    gm-AEJA_(Glyco):
-      mass: 939.3919
-      mult_num: 2
-    gm-AEJ_(Glyco):
       mass: 868.3548
       mult_num: 2
-    gm-AEJ-gm-AEJ_(Glyco):
+    gm-AEJA:
+      mass: 939.3919
+      mult_num: 2
+    gm-AEJ-gm-AEJ:
       mass: 1720.7146
       mult_num: 3
-    gm-AEJ-gm-AEJA_(Glyco):
+    gm-AEJ-gm-AEJA:
       mass: 1791.7517
       mult_num: 3
-    gm-AEJA-gm-AEJA_(Glyco):
+    gm-AEJA-gm-AEJA:
       mass: 1862.7888
       mult_num:  3
   lactyl:
-    Lac-AEJA:
-      mass: 533.2333
+    l-AE:
+      mass: 290.1116
       mult_num: 2
-    Lac-AEJ:
+    l-AEJ:
       mass: 462.1962
       mult_num: 2
-    Lac-AEJ-Lac-AEJ:
+    l-AEJA:
+      mass: 533.2333
+      mult_num: 2
+    l-AEJ=l-AEJ:
       mass: 906.3818
       mult_num: 3
-    Lac-AEJ-Lac-AEJA:
+    l-AEJ=l-AEJA:
       mass: 977.4189
       mult_num: 3
-    Lac-AEJA-Lac-AEJA:
+    l-AEJA=l-AEJA:
       mass: 1048.4560
       mult_num: 3
 mod_type:

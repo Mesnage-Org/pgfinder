@@ -93,7 +93,10 @@ def multimer_builder(theo_df, multimer_type: int = 0):
                 donor = name
                 donor_mw = mass
                 theo_mw.append(Decimal(mw) + donor_mw + Decimal("-18.0106"))
-                theo_struct.append(acceptor + "-" + donor + "|" + str(mult_num))
+                # FIXME: In an ideal world, `-` should actually be `~` here, but Excel will throw
+                # a hissy-fit about `~` being an escape character, so that's out of scope for now
+                joiner = "-" if multimer_type == 1 else "="
+                theo_struct.append(acceptor + joiner + donor + "|" + str(mult_num))
 
     # Call builder subfunction with different arguements based on multimer type selected
     # and calculate multimers based on peptide bond through side chain
