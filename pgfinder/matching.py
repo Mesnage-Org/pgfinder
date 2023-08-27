@@ -338,6 +338,9 @@ def data_analysis(
     LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ftrs_df=raw_data_df, theo_df=theo_masses_df, user_ppm=ppm_tolerance)
 
+    # Make sure the enabled_mod_list (if empty), is actually represented by an empty list
+    enabled_mod_list = enabled_mod_list or []
+
     # NOTE: "Multimers" is a semi-magic keyword here. Multimers and modifications are treated
     # differently by most of the code and have their own sections in `parameters.yaml`, but
     # despite this, all of the multimer and modification flags are passed to `data_analysis()`
@@ -352,9 +355,7 @@ def data_analysis(
         LOGGER.info("Filtering theoretical multimers by observed")
         return filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
 
-    obs_multimers_df = pd.concat(build_multimers(type) for type in multimer_mods)
-
-    obs_theo_df = pd.concat([obs_monomers_df, obs_multimers_df]).reset_index(drop=True)
+    obs_theo_df = pd.concat([obs_monomers_df, *(build_multimers(type) for type in multimer_mods)])
 
     def apply_modification(mod):
         LOGGER.info(f"Generating {mod} variants")
@@ -364,7 +365,7 @@ def data_analysis(
     master_frame = pd.concat(
         [
             obs_theo_df,
-            *[apply_modification(mod) for mod in other_mods],
+            *(apply_modification(mod) for mod in other_mods),
         ]
     )
 

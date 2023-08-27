@@ -5,7 +5,6 @@ ppm_tolerance: 10
 consolidation_ppm: 1
 time_delta: 0.5
 mod_list:
-  - none # All modifications disabled, comment this line and uncomment the following modifications you wish to use.
   # - Cross-Linked Multimers (=)
   # - Glycosidic Multimers (-)
   # - Lactyl Multimers (l)
