@@ -7,9 +7,9 @@ time_delta: 0.5
 mod_list:
   # - Cross-Linked Multimers (=)
   # - Glycosidic Multimers (-)
-  # - Lactyl Multimers (l)
-  # - Extra Disaccharide (+gm)
+  # - Lactyl Multimers (=l)
 
+  # - Extra Disaccharide (+gm)
   # - Lactyl Peptides (l)
   # - Loss of Disaccharide (-gm)
   # - Loss of GlcNAc (-g)
