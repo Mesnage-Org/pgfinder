@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run pgfinder at the command line."""
 import argparse as arg
+import ast
 import importlib.resources as pkg_resources
 import logging
 import warnings
@@ -43,7 +44,9 @@ def create_parser() -> arg.ArgumentParser:
     )
     parser.add_argument("--masses_file", dest="masses_file", type=str, required=False, help="Theoretical masses file.")
     parser.add_argument("--time_delta", dest="time_delta", type=int, required=False, help="Time delta.")
-    parser.add_argument("--mod_list", dest="mod_list", type=list, required=False, help="Module List.")
+    parser.add_argument(
+        "--mod_list", dest="mod_list", type=ast.literal_eval, required=False, help="Modifications to include."
+    )
     parser.add_argument("--output_dir", dest="output_dir", type=str, required=False, help="Output directory.")
     parser.add_argument("--warnings", dest="warnings", type=str, required=False, help="Whether to ignore warnings.")
     parser.add_argument("--quiet", dest="quiet", type=bool, required=False, help="Supress output.")

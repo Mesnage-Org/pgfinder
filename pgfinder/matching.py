@@ -1,5 +1,6 @@
 """Matching functions"""
 import logging
+import re
 from decimal import Decimal
 
 import pandas as pd
@@ -63,14 +64,14 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_df: pd.DataFrame, user_ppm: int) -
     return filtered_df
 
 
-def multimer_builder(theo_df, multimer_type: int = 0):
+def multimer_builder(theo_df, multimer_type: str):
     """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
     theo_df:
         dataframe containing theoretical monomerics structures and their corresponding masses
-    multimer_type: int
+    multimer_type: str
 
     Returns
     -------
@@ -82,7 +83,6 @@ def multimer_builder(theo_df, multimer_type: int = 0):
     theo_struct = []
 
     # Builder sub function - calculates multimer mass and name
-    # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
         for _, row in theo_df.iterrows():
             if (
@@ -93,19 +93,14 @@ def multimer_builder(theo_df, multimer_type: int = 0):
                 donor = name
                 donor_mw = mass
                 theo_mw.append(Decimal(mw) + donor_mw + Decimal("-18.0106"))
-                theo_struct.append(acceptor + "-" + donor + "|" + str(mult_num))
+                # FIXME: In an ideal world, `-` should actually be `~` here, but Excel will throw
+                # a hissy-fit about `~` being an escape character, so that's out of scope for now
+                joiner = "-" if "Glycosidic" in multimer_type else "="
+                theo_struct.append(acceptor + joiner + donor + "|" + str(mult_num))
 
     # Call builder subfunction with different arguements based on multimer type selected
     # and calculate multimers based on peptide bond through side chain
-    # if multimer_type is "peptide":
-    if multimer_type == 0:
-        multimer = MULTIMERS["peptide"]
-    # elif multimer_type is "gycosidic":
-    elif multimer_type == 1:
-        multimer = MULTIMERS["gycosidic"]
-    # elif multimer_type is "lactyl":
-    elif multimer_type == 2:
-        multimer = MULTIMERS["lactyl"]
+    multimer = MULTIMERS[multimer_type]
     LOGGER.info(f"Building features for multimer type : {multimer_type}")
     [builder(molecule, Decimal(features["mass"]), features["mult_num"]) for molecule, features in multimer.items()]
 
@@ -130,29 +125,38 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
         Pandas DataFrame of ???
     """
     mod_mass = Decimal(MOD_TYPE[mod_type]["mass"])
-    mod_name = MOD_TYPE[mod_type]["name"]
+    # NOTE: This regex extracts the modification abbrevation from the end of its full name / type —
+    # it simply extracts the bracketed expression at the end of the line
+    mod_abbr = re.search(r"\(.*\)$", mod_type).group(0)
 
     obs_theo_muropeptides_df = filtered_theo_df.copy()
     # Calculate new mass of modified structure
     obs_theo_muropeptides_df["Theo (Da)"] = obs_theo_muropeptides_df["Theo (Da)"].map(lambda x: Decimal(x) + mod_mass)
 
-    # Add modification tags to structure name
-    if mod_type == "Decay":
-        obs_theo_muropeptides_df["Inferred structure"] = obs_theo_muropeptides_df["Inferred structure"].map(
-            lambda x: x[1 : len(x)]
-        )
-    elif mod_type == "Sodium" or mod_type == "Potassium":
-        obs_theo_muropeptides_df["Inferred structure"] = obs_theo_muropeptides_df["Inferred structure"].map(
-            lambda x: mod_name + " " + x
-        )
-    elif mod_type == "Nude":
-        obs_theo_muropeptides_df["Inferred structure"] = obs_theo_muropeptides_df["Inferred structure"].map(
-            lambda x: mod_name + x
-        )
-    else:
-        obs_theo_muropeptides_df["Inferred structure"] = obs_theo_muropeptides_df["Inferred structure"].map(
-            lambda x: x[: len(x) - 2] + " " + "(" + mod_type + ")" + " " + x[len(x) - 2 : len(x)]
-        )
+    # Add modification tags to structure name — there are some special cases that need handling first!
+    # FIXME: Kinda pointless to have a file that the user can use to define custom modifications if
+    # we're going to hard-code in special cases anyways? I suppose they can still add their own as
+    # long as they don't also want any sort of "special" formatting
+    base_structure = obs_theo_muropeptides_df["Inferred structure"]
+    # FIXME: Absolutely no validation that these structures make sense or are chemically possible —
+    # even modifications like "Loss of GlcNAc" don't guarantee that a `g` character is removed from
+    # the structure's name. It just chops off the first character with reckless abandon...
+    # NOTE: All of these functions assume (with no guarantee) that structures begin with `gm-`
+    special_cases = {
+        "Extra Disaccharide (+gm)": lambda s: "gm-" + s,
+        "Lactyl Peptides (l)": lambda s: "l" + s[2:],
+        "Loss of Disaccharide (-gm)": lambda s: s[3:],
+        "Loss of GlcNAc (-g)": lambda s: s[1:],
+    }
+
+    # The silly `len(s) - 2` rubbish here is to preserve the `|x` multimer number at the end of
+    # each structure name
+    def default_case(s):
+        return s[: len(s) - 2] + " " + mod_abbr + " " + s[len(s) - 2 : len(s)]
+
+    structure_updater = special_cases.get(mod_type, default_case)
+
+    obs_theo_muropeptides_df["Inferred structure"] = base_structure.map(structure_updater)
     return obs_theo_muropeptides_df
 
 
@@ -315,9 +319,9 @@ def data_analysis(
     theo_masses_df : pd.DataFrame
         Theoretical masses as Pandas DataFrame.
     rt_window : float
-        ?
+        Set time window for in-source decay and salt adduct cleanup
     enabled_mod_list : list
-        List of modules to enable.
+        List of modifications to enable.
     ppm_tolerance : float
         The ppm tolerance used when matching the theoretical masses of structures to observed ions
     consolidation_ppm : float
@@ -330,123 +334,51 @@ def data_analysis(
     sugar = Decimal("203.0793")
     sodium = Decimal("21.9819")
     potassium = Decimal("37.9559")
-    # retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
-    time_delta_window = rt_window
-
-    # FIXME : Should these be .copy() since Pandas DataFrames will be modified by reference I think and so any change to
-    # theo or ff cascades back to theo_masses_df and raw_data_df automatically (unless that is the intention)?
-    theo = theo_masses_df
-    ff = raw_data_df
 
     LOGGER.info("Filtering theoretical masses by observed masses")
-    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=ppm_tolerance)
-    # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
-    #         possible that there are multiple types listed in the enbaled_mod_list?
-    # FIXME : Tests of the impacts here are poor.
-    if "Multimers" in enabled_mod_list:
+    obs_monomers_df = filtered_theo(ftrs_df=raw_data_df, theo_df=theo_masses_df, user_ppm=ppm_tolerance)
+
+    # Make sure the enabled_mod_list (if empty), is actually represented by an empty list
+    enabled_mod_list = enabled_mod_list or []
+
+    # NOTE: "Multimers" is a semi-magic keyword here. Multimers and modifications are treated
+    # differently by most of the code and have their own sections in `parameters.yaml`, but
+    # despite this, all of the multimer and modification flags are passed to `data_analysis()`
+    # in the same `enabled_mod_list` variable... This is the shortest path to getting something
+    # working now.
+    multimer_mods = [m for m in enabled_mod_list if "Multimers" in m]
+    other_mods = [m for m in enabled_mod_list if m not in multimer_mods]
+
+    def build_multimers(mod):
         LOGGER.info("Building multimers from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df)
+        theo_multimers_df = multimer_builder(obs_monomers_df, mod)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
-    elif "multimers_Glyco" in enabled_mod_list:
-        LOGGER.info("Building multimers from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, 1)
-        LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
-    elif "Multimers_Lac" in enabled_mod_list:
-        LOGGER.info("Building multimers_Lac from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, 2)
-        LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
-    else:
-        obs_multimers_df = pd.DataFrame()
+        return filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
+
+    obs_theo_df = pd.concat([obs_monomers_df, *(build_multimers(type) for type in multimer_mods)])
+
+    def apply_modification(mod):
+        LOGGER.info(f"Generating {mod} variants")
+        return modification_generator(obs_theo_df, mod)
 
     LOGGER.info("Building custom search file")
+    master_frame = pd.concat(
+        [
+            obs_theo_df,
+            *(apply_modification(mod) for mod in other_mods),
+        ]
+    )
 
-    obs_theo_df = pd.concat([obs_monomers_df, obs_multimers_df]).reset_index(drop=True)
-
-    LOGGER.info("Generating variants")
-
-    if "Sodium" in enabled_mod_list:
-        adducts_sodium_df = modification_generator(obs_theo_df, "Sodium")
-    else:
-        adducts_sodium_df = pd.DataFrame()
-
-    if "Potassium" in enabled_mod_list:
-        adducts_potassium_df = modification_generator(obs_theo_df, "Potassium")
-    else:
-        adducts_potassium_df = pd.DataFrame()
-
-    if "Anh" in enabled_mod_list:
-        anhydro_df = modification_generator(obs_theo_df, "Anh")
-    else:
-        anhydro_df = pd.DataFrame()
-
-    if "DeAc" in enabled_mod_list:
-        deacetyl_df = modification_generator(obs_theo_df, "DeAc")
-    else:
-        deacetyl_df = pd.DataFrame()
-
-    if "DeAc_Anh" in enabled_mod_list:
-        deac_anhy_df = modification_generator(obs_theo_df, "DeAc_Anh")
-    else:
-        deac_anhy_df = pd.DataFrame()
-    if "O-Acetylated" in enabled_mod_list:
-        oacetyl_df = modification_generator(obs_theo_df, "O-Acetylated")
-    else:
-        oacetyl_df = pd.DataFrame()
-
-    if "Nude" in enabled_mod_list:
-        nude_df = modification_generator(obs_theo_df, "Nude")
-    else:
-        nude_df = pd.DataFrame()
-
-    if "Decay" in enabled_mod_list:
-        decay_df = modification_generator(obs_theo_df, "Decay")
-    else:
-        decay_df = pd.DataFrame()
-
-    if "Amidation" in enabled_mod_list:
-        ami_df = modification_generator(obs_theo_df, "Amidated")
-    else:
-        ami_df = pd.DataFrame()
-
-    if "Amidase" in enabled_mod_list:
-        deglyco_df = modification_generator(obs_theo_df, "Amidase Product")
-    else:
-        deglyco_df = pd.DataFrame()
-
-    if "Double_Anh" in enabled_mod_list:
-        double_Anhydro_df = modification_generator(obs_theo_df, "Double_Anh")
-
-    else:
-        double_Anhydro_df = pd.DataFrame()
-
-    master_list = [
-        obs_theo_df,
-        adducts_potassium_df,
-        adducts_sodium_df,
-        anhydro_df,
-        deac_anhy_df,
-        deacetyl_df,
-        oacetyl_df,
-        decay_df,
-        nude_df,
-        ami_df,
-        deglyco_df,
-        double_Anhydro_df,
-    ]
-    master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Theo (Da)": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_frame, ppm_tolerance)
+    matched_data_df = matching(raw_data_df, master_frame, ppm_tolerance)
     LOGGER.info("Cleaning data")
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
 
-    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
-    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
-    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
+    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=rt_window)
+    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=rt_window)
+    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=rt_window)
 
     # set metadata
     cleaned_data_df.attrs["file"] = raw_data_df.attrs["file"]

@@ -5,21 +5,22 @@ ppm_tolerance: 10
 consolidation_ppm: 1
 time_delta: 0.5
 mod_list:
-  - none # All modifications disabled, comment this line and uncomment the following modifications you wish to use.
-#  - Sodium
-#  - Potassium
-#  - Anhydro
-#  - DeAc
-#  - Deacetyl_Anhydro
-#  - Nude
-#  - Decay
-#  - Amidation
-#  - Amidase
-#  - Double_Anh
-#  - Multimers
-#  - multimers_Glyco
-#  - Multimers_Lac
-#  - O-Acetylated
+  # - Cross-Linked Multimers (=)
+  # - Glycosidic Multimers (-)
+  # - Lactyl Multimers (=l)
+
+  # - Extra Disaccharide (+gm)
+  # - Lactyl Peptides (l)
+  # - Loss of Disaccharide (-gm)
+  # - Loss of GlcNAc (-g)
+
+  # - Amidation (Am)
+  # - Anhydro-MurNAc (Anh)
+  # - Deacetylation (-Ac)
+  # - Deacetylation and Anhydro-MurNAc (-Ac, Anh)
+  # - O-Acetylation (+Ac)
+  # - Potassium Adduct (K+)
+  # - Sodium Adduct (Na+)
 output_dir: output
 warnings: ignore
 quiet: false
