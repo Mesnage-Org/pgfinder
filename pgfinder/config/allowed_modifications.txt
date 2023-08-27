@@ -1,6 +1,6 @@
 Cross-Linked Multimers (=)
 Glycosidic Multimers (-)
-Lactyl Multimers (l)
+Lactyl Multimers (=l)
 
 Extra Disaccharide (+gm)
 Lactyl Peptides (l)
