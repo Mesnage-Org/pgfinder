@@ -318,9 +318,9 @@ def data_analysis(
     theo_masses_df : pd.DataFrame
         Theoretical masses as Pandas DataFrame.
     rt_window : float
-        ?
+        Set time window for in-source decay and salt adduct cleanup
     enabled_mod_list : list
-        List of modules to enable.
+        List of modifications to enable.
     ppm_tolerance : float
         The ppm tolerance used when matching the theoretical masses of structures to observed ions
     consolidation_ppm : float
