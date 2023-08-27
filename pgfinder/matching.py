@@ -63,14 +63,14 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_df: pd.DataFrame, user_ppm: int) -
     return filtered_df
 
 
-def multimer_builder(theo_df, multimer_type: int = 0):
+def multimer_builder(theo_df, multimer_type: str):
     """Generate multimers (dimers & trimers) from observed monomers
 
     Parameters
     ----------
     theo_df:
         dataframe containing theoretical monomerics structures and their corresponding masses
-    multimer_type: int
+    multimer_type: str
 
     Returns
     -------
@@ -99,15 +99,7 @@ def multimer_builder(theo_df, multimer_type: int = 0):
 
     # Call builder subfunction with different arguements based on multimer type selected
     # and calculate multimers based on peptide bond through side chain
-    # if multimer_type is "peptide":
-    if multimer_type == 0:
-        multimer = MULTIMERS["peptide"]
-    # elif multimer_type is "gycosidic":
-    elif multimer_type == 1:
-        multimer = MULTIMERS["gycosidic"]
-    # elif multimer_type is "lactyl":
-    elif multimer_type == 2:
-        multimer = MULTIMERS["lactyl"]
+    multimer = MULTIMERS[multimer_type]
     LOGGER.info(f"Building features for multimer type : {multimer_type}")
     [builder(molecule, Decimal(features["mass"]), features["mult_num"]) for molecule, features in multimer.items()]
 
