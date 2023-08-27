@@ -349,9 +349,9 @@ def data_analysis(
     multimer_mods = [m for m in enabled_mod_list if "Multimers" in m]
     other_mods = [m for m in enabled_mod_list if m not in multimer_mods]
 
-    def build_multimers(type):
+    def build_multimers(mod):
         LOGGER.info("Building multimers from obs muropeptides")
-        theo_multimers_df = multimer_builder(obs_monomers_df, type)
+        theo_multimers_df = multimer_builder(obs_monomers_df, mod)
         LOGGER.info("Filtering theoretical multimers by observed")
         return filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
 
