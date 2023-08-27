@@ -334,13 +334,8 @@ def data_analysis(
     sodium = Decimal("21.9819")
     potassium = Decimal("37.9559")
 
-    # FIXME : Should these be .copy() since Pandas DataFrames will be modified by reference I think and so any change to
-    # theo or ff cascades back to theo_masses_df and raw_data_df automatically (unless that is the intention)?
-    theo = theo_masses_df
-    ff = raw_data_df
-
     LOGGER.info("Filtering theoretical masses by observed masses")
-    obs_monomers_df = filtered_theo(ftrs_df=ff, theo_df=theo, user_ppm=ppm_tolerance)
+    obs_monomers_df = filtered_theo(ftrs_df=raw_data_df, theo_df=theo_masses_df, user_ppm=ppm_tolerance)
     # FIXME : Is this the logic that is required? It seems only one type of multimers will ever get built but is it not
     #         possible that there are multiple types listed in the enbaled_mod_list?
     # FIXME : Tests of the impacts here are poor.
@@ -348,17 +343,17 @@ def data_analysis(
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
+        obs_multimers_df = filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
     elif "multimers_Glyco" in enabled_mod_list:
         LOGGER.info("Building multimers from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 1)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
+        obs_multimers_df = filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
     elif "Multimers_Lac" in enabled_mod_list:
         LOGGER.info("Building multimers_Lac from obs muropeptides")
         theo_multimers_df = multimer_builder(obs_monomers_df, 2)
         LOGGER.info("Filtering theoretical multimers by observed")
-        obs_multimers_df = filtered_theo(ff, theo_multimers_df, ppm_tolerance)
+        obs_multimers_df = filtered_theo(raw_data_df, theo_multimers_df, ppm_tolerance)
     else:
         obs_multimers_df = pd.DataFrame()
 
@@ -440,7 +435,7 @@ def data_analysis(
     master_frame = pd.concat(master_list)
     master_frame = master_frame.astype({"Theo (Da)": float})
     LOGGER.info("Matching")
-    matched_data_df = matching(ff, master_frame, ppm_tolerance)
+    matched_data_df = matching(raw_data_df, master_frame, ppm_tolerance)
     LOGGER.info("Cleaning data")
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
