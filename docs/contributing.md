@@ -60,15 +60,3 @@ made but typically they are ok to accept, they will be `black` formatting or Not
 
 Release to the [Python Package Index (PyPI)](https://pypi.org) are automated and occur when a new release is made on
 GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning](https://semver.org/).
-
-### Pre-release candidates
-
-If you have new features you wish to test using the [PGFinder JupyterLite
-Notebook](https://github.com/Mesnage-Org/pgfinder-jupyterlite) then the tag should indicate that this is a "pre-release"
-and as well as a semantic release number it should be followed with one of the [PEP0440 pre-release
-spellings](https://peps.python.org/pep-0440/#pre-release-spelling) (using a [pre-release
-separator](https://peps.python.org/pep-0440/#pre-release-separators)). For example if the most recent release is
-`v0.0.4` and you have a new feature you wish to test in the Jupyter Lite Notebook the tag should take the form
-`v0.0.4-a1` to indicate this is the first alpha revision of the new feature. If you find errors and correct them bump
-the number following `a` i.e. `v0.0.4-a2`. Once you are happy that the new feature is working as desired you can proceed
-with making a new release which in this example, following semantic versioning, would be `v0.0.5`.
