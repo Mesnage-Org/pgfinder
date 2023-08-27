@@ -83,10 +83,10 @@ mod_type:
 mass_to_clean:
   sodiated:
     parent: ^gm|^m|^l
-    target: \(Na+\)$
+    target: \(Na\+\)
   potassated:
     parent: ^gm|^m|^l
-    target: \(K+\)$
+    target: \(K\+\)
   decay:
     parent: ^gm
     target: ^m

@@ -155,6 +155,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
         return s[: len(s) - 2] + " " + mod_abbr + " " + s[len(s) - 2 : len(s)]
 
     structure_updater = special_cases.get(mod_type, default_case)
+
     obs_theo_muropeptides_df["Inferred structure"] = base_structure.map(structure_updater)
     return obs_theo_muropeptides_df
 
@@ -353,13 +354,17 @@ def data_analysis(
 
     obs_multimers_df = pd.concat(build_multimers(type) for type in multimer_mods)
 
-    LOGGER.info("Generating variants and building custom search file")
     obs_theo_df = pd.concat([obs_monomers_df, obs_multimers_df]).reset_index(drop=True)
 
+    def apply_modification(mod):
+        LOGGER.info(f"Generating {mod} variants")
+        return modification_generator(obs_theo_df, mod)
+
+    LOGGER.info("Building custom search file")
     master_frame = pd.concat(
         [
             obs_theo_df,
-            *[modification_generator(obs_theo_df, mod) for mod in other_mods],
+            *[apply_modification(mod) for mod in other_mods],
         ]
     )
 
