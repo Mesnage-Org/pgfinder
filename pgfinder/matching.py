@@ -333,8 +333,6 @@ def data_analysis(
     sugar = Decimal("203.0793")
     sodium = Decimal("21.9819")
     potassium = Decimal("37.9559")
-    # retention time window to look in for in source decay products (rt of parent ion plus or minus time_delta)
-    time_delta_window = rt_window
 
     # FIXME : Should these be .copy() since Pandas DataFrames will be modified by reference I think and so any change to
     # theo or ff cascades back to theo_masses_df and raw_data_df automatically (unless that is the intention)?
@@ -447,9 +445,9 @@ def data_analysis(
 
     matched_data_df = calculate_ppm_delta(df=matched_data_df)
 
-    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=time_delta_window)
-    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=time_delta_window)
-    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=time_delta_window)
+    cleaned_df = clean_up(ftrs_df=matched_data_df, mass_to_clean=sodium, time_delta=rt_window)
+    cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=rt_window)
+    cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=rt_window)
 
     # set metadata
     cleaned_data_df.attrs["file"] = raw_data_df.attrs["file"]
