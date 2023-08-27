@@ -48,9 +48,9 @@
 				<div class="card p-4 variant-filled-secondary max-w-md" data-popup="consolidationTooltip">
 					<p>
 						During consolidation, structures with the lowest absolute ppm are selected over those
-						farther from the theoretical mass — if two or more matches are nearly equidistant from
-						the theoretical mass, less than the Consolidation PPM apart, then both matches are
-						retained
+						farther from the theoretical mass. However, if two or more matches have a theoretical
+						mass less than the consolidation ppm apart, then those matches are retained, leaving
+						several possible matches.
 					</p>
 					<div class="arrow variant-filled-secondary" />
 				</div>
