@@ -28,7 +28,7 @@ def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifi
         List of permissible modifications.
     """
     data = pkgutil.get_data(__name__, config_file)
-    return io.BytesIO(data).readlines()
+    return [ln.strip().decode("utf-8") for ln in io.BytesIO(data).readlines() if not ln.isspace()]
 
 
 def validate_raw_data_df(raw_data_df: pd.DataFrame) -> Union[None, ValueError]:

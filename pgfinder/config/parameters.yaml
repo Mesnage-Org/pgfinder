@@ -1,5 +1,5 @@
 multimer:
-  peptide:
+  Cross-Linked Multimers (=):
     gm-AE:
       mass: 698.2858
       mult_num: 2
@@ -18,7 +18,7 @@ multimer:
     gm-AEJA=gm-AEJA:
       mass: 1864.8044
       mult_num: 3
-  gycosidic:
+  Glycosidic Multimers (-):
     gm-AE:
       mass: 696.2702
       mult_num: 2
@@ -37,7 +37,7 @@ multimer:
     gm-AEJA-gm-AEJA:
       mass: 1862.7888
       mult_num:  3
-  lactyl:
+  Lactyl Multimers (l):
     l-AE:
       mass: 290.1116
       mult_num: 2
@@ -57,47 +57,36 @@ multimer:
       mass: 1048.4560
       mult_num: 3
 mod_type:
-  Anh:
-    mass: -20.0262
-    name:
-  DeAc:
-    mass: -42.0105
-    name:
-  O-Acetylated:
-    mass: 42.0105
-    name:
-  DeAc_Anh:
-    mass: -62.0368
-    name:
-  Decay:
-    mass: -203.0793
-    name:
-  Sodium:
-    mass: 21.9819
-    name: Na+
-  Potassium:
-    mass: 37.9559
-    name: K+
-  Nude:
+  Extra Disaccharide (+gm):
     mass: 478.1799
-    name: gm-
-  Amidated:
-    mass: -0.9840
-    name: Amidated
-  Amidase Product:
-    mass: -480.1955
-    name: (Amidase Product)
-  Lactyl:
+  Lactyl Peptides (l):
     mass: -408.1744
-    name: (Lactyl)
+  Loss of Disaccharide (-gm):
+    mass: -480.1955
+  Loss of GlcNAc (-g):
+    mass: -203.0793
+  Amidation (Am):
+    mass: -0.9840
+  Anhydro-MurNAc (Anh):
+    mass: -20.0262
+  Deacetylation (-Ac):
+    mass: -42.0105
+  Deacetylation and Anhydro-MurNAc (-Ac, Anh):
+    mass: -62.0368
+  O-Acetylation (+Ac):
+    mass: 42.0105
+  Potassium Adduct (K+):
+    mass: 37.9559
+  Sodium Adduct (Na+):
+    mass: 21.9819
 
 mass_to_clean:
   sodiated:
-    parent: ^gm|^m|^Lac
-    target: ^Na+
+    parent: ^gm|^m|^l
+    target: \(Na+\)$
   potassated:
-    parent: ^gm|^m|^Lac
-    target: ^K+
+    parent: ^gm|^m|^l
+    target: \(K+\)$
   decay:
     parent: ^gm
     target: ^m
