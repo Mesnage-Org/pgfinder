@@ -1,14 +1,13 @@
-Sodium Adduct (Na+)
-Potassium Adduct (K+)
+Cross-Linked Multimers (=)
+Glycosidic Multimers (-)
+Lactyl Multimers (l)
+Amidation (+Am)
 Anhydro-MurNAc (Anh)
 Deacetylation (-Ac)
 Deacetylation and Anhydro-MurNAc (-Ac, Anh)
 Extra Disaccharide (gm)
-GlcNAc Loss
-Amidation (+Am)
 Loss of Disaccharide
-Double Anhydro-MurNAc (Anh, Anh)
-Cross-Linked Multimers (=)
-Glycosidic Multimers (-)
-Multimers_Lac
+Loss of GlcNAc
 O-Acetylation (+Ac)
+Potassium Adduct (K+)
+Sodium Adduct (Na+)
