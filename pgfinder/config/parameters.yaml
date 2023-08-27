@@ -37,7 +37,7 @@ multimer:
     gm-AEJA-gm-AEJA:
       mass: 1862.7888
       mult_num:  3
-  Lactyl Multimers (l):
+  Lactyl Multimers (=l):
     l-AE:
       mass: 290.1116
       mult_num: 2
