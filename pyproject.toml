@@ -66,11 +66,6 @@ pypi = [
   "setuptools_scm[toml]>=6.2",
   "wheel"
 ]
-notebooks = [
-  "jupyter",
-  "ipywidgets",
-  "ipysheet"
-]
 
 [tool.setuptools.packages.find]
 where = ["."]

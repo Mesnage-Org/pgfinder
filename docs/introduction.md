@@ -17,9 +17,9 @@ paramount importance to understand antibiotic resistance, chronic inflammatory d
 psychiatric disorders.
 
 Traditionally, peptidoglycan analysis involved a manual inspection of individual mass spectra to identify peptidoglycan
-fragments based on their theoretical mass. PGFinder is an open-source Python package that can be run through Jupyter
-notebooks or at the command line to perform an unbiased and automated analysis of LC-MS data. This enables a consistent
-and reproducible workflow, opening new perspectives to develop "peptidoglycomics" as a new discipline.
+fragments based on their theoretical mass. PGFinder is an open-source Python package that can be run through a web
+GUI or via the command line to perform an unbiased and automated analysis of LC-MS data. This enables a consistent and
+reproducible workflow, opening new perspectives to develop "peptidoglycomics" as a new discipline.
 
 ## Methods
 
