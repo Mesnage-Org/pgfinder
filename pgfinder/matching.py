@@ -82,7 +82,6 @@ def multimer_builder(theo_df, multimer_type: int = 0):
     theo_struct = []
 
     # Builder sub function - calculates multimer mass and name
-    # FIXME : No need to use nested functions
     def builder(name, mass, mult_num: int):
         for _, row in theo_df.iterrows():
             if (
