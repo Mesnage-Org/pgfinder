@@ -3,7 +3,8 @@
 	import { AppShell, AppBar, Drawer } from '@skeletonlabs/skeleton';
 	import LinksAndDownloads from './LinksAndDownloads.svelte';
 	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faBars } from '@fortawesome/free-solid-svg-icons';
+	import { faBars, faBook } from '@fortawesome/free-solid-svg-icons';
+	import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
@@ -39,12 +40,14 @@
 			<strong class="text-xl">PGFinder</strong>
 			<svelte:fragment slot="trail">
 				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://github.com/Mesnage-Org/pgfinder"
+					href="https://mesnage-org.github.io/pgfinder/master/usage.html"
 					target="_blank"
 					rel="noreferrer"
 				>
-					GitHub
+					<Fa icon={faBook} size="lg" />
+				</a>
+				<a href="https://github.com/Mesnage-Org/pgfinder" target="_blank" rel="noreferrer">
+					<Fa icon={faGithub} size="lg" />
 				</a>
 			</svelte:fragment>
 		</AppBar>

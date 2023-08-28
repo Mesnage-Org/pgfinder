@@ -13,6 +13,7 @@
 		"format": "prettier --plugin prettier-plugin-svelte --write ."
 	},
 	"devDependencies": {
+		"@fortawesome/free-brands-svg-icons": "^6.4.2",
 		"@playwright/test": "^1.28.1",
 		"@skeletonlabs/skeleton": "2.0.0-rc.1",
 		"@skeletonlabs/tw-plugin": "0.1.0-rc.5",
