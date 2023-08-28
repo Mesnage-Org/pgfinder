@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Drawer } from '@skeletonlabs/skeleton';
+	import LinksAndDownloads from './LinksAndDownloads.svelte';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,15 +9,32 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	// Initialize Stores for Drawers
+	import { initializeStores, getDrawerStore } from '@skeletonlabs/skeleton';
+	initializeStores();
+	const drawerStore = getDrawerStore();
+
+	function openDrawer(): void {
+		drawerStore.open({
+			width: 'w-96'
+		});
+	}
 </script>
 
+<!-- Drawer for Links and Downloads -->
+<Drawer>
+	<LinksAndDownloads />
+</Drawer>
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
 			<svelte:fragment slot="lead">
-				<Fa icon={faBars} size="lg" />
+				<button on:click={openDrawer}>
+					<Fa icon={faBars} size="lg" />
+				</button>
 			</svelte:fragment>
 			<strong class="text-xl">PGFinder</strong>
 			<svelte:fragment slot="trail">
