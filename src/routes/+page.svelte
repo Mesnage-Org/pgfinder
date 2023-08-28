@@ -7,8 +7,7 @@
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import { defaultPyio } from '$lib/constants';
 	import fileDownload from 'js-file-download';
-	// TODO:
-	// 6) Add a README and some automated CI checks
+
 	let pgfinder: Worker | undefined;
 	onMount(() => {
 		pgfinder = new PGFinder();
