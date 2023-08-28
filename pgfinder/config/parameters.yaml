@@ -37,29 +37,29 @@ multimer:
     gm-AEJA-gm-AEJA:
       mass: 1862.7888
       mult_num:  3
-  Lactyl Multimers (=l):
-    l-AE:
+  Lactyl Multimers (=Lac):
+    Lac-AE:
       mass: 290.1116
       mult_num: 2
-    l-AEJ:
+    Lac-AEJ:
       mass: 462.1962
       mult_num: 2
-    l-AEJA:
+    Lac-AEJA:
       mass: 533.2333
       mult_num: 2
-    l-AEJ=l-AEJ:
+    Lac-AEJ=Lac-AEJ:
       mass: 906.3818
       mult_num: 3
-    l-AEJ=l-AEJA:
+    Lac-AEJ=Lac-AEJA:
       mass: 977.4189
       mult_num: 3
-    l-AEJA=l-AEJA:
+    Lac-AEJA=Lac-AEJA:
       mass: 1048.4560
       mult_num: 3
 mod_type:
   Extra Disaccharide (+gm):
     mass: 478.1799
-  Lactyl Peptides (l):
+  Lactyl Peptides (Lac):
     mass: -408.1744
   Loss of Disaccharide (-gm):
     mass: -480.1955
@@ -82,10 +82,10 @@ mod_type:
 
 mass_to_clean:
   sodiated:
-    parent: ^gm|^m|^l
+    parent: ^gm|^m|^Lac
     target: \(Na\+\)
   potassated:
-    parent: ^gm|^m|^l
+    parent: ^gm|^m|^Lac
     target: \(K\+\)
   decay:
     parent: ^gm

@@ -144,7 +144,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     # NOTE: All of these functions assume (with no guarantee) that structures begin with `gm-`
     special_cases = {
         "Extra Disaccharide (+gm)": lambda s: "gm-" + s,
-        "Lactyl Peptides (l)": lambda s: "l" + s[2:],
+        "Lactyl Peptides (Lac)": lambda s: "Lac" + s[2:],
         "Loss of Disaccharide (-gm)": lambda s: s[3:],
         "Loss of GlcNAc (-g)": lambda s: s[1:],
     }
