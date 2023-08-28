@@ -9,7 +9,7 @@
 <Accordion autocollapse class="w-full">
 	{#each Object.entries(massLibraries) as [species, libraries], speciesId}
 		<AccordionItem>
-			<svelte:fragment slot="summary">{species}</svelte:fragment>
+			<svelte:fragment slot="summary"><i>{species}</i></svelte:fragment>
 			<svelte:fragment slot="content">
 				<ListBox>
 					{#each Object.entries(libraries) as [name, library], libraryId}
