@@ -18,7 +18,7 @@
 
 	function openDrawer(): void {
 		drawerStore.open({
-			width: 'max-w-[90%] w-96'
+			width: 'max-w-[80%] w-96'
 		});
 	}
 </script>
