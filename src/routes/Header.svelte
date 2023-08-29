@@ -31,15 +31,11 @@
 	</p>
 
 	<svelte:fragment slot="trail">
-		<a
-			href="https://mesnage-org.github.io/pgfinder/master/usage.html"
-			target="_blank"
-			rel="noreferrer"
-		>
+		<a href="https://mesnage-org.github.io/pgfinder/master/usage.html" target="_blank">
 			<Fa icon={faBook} size="lg" />
 		</a>
 
-		<a href="https://github.com/Mesnage-Org/pgfinder" target="_blank" rel="noreferrer">
+		<a href="https://github.com/Mesnage-Org/pgfinder" target="_blank">
 			<Fa icon={faGithub} size="lg" />
 		</a>
 	</svelte:fragment>

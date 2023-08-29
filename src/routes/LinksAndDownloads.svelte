@@ -32,15 +32,19 @@
 	<h4 class="h4">Useful Links & Software</h4>
 	<ul class="list-disc pl-4">
 		<li>
-			<a href="https://github.com/Mesnage-Org/pgfinder/tree/master/pgfinder/masses" class="anchor">
+			<a
+				href="https://github.com/Mesnage-Org/pgfinder/tree/master/pgfinder/masses"
+				class="anchor"
+				target="_blank"
+			>
 				Browse Built-In Mass Libraries
 			</a>
 		</li>
 		<li>
-			<a href="https://www.maxquant.org/" class="anchor">Download MaxQuant</a>
+			<a href="https://www.maxquant.org/" class="anchor" target="_blank">Download MaxQuant</a>
 		</li>
 		<li>
-			<a href="https://proteowizard.sourceforge.io/download.html" class="anchor">
+			<a href="https://proteowizard.sourceforge.io/download.html" class="anchor" target="_blank">
 				Download ProteoWizard (MSConvert)
 			</a>
 		</li>
@@ -59,7 +63,7 @@
 		</strong>
 		<i>eLife</i> <strong>10</strong>:e70597
 		<br />
-		<a href="https://doi.org/10.7554/eLife.70597" class="anchor">
+		<a href="https://doi.org/10.7554/eLife.70597" class="anchor" target="_blank">
 			https://doi.org/10.7554/eLife.70597
 		</a>
 	</p>
