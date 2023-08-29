@@ -17,7 +17,7 @@ repos:
     rev: v3.0.1
     hooks:
       - id: prettier
-        args: [--plugin, prettier-plugin-svelte, --write, .] # edit files in-place
+        args: [--write] # edit files in-place
         additional_dependencies:
           - prettier
           - prettier-plugin-svelte
