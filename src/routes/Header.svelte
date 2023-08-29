@@ -1,0 +1,39 @@
+<script lang="ts">
+	import { AppBar } from '@skeletonlabs/skeleton';
+	import Fa from 'svelte-fa/src/fa.svelte';
+	import { faBars, faBook } from '@fortawesome/free-solid-svg-icons';
+	import { faGithub } from '@fortawesome/free-brands-svg-icons';
+	import { getDrawerStore } from '@skeletonlabs/skeleton';
+	export let pgfinderVersion: string | undefined;
+
+	const drawerStore = getDrawerStore();
+	function openDrawer(): void {
+		drawerStore.open({
+			width: 'max-w-[80%] w-96'
+		});
+	}
+</script>
+
+<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
+	<svelte:fragment slot="lead">
+		<button on:click={openDrawer}>
+			<Fa icon={faBars} size="lg" />
+		</button>
+	</svelte:fragment>
+
+	<strong class="text-xl">PGFinder (v{pgfinderVersion})</strong>
+
+	<svelte:fragment slot="trail">
+		<a
+			href="https://mesnage-org.github.io/pgfinder/master/usage.html"
+			target="_blank"
+			rel="noreferrer"
+		>
+			<Fa icon={faBook} size="lg" />
+		</a>
+
+		<a href="https://github.com/Mesnage-Org/pgfinder" target="_blank" rel="noreferrer">
+			<Fa icon={faGithub} size="lg" />
+		</a>
+	</svelte:fragment>
+</AppBar>

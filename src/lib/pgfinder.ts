@@ -16,7 +16,9 @@ const pyio: Pyio = { ...defaultPyio };
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
 	await micropip.install('pgfinder==1.0.0rc3');
-	await pyodide.runPythonAsync('from pgfinder.gui.shim import *');
+	await pyodide.runPythonAsync('import pgfinder; from pgfinder.gui.shim import *');
+
+	const pgfinderVersion = await pyodide.runPythonAsync('pgfinder.__version__');
 
 	const proxy = await pyodide.runPythonAsync('allowed_modifications()');
 	const allowedModifications = proxy.toJs();
@@ -28,6 +30,7 @@ const pyio: Pyio = { ...defaultPyio };
 	postMessage({
 		type: 'Ready',
 		content: {
+			pgfinderVersion,
 			allowedModifications,
 			massLibraries
 		}

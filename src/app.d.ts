@@ -1,13 +1,3 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-// and what to do when importing types
-declare namespace App {
-	// interface Locals {}
-	// interface PageData {}
-	// interface Error {}
-	// interface Platform {}
-}
-
 declare type VirtFile = { name: string; content: ArrayBuffer };
 
 declare type Pyio = {
@@ -29,6 +19,7 @@ declare type MassLibraryIndex = {
 	};
 };
 declare type ReadyMsg = {
+	pgfinderVersion: string;
 	allowedModifications: Array<string>;
 	massLibraries: MassLibraryIndex;
 };
