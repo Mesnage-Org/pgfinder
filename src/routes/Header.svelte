@@ -21,7 +21,14 @@
 		</button>
 	</svelte:fragment>
 
-	<strong class="text-xl">PGFinder (v{pgfinderVersion})</strong>
+	<p class="text-xl text-center">
+		<strong>
+			PGFinder
+			{#if pgfinderVersion}
+				(v{pgfinderVersion})
+			{/if}
+		</strong>
+	</p>
 
 	<svelte:fragment slot="trail">
 		<a

@@ -33,7 +33,7 @@
 	<ul class="list-disc pl-4">
 		<li>
 			<a href="https://github.com/Mesnage-Org/pgfinder/tree/master/pgfinder/masses" class="anchor">
-				Download Built-In Mass Libraries
+				Browse Built-In Mass Libraries
 			</a>
 		</li>
 		<li>
