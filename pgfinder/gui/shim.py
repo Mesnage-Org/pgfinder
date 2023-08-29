@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from pgfinder import matching, pgio, validation
 from pgfinder.gui.internal import (
     MASS_LIB_DIR,
@@ -8,11 +6,11 @@ from pgfinder.gui.internal import (
 )
 
 
-def mass_library_index() -> Dict:
+def mass_library_index():
     return open(MASS_LIB_DIR / "index.json").read()
 
 
-def allowed_modifications() -> List:
+def allowed_modifications():
     return validation.allowed_modifications()
 
 
