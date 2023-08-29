@@ -78,7 +78,7 @@
 	</svelte:fragment>
 
 	<div class="h-full flex flex-col justify-center items-center">
-		<div class="card min-w-[20rem]">
+		<div class="card m-2 w-[20rem] max-w-[90%]">
 			<section class="flex flex-col space-y-4 justify-center p-4">
 				<MsDataUploader bind:value={pyio.msData} />
 				<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />
