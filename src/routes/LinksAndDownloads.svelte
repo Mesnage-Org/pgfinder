@@ -32,6 +32,11 @@
 	<h4 class="h4">Useful Links & Software</h4>
 	<ul class="list-disc pl-4">
 		<li>
+			<a href="https://github.com/Mesnage-Org/pgfinder/tree/master/pgfinder/masses" class="anchor">
+				Download Built-In Mass Libraries
+			</a>
+		</li>
+		<li>
 			<a href="https://www.maxquant.org/" class="anchor">Download MaxQuant</a>
 		</li>
 		<li>
