@@ -36,6 +36,7 @@
 	let loading = true;
 	let processing = false;
 	let ready = false;
+	let advancedMode = false;
 
 	let pgfinderVersion: string;
 	let allowedModifications: Array<string>;
@@ -66,6 +67,16 @@
 		pgfinder?.postMessage(pyio);
 		processing = true;
 	}
+
+	// Reactively adapt the UI when entering advanced mode
+	let uiWidth: string;
+	$: uiWidth = advancedMode ? 'md:w-[40rem]' : '';
+
+	// It's nice to animate the width when opening and closing advanced mode, but
+	// it seems like animating the opening leads to some jittery animations, so
+	// this is just enabling the animation on close. If browsers ever put
+	// transitions in their own threads, then maybe this will look nice...
+	$: animateWidth = !advancedMode ? 'transition-all' : '';
 </script>
 
 <Drawer>
@@ -78,7 +89,7 @@
 	</svelte:fragment>
 
 	<div class="h-full flex flex-col justify-center items-center">
-		<div class="card m-2 w-[20rem] max-w-[90%]">
+		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
 			<section class="flex flex-col space-y-4 justify-center p-4">
 				<MsDataUploader bind:value={pyio.msData} />
 				<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />
@@ -87,6 +98,7 @@
 					bind:ppmTolerance={pyio.ppmTolerance}
 					bind:cleanupWindow={pyio.cleanupWindow}
 					bind:consolidationPpm={pyio.consolidationPpm}
+					bind:advancedMode
 					{allowedModifications}
 				/>
 				<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>

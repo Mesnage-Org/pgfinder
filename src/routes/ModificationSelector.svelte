@@ -4,10 +4,10 @@
 	export let allowedModifications: Array<string> | undefined;
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center aspect-square overflow-y-auto">
 	<h5 class="pb-1 h5">Modifications</h5>
 	{#if allowedModifications !== undefined}
-		<ListBox class="w-full max-h-32 overflow-auto rounded-container-token" multiple>
+		<ListBox class="w-full overflow-y-auto" multiple>
 			{#each [...allowedModifications] as name}
 				<ListBoxItem bind:group={value} name="enabled-modifications" value={name}>
 					{name}
@@ -15,7 +15,7 @@
 			{/each}
 		</ListBox>
 	{:else}
-		<div class="flex justify-center">
+		<div class="flex h-full items-center">
 			<ProgressRadial />
 		</div>
 	{/if}
