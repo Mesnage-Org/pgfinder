@@ -1,5 +1,8 @@
 multimer:
   Cross-Linked Multimers (=):
+    gm-A:
+      mass: 569.2433
+      mult_num: 2
     gm-AE:
       mass: 698.2858
       mult_num: 2
@@ -19,6 +22,9 @@ multimer:
       mass: 1864.8044
       mult_num: 3
   Glycosidic Multimers (-):
+    gm-A:
+      mass: 567.2277
+      mult_num: 2
     gm-AE:
       mass: 696.2702
       mult_num: 2
@@ -38,6 +44,9 @@ multimer:
       mass: 1862.7888
       mult_num:  3
   Lactyl Multimers (=Lac):
+    Lac-A:
+      mass: 163.0847
+      mult_num: 2
     Lac-AE:
       mass: 290.1116
       mult_num: 2
