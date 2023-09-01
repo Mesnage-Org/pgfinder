@@ -48,7 +48,7 @@
 				Download ProteoWizard (MSConvert)
 			</a>
 		</li>
-		<li>How to deconvolute raw data (coming soon!)</li>
+		<!-- <li>How to deconvolute raw data (coming soon!)</li> -->
 	</ul>
 
 	<hr class="my-4" />
