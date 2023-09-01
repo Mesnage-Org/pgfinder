@@ -13,7 +13,7 @@
 </script>
 
 <div class="flex flex-col items-center">
-	<h5 class="pb-1 h5">Mass Library</h5>
+	<h5 class="pb-1 h5">Mass Database</h5>
 	<TabGroup class="w-full" justify="justify-center">
 		<Tab bind:group={customMassLibrary} name="built-in" value={false}>Built-In</Tab>
 		<Tab bind:group={customMassLibrary} name="custom" value={true}>Custom</Tab>
