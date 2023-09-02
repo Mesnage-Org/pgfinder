@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-09-02
+
+### Fixed
+
+- Restore `pgfinder_interactive.ipynb` to redirect users from the ELife paper
+
 ## [1.0.0-rc.3] - 2023-08-28
 
 ### Changed
@@ -24,7 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Let there be peptidoglycan.
 
-[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0-rc.3...HEAD
+[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0-rc.3...v1.0.0
 [1.0.0-rc.3]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0-rc.2...v1.0.0-rc.3
 [1.0.0-rc.2]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0-rc.1...v1.0.0-rc.2
 [1.0.0-rc.1]: https://github.com/Mesnage-Org/pgfinder/releases/tag/v1.0.0-rc.1
