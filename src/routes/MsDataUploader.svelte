@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { FileDropzone, popup } from '@skeletonlabs/skeleton';
-	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import Tooltip from './Tooltip.svelte';
 	export let value: Array<VirtFile> | undefined;
 
 	let files: FileList;
@@ -16,16 +15,10 @@
 <div class="flex flex-col items-center">
 	<h5 class="pb-1 h5">
 		Deconvoluted Datasets
-		<div
-			class="inline ml-1 [&>*]:pointer-events-none"
-			use:popup={{
-				event: 'hover',
-				target: `supported-versions`,
-				placement: 'top'
-			}}
-		>
-			<Fa icon={faCircleInfo} class="inline" />
-		</div>
+		<Tooltip style="inline ml-1" popupId="supported-versions">
+			This version has been tested with .ftrs files from Byos v3.11, v5.1, and v5.2, as well as
+			allPeptides.txt files from Maxquant v2.0.1.0 through v2.4.2.0
+		</Tooltip>
 	</h5>
 
 	<FileDropzone
@@ -53,13 +46,4 @@
 			{/if}
 		</svelte:fragment>
 	</FileDropzone>
-
-	<!-- I need to abstract these popups and their settings into a couple of my own components... -->
-	<div class="card p-4 variant-filled-secondary max-w-md" data-popup="supported-versions">
-		<p class="text-center">
-			This version has been tested with .ftrs files from Byos v3.11, v5.1, and v5.2, as well as
-			allPeptides.txt files from Maxquant v2.0.1.0 through v2.4.2.0
-		</p>
-		<div class="arrow variant-filled-secondary" />
-	</div>
 </div>
