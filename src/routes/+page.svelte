@@ -74,7 +74,7 @@
 
 	// It's nice to animate the width when opening and closing advanced mode, but
 	// it seems like animating the opening leads to some jittery animations, so
-	// this is just enabling the animation on close. If browsers ever put
+	// this is just enables the animation on close. If browsers ever put
 	// transitions in their own threads, then maybe this will look nice...
 	$: animateWidth = !advancedMode ? 'transition-all' : '';
 </script>

@@ -16,7 +16,7 @@
 	<Fa icon={faCircleInfo} class="inline" />
 </div>
 <div
-	class="card p-4 variant-filled-secondary max-w-[calc(100vw-16px)] md:max-w-md z-50"
+	class="card p-4 variant-filled-secondary w-96 max-w-[calc(100vw-16px)] z-50"
 	data-popup={popupId}
 >
 	<p class="text-center font-normal font-token">
