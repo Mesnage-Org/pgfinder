@@ -6,7 +6,11 @@
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover" data-theme="rocket">
+
+	<!-- NOTE: The `class-"absolute w-full"` is an ungodly hack to stop tooltips from
+	     zooming out the viewport of mobile users, scaling the entire page up and down...-->
+
+	<body data-sveltekit-preload-data="hover" data-theme="rocket" class="absolute w-full">
 		<div style="display: contents" class="h-full overflow-hidden">%sveltekit.body%</div>
 	</body>
 </html>
