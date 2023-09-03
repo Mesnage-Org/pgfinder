@@ -35,15 +35,14 @@ def ms_file_reader(file) -> pd.DataFrame:
     pd.DataFrame
         File loaded as Pandas Dataframe.
     """
-    filename = file
-    if not str(file).find("ftrs") == -1:
+    if "ftrs" in file:
         return_df = ftrs_reader(file)
-    elif not str(file).find("txt") == -1:
+    elif "txt" in file:
         return_df = maxquant_file_reader(file)
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["file"] = PurePath(filename).name
+    return_df.attrs["file"] = PurePath(file).name
     LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
     return return_df
 
@@ -126,19 +125,19 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         return ff
 
 
-def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
+def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     """Reads theoretical masses files (csv) returning a Panda Dataframe
 
     Parameters
     ----------
-    input_file: Union[str, Path]
+    file: Union[str, Path]
 
     Returns
     -------
     pd.DataFrame
         Pandas DataFrame of theoretical masses.
     """
-    theo_masses_df = pd.read_csv(input_file)
+    theo_masses_df = pd.read_csv(file)
     try:
         theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     except ValueError as e:
@@ -148,8 +147,8 @@ def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
                 "columns. Have you checked the format of your database against one of the built-in databases?"
             )
         ) from e
-    theo_masses_df.attrs["file"] = PurePath(input_file).name
-    LOGGER.info(f"Theoretical masses loaded from     : {input_file}")
+    theo_masses_df.attrs["file"] = PurePath(file).name
+    LOGGER.info(f"Theoretical masses loaded from     : {file}")
     return theo_masses_df
 
 
