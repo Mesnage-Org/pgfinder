@@ -4,9 +4,12 @@
 	import {
 		AppShell,
 		Drawer,
+		Modal,
 		ProgressBar,
 		storePopup,
-		initializeStores
+		initializeStores,
+		getModalStore,
+		type ModalSettings
 	} from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { onMount } from 'svelte';
@@ -23,9 +26,13 @@
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import { defaultPyio } from '$lib/constants';
 	import fileDownload from 'js-file-download';
+	import ErrorModal from './ErrorModal.svelte';
 
-	// Initialize Stores for Drawers
+	// Initialize Stores for Drawers and Modals
 	initializeStores();
+
+	// Get the Error Modal Store
+	const modalStore = getModalStore();
 
 	// Floating UI for Popups
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
@@ -55,6 +62,18 @@
 			} else if (type === 'Result') {
 				fileDownload(content.blob, content.filename);
 				processing = false;
+			} else if (type === 'Error') {
+				const modal: ModalSettings = {
+					type: 'component',
+					component: {
+						ref: ErrorModal,
+						props: {
+							message: content.message
+						}
+					}
+				};
+				modalStore.trigger(modal);
+				processing = false;
 			}
 		};
 	});
@@ -78,6 +97,8 @@
 	// transitions in their own threads, then maybe this will look nice...
 	$: animateWidth = !advancedMode ? 'transition-all' : '';
 </script>
+
+<Modal regionBackdrop="bg-surface-backdrop-token overflow-y-hidden" />
 
 <Drawer>
 	<LinksAndDownloads />
