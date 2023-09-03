@@ -35,15 +35,18 @@ def ms_file_reader(file) -> pd.DataFrame:
     pd.DataFrame
         File loaded as Pandas Dataframe.
     """
-    if "ftrs" in file:
+    # If we get a path, we need to convert to a string for `in` to work
+    filename = PurePath(file).name
+
+    if "ftrs" in filename:
         return_df = ftrs_reader(file)
-    elif "txt" in file:
+    elif "txt" in filename:
         return_df = maxquant_file_reader(file)
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["file"] = PurePath(file).name
-    LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
+    return_df.attrs["file"] = filename
+    LOGGER.info(f"Mass spectroscopy file loaded from : {filename}")
     return return_df
 
 
