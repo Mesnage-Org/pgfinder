@@ -12,9 +12,8 @@ MASS_LIB_DIR = Path(sys.modules["pgfinder"].__file__).parent / "masses"
 
 def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
     # Attempt to load a built-in library if no content was uploaded
-    upload["content"] = (
-        open(MASS_LIB_DIR / upload["name"], "rb").read() if upload["content"] is None else upload["content"]
-    )
+    if upload["content"] is None:
+        upload["content"] = open(MASS_LIB_DIR / upload["name"], "rb").read()
 
     with uploaded_file(upload) as file:
         return pgio.theo_masses_reader(file)
