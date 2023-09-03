@@ -36,17 +36,22 @@ def ms_file_reader(file) -> pd.DataFrame:
         File loaded as Pandas Dataframe.
     """
     # If we get a path, we need to convert to a string for `in` to work
-    filename = PurePath(file).name
+    filename = PurePath(file)
 
-    if "ftrs" in filename:
+    if filename.suffix == ".ftrs":
         return_df = ftrs_reader(file)
-    elif "txt" in filename:
+    elif filename.suffix == ".txt":
         return_df = maxquant_file_reader(file)
     else:
-        raise ValueError("Unknown file type.")
+        raise UserError(
+            (
+                "The supplied data file was neither a .ftrs nor a .txt file. Please ensure that "
+                "you've selected a valid Byos (.ftrs) or MaxQuant (.txt) file."
+            )
+        )
 
-    return_df.attrs["file"] = filename
-    LOGGER.info(f"Mass spectroscopy file loaded from : {filename}")
+    return_df.attrs["file"] = filename.name
+    LOGGER.info(f"Mass spectroscopy file loaded from : {filename.name}")
     return return_df
 
 
@@ -140,7 +145,23 @@ def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     pd.DataFrame
         Pandas DataFrame of theoretical masses.
     """
-    theo_masses_df = pd.read_csv(file)
+    try:
+        theo_masses_df = pd.read_csv(file)
+    except (pd.errors.ParserError, UnicodeDecodeError) as e:
+        raise UserError(
+            (
+                "The supplied mass database doesn't contain valid CSV. Double-check that you've "
+                "selected the correct file and that it's plain CSV."
+            )
+        ) from e
+    except pd.errors.EmptyDataError as e:
+        raise UserError(
+            (
+                "The supplied mass database was empty. Double-check that you've "
+                "selected the correct file and that it contains CSV data."
+            )
+        ) from e
+
     try:
         theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     except ValueError as e:
