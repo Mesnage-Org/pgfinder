@@ -1,11 +1,12 @@
+import type { PyProxy, PythonError } from 'pyodide/ffi';
 import { loadPyodide } from 'pyodide';
 import { defaultPyio } from '$lib/constants';
 
 const pyio: Pyio = { ...defaultPyio };
-
 const pyodide = await loadPyodide({
 	indexURL: '/pgfinder-gui/pyodide'
 });
+
 pyodide.registerJsModule('pyio', pyio);
 await pyodide.loadPackage(['micropip', 'sqlite3']);
 const micropip = pyodide.pyimport('micropip');
@@ -30,9 +31,7 @@ postMessage({
 	}
 });
 
-onmessage = async ({ data }) => {
-	Object.assign(pyio, data);
-	const proxy = await pyodide.runPythonAsync('run_analysis()');
+function postResult(proxy: PyProxy) {
 	const csvFiles = proxy.toJs();
 	proxy.destroy();
 	csvFiles.forEach((csv: string, file: string) => {
@@ -48,4 +47,19 @@ onmessage = async ({ data }) => {
 			}
 		});
 	});
+}
+
+function postError(error: PythonError) {
+	const message = error.message;
+	postMessage({
+		type: 'Error',
+		content: {
+			message
+		}
+	});
+}
+
+onmessage = async ({ data }) => {
+	Object.assign(pyio, data);
+	pyodide.runPythonAsync('run_analysis()').then(postResult).catch(postError);
 };

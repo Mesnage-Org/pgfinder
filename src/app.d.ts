@@ -27,7 +27,10 @@ declare type ResultMsg = {
 	filename: string;
 	blob: Blob;
 };
+declare type ErrorMsg = {
+	message: string;
+};
 declare type Msg = {
 	type: MsgType;
-	content: ReadyMsg | ResultMsg;
+	content: ReadyMsg | ResultMsg | ErrorMsg;
 };
