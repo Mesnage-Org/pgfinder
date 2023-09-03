@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 import pgfinder.matching as matching
+from pgfinder.errors import UserError
 from pgfinder.matching import calculate_ppm_delta, pick_most_likely_structures
 
 BASE_DIR = Path.cwd()
@@ -19,8 +20,8 @@ def test_filtered_theo(raw_data, theo_masses, ppm):
 
 def test_filtered_theo_no_match(raw_data_no_match, theo_masses, ppm):
     with pytest.raises(
-        ValueError,
-        match="NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance.",
+        UserError,
+        match="No matches were found for this search. Please check your database or increase mass tolerance.",
     ):
         matching.filtered_theo(raw_data_no_match, theo_masses, ppm)
 

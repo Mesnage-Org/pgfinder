@@ -7,6 +7,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
+from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -57,9 +58,7 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_df: pd.DataFrame, user_ppm: int) -
     filtered_df.drop_duplicates(inplace=True)
 
     if filtered_df.empty:
-        raise ValueError(
-            "NO MATCHES WERE FOUND for this search. Please check your database or increase mass tolerance."
-        )
+        raise UserError("No matches were found for this search. Please check your database or increase mass tolerance.")
 
     return filtered_df
 

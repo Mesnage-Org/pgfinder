@@ -16,6 +16,7 @@ try:
 except ImportError:
     from yaml import Loader
 
+from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
@@ -34,16 +35,18 @@ def ms_file_reader(file) -> pd.DataFrame:
     pd.DataFrame
         File loaded as Pandas Dataframe.
     """
-    filename = file
-    if not str(file).find("ftrs") == -1:
+    # If we get a path, we need to convert to a string for `in` to work
+    filename = PurePath(file).name
+
+    if "ftrs" in filename:
         return_df = ftrs_reader(file)
-    elif not str(file).find("txt") == -1:
+    elif "txt" in filename:
         return_df = maxquant_file_reader(file)
     else:
         raise ValueError("Unknown file type.")
 
-    return_df.attrs["file"] = PurePath(filename).name
-    LOGGER.info(f"Mass spectroscopy file loaded from : {file}")
+    return_df.attrs["file"] = filename
+    LOGGER.info(f"Mass spectroscopy file loaded from : {filename}")
     return return_df
 
 
@@ -106,8 +109,8 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
                 inplace=True,
             )
         else:
-            raise ValueError(
-                "The supplied FTRS file could not be read! Did it come from an unsupported version of Byos?"
+            raise UserError(
+                "The supplied FTRS file could not be read. Did it come from an unsupported version of Byos?"
             )
 
         # Reorder columns in dataframe to desired order, dropping unwanted columns
@@ -125,22 +128,30 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         return ff
 
 
-def theo_masses_reader(input_file: Union[str, Path]) -> pd.DataFrame:
+def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     """Reads theoretical masses files (csv) returning a Panda Dataframe
 
     Parameters
     ----------
-    input_file: Union[str, Path]
+    file: Union[str, Path]
 
     Returns
     -------
     pd.DataFrame
         Pandas DataFrame of theoretical masses.
     """
-    theo_masses_df = pd.read_csv(input_file)
-    theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
-    theo_masses_df.attrs["file"] = PurePath(input_file).name
-    LOGGER.info(f"Theoretical masses loaded from     : {input_file}")
+    theo_masses_df = pd.read_csv(file)
+    try:
+        theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
+    except ValueError as e:
+        raise UserError(
+            (
+                "The supplied mass database didn't have the correct number of "
+                "columns. Have you checked the format of your database against one of the built-in databases?"
+            )
+        ) from e
+    theo_masses_df.attrs["file"] = PurePath(file).name
+    LOGGER.info(f"Theoretical masses loaded from     : {file}")
     return theo_masses_df
 
 
@@ -159,7 +170,15 @@ def maxquant_file_reader(file):
     """
 
     # reads file into dataframe
-    maxquant_df = pd.read_table(file, low_memory=False)
+    try:
+        maxquant_df = pd.read_table(file, low_memory=False)
+    except pd.errors.EmptyDataError as e:
+        raise UserError(
+            (
+                "No data was found in the supplied .txt file. Have you checked "
+                "you're using the allPeptides.txt file from MaxQuant?"
+            )
+        ) from e
     # adds inferredStructure column
     maxquant_df["Inferred structure"] = np.nan
     # adds theo_mwMonoisotopic column
@@ -186,7 +205,15 @@ def maxquant_file_reader(file):
         "Intensity",
     ]
     # Reorder columns in dataframe to desired order.
-    maxquant_df = maxquant_df[cols_order]
+    try:
+        maxquant_df = maxquant_df[cols_order]
+    except KeyError as e:
+        raise UserError(
+            (
+                "The supplied MaxQuant file could not be read. Have you checked "
+                "you're using the allPeptides.txt file from a supported version of MaxQuant?"
+            )
+        ) from e
 
     return maxquant_df
 

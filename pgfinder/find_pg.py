@@ -10,6 +10,7 @@ from typing import Union
 
 import yaml
 
+from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME, setup_logger
 from pgfinder.matching import data_analysis
 from pgfinder.pgio import (
@@ -121,43 +122,47 @@ def process_file(
 def main():
     """Run processing."""
 
-    # Parse command line options, load config and update with command line options
-    parser = create_parser()
-    args = parser.parse_args()
-    if args.config_file is not None:
-        config = read_yaml(args.config_file)
-        LOGGER.info(f"Configuration file loaded from     : {args.config_file}")
-    else:
-        default_config = pkg_resources.open_text(__package__, "default_config.yaml")
-        config = yaml.safe_load(default_config.read())
-        LOGGER.info("Default configuration file loaded.")
-    config = update_config(config, args)
+    try:
+        # Parse command line options, load config and update with command line options
+        parser = create_parser()
+        args = parser.parse_args()
+        if args.config_file is not None:
+            config = read_yaml(args.config_file)
+            LOGGER.info(f"Configuration file loaded from     : {args.config_file}")
+        else:
+            default_config = pkg_resources.open_text(__package__, "default_config.yaml")
+            config = yaml.safe_load(default_config.read())
+            LOGGER.info("Default configuration file loaded.")
+        config = update_config(config, args)
 
-    # Optionally ignore all warnings or just show deprecation warnings
-    if config["warnings"] == "ignore":
-        warnings.filterwarnings("ignore")
-        LOGGER.info("NB : All warnings have been turned off for this run.")
-    elif config["warnings"] == "deprecated":
+        # Optionally ignore all warnings or just show deprecation warnings
+        if config["warnings"] == "ignore":
+            warnings.filterwarnings("ignore")
+            LOGGER.info("NB : All warnings have been turned off for this run.")
+        elif config["warnings"] == "deprecated":
 
-        def fxn():
-            warnings.warn("deprecated", DeprecationWarning, stacklevel=2)
+            def fxn():
+                warnings.warn("deprecated", DeprecationWarning, stacklevel=2)
 
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            fxn()
-    if config["quiet"]:
-        LOGGER.setLevel("ERROR")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                fxn()
+        if config["quiet"]:
+            LOGGER.setLevel("ERROR")
 
-    process_file(
-        input_file=config["input_file"],
-        masses_file=config["masses_file"],
-        ppm_tolerance=config["ppm_tolerance"],
-        consolidation_ppm=config["consolidation_ppm"],
-        time_delta=config["time_delta"],
-        mod_list=config["mod_list"],
-        output_dir=config["output_dir"],
-        float_format=config["float_format"],
-    )
+        process_file(
+            input_file=config["input_file"],
+            masses_file=config["masses_file"],
+            ppm_tolerance=config["ppm_tolerance"],
+            consolidation_ppm=config["consolidation_ppm"],
+            time_delta=config["time_delta"],
+            mod_list=config["mod_list"],
+            output_dir=config["output_dir"],
+            float_format=config["float_format"],
+        )
+    except UserError as e:
+        # Avoid dumping a whole stack-trace if it's the user who's done something wrong
+        LOGGER.error(e)
 
 
 if __name__ == "__main__":
