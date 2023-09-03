@@ -5,5 +5,3 @@ class UserError(ValueError):
     the message text should make it clear what's gone wrong and which steps the
     user can take to resolve the problem.
     """
-
-    pass
