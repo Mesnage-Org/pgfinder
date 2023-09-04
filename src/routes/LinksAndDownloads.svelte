@@ -37,7 +37,7 @@
 				class="anchor"
 				target="_blank"
 			>
-				Browse Built-In Mass Libraries
+				Browse Built-In Mass Databases
 			</a>
 		</li>
 		<li>
