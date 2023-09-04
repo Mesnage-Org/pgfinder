@@ -22,7 +22,7 @@
 	</h5>
 
 	<FileDropzone
-		class="max-h-48 overflow-auto"
+		regionInterface="overflow-hidden"
 		name="ms-data"
 		bind:files
 		on:change={dataUploaded}
