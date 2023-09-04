@@ -3,7 +3,7 @@
 ![CI Tests](https://github.com/Mesnage-Org/pgfinder/actions/workflows/ci-tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Mesnage-Org/pgfinder/branch/master/graph/badge.svg?token=5SM94G9Z6K)](https://codecov.io/gh/Mesnage-Org/pgfinder)
 [![PyPI version](https://img.shields.io/pypi/v/pgfinder?color=blue)](https://pypi.org/project/pgfinder/)
-[![Docs](https://img.shields.io/badge/github.io-docs-green)](https://mesnage-org.github.io/pgfinder/)
+[![Documentation Status](https://readthedocs.org/projects/pgfinder/badge/?version=latest)](https://pgfinder.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/ORDA--DOI-10.15131%2Fshef.data.20101751.v1-lightgrey)](https://doi.org/10.15131/shef.data.20101751.v1)
 
 A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder-gui/). For
@@ -13,7 +13,7 @@ refer to the [Installation](https://mesnage-org.github.io/pgfinder/master/instal
 [Usage](https://mesnage-org.github.io/pgfinder/master/usage.html) documentation.
 
 For an introduction to Peptidoglycan analysis please refer to the
-[documentation](https://mesnage-org.github.io/pgfinder/master/introduction.html).
+[documentation](https://pgfinder.readthedocs.io/en/latest/introduction.html).
 
 ## Usage
 
@@ -29,12 +29,12 @@ find_pg -c config.yaml
 ```
 
 For details of using the CLI version including the configuration file please refer to the
-[Usage](https://mesnage-org.github.io/pgfinder/master/usage.html) section of the Documentation.
+[Usage](https://pgfinder.readthedocs.io/en/latest/usage.html) section of the Documentation.
 
 ## Installation
 
 Detailed installation instructions can be found in the
-[Installation](https://mesnage-org.github.io/pgfinder/master/installation.html) section of the Documentation.
+[Installation](https://pgfinder.readthedocs.io/en/latest/installation.html) section of the Documentation.
 
 PGFinder is available from [PyPI](https://pypi.org/project/pgfinder/) so can be installed with `pip`.
 
@@ -59,7 +59,7 @@ pip install -e .
 ## Contributing
 
 Contributions are welcome, please refer to the detailed
-[Contributing](https://mesnage-org.github.io/pgfinder/master/contributing.html) section of the Documentation which
+[Contributing](https://pgfinder.readthedocs.io/en/latest/contributing.html) section of the Documentation which
 details how to setup and install all components and setup/configure the development tools such as `pre-commit`.
 
 ## Copying
