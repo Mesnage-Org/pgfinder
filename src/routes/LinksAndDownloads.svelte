@@ -6,7 +6,7 @@
 <div class="mx-4 my-4">
 	<h4 class="h4">Deconvoluted Example Datasets</h4>
 	<dl class="list-dl">
-		<a href="/pgfinder-gui/data/Ecoli_WT(Patel et al).ftrs">
+		<a href="/pgfinder-gui/data/E. coli WT (Patel et al).ftrs">
 			<div class="flex items-stretch hover:variant-soft-surface">
 				<div class="badge bg-secondary-500 h-full"><Fa icon={faDownload} size="lg" /></div>
 				<span class="flex-auto">
@@ -16,7 +16,7 @@
 			</div>
 		</a>
 
-		<a href="/pgfinder-gui/data/Cdiff_WT(Bern et al).ftrs">
+		<a href="/pgfinder-gui/data/C. difficile WT (Bern et al).ftrs">
 			<div class="flex items-stretch hover:variant-soft-surface">
 				<div class="badge bg-secondary-500 h-full"><Fa icon={faDownload} size="lg" /></div>
 				<span class="flex-auto">
