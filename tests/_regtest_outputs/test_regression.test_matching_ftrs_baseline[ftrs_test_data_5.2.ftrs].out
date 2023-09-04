@@ -4,8 +4,8 @@ masses_file : e_coli_monomer_masses.csv,2,9.5372,2;3;1,1864.7989,1864.8046,-3.04
 rt_window : 0.5,2,9.5372,2;3;1,1864.7989,1864.8046,-3.0439,gm-AEJA=gm-AEJA|2,541312872.0,,
 "modifications : ['Cross-Linked Multimers (=)', 'Glycosidic Multimers (-)', 'Lactyl Multimers (=Lac)', 'Anhydro-MurNAc (Anh)', 'Deacetylation (-Ac)', 'Deacetylation and Anhydro-MurNAc (-Ac, Anh)', 'Amidation (Am)', 'O-Acetylation (+Ac)', 'Potassium Adduct (K+)', 'Sodium Adduct (Na+)', 'Extra Disaccharide (+gm)', 'Lactyl Peptides (Lac)', 'Loss of Disaccharide (-gm)', 'Loss of GlcNAc (-g)']",2,9.5372,2;3;1,1864.7989,1864.7888,5.4288,gm-AEJQW=gm-AE|2,541312872.0,,
 ppm : 10,21,9.1561,2;3;1,1793.7639,1793.7675,-2.0128,gm-AEJA=gm-AEJ|2,200833004.0,"gm-AEJA=gm-AEJ|2,   gm-AEJ=gm-AEJA|2",200833004.0
-version : pgfinder,21,9.1561,2;3;1,1793.7639,1793.7675,-2.0128,gm-AEJ=gm-AEJA|2,200833004.0,,
-,21,9.1561,2;3;1,1793.7639,1793.7724,-4.7445,gm-AEJKD=gm-AE|2,200833004.0,,
+consolidation_ppm : 1,21,9.1561,2;3;1,1793.7639,1793.7675,-2.0128,gm-AEJ=gm-AEJA|2,200833004.0,,
+version : pgfinder,21,9.1561,2;3;1,1793.7639,1793.7724,-4.7445,gm-AEJKD=gm-AE|2,200833004.0,,
 ,21,9.1561,2;3;1,1793.7639,1793.7724,-4.7445,gm-AEJDE=gm-AE|2,200833004.0,,
 ,21,9.1561,2;3;1,1793.7639,1793.7466,9.6387,gm-AEJGW=gm-AE|2,200833004.0,,
 ,8,5.6048,2;1,870.368,870.3706,-2.9542,gm-AEJ|1,147769024.0,gm-AEJ|1,147769024.0

@@ -385,6 +385,7 @@ def data_analysis(
     cleaned_data_df.attrs["rt_window"] = rt_window
     cleaned_data_df.attrs["modifications"] = enabled_mod_list
     cleaned_data_df.attrs["ppm"] = ppm_tolerance
+    cleaned_data_df.attrs["consolidation_ppm"] = consolidation_ppm
 
     cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
     cleaned_data_df.reset_index(drop=True, inplace=True)
