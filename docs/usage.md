@@ -11,7 +11,8 @@ have to wait a whilst it sets up in the background (for those curious or interes
 [pyodide](mesnage-org.github.io/pgfinder-gui/) a [Web Assembly language (WASM)](https://webassembly.org/) in the
 background to install PGFinder and all its Python dependencies). Once loaded the page should look like the image below.
 
-![Initial screenshot of PGFinder GUI](img/pgfinder-gui001.png)
+![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/9537c200-5b48-4d50-ac72-1c8b62d83909)
+
 
 ### Upload a file
 
@@ -19,22 +20,28 @@ You should click on the large button with a dashed border to **Upload a file** a
 MaxQuant (`.txt`) file that you wish to analyse. Please note that the versions currently supported for Byos is 3.11 and MaxQuant is 2.4.2.0. 
 Please note that this WebUI allows you to upload multiple deconvoluted datasets to perform several searches with the same database in one go. 
 Each search output will be downloaded as an individual .csv file.  
+If you have no deconvoluted dataset but you want to test PGFinder, you can download a file for a test by clicking on the top left corner of the screen, as indicated below. The test file provided is a .ftrs file corresponding to a dataset described in the PGFinder article (Patel et al., 2021, eLife).
 
-### Choose a Mass Library
+![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/ffbab2ad-893c-4be5-8c74-891b33d85237)
 
-You then have the option to chose which **Mass Library** will be used to compare your sample to. There are several
+
+
+### Choose a Mass Database
+
+You then have the option to chose which **Mass Database** will be used to compare your sample to. There are several
 provisioned for your convenience, from two bacterial species _Clostridium difficile_ and _Escherichia coli_. Each
 species has three associated libraries, `Simple` / `Non-Redundant` / `Complex` and you can choose which to select by
-clicking on the downwards point arrow next to the species name to expand the options and clicking on on the library you
+clicking on the downwards point arrow next to the species name to expand the options and clicking on on the database you
 wish to use, it will turn white to indicate it has been selected as shown below (**NB** hover the mouse of the circle
-with an `i` in it and tool-tip box will pop-up describing the library).
+with an `i` in it and tool-tip box will pop-up describing the database).
 
 
-![Choosing the _Escherichia coli_ Non-Redundant Mass Library](img/pgfinder-gui002.png)
+![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/41764585-e64f-4a23-adfd-c7a379d47782)
 
-#### Using a Custom Library
 
-If you have your own library you can choose to upload it by clicking on **Custom** and the the **Upload a file** box
+#### Using a Custom Database
+
+If you have your own database you can choose to upload it by clicking on **Custom** and the the **Upload a file** box
 that appears under this and selecting your `.csv` file to upload.
 
 ### Advanced Options
@@ -60,13 +67,14 @@ The Cleanup Window parameter can also be set.
 
 In the screenshot below we have...
 
-1. Uploaded the `ftrs_test_data.ftrs` file.
-2. Selected the _Escherichia coli_ **Non-Redundant** mass library.
-3. Enabled Sodium and Potassium Modifications.
+1. Uploaded the ftrs file provided as an example = **E. coli_WT (Patel et al).ftrs**.
+2. Selected the _Escherichia coli_ **Non-Redundant** mass database.
+3. Enabled Cross-Linked Multimers and Anhydro-MurNAc Modifications.
 4. Set the PPM to 15.
-5. Set the Cleanup Window to 0.6.
+5. Set the Cleanup Window to 0.5.
+6. Set the consolidation PPM to 1.
 
-![Setting Advanced Options in PGFinder](img/pgfinder-gui003.png)
+![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/a63e21ff-8276-4bdd-be64-c27b41c4aab1)
 
 
 ### Run Analysis
@@ -82,6 +90,23 @@ j`.
 
 The results have the same name as the input file but with the extension `.csv`. This can be opened in statistical
 software or spreadsheets for subsequent viewing.
+
+THe picture belows shows the expected content of the output. It contains the following comumns:
+1. Metadata; describes all relevant information related to the search parameters, including the name of the deconvoluted data file and mass database used, the cleanup window time, modifications enabled, ppm tolerance, ppm consolidation value and PGFinder version used).
+2. ID; scan ID
+3. RT(min); retention time (in minutes) associated with the theoretical mass matched
+4. Charge; charge state of ions detected with the observed mass
+5. Obs(Da); deconvoluted mass (in Daltons) of individual molecules
+6. Theo(Da); theoretical monoisotoopic mass corresponding to the structure searches
+7. Delta_ppm; difference between observed and theoretical masses matched
+8. Inferred structure; muropeptide structure searched
+9. Intensity; ion intensity corresponding to the molecules with the observed mass matched to a theoretical structure
+10. Inferred structure (consolidated); most likely structure displaying the lowest absolute delta_ppm value. if two or more matches have a theoretical mass less than the consolidation ppm apart, then those matches are retained, leaving several possible matches consolidation 
+11. Intensity (consolidated); ion intensity corresponding to the molecules with the observed mass matched to a theoretical consolidated structure.     
+
+
+![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/309144ee-93a5-4ede-a861-ef18c231954e)
+
 
 ## Command Line
 
