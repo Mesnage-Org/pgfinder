@@ -9,8 +9,8 @@
 A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder-gui/). For
 descriptions of the features of each version please refer to the
 [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the development version please
-refer to the [Installation](https://mesnage-org.github.io/pgfinder/master/installation.html) and
-[Usage](https://mesnage-org.github.io/pgfinder/master/usage.html) documentation.
+refer to the [Installation](https://pgfinder.readthedocs.io/en/latest/installation.html) and
+[Usage](https://pgfinder.readthedocs.io/en/latest/usage.html) documentation.
 
 For an introduction to Peptidoglycan analysis please refer to the
 [documentation](https://pgfinder.readthedocs.io/en/latest/introduction.html).

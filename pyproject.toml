@@ -31,7 +31,7 @@ dependencies = [
 [project.urls]
 Source = "https://github.com/Mesnage-Org/pgfinder"
 Bug_Tracker = "https://github.com/Mesnage-Org/pgfinder/issues"
-Documentation = "https://mesnage-org.github.io/pgfinder/"
+Documentation = "https://pgfinder.readthedocs.io/en/latest/"
 
 
 [project.optional-dependencies]
