@@ -105,7 +105,7 @@ The picture below shows the expected content of the output. It contains the foll
 11. Intensity (consolidated); ion intensity corresponding to the molecules with the observed mass matched to a theoretical consolidated structure.     
 
 
-![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/309144ee-93a5-4ede-a861-ef18c231954e)
+![Sample output from PGFinder](https://github.com/Mesnage-Org/pgfinder/assets/70374280/309144ee-93a5-4ede-a861-ef18c231954e)
 
 
 ## Command Line
