@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 </script>
@@ -6,7 +7,7 @@
 <div class="mx-4 my-4">
 	<h4 class="h4">Deconvoluted Example Datasets</h4>
 	<dl class="list-dl">
-		<a href="/pgfinder-gui/data/E. coli WT (Patel et al).ftrs">
+		<a href="{base}/data/E. coli WT (Patel et al).ftrs">
 			<div class="flex items-stretch hover:variant-soft-surface">
 				<div class="badge bg-secondary-500 h-full"><Fa icon={faDownload} size="lg" /></div>
 				<span class="flex-auto">
@@ -16,7 +17,7 @@
 			</div>
 		</a>
 
-		<a href="/pgfinder-gui/data/C. difficile WT (Bern et al).ftrs">
+		<a href="{base}/data/C. difficile WT (Bern et al).ftrs">
 			<div class="flex items-stretch hover:variant-soft-surface">
 				<div class="badge bg-secondary-500 h-full"><Fa icon={faDownload} size="lg" /></div>
 				<span class="flex-auto">
