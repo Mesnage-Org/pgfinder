@@ -36,7 +36,7 @@ wish to use, it will turn white to indicate it has been selected as shown below 
 with an `i` in it and tool-tip box will pop-up describing the database).
 
 
-![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/41764585-e64f-4a23-adfd-c7a379d47782)
+![Choosing mass libraries](https://github.com/Mesnage-Org/pgfinder/assets/70374280/41764585-e64f-4a23-adfd-c7a379d47782)
 
 
 #### Using a Custom Database
