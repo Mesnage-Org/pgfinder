@@ -91,7 +91,7 @@ j`.
 The results have the same name as the input file but with the extension `.csv`. This can be opened in statistical
 software or spreadsheets for subsequent viewing.
 
-THe picture belows shows the expected content of the output. It contains the following comumns:
+The picture below shows the expected content of the output. It contains the following columns:
 1. Metadata; describes all relevant information related to the search parameters, including the name of the deconvoluted data file and mass database used, the cleanup window time, modifications enabled, ppm tolerance, ppm consolidation value and PGFinder version used).
 2. ID; scan ID
 3. RT(min); retention time (in minutes) associated with the theoretical mass matched
