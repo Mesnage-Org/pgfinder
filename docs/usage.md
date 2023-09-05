@@ -74,7 +74,7 @@ In the screenshot below we have...
 5. Set the Cleanup Window to 0.5.
 6. Set the consolidation PPM to 1.
 
-![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/a63e21ff-8276-4bdd-be64-c27b41c4aab1)
+![Setting Advanced Options in PGFinder](https://github.com/Mesnage-Org/pgfinder/assets/70374280/a63e21ff-8276-4bdd-be64-c27b41c4aab1)
 
 
 ### Run Analysis
