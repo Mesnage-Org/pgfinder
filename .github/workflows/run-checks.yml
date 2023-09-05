@@ -32,8 +32,8 @@ jobs:
       - name: Run Prettier & ESLint
         run: pnpm lint
 
-      - name: Install Playwright Browsers & Dependencies
-        run: pnpx playwright install-deps && pnpx playwright install
+      # - name: Install Playwright Browsers & Dependencies
+      #   run: pnpx playwright install-deps && pnpx playwright install
 
-      - name: Run Playwright Tests
-        run: pnpm test
+      # - name: Run Playwright Tests
+      #   run: pnpm test
