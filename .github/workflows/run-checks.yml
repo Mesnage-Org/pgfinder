@@ -31,3 +31,6 @@ jobs:
 
       - name: Run Prettier & ESLint
         run: pnpm lint
+
+      - name: Run Playwright Tests
+        run: pnpm test
