@@ -22,7 +22,7 @@ Please note that this WebUI allows you to upload multiple deconvoluted datasets 
 Each search output will be downloaded as an individual .csv file.  
 If you have no deconvoluted dataset but you want to test PGFinder, you can download a file for a test by clicking on the top left corner of the screen, as indicated below. The test file provided is a `.ftrs` file corresponding to a dataset described in the PGFinder article (Patel et al., 2021, eLife).
 
-![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/ffbab2ad-893c-4be5-8c74-891b33d85237)
+![Downloading test ftrs file](https://github.com/Mesnage-Org/pgfinder/assets/70374280/ffbab2ad-893c-4be5-8c74-891b33d85237)
 
 
 
