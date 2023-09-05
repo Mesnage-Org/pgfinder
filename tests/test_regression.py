@@ -21,7 +21,7 @@ def test_matching_mq_baseline(
     )
     output_df = pd.read_csv(output_filepath, index_col=None)
     # Because versions change based on commits due to setuptools_scm we fix the version so tests are consistent
-    output_df.iloc[5, 0] = "version : pgfinder"
+    output_df.iloc[6, 0] = "version : pgfinder"
 
     print(output_df.to_csv(index=False), file=regtest)
 
@@ -42,6 +42,6 @@ def test_matching_ftrs_baseline(
 
     output_df = pd.read_csv(output_filepath, index_col=None)
     # Because versions change based on commits due to setuptools_scm we fix the version so tests are consistent
-    output_df.iloc[5, 0] = "version : pgfinder"
+    output_df.iloc[6, 0] = "version : pgfinder"
 
     print(output_df.to_csv(index=False), file=regtest)

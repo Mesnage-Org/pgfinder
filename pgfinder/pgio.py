@@ -271,6 +271,7 @@ def dataframe_to_csv_metadata(
         f"rt_window : {output_dataframe.attrs['rt_window']}",
         f"modifications : {output_dataframe.attrs['modifications']}",
         f"ppm : {output_dataframe.attrs['ppm']}",
+        f"consolidation_ppm : {output_dataframe.attrs['consolidation_ppm']}",
         f"version : {_version}",
     ]
     # Add Metadata as first column
