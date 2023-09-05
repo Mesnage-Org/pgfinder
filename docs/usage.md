@@ -11,7 +11,7 @@ have to wait a whilst it sets up in the background (for those curious or interes
 [pyodide](mesnage-org.github.io/pgfinder-gui/) a [Web Assembly language (WASM)](https://webassembly.org/) in the
 background to install PGFinder and all its Python dependencies). Once loaded the page should look like the image below.
 
-![image](https://github.com/Mesnage-Org/pgfinder/assets/70374280/9537c200-5b48-4d50-ac72-1c8b62d83909)
+![Initial screenshot of PGFinder GUI](https://github.com/Mesnage-Org/pgfinder/assets/70374280/9537c200-5b48-4d50-ac72-1c8b62d83909)
 
 
 ### Upload a file
