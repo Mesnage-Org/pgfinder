@@ -8,8 +8,11 @@ let pyodide: PyodideInterface;
 // Maybe someday (once top-level await is even more universal), I should get
 // rid of this useless, immediately-called function...
 (async () => {
+	// NOTE: This version needs to match the version of pyodide installed by npm!
+	// These files can also be hosted locally from `/static` if something ever
+	// happens to this CDN, but there will be some build-system demons to battle.
 	pyodide = await loadPyodide({
-		indexURL: '/pgfinder-gui/pyodide'
+		indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/'
 	});
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);

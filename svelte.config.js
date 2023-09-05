@@ -14,7 +14,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		paths: {
-			base: '/pgfinder-gui'
+			base: process.env.CI ? '/pgfinder-gui' : ''
 		}
 	}
 };
