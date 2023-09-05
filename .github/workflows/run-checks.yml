@@ -23,7 +23,7 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Install dependencies
+      - name: Install Project Dependencies
         run: pnpm install
 
       - name: Run Svelte Check
@@ -31,6 +31,9 @@ jobs:
 
       - name: Run Prettier & ESLint
         run: pnpm lint
+
+      - name: Install Playwright Browsers & Dependencies
+        run: pnpx playwright install-deps && pnpx playwright install
 
       - name: Run Playwright Tests
         run: pnpm test

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('links are live', async ({ page }) => {
+	test.slow();
 	await page.goto('/');
 	await page.locator('#shell-header').getByRole('button').click();
 
