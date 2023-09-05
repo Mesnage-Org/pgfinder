@@ -61,9 +61,12 @@ have one.
 The Parts Per Million tolerance for matching molecules can be set, enter a number in the box underneath the **PPM
 Tolerance** heading.
 
-#### Cleanup Window
+#### Consolidation PPM
 
-The Cleanup Window parameter can also be set.
+During consolidation, structures with the lowest absolute ppm are selected over those farther from the theoretical mass.  
+However, if two or more matches have a theoretical mass less than the consolidation ppm apart, then those matches are retained, leaving several possible matches.
+This parameter defines the minimal difference in absolute ppm value below which no consoliation is made. 
+
 
 In the screenshot below we have...
 
