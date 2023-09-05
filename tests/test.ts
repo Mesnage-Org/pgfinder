@@ -22,7 +22,7 @@ test('links are live', async ({ page }) => {
 	await page.getByRole('link', { name: 'Download ProteoWizard (MSConvert)' }).click();
 	const page3 = await page3Promise;
 	await page3.waitForLoadState('domcontentloaded');
-	expect(await page3.title()).toEqual('UPDATE WHEN BACK ONLINE!!!');
+	expect(await page3.title()).toEqual('ProteoWizard: Download');
 
 	const page4Promise = page.waitForEvent('popup');
 	await page.getByRole('link', { name: 'https://doi.org/10.7554/eLife.70597' }).click();
