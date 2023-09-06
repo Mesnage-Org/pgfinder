@@ -1,0 +1,138 @@
+[build-system]
+requires = [
+  "setuptools >= 45",
+  "setuptools_scm[toml]>=6.2",
+  "wheel"
+  ]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pgfinder"
+description = "Peptidoglycan analysis"
+readme = "README.md"
+license = {text = "GNU Lesser GPLv3"}
+dynamic = ["version"]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research"
+]
+keywords = [
+  ""
+]
+requires-python = ">=3.8"
+dependencies = [
+  "numpy",
+  "pandas",
+  "pyyaml"
+]
+
+[project.urls]
+Source = "https://github.com/Mesnage-Org/pgfinder"
+Bug_Tracker = "https://github.com/Mesnage-Org/pgfinder/issues"
+Documentation = "https://pgfinder.readthedocs.io/en/latest/"
+
+
+[project.optional-dependencies]
+tests = [
+  "py",
+  "pytest>=7.0",
+  "pytest-cov",
+  "pytest-mpl",
+  "pytest-regtest",
+  "pytest-xdist"
+]
+docs = [
+  "sphinx",
+  "myst_parser",
+  "numpydoc",
+  "pydata_sphinx_theme",
+  "sphinx_markdown_tables",
+  "sphinx-autoapi",
+  "sphinx-autodoc-typehints",
+  "sphinx-multiversion",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-mermaid",
+  "sphinxcontrib-napoleon",
+]
+dev = [
+  "black",
+  "pre-commit",
+  "ruff"
+]
+pypi = [
+  "build",
+  "setuptools_scm[toml]>=6.2",
+  "wheel"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pgfinder"]
+exclude = ["tests"]
+
+[tool.setuptools_scm]
+write_to = "pgfinder/_version.py"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "--cov=pgfinder"
+testpaths = [
+    "tests"
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning"
+]
+
+[tool.black]
+line-length = 120
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.venv
+  )/
+)
+'''
+
+[tool.coverage.run]
+omit = [
+    "pgfinder/_version.py"
+]
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+# per-file-ignores = []
+line-length = 120
+target-version = "py38"
+select = ["B", "E", "F", "W", "I001"]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "R", "S", "W", "U", "I001"]
+
+[project.scripts]
+find_pg = "pgfinder.find_pg:main"

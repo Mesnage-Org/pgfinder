@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+dist/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# temp
+.pytest_cache/
+.ipynb_checkpoints/
+
+# outputs
+*Cleaned.csv
+eg_output.csv
+results*.csv
+
+#IDE
+.vscode/
+.idea/
+.venv/
+data/test_ms_data 10ppm test.csv
+data/test_ms_data 5ppm test.csv
+data/test_ms_data.ftrs
+pgfinder/debug_enviroment
+pgfinder/local_test.py
+*~
+\#*
+\#*\#
+
+#Testing
+cov*.xml
+.cov*
+*.log
+
+#Built docs
+docs/_build/*
+
+# Setuptools Version file
+pgfinder/_version.py
