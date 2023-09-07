@@ -12,7 +12,7 @@ const config = {
 		inspector: true
 	},
 	kit: {
-		adapter: adapter(),
+		adapter: adapter()
 	}
 };
 export default config;
