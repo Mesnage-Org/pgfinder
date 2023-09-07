@@ -35,4 +35,4 @@ cov*.xml
 docs/_build/*
 
 # Setuptools Version file
-lib/pgfinder/_version.py
+pgfinder/_version.py
