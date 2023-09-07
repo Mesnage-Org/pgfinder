@@ -1,4 +1,4 @@
-name: Run Code Checks
+name: Run GUI checks and tests
 
 on:
   pull_request:
