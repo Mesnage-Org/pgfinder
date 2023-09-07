@@ -13,9 +13,6 @@ const config = {
 	},
 	kit: {
 		adapter: adapter(),
-		paths: {
-			base: process.env.CI ? '/pgfinder-gui' : ''
-		}
 	}
 };
 export default config;
