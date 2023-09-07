@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
+    defaults:
+      run:
+        working-directory: ./lib
     steps:
       - name: prepare-data-folder
         run : mkdir 'data'
