@@ -1,6 +1,6 @@
 # Usage
 
-Two options are available to run PGFinder: (i) an online Web User Interface (WebUI) or (ii) a Command Line Interface. 
+Two options are available to run PGFinder: (i) an online Web User Interface (WebUI) or (ii) a Command Line Interface.
 The [Data Dictionary](data_dictionary.md) describes software inputs and outputs.
 
 ## WebUI
@@ -18,8 +18,8 @@ some time to install PGFinder and all its Python dependencies. Once loaded, the 
 
 You should click on the large button with a dashed border to **Upload a file** and select your Byos (`.ftrs`) or
 MaxQuant (`.txt`) file that you wish to analyse. Please note which versions of these programs are currently supported — the tooltip contains specific version numbers
-Please note that this WebUI allows you to upload multiple deconvoluted datasets to perform several searches with the same database and settings in one go. 
-Each search output will be downloaded as an individual .csv file.  
+Please note that this WebUI allows you to upload multiple deconvoluted datasets to perform several searches with the same database and settings in one go.
+Each search output will be downloaded as an individual .csv file.
 If you have no deconvoluted dataset but you want to test PGFinder, you can download a file for testing by clicking on the top left corner of the screen as indicated below. The test file provided is a `.ftrs` file corresponding to a dataset described in the PGFinder article (Patel et al., 2021, eLife).
 
 ![Downloading test ftrs file](https://github.com/Mesnage-Org/pgfinder/assets/70374280/ffbab2ad-893c-4be5-8c74-891b33d85237)
@@ -68,9 +68,9 @@ are transferred to the parent ion / structure.
 
 #### Consolidation PPM
 
-During consolidation, structures with the lowest absolute ppm are selected over those farther from the theoretical mass.  
+During consolidation, structures with the lowest absolute ppm are selected over those farther from the theoretical mass.
 However, if two or more matches have a theoretical mass less than the consolidation ppm apart, then all of those matches are retained.
-This parameter defines the minimal difference in absolute ppm below which no consolidation is made. 
+This parameter defines the minimal difference in absolute ppm below which no consolidation is made.
 
 
 In the screenshot below we have...
@@ -108,7 +108,7 @@ The picture below shows the expected content of the output. It contains the foll
 8. Inferred structure; muropeptide structure searched
 9. Intensity; ion intensity corresponding to the molecules with the observed mass matched to a theoretical structure
 10. Inferred structure (consolidated); most likely structure displaying the lowest absolute delta_ppm value. if two or more matches have a theoretical mass less than the consolidation ppm apart, then those matches are retained, leaving several possible matches.
-11. Intensity (consolidated); ion intensity corresponding to the molecules with the observed mass matched to a theoretical consolidated structure.     
+11. Intensity (consolidated); ion intensity corresponding to the molecules with the observed mass matched to a theoretical consolidated structure.
 
 
 ![Sample output from PGFinder](https://github.com/Mesnage-Org/pgfinder/assets/70374280/309144ee-93a5-4ede-a861-ef18c231954e)

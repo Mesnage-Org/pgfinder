@@ -16,7 +16,7 @@ Welcome to pgfinder's documentation!
    :maxdepth: 2
    :caption: API
 
-   pgfinder.logs 
+   pgfinder.logs
    pgfinder.find_pg
    pgfinder.io
    pgfinder.matching

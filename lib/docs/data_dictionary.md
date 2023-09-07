@@ -10,7 +10,7 @@ Effective use of `pgfinder` requires an understanding of the inputs and outputs 
 
 ## Inputs
 
-`pgfinder` takes data from mass spectrometry instruments, as well as a "database" of expected 
+`pgfinder` takes data from mass spectrometry instruments, as well as a "database" of expected
 masses and some user specified modifications.
 
 ### FTRS Files
@@ -48,7 +48,7 @@ to which the input data is being compared. Allowed mofifications are:
 ### Mass Databases (Lists)
 
 Mass databases are lists of structures and their associated mass. They are in `CSV` format
-with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia coli* and 
+with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia coli* and
 *Clostridium difficle*, but can take a different mass list as an input.
 
 | Column           | Description       | Unit             |
