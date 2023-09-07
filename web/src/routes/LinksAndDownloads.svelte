@@ -2,7 +2,6 @@
 	import { base } from '$app/paths';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faDownload } from '@fortawesome/free-solid-svg-icons';
-	console.log(`Base: ${base}`);
 </script>
 
 <div class="mx-4 my-4">
