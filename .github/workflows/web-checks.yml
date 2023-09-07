@@ -3,7 +3,7 @@ name: Run GUI checks and tests
 on:
   pull_request:
   push:
-    branches: 'main'
+    branches: 'master'
 
 jobs:
   build_site:
