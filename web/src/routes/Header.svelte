@@ -31,7 +31,7 @@
 	</p>
 
 	<svelte:fragment slot="trail">
-		<a href="https://mesnage-org.github.io/pgfinder/master/usage.html" target="_blank">
+		<a href="https://pgfinder.readthedocs.io/en/latest/usage.html" target="_blank">
 			<Fa icon={faBook} size="lg" />
 		</a>
 
