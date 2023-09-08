@@ -22,7 +22,7 @@ PGFinder is available in two forms a web-based User Interface (WebUI) at
 Python package.
 
 
-Thecommand-line programme (`find_pg`) uses a YAML configuration file as input.
+The command-line programme (`find_pg`) uses a YAML configuration file as input.
 
 ``` bash
 find_pg -c config.yaml
@@ -45,7 +45,7 @@ pip install pgfinder
 It can also be installed directly from this repository
 
 ``` bash
-pip install "git+https://github.com/Mesnage-Org/pgfinder.git&subdirectory=lib"
+pip install "git+https://github.com/Mesnage-Org/pgfinder.git#egg=pgfinder&subdirectory=lib"
 ```
 
 Or you can clone the repository and install it.
