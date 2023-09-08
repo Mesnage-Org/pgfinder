@@ -3,21 +3,24 @@ repos:
     rev: v4.4.0  # Use the ref you want to point at
     hooks:
       - id: check-case-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: mixed-line-ending
       - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-json
       - id: pretty-format-json
         args: ["--autofix", "--no-sort-keys"]
+        exclude: ^web/
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
-        types: [python]
+        exclude: \.out$
       - id: fix-byte-order-marker
       - id: name-tests-test
         args: ["--pytest-test-first"]
       - id: requirements-txt-fixer
       - id: trailing-whitespace
-        types: [python, yaml, markdown]
 
   - repo: https://github.com/psf/black
     rev: 23.7.0
@@ -33,6 +36,33 @@ repos:
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
+
+  # - repo: https://github.com/pre-commit/mirrors-prettier
+  #   rev: v3.0.3
+  #   hooks:
+  #     - id: prettier
+  #       args: [--write] # edit files in-place
+  #       additional_dependencies:
+  #         - prettier
+  #         - prettier-plugin-svelte
+  #         - svelte
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.48.0
+    hooks:
+      - id: eslint
+        types: [file]
+        args: [--fix, --resolve-plugins-relative-to, ~/.cache/pre-commit]
+        files: \.(js|ts|svelte)$
+        additional_dependencies:
+          - eslint
+          - typescript
+          - svelte
+          - svelte-eslint-parser
+          - eslint-plugin-svelte
+          - eslint-config-prettier
+          - '@typescript-eslint/eslint-plugin'
+          - '@typescript-eslint/parser'
 
 ci:
   autofix_prs: true

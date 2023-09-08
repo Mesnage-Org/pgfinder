@@ -1,0 +1,27 @@
+input_file: data/ftrs_test_data.ftrs
+# input_file: data/maxquant_test_data.txt
+masses_file: pgfinder/masses/e_coli_monomers_simple.csv
+ppm_tolerance: 10
+consolidation_ppm: 1
+time_delta: 0.5
+mod_list:
+  # - Cross-Linked Multimers (=)
+  # - Glycosidic Multimers (-)
+  # - Lactyl Multimers (=Lac)
+
+  # - Anhydro-MurNAc (Anh)
+  # - Deacetylation (-Ac)
+  # - Deacetylation and Anhydro-MurNAc (-Ac, Anh)
+  # - Amidation (Am)
+  # - O-Acetylation (+Ac)
+  # - Potassium Adduct (K+)
+  # - Sodium Adduct (Na+)
+
+  # - Extra Disaccharide (+gm)
+  # - Lactyl Peptides (Lac)
+  # - Loss of Disaccharide (-gm)
+  # - Loss of GlcNAc (-g)
+output_dir: output
+warnings: ignore
+quiet: false
+float_format: 4
