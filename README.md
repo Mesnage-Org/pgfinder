@@ -45,14 +45,14 @@ pip install pgfinder
 It can also be installed directly from this repository
 
 ``` bash
-pip install git+https://github.com/Mesnage-Org/PGFinder.git
+pip install "git+https://github.com/Mesnage-Org/pgfinder.git&subdirectory=lib"
 ```
 
 Or you can clone the repository and install it.
 
 ``` bash
 git clone https://github.com/Mesnage-Org/pgfinder.git
-cd pgfinder
+cd pgfinder/lib
 pip install -e .
 ```
 
