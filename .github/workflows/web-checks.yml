@@ -1,0 +1,37 @@
+name: Run GUI checks and tests
+
+on:
+  pull_request:
+  push:
+    branches: 'master'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: 'web/pnpm-lock.yaml'
+
+      - name: Install Project Dependencies
+        run: pnpm install
+
+      - name: Run Svelte Check
+        run: pnpm check
+
+      - name: Run Prettier & ESLint
+        run: pnpm lint

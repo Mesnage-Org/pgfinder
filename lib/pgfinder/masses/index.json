@@ -1,0 +1,30 @@
+{
+  "Escherichia coli": {
+    "Simple": {
+      "File": "e_coli_monomers_simple.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, gm-A, gm-AE, gm-AEJ, gm-AEJX and all gm-AEJAX structures, where X can be any of the 20 canonical amino acids. In all structures, isoleucine is used to represent the L/I ambiguity."
+    },
+    "Non-Redundant": {
+      "File": "e_coli_monomers_non_redundant.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, gm-A, gm-AE, gm-AEJ, gm-AEJX and all gm-AEJXX structures, where X can be any of the 20 canonical amino acids; for gm-AEJXX structures, mass coincidences resulting from swapping the fourth and fifth stem residues have been removed. In all structures, isoleucine is used to represent the L/I ambiguity."
+    },
+    "Complex": {
+      "File": "e_coli_monomers_complex.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, gm-A, gm-AE, gm-AEJ, gm-AEJX and all gm-AEJXX structures, where X can be any of the 20 canonical amino acids."
+    }
+  },
+  "Clostridium difficile": {
+    "Simple": {
+      "File": "c_diff_monomers_simple.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, g(-Ac)m-A, g(-Ac)m-AE, g(-Ac)m-AEJ, g(-Ac)m-AEJX and all g(-Ac)m-AEJAX structures, where X can be any of the 20 canonical amino acids. In all structures, isoleucine is used to represent the L/I ambiguity."
+    },
+    "Non-Redundant": {
+      "File": "c_diff_monomers_non_redundant.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, g(-Ac)m-A, g(-Ac)m-AE, g(-Ac)m-AEJ, g(-Ac)m-AEJX and all gm-AEJXX structures, where X can be any of the 20 canonical amino acids; for g(-Ac)m-AEJXX structures, mass coincidences resulting from swapping the fourth and fifth stem residues have been removed. In all structures, isoleucine is used to represent the L/I ambiguity."
+    },
+    "Complex": {
+      "File": "c_diff_monomers_complex.csv",
+      "Description": "Contains di- tetra- and hexasaccharides, g(-Ac)m-A, g(-Ac)m-AE, g(-Ac)m-AEJ, g(-Ac)m-AEJX and all g(-Ac)m-AEJXX structures, where X can be any of the 20 canonical amino acids."
+    }
+  }
+}

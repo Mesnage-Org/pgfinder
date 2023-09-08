@@ -6,7 +6,7 @@
 [![Documentation Status](https://readthedocs.org/projects/pgfinder/badge/?version=latest)](https://pgfinder.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/ORDA--DOI-10.15131%2Fshef.data.20101751.v1-lightgrey)](https://doi.org/10.15131/shef.data.20101751.v1)
 
-A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder-gui/). For
+A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder/). For
 descriptions of the features of each version please refer to the
 [Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the development version please
 refer to the [Installation](https://pgfinder.readthedocs.io/en/latest/installation.html) and
@@ -18,11 +18,11 @@ For an introduction to Peptidoglycan analysis please refer to the
 ## Usage
 
 PGFinder is available in two forms a web-based User Interface (WebUI) at
-[mesnage-org.github.io/pgfinder-gui/](https://mesnage-org.github.io/pgfinder-gui/) or a command line interface (CLI)
+[mesnage-org.github.io/pgfinder/](https://mesnage-org.github.io/pgfinder/) or a command line interface (CLI)
 Python package.
 
 
-Thecommand-line programme (`find_pg`) uses a YAML configuration file as input.
+The command-line programme (`find_pg`) uses a YAML configuration file as input.
 
 ``` bash
 find_pg -c config.yaml
@@ -45,14 +45,14 @@ pip install pgfinder
 It can also be installed directly from this repository
 
 ``` bash
-pip install git+https://github.com/Mesnage-Org/PGFinder.git
+pip install "git+https://github.com/Mesnage-Org/pgfinder.git#egg=pgfinder&subdirectory=lib"
 ```
 
 Or you can clone the repository and install it.
 
 ``` bash
 git clone https://github.com/Mesnage-Org/pgfinder.git
-cd pgfinder
+cd pgfinder/lib
 pip install -e .
 ```
 
@@ -71,7 +71,7 @@ This software is licensed as specified by the GPL License and LGPL License. Plea
 ## Links
 
 * [Mesnage Lab](https://mesnagelab.weebly.com/)
-* [PGFinder On-Line](https://mesnage-org.github.io/pgfinder-gui/)
+* [PGFinder On-Line](https://mesnage-org.github.io/pgfinder/)
 
 ## References
 
