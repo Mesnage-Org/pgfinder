@@ -6,9 +6,9 @@ The [Data Dictionary](data_dictionary.md) describes software inputs and outputs.
 ## WebUI
 
 An interactive web-page for running your analysis is available at
-[mesnage-org.github.io/pgfinder-gui/](https://mesnage-org.github.io/pgfinder-gui/). On first visiting the page you will
+[mesnage-org.github.io/pgfinder/](https://mesnage-org.github.io/pgfinder/). On first visiting the page you will
 have to wait awhile whilst it sets up in the background (for those curious or interested, it is using
-[Pyodide](mesnage-org.github.io/pgfinder-gui/) running on [Web Assembly (WASM)](https://webassembly.org/) It'll take
+[Pyodide](https://pyodide.org/en/stable/) running on [Web Assembly (WASM)](https://webassembly.org/) It'll take
 some time to install PGFinder and all its Python dependencies. Once loaded, the page should look like the image below.
 
 ![Initial screenshot of PGFinder GUI](https://github.com/Mesnage-Org/pgfinder/assets/70374280/9537c200-5b48-4d50-ac72-1c8b62d83909)
