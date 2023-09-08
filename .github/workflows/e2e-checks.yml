@@ -36,16 +36,3 @@ jobs:
 
       - name: Run Playwright Tests
         run: pnpm test
-
-      - name:
-        run: |
-          ls
-          ls ..
-
-      - name: Upload Report
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: ./
-          retention-days: 30
