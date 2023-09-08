@@ -6,7 +6,7 @@ on:
     branches: 'master'
 
 jobs:
-  build:
+  test:
     name: Ex1 (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
