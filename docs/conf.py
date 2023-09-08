@@ -133,11 +133,6 @@ html_static_path = ["_static"]
 templates_path = [
     "_templates",
 ]
-html_sidebars = {
-    "**": [
-        "versioning.html",
-    ],
-}
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
