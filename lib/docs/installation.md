@@ -32,7 +32,7 @@ Versions are released automatically when commits on GitHub are tagged.
 To install the most recent pre-release version, use:
 
 ``` bash
-pip install git+https://github.com/Mesnage-Org/PGFinder.git
+pip install "git+https://github.com/Mesnage-Org/pgfinder.git#egg=pgfinder&subdirectory=lib"
 ```
 
 Developers should follow the [developer installation instructions](contributing.md).
