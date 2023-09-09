@@ -10,7 +10,7 @@ test('links are live', async ({ page }) => {
 	const page1 = await page1Promise;
 	await page1.waitForLoadState('domcontentloaded');
 	expect(await page1.title()).toEqual(
-		'pgfinder/pgfinder/masses at master · Mesnage-Org/pgfinder · GitHub'
+		'pgfinder/lib/pgfinder/masses at master · Mesnage-Org/pgfinder · GitHub'
 	);
 
 	const page2Promise = page.waitForEvent('popup');

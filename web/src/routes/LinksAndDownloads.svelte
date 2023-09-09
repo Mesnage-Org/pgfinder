@@ -34,7 +34,7 @@
 	<ul class="list-disc pl-4">
 		<li>
 			<a
-				href="https://github.com/Mesnage-Org/pgfinder/tree/master/pgfinder/masses"
+				href="https://github.com/Mesnage-Org/pgfinder/tree/master/lib/pgfinder/masses"
 				class="anchor"
 				target="_blank"
 			>
