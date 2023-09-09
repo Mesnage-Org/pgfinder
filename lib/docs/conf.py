@@ -25,9 +25,9 @@ autodoc_mock_imports = ["numpy", "pandas", "pyyaml"]
 
 # -- Project information -----------------------------------------------------
 
-project = "pgFinder"
-copyright = "2022, pgFinder authors"
-author = "pgFinder authors"
+project = "PGFinder"
+copyright = "2022, PGFinder authors"
+author = "PGFinder authors"
 
 # The short X.Y version
 release = version("pgfinder")
@@ -137,7 +137,7 @@ templates_path = [
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "pgFinderdoc"
+htmlhelp_basename = "PGFinderdoc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -161,7 +161,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "pgFinder.tex", "pgFinder Documentation", [author], "manual"),
+    (master_doc, "PGFinder.tex", "PGFinder Documentation", [author], "manual"),
 ]
 
 
@@ -169,7 +169,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "pgFinder", "PgFinder Documentation", [author], 1)]
+man_pages = [(master_doc, "PGFinder", "PGFinder Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -178,7 +178,7 @@ man_pages = [(master_doc, "pgFinder", "PgFinder Documentation", [author], 1)]
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, "PgFinder", "PgFinder Documentation", author, "PgFinder", "Peptidoglycan Finder.", "Miscellaneous"),
+    (master_doc, "PGFinder", "PGFinder Documentation", author, "PGFinder", "Peptidoglycan Finder.", "Miscellaneous"),
 ]
 
 
