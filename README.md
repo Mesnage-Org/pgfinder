@@ -7,7 +7,7 @@
 
 A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder/). For
 descriptions of the features of each version please refer to the
-[Releases](https://github.com/Mesnage-Org/pgfinder/releases) page. If you wish to use the development version please
+[Releases](https://github.com/Mesnage-Org/pgfinder/releases) page or the [Changelog](https://github.com/Mesnage-Org/pgfinder/blob/master/CHANGELOG.md). If you wish to use the development version please
 refer to the [Installation](https://pgfinder.readthedocs.io/en/latest/installation.html) and
 [Usage](https://pgfinder.readthedocs.io/en/latest/usage.html) documentation.
 
