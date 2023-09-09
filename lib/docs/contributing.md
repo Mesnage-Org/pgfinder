@@ -9,14 +9,14 @@ There are a few ways to contribute:
 
 ## Repository Structure
 
-Currently, the `pgfinder` repository is split into two major parts: in the `lib` folder is the Python library (and CLI)
+Currently, the `pgfinder` repository is split into two major parts: in the `lib` folder is the library (and CLI)
 code that forms the heart of PGFinder. The code in this directory is written purely in Python. The other half of this
 repository is the `pgfinder-gui` web application — this code lives in the `web` directory. This webapp is written using
 [SvelteKit](https://kit.svelte.dev/) and simply wraps PGFinder into a presentable package and passes user inputs to the `pgfinder` Python package
 (running in the client's browser via WebAssembly / Pyodide).
 
-As these two halves of the applicaton of written using different languages and frameworks, you'll need different tools
-to contribute to each of them!
+As these two halves of the applicaton are written using different languages and frameworks, you'll need different tools
+to contribute to each of them.
 
 ## Hacking On The `lib` Directory
 
@@ -25,7 +25,7 @@ to contribute to each of them!
 The current version when installed from GitHub is a combination of the most recent Git tag combined with the hash of the
 current `HEAD` of the branch and how many commits away from the last tag it is.
 
-If you wish to contribute to the development of PGFinder you should clone (your fork of) this repository, navigate to the
+If you wish to contribute to the development of PGFinder, you should clone (your fork of) this repository, navigate to the
 `lib` directory, and install `pgfinder` in editable mode (`pip install -e`) with the following commands (which install
 additional dependencies for tests, documentation and linting).
 
@@ -53,7 +53,7 @@ pytest
 PGFinder uses [pre-commit](https://pre-commit.com) hooks to ensure code conforms to the [PEP8 Python Style
 Guide](https://pep8.org/) using the [ruff](https://duckduckgo.com/?q=ruff+linter&t=opera&ia=images) linter, applies
 [black](https://black.readthedocs.io/en/stable/index.html) formatting, and checks for a number of other common mistakes.
-These hooks are run on GitHub when Pull Requests are made using [pre-commit.ci](https://pre-commit.ci) and
+These hooks are run on GitHub when Pull Requests are made using [pre-commit.ci](https://pre-commit.ci), and
 if you have not run them locally, then your pull request will fail the tests it needs to pass.
 
 `pre-commit` will have been installed as part of the extra dependencies above (they are part of `dev`), but you need to
@@ -72,7 +72,7 @@ made, but typically they are ok to accept — they will be `black` formatting or
 
 ### Releasing to PyPI
 
-Release to the [Python Package Index (PyPI)](https://pypi.org) are automated and occur when a new release is made on
+Releases to the [Python Package Index (PyPI)](https://pypi.org) are automated and occur when a new release is made on
 GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning](https://semver.org/).
 
 ## Hacking On The `web` Directory
@@ -108,7 +108,7 @@ pnpm test -- --ui
 
 ### Formatting
 
-To ensure consistent formating through the `web` directory, you can run [Prettier](https://prettier.io/) using the following command:
+To ensure consistent formating throughout the `web` directory, you can run [Prettier](https://prettier.io/) using the following command:
 
 ``` bash
 # Run Prettier
