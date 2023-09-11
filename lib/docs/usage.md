@@ -122,12 +122,12 @@ install PGFinder on your computer.
 ## `find_pg`
 
 You can also use the command line interface `find_pg` which works with a YAML configuration file (see
-`pgfinder/default_config.yaml`) for an example which you can modify. You must supply at least one option on the command line `-c
+`lib/pgfinder/default_config.yaml`) for an example which you can modify. You must supply at least one option on the command line `-c
 <path/to/config.yaml>`, so to use the example config you would.
 
 ``` bash
 find_pg -c pgfinder/default_config.yaml
 ```
 
-Each option in the configuration file can be over-ridden at the command line, see `find_pg --help` for more
+Each option in the configuration file can be overridden at the command line, see `find_pg --help` for more
 information.
