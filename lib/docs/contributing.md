@@ -54,7 +54,7 @@ PGFinder uses [pre-commit](https://pre-commit.com) hooks to ensure code conforms
 Guide](https://pep8.org/) using the [ruff](https://duckduckgo.com/?q=ruff+linter&t=opera&ia=images) linter, applies
 [black](https://black.readthedocs.io/en/stable/index.html) formatting, and checks for a number of other common mistakes.
 These hooks are run on GitHub when Pull Requests are made using [pre-commit.ci](https://pre-commit.ci), and
-if you have not run them locally, then your pull request will fail the tests it needs to pass.
+if you have not run them locally, then your pull request may fail the tests it needs to pass.
 
 `pre-commit` will have been installed as part of the extra dependencies above (they are part of `dev`), but you need to
 install `pre-commit` and the hooks locally in your virtual environment. This can be done with the following commands.
