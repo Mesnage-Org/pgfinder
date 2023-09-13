@@ -9,7 +9,6 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
-from pathlib import Path
 import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -17,6 +16,7 @@ import sys
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 from importlib.metadata import version
+from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(".."))
 
