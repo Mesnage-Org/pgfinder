@@ -16,7 +16,6 @@ Welcome to pgfinder's documentation!
    :maxdepth: 2
    :caption: API
 
-   api
 
 Indices and tables
 ==================
