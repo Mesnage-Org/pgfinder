@@ -23,6 +23,3 @@ python:
       path: lib/
       extra_requirements:
         - docs
-        - sphinx.ext.autodoc
-        - sphinx_autodoc_typehints
-        - sphinx.ext.autosummary

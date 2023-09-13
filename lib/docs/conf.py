@@ -9,6 +9,7 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
+from pathlib import Path
 import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -44,6 +45,7 @@ version = ".".join(release.split(".")[:2])
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "autoapi.extension",
     "sphinx.ext.autodoc",
     "sphinx_autodoc_typehints",
     "sphinx.ext.viewcode",
@@ -86,6 +88,13 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "setup.py"]
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
 
+# -- autoapi configuration ---------------------------------------------------
+
+# Language of source code to parse
+autoapi_type = "python"
+
+# Source code to parse to generate API docs relative to 'docs/source' directory
+autoapi_dirs = [Path("../pgfinder/")]
 
 # -- Options for HTML output -------------------------------------------------
 
