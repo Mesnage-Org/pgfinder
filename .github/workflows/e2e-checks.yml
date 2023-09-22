@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Install Playwright Browsers & Dependencies
-        run: playwright install --with-deps
+        run: pnpx playwright install --with-deps
 
       - name: Run Playwright Tests
-        run: pnpm test
+        run: pnpx playwright test
