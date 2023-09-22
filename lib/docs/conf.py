@@ -52,7 +52,6 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.coverage",
     "sphinx.ext.napoleon",
-    "sphinx.ext.autosummary",
     "sphinx_rtd_theme",
     "myst_parser",
     "numpydoc",
