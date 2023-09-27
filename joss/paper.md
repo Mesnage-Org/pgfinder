@@ -6,108 +6,79 @@ tags:
   - peptidoglycan
   - amino acids
 authors:
+  - name: Brooks J Rady
+    orcid: 0000-0003-4763-4070
+    equal-contrib: true
+    corresponding: false
+    affiliation: 2
   - name: Neil Shephard
     orcid: 0000-0001-8301-6857
     equal-contrib: true
-    corresponding: true
+    corresponding: false
     affiliation: 1
   - name: Ankur Patel
-    equal-contrib: true
+    equal-contrib: false
     affiliation: 2
   - name: Robert Turner
     orcid: 0000-0002-1353-1404
     equal-contrib: true
-    affiliation: 1
+    corresponding: true
+    affiliation: "1,3"
   - name: Stéphane Mesnage
     orcid: 0000-0003-1648-4890
     equal-contrib: true
+    corresponding: true
     affiliation: 2
+
 affiliations:
  - name: Research Software Engineering, Department of Computer Science, The University of Sheffield
    index: 1
- - name: Mesnage Laboratory, School of Biosciences, The University of Sheffield
+ - name: School of Biosciences, The University of Sheffield
    index: 2
-date: 30 September 2022
+ - name: Nuffield Department of Medicine, University of Oxford, Oxford, UK
+   index: 3
+
+date: 30 September 2023
 bibliography: paper.bib
 ---
 
 # Summary
 
-Peptidoglycan is a key components in the cell surface of bacteria with numerous essential roles including ensuring
-mechanical stability and mediating interactions with the environment and host. Understanding its biogenesis and
-structure is key to understanding how cell surface properties modulate antimicrobial resistance and host-pathogen
-interactions. The field of _Peptidoglycomics_ seeks to model and determine the structure of these molecules based on
-laboratory based chromatography is in its infancy but progress will be greatly facilitated by development of software
-tools such as `PGFinder` which introduces a streamlined workflow pipelines for analysing and working with laboratory
-generated data.
+Peptidoglycan is an essential and ubiquitous component of the bacterial cell envelope that is the target of the most widely used antibiotics like penicillin [@vollmerPeptidoglycanStructureArchitecture2008a].
+This giant net-like molecule surrounds the bacterial cell to maintain cell shape and to confer protection against osmotic stress.
+During bacterial growth and division, the structure and composition of peptidoglycan undergoes partial cleavage and polymerisation events (a process called remodelling).
+Peptidoglycan fragments released during bacterial growth represent important signalling molecules that play a key role in host-pathogen interactions [@bastosUptakeRecognitionResponses2021].
+Recent work also suggested that peptidoglycan fragments released by gut bacteria modulate neurodevelopmental disorders [@gabanyiBacterialSensingNeuronal2022; gonzalez-santanaBacterialPeptidoglycansMicrobiota2020].
+Understanding the biogenesis and structure of peptidoglycan is therefore of paramount importance to understand bacterial growth, division, antibiotic resistance as well as, host-pathogen interactions.
+Peptidoglycan structure was described in the late 80’s requiring the digestion of the entire molecule into smaller fragments that are separated by chromatography and analysed by mass spectrometry, referred to as LC-MS.
+This experimental approach generates large datasets (typically 250MB files).
+This work describes the first open-source software dedicated to the automated analysis of peptidoglycan LC-MS datasets, paving the way for “peptidoglycomics” studies.
 
 # Statement of need
 
-The fields of Proteomics and Glycomics have many software solutions available, but none are currently suited to the
-analysis of peptidoglycan molecules which are made from a backbone of glycan chains with peptide side-chains each of
-which are themselves composed of unusual sugars and amino acids. As a consequence researchers have traditionally relied
-on laborious and error prone manual analysis of data generated from Reversed-Phase High-Pressure Liquid Chromatography
-(RP-HPLC) and mass spectroscopy (MS) as no automated tools were available. `PGFinder` is implemented the popular Python
-language and addresses this short-coming by introducing an automated workflow of PG structural analysis built on
-open-access principles that enable replicable and reproducible analyses to be undertaken and in turn peer-reviewed. As
-such `PGFinder` instantiates the field of peptidoglycomics on a firm footing.
+The analysis of peptidoglycan structure and composition requires the purification of this molecule and its hydrolysis into smaller, soluble fragments (disaccharide-peptides).
+These smaller molecules are analysed by LC-MS, which generate large ‘Omics datasets.
+Peptidoglycan fragments contain unusual amino acids and unusual peptide bonds so peptidoglycan LC-MS datasets cannot be handled by software dedicated to proteomics or glycomics studies.
+As a result, the analysis of peptidoglycan structure remains a biassed, manual, error prone and inconsistent process, essentially relying on the use of Microsoft Excel spreadsheets containing theoretical masses corresponding to peptidoglycan fragments.
+We developed a tool called PGFinder dedicated to peptidoglycan analysis.
+PGFinder is implemented in the popular Python language and addresses this short-coming by introducing an automated workflow of PG structural analysis built on open-access principles that enable replicable and reproducible analyses to be undertaken and in turn peer-reviewed [@patelPGFinderNovelAnalysis2021a].
+PGFinder first requires the deconvolution of LC-MS datasets using an open-source software like Maxquant [@coxMaxQuantEnablesHigh2008].
+The observed masses in the deconvoluted data are matched with theoretical masses corresponding to peptidoglycan structures.
+The search output provides information about the molecules detected by LC-MS such as their abundance, charge state, retention time or intensity.
+This process can be achieved using a “serverless” WebAssembly Graphical User Interface to enable users with no expertise in programming to use this tool.
 
-# Package Overview
 
-An overview of the iterative search strategy used in the workflow is shown in figure \ref{fig:workflow}.`PGFinder` uses
- a list of theoretical masses for a given set of known molecules based on their molecular structure (Database 1).
- Experimental data from mass spectroscopy is matched to these within a defined tolerance to give the matched theoretical
- monomer masses (Library 1). This library forms the basis of a second _in silico_ database of possible dimers and
- trimers that may be formed (Database 2) and these were again compared to the observed masses to generate a second
- library of matched theoretical dimers and trimers (Library 2). A third library (Library 3) is then derived of possible
- modifications that may arise through modifications which contains only modified muropeptides of matched monomers,
- dimers and trimers. Further details of the molecular aspects are given in [@Patel2021Sep].
+** FIGURE **
 
-**TODO** Please review the above, I've attempted to refine and simplify the second paragraph under _Results_ of [@Patel2021Sep].
-
-# Resources and Examples
-
-`PGFinder` is available on [PyPI](https://pypi.org/project/pgfinder/) and the development code is openly available on
-[GitHub](https://pypi.org/project/pgfinder/). Documentation is also available
-[online](https://mesnage-org.github.io/pgfinder/) and example Jupyter Notebooks are available for users to test and use.
-An example of command line usage is provided:
-
-```bash
-$ pip install pgfinder
-$ find_pg --config config/example.yaml
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Loaded parameters from file : config/parameters.yaml
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] All parameters converted to decimal
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Configuration file loaded from     : config/example.yaml
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Input file                         : data\ftrs_test_data.ftrs
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] NB : All warnings have been turned off for this run.
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Mass spectroscopy file loaded from : data\ftrs_test_data.ftrs
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Theoretical masses loaded from      : data\masses\e_coli_monomer_masses.csv
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] PPM Tolerance                      : 0.5
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Time Delta                         : 10
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Filtering theoretical masses by observed masses
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building multimers from obs muropeptides
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building features for multimer type : 1
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Filtering theoretical multimers by observed
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Building custom search file
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Generating variants
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Matching
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Cleaning data
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Processing 10 Sodium Adducts
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] No ^K+ found
-[Mon, 06 Mar 2023 17:05:08] [INFO    ] [pgfinder] Processing 20 in source decay products
-[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Processing complete!
-[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Metadata save to                   : output
-[Mon, 06 Mar 2023 17:05:09] [INFO    ] [pgfinder] Results saved to                   : output\results.csv
-```
-
-# Citations
-
+Our approach makes maximum use of currently free resources on GitHub and PyPI, without the need to maintain a dynamic server application - the computing power for analysis is provided by the user.
+This is possible due to the moderate compute requirements of Peptidoglycomics compared with, say, metagenomics analyses.
+A future, server based, approach to handling data will be necessary to embark on Metapeptidoglycomics, where comparisons are made between large numbers of samples e.g. from different geographic areas, patients or ecological niches.
+In the meantime, PGFinder is allowing the field of Peptidoglycomics to mature into its place amongst more established -omics domains.
 
 # Acknowledgements
 
-Funding to develop and improve documentation and accessibility to `PGFinder` was
-provided by the [Unleash Your Data and Software](https://www.sheffield.ac.uk/library/rdm/unleashdatasoftware)
-initiative at The University of Sheffield.
-
+Funding to develop and improve documentation and accessibility to PGFinder was provided by the Unleash Your Data and Software initiative at The University of Sheffield as well as IAA BBSRC and MRC MR/S009272/1 grants to SM.
+BJR and AVP were funded by iCASE DTP studentships (BBSRC WR BB/M011151/1 and NERC ACCE NE/S00713X/1, respectively).
+The authors acknowledge Marshall Bern (ProteinMetics) for his constant support.
 
 # References
