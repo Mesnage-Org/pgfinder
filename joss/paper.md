@@ -36,7 +36,7 @@ affiliations:
  - name: Nuffield Department of Medicine, University of Oxford, UK
    index: 3
 
-date: 30 September 2023
+date: 29 September 2023
 bibliography: paper.bib
 ---
 
