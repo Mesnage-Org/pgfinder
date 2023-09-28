@@ -29,11 +29,11 @@ authors:
     affiliation: 1
 
 affiliations:
- - name: School of Biosciences, The University of Sheffield
+ - name: School of Biosciences, The University of Sheffield, UK
    index: 1
- - name: Research Software Engineering, Department of Computer Science, The University of Sheffield
+ - name: Research Software Engineering, The University of Sheffield, UK
    index: 2
- - name: Nuffield Department of Medicine, University of Oxford, Oxford, UK
+ - name: Nuffield Department of Medicine, University of Oxford, UK
    index: 3
 
 date: 30 September 2023
@@ -42,36 +42,34 @@ bibliography: paper.bib
 
 # Summary
 
-Peptidoglycan is an essential and ubiquitous component of the bacterial cell envelope that is the target of the most widely used antibiotics like penicillin [@vollmerPeptidoglycanStructureArchitecture2008a].
-This giant net-like molecule surrounds the bacterial cell to maintain cell shape and to confer protection against osmotic stress.
-During bacterial growth and division, the structure and composition of peptidoglycan undergoes partial cleavage and polymerisation events (a process called remodelling).
-Peptidoglycan fragments released during bacterial growth represent important signalling molecules that play a key role in host-pathogen interactions [@bastosUptakeRecognitionResponses2021].
+Peptidoglycan is an essential and ubiquitous component of the bacterial cell envelope that is the target of widely used antibiotics like penicillin [@vollmerPeptidoglycanStructureArchitecture2008a].
+This giant, net-like molecule surrounds the bacterium to maintain cell shape and confer protection against osmotic stress.
+To grow and divide, bacteria remodel their peptidoglycan via numerous cleavage and polymerisation events, making it a remarkably dynamic molecule.
+Furthermore, peptidoglycan fragments released during bacterial growth represent important signalling molecules that play a key role in host-pathogen interactions [@bastosUptakeRecognitionResponses2021].
 Recent work also suggested that peptidoglycan fragments released by gut bacteria modulate neurodevelopmental disorders [@gabanyiBacterialSensingNeuronal2022; @gonzalez-santanaBacterialPeptidoglycansMicrobiota2020].
-Understanding the biogenesis and structure of peptidoglycan is therefore of paramount importance to understand bacterial growth, division, antibiotic resistance as well as, host-pathogen interactions.
-Peptidoglycan structure was described in the late 1980s requiring the digestion of the entire molecule into smaller fragments that are separated by chromatography and analysed by mass spectrometry, referred to as LC-MS.
-This experimental approach generates large datasets (typically 250MB files).
-This work describes the first open-source software dedicated to the automated analysis of peptidoglycan LC-MS datasets, paving the way for “peptidoglycomics” studies.
+Understanding the biogenesis and structural diversity of peptidoglycan is therefore vital to understanding bacterial growth, division, antibiotic resistance, and host-pathogen interactions.
+Since peptidoglycan structure was first described in the late 1980s, studying it has meant digesting the entire molecule into smaller fragments (disaccharide-peptides) that can be separated by chromatography and analysed by mass spectrometry (together referred to as LC-MS).
+Crucially, however, this experimental approach generates large datasets (typically 250MB files) that can make manual data analysis challenging.
+This work describes the first open-source software dedicated to the automated analysis of peptidoglycan LC-MS datasets, paving the way for true "peptidoglycomics" studies.
 
 # Statement of need
 
-The analysis of peptidoglycan structure and composition requires the purification of this molecule and its hydrolysis into smaller, soluble fragments (disaccharide-peptides).
-These smaller molecules are analysed by LC-MS, which generate large ‘Omics datasets.
-Peptidoglycan fragments contain unusual amino acids and unusual peptide bonds so peptidoglycan LC-MS datasets cannot be handled by software dedicated to proteomics or glycomics studies.
-As a result, the analysis of peptidoglycan structure remains a biased, manual, error prone and inconsistent process, essentially relying on the use of Microsoft Excel spreadsheets containing theoretical masses corresponding to peptidoglycan fragments.
-We developed a tool called PGFinder dedicated to peptidoglycan analysis.
-PGFinder is implemented in the popular Python language and addresses this short-coming by introducing an automated workflow of PG structural analysis built on open-access principles that enable replicable and reproducible analyses to be undertaken and in turn peer-reviewed [@patelPGFinderNovelAnalysis2021a].
-PGFinder first requires the deconvolution of LC-MS datasets using an open-source software like Maxquant [@coxMaxQuantEnablesHigh2008].
-The observed masses in the deconvoluted data are matched with theoretical masses corresponding to peptidoglycan structures.
-The search output provides information about the molecules detected by LC-MS such as their abundance, charge state, retention time or intensity.
-This process can be achieved using a “serverless” WebAssembly Graphical User Interface to enable users with no expertise in programming to use this tool.
+The large -omics datasets generated by the LC-MS analysis of digested peptidoglycan contain many unusual amino acids and peptide bonds that cannot be handled by software originally designed for glycomics or proteomics.
+As a result, the analysis of peptidoglycan structure remains a biased, manual, error prone, and inconsistent process — essentially relying on the use of Microsoft Excel spreadsheets to map theoretical masses to peptidoglycan fragments.
+To address this, we developed a tool called PGFinder that is dedicated to peptidoglycan analysis.
+PGFinder is implemented in the popular Python programming language and introduces an automated workflow for peptidoglycan structural analysis that is built on open-access principles and enables reproducible analyses and peer-review [@patelPGFinderNovelAnalysis2021a].
+PGFinder first requires the deconvolution of LC-MS datasets using another open-source software like Maxquant [@coxMaxQuantEnablesHigh2008].
+The observed masses in the deconvoluted data are then matched with theoretical masses corresponding to disaccharide-peptides before looking for modified or polymerised versions of these building blocks.
+The search output provides information about the molecules detected by LC-MS, including their abundance, charge state, retention time and intensity.
+These automated analyses can be performed using a user-friendly web interface, allowing users with no prior experience in programming to use PGFinder.
 
+![Software and infrastructure engineering](Infrastructure.svg){width="100%"}
 
-![Software and infrastructure engineering](Infrastructure.png)
-
-Our approach makes maximum use of currently free resources on GitHub and PyPI, without the need to maintain a dynamic server application - the computing power for analysis is provided by the user.
-This is possible due to the moderate compute requirements of Peptidoglycomics compared with metagenomics analyses.
-A future, server based, approach to handling data will be necessary to embark on Metapeptidoglycomics, where comparisons are made between large numbers of samples e.g. from different geographic areas, patients or ecological niches.
-In the meantime, PGFinder is allowing the field of Peptidoglycomics to mature into its place amongst more established -omics domains.
+Our approach makes the most of the free resources currently available on GitHub and PyPI.
+The web tool can be hosted on GitHub Pages since the analysis itself is performed client-side via Pyodide and WebAssembly.
+This is possible due to the moderate compute requirements of peptidoglycomics compared with more ambitious metagenomic analyses.
+In the future, a server-side approach will be necessary to embark on metapeptidoglycomics, where comparisons are made between large numbers of samples from different geographic areas, patients or ecological niches.
+In the meantime, PGFinder is helping the field of peptidoglycomics to mature into its place amongst the more established -omics domains.
 
 # Acknowledgements
 
