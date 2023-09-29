@@ -22,7 +22,7 @@ authors:
   - name: Robert Turner
     orcid: 0000-0002-1353-1404
     corresponding: true
-    affiliation: "2,3"
+    affiliation: 2
   - name: Stéphane Mesnage
     orcid: 0000-0003-1648-4890
     corresponding: true
@@ -33,8 +33,6 @@ affiliations:
    index: 1
  - name: Research Software Engineering, The University of Sheffield, UK
    index: 2
- - name: Nuffield Department of Medicine, University of Oxford, UK
-   index: 3
 
 date: 29 September 2023
 bibliography: paper.bib
