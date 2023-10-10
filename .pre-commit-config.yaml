@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0  # Use the ref you want to point at
+    rev: v4.5.0  # Use the ref you want to point at
     hooks:
       - id: check-case-conflict
       - id: check-symlinks
@@ -48,7 +48,7 @@ repos:
   #         - svelte
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.50.0
+    rev: v8.51.0
     hooks:
       - id: eslint
         types: [file]
