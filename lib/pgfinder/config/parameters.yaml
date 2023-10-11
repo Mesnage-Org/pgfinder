@@ -1,5 +1,27 @@
 multimer:
-  Cross-Linked Multimers (=):
+  3-3 and 3-4 Cross-Linked Multimers (=):
+    gm-AE:
+      mass: 698.2858
+      mult_num: 2
+    gm-AEJ:
+      mass: 870.3704
+      mult_num: 2
+    gm-AEJA:
+      mass: 941.4075
+      mult_num: 2
+    gm-AEJ=gm-AEJ:
+      mass: 1722.7302
+      mult_num: 3
+    gm-AEJ=gm-AEJA:
+      mass: 1793.7673
+      mult_num: 3
+    gm-AEJA=gm-AEJA:
+      mass: 1864.8044
+      mult_num: 3
+  3-1, 3-3, and 3-4 Cross-Linked Multimers (=):
+    gm-A:
+      mass: 569.2433
+      mult_num: 2
     gm-AE:
       mass: 698.2858
       mult_num: 2
