@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a modification for enabling 3-1 cross-linking (#249)
+
+### Fixed
+
+- Removed the trailing space after bracketed modifications (#249)
+
 ## [1.0.3] - 2023-09-04
 
 ### Fixed
