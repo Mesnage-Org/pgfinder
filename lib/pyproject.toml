@@ -74,7 +74,6 @@ exclude = ["tests"]
 
 [tool.setuptools_scm]
 root = ".."
-write_to = "lib/pgfinder/_version.py"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
