@@ -29,6 +29,8 @@ pip install pgfinder
 
 Versions are released automatically when commits on GitHub are tagged.
 
+## Development
+
 To install the most recent pre-release version, use:
 
 ``` bash
