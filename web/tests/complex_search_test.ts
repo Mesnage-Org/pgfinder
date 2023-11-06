@@ -9,8 +9,8 @@ test('run a complex search', async ({ page }) => {
 	await page.getByRole('option', { name: 'Complex' }).click();
 
 	await page.getByRole('button', { name: 'Advanced Options' }).click();
-	await page.getByRole('option', { name: '3-3 and 3-4 Cross-Linked Multimers (=)' }).click();
-	await page.getByRole('option', { name: '3-1 Cross-Linked Multimers (=)' }).click();
+	await page.getByRole('option', { name: '3-3 and 4-3 Cross-Linked Multimers (=)' }).click();
+	await page.getByRole('option', { name: '1-3 Cross-Linked Multimers (=)' }).click();
 	await page.getByRole('option', { name: 'Glycosidic Multimers (-)' }).click();
 	await page.getByRole('option', { name: 'Lactyl Multimers (=Lac)' }).click();
 	await page.getByRole('option', { name: 'Anhydro-MurNAc (Anh)' }).click();
