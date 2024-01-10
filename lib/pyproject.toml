@@ -40,7 +40,7 @@ tests = [
   "pytest>=7.0",
   "pytest-cov",
   "pytest-mpl",
-  "pytest-regtest",
+  "pytest-regtest<2.0.0",
   "pytest-xdist"
 ]
 docs = [
@@ -134,6 +134,10 @@ target-version = "py38"
 select = ["B", "E", "F", "W", "I001"]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F", "R", "S", "W", "U", "I001"]
+
+[tool.ruff.lint]
+extend-select = ["NPY201"]
+preview = true
 
 [project.scripts]
 find_pg = "pgfinder.find_pg:main"
