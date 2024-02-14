@@ -1,4 +1,5 @@
 """Functions for reading and writing data."""
+
 import logging
 from pathlib import Path
 from typing import Dict, Union

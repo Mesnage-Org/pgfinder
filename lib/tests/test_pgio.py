@@ -1,4 +1,5 @@
 """Test pgio functions."""
+
 from pathlib import Path
 from unittest import TestCase
 
