@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
-	import Fa from 'svelte-fa/src/fa.svelte';
+	import Fa from 'svelte-fa';
 	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 	export let popupId: string;
 	export let style: string = '';

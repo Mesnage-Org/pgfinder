@@ -1,4 +1,5 @@
 """Package initialisation"""
+
 from importlib.metadata import version
 from pkgutil import get_data
 

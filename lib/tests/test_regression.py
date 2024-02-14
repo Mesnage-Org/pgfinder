@@ -1,4 +1,5 @@
 """Regression test"""
+
 import pandas as pd
 
 import pgfinder.matching as matching
