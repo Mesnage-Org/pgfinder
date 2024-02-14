@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AppBar } from '@skeletonlabs/skeleton';
-	import Fa from 'svelte-fa/src/fa.svelte';
+	import Fa from 'fa.svelte';
 	import { faBars, faBook } from '@fortawesome/free-solid-svg-icons';
 	import { faGithub } from '@fortawesome/free-brands-svg-icons';
 	import { getDrawerStore } from '@skeletonlabs/skeleton';
