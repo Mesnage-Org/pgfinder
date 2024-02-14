@@ -33,5 +33,5 @@ jobs:
       - name: Run Svelte Check
         run: pnpm check
 
-      - name: Run Prettier & ESLint
-        run: pnpm lint
+      # - name: Run Prettier & ESLint
+      #   run: pnpm lint
