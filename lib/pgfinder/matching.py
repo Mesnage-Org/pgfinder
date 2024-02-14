@@ -152,7 +152,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     # The silly `len(s) - 2` rubbish here is to preserve the `|x` multimer number at the end of
     # each structure name
     def default_case(s):
-        return s[: len(s) - 2] + " " + mod_abbr + " " + s[len(s) - 2 : len(s)]
+        return s[: len(s) - 2] + " " + mod_abbr + s[len(s) - 2 : len(s)]
 
     structure_updater = special_cases.get(mod_type, default_case)
 
