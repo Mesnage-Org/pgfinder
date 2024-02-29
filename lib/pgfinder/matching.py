@@ -379,19 +379,21 @@ def data_analysis(
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=rt_window)
     cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=rt_window)
 
-    # set metadata
-    cleaned_data_df.attrs["file"] = raw_data_df.attrs["file"]
-    cleaned_data_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
-    cleaned_data_df.attrs["rt_window"] = rt_window
-    cleaned_data_df.attrs["modifications"] = enabled_mod_list
-    cleaned_data_df.attrs["ppm"] = ppm_tolerance
-    cleaned_data_df.attrs["consolidation_ppm"] = consolidation_ppm
-
     cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
     cleaned_data_df.reset_index(drop=True, inplace=True)
 
     # Apply some post-processing to the results
-    final_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
+    most_likely_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
+    final_df = consolidate_results(most_likely_df)
+
+    # set metadata
+    final_df.attrs["file"] = raw_data_df.attrs["file"]
+    final_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
+    final_df.attrs["rt_window"] = rt_window
+    final_df.attrs["modifications"] = enabled_mod_list
+    final_df.attrs["ppm"] = ppm_tolerance
+    final_df.attrs["consolidation_ppm"] = consolidation_ppm
+
     return final_df
 
 
@@ -484,3 +486,53 @@ def pick_most_likely_structures(
     merged_df = pd.concat([most_likely, unmatched_rows])
 
     return merged_df.reset_index(drop=True)
+
+
+def consolidate_results(
+    df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Add a final table of muropeptide structures and their relative abundances
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        DataFrame of structures to be processed.
+
+    Returns
+    -------
+    pd.DataFrame
+        The input dataframe with additional columns containing the consolidated results
+    """
+    INTENSITY_COLUMN = "Intensity (consolidated)"
+    STRUCTURE_COLUMN = "Inferred structure (consolidated)"
+
+    def pick_from_highest_intensity_instance(column: pd.Series):
+        return column[df.loc[column.index, INTENSITY_COLUMN].idxmax()]
+
+    consolidated_df = (
+        df.groupby(STRUCTURE_COLUMN)
+        .agg(
+            {
+                "RT (min)": pick_from_highest_intensity_instance,
+                INTENSITY_COLUMN: sum,
+                "Theo (Da)": pick_from_highest_intensity_instance,
+                "Delta ppm": pick_from_highest_intensity_instance,
+            }
+        )
+        .reset_index()
+    )
+
+    total_intensity = consolidated_df[INTENSITY_COLUMN].sum()
+    consolidated_df["Abundance (%)"] = consolidated_df[INTENSITY_COLUMN] / total_intensity * 100
+
+    consolidated_df["Oligomerisation"] = consolidated_df[STRUCTURE_COLUMN].apply(lambda s: s[-1])
+    consolidated_df.sort_values(
+        by=["Oligomerisation", "Abundance (%)"], ascending=[True, False], inplace=True, kind="stable", ignore_index=True
+    )
+
+    consolidated_df.at[0, "Total intensity"] = total_intensity
+    consolidated_df = consolidated_df[
+        ["Total intensity", STRUCTURE_COLUMN, "Abundance (%)", "RT (min)", "Theo (Da)", "Delta ppm"]
+    ]
+
+    return pd.concat([df, consolidated_df], axis=1)
