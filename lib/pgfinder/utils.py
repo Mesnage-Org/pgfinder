@@ -1,4 +1,5 @@
 """Utilities"""
+
 import logging
 from argparse import Namespace
 from decimal import Decimal

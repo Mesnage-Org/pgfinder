@@ -1,4 +1,5 @@
 """PG Finder I/O operations"""
+
 import logging
 import sqlite3
 from datetime import datetime
@@ -171,6 +172,14 @@ def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
                 "columns. Have you checked the format of your database against one of the built-in databases?"
             )
         ) from e
+    # Check that all structures are followed by "|n" where n is one or more digits
+    if not theo_masses_df["Inferred structure"].str.contains(r"\|\d+$").all():
+        raise UserError(
+            (
+                "The supplied mass database contains structures missing the '|n' suffix encoding oligomerisation "
+                "state. This should be '|1' for monomers, '|2' for dimers, '|3' for trimers, and so on."
+            )
+        )
     theo_masses_df.attrs["file"] = PurePath(file).name
     LOGGER.info(f"Theoretical masses loaded from     : {file}")
     return theo_masses_df

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2023-11-06
+
+### Changed
+
+- Changed cross-linking modifications to read donor-acceptor (#249)
+
+## [1.1.0] - 2023-10-15
+
+### Added
+
+- Added a modification for enabling 3-1 cross-linking (#249)
+
+### Fixed
+
+- Removed the trailing space after bracketed modifications (#249)
+
 ## [1.0.3] - 2023-09-04
 
 ### Fixed
@@ -48,7 +64,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Let there be peptidoglycan.
 
-[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/Mesnage-Org/pgfinder/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.3...v1.1.0
 [1.0.3]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.0...v1.0.1
