@@ -505,6 +505,12 @@ def consolidate_results(
     """
     INTENSITY_COLUMN = "Intensity (consolidated)"
     STRUCTURE_COLUMN = "Inferred structure (consolidated)"
+    RT_COLUMN = "RT (min)"
+    THEO_COLUMN = "Theo (Da)"
+    PPM_COLUMN = "Delta ppm"
+    ABUNDANCE_COLUMN = "Abundance (%)"
+    OLIGOMER_COLUMN = "Oligomerisation"
+    TOTAL_COLUMN = "Total intensity"
 
     def pick_from_highest_intensity_instance(column: pd.Series):
         return column[df.loc[column.index, INTENSITY_COLUMN].idxmax()]
@@ -513,26 +519,30 @@ def consolidate_results(
         df.groupby(STRUCTURE_COLUMN)
         .agg(
             {
-                "RT (min)": pick_from_highest_intensity_instance,
+                RT_COLUMN: pick_from_highest_intensity_instance,
                 INTENSITY_COLUMN: sum,
-                "Theo (Da)": pick_from_highest_intensity_instance,
-                "Delta ppm": pick_from_highest_intensity_instance,
+                THEO_COLUMN: pick_from_highest_intensity_instance,
+                PPM_COLUMN: pick_from_highest_intensity_instance,
             }
         )
         .reset_index()
     )
 
     total_intensity = consolidated_df[INTENSITY_COLUMN].sum()
-    consolidated_df["Abundance (%)"] = consolidated_df[INTENSITY_COLUMN] / total_intensity * 100
+    consolidated_df[ABUNDANCE_COLUMN] = consolidated_df[INTENSITY_COLUMN] / total_intensity
 
-    consolidated_df["Oligomerisation"] = consolidated_df[STRUCTURE_COLUMN].apply(lambda s: s[-1])
+    consolidated_df[OLIGOMER_COLUMN] = consolidated_df[STRUCTURE_COLUMN].apply(lambda s: s[-1])
     consolidated_df.sort_values(
-        by=["Oligomerisation", "Abundance (%)"], ascending=[True, False], inplace=True, kind="stable", ignore_index=True
+        by=[OLIGOMER_COLUMN, ABUNDANCE_COLUMN], ascending=[True, False], inplace=True, kind="stable", ignore_index=True
     )
 
-    consolidated_df.at[0, "Total intensity"] = total_intensity
+    consolidated_df.at[0, TOTAL_COLUMN] = total_intensity
     consolidated_df = consolidated_df[
-        ["Total intensity", STRUCTURE_COLUMN, "Abundance (%)", "RT (min)", "Theo (Da)", "Delta ppm"]
+        [TOTAL_COLUMN, STRUCTURE_COLUMN, ABUNDANCE_COLUMN, RT_COLUMN, THEO_COLUMN, PPM_COLUMN]
     ]
+
+    consolidated_df[ABUNDANCE_COLUMN] = consolidated_df[ABUNDANCE_COLUMN].round(4)
+    consolidated_df[RT_COLUMN] = consolidated_df[RT_COLUMN].round(2)
+    consolidated_df[PPM_COLUMN] = consolidated_df[PPM_COLUMN].round(1)
 
     return pd.concat([df, consolidated_df], axis=1)
