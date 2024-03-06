@@ -7,7 +7,7 @@ import pytest
 
 import pgfinder.matching as matching
 from pgfinder.errors import UserError
-from pgfinder.matching import calculate_ppm_delta, pick_most_likely_structures
+from pgfinder.matching import calculate_ppm_delta, consolidate_results, pick_most_likely_structures
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"
@@ -40,3 +40,18 @@ def test_pick_most_likely_structures() -> None:
     reshaped_long_df = pick_most_likely_structures(long_df, 1)
 
     pd.testing.assert_frame_equal(reshaped_long_df, wide_df, check_dtype=False)
+
+
+def test_consolidation() -> None:
+    """Test the post-processing structure / intensity consolidation step"""
+    unconsolidated_df = pd.read_csv(RESOURCES / "unconsolidated.csv")
+    consolidated_df = pd.read_csv(RESOURCES / "consolidated.csv")
+
+    # Duplicate column names are automatically mangled by read_csv seemingly
+    # without any alternative, and comparing without the column names seems to
+    # only be possible by dropping down to numpy via .values, but then that
+    # chokes on NaN values, even with equal_nan=True, since it doesn't seem to
+    # know the datatype of the column. I got sick of suffering, so this just
+    # converts the numpy array to a string and compares those values.
+    # Absolutely disgusting.
+    assert str(consolidate_results(unconsolidated_df).values) == str(consolidated_df.values)

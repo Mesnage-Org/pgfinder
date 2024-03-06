@@ -1,0 +1,7 @@
+RT (min),Theo (Da),Delta ppm,Inferred structure (consolidated),Intensity (consolidated),Total intensity,Inferred structure (consolidated),Abundance (%),RT (min),Theo (Da),Delta ppm
+1,100,0.1,gm|0,100,360,gm|0,0.5278,1,100,0.1
+2,200,0.2,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",50,,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",0.4167,4,400,0.4
+3,300,0.3,gm-AEJR|1,20,,gm-AEJR|1,0.0556,3,300,0.3
+4,400,0.4,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",60,,,,,,
+5,500,0.5,gm|0,90,,,,,,
+6,600,0.6,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",40,,,,,,
