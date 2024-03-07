@@ -508,23 +508,23 @@ def consolidate_results(
     ----------
     df : pd.DataFrame
         DataFrame of structures to be processed.
-    intensity_column: str
+    intensity_column : str
         Intensity column.
-    structure_column: str
+    structure_column : str
         Structure column.
-    rt_column: str
+    rt_column : str
         RT column.
-    theo_column: str
+    theo_column : str
         Theoretical Mass column.
-    ppm_column: str
+    ppm_column : str
         Delta ppm column.
-    abundance_column: str
+    abundance_column : str
         Abundance column.
-    oligomer_column: str
+    oligomer_column : str
         Oligomer column.
-    total_column: str
+    total_column : str
         Total column.
-    suffix: str
+    suffix : str
         Suffix appended to all consolidation columns to avoid duplicate column names. If a column has '(consolidated)'
         in it already this suffix is included within the parentheses.
 
