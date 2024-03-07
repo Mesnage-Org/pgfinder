@@ -1,4 +1,4 @@
-Metadata,ID,RT (min),Charge,Obs (Da),Theo (Da),Delta ppm,Inferred structure,Intensity,Inferred structure (consolidated),Intensity (consolidated),Total intensity,Inferred structure (consolidated).1,Abundance (%),RT (min).1,Theo (Da).1,Delta ppm.1
+Metadata,ID,RT (min),Charge,Obs (Da),Theo (Da),Delta ppm,Inferred structure,Intensity,Inferred structure (consolidated),Intensity (consolidated),Total intensity (candidate),Inferred structure (consolidated candidate),Abundance (%) (candidate),RT (min) (candidate),Theo (Da) (candidate),Delta ppm (candidate)
 file : ftrs_test_data_3.11.ftrs,518,6.4482,2;1,941.413,941.4077,5.6422,gm-AEJA|1,435325463,gm-AEJA|1,435325463.0,1770046705.0,"gm-gm|0,   gm (x2)|0",0.0048,7.19,976.386,0.4
 masses_file : e_coli_monomer_masses.csv,651,9.0145,2;3,1864.8089,1864.8046,2.3238,gm-AEJAA=gm-AEJ|2,154801130,"gm-AEJAA=gm-AEJ|2,   gm-AEJA=gm-AEJA|2",154801130.0,,gm|0,0.0021,7.2,498.2061,-1.4
 rt_window : 0.5,651,9.0145,2;3,1864.8089,1864.8046,2.3238,gm-AEJA=gm-AEJA|2,154801130,,,,gm (Anh)|0,0.0019,7.37,478.1799,0.6

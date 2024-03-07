@@ -491,21 +491,42 @@ def pick_most_likely_structures(
 
 def consolidate_results(
     df: pd.DataFrame,
-    intensity_column="Intensity (consolidated)",
-    structure_column="Inferred structure (consolidated)",
-    rt_column="RT (min)",
-    theo_column="Theo (Da)",
-    ppm_column="Delta ppm",
-    abundance_column="Abundance (%)",
-    oligomer_column="Oligomerisation",
-    total_column="Total intensity",
+    intensity_column: str = "Intensity (consolidated)",
+    structure_column: str = "Inferred structure (consolidated)",
+    rt_column: str = "RT (min)",
+    theo_column: str = "Theo (Da)",
+    ppm_column: str = "Delta ppm",
+    abundance_column: str = "Abundance (%)",
+    oligomer_column: str = "Oligomerisation",
+    total_column: str = "Total intensity",
+    suffix: str = "candidate",
 ) -> pd.DataFrame:
-    """Add a final table of muropeptide structures and their relative abundances
+    """
+    Add a final table of muropeptide structures and their relative abundances
 
     Parameters
     ----------
-    df: pd.DataFrame
+    df : pd.DataFrame
         DataFrame of structures to be processed.
+    intensity_column: str
+        Intensity column.
+    structure_column: str
+        Structure column.
+    rt_column: str
+        RT column.
+    theo_column: str
+        Theoretical Mass column.
+    ppm_column: str
+        Delta ppm column.
+    abundance_column: str
+        Abundance column.
+    oligomer_column: str
+        Oligomer column.
+    total_column: str
+        Total column.
+    suffix: str
+        Suffix appended to all consolidation columns to avoid duplicate column names. If a column has '(consolidated)'
+        in it already this suffix is included within the parentheses.
 
     Returns
     -------
@@ -521,14 +542,13 @@ def consolidate_results(
         .agg(
             {
                 rt_column: pick_from_highest_intensity_instance,
-                intensity_column: sum,
+                intensity_column: "sum",
                 theo_column: pick_from_highest_intensity_instance,
                 ppm_column: pick_from_highest_intensity_instance,
             }
         )
         .reset_index()
     )
-
     total_intensity = consolidated_df[intensity_column].sum()
     consolidated_df[abundance_column] = consolidated_df[intensity_column] / total_intensity
 
@@ -545,5 +565,17 @@ def consolidate_results(
     consolidated_df[abundance_column] = consolidated_df[abundance_column].round(4)
     consolidated_df[rt_column] = consolidated_df[rt_column].round(2)
     consolidated_df[ppm_column] = consolidated_df[ppm_column].round(1)
+
+    # Add " (suffix)" to all columns, or insert if
+    consolidated_df.rename(
+        columns=(
+            lambda x: (
+                x.replace("(consolidated)", f"(consolidated {suffix})")
+                if re.search("(consolidated)", x)
+                else x + f" ({suffix})"
+            )
+        ),
+        inplace=True,
+    )
 
     return pd.concat([df, consolidated_df], axis=1)

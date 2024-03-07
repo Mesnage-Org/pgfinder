@@ -32,6 +32,8 @@ For details of using the CLI version including the configuration file please ref
 
 ## Installation
 
+### pgfinder
+
 Detailed installation instructions can be found in the
 [Installation](https://pgfinder.readthedocs.io/en/latest/installation.html) section of the Documentation.
 
@@ -53,6 +55,20 @@ Or you can clone the repository and install it.
 git clone https://github.com/Mesnage-Org/pgfinder.git
 cd pgfinder/lib
 pip install -e .
+```
+### WebUI
+
+A WebUI implemented using the [Svelte](https://svelte.dev/) framework is available. Detailed information of development
+is not currently provided but if you wish to run the WebUI locally you can do so. You will need the
+[npm](https://www.npmjs.com/) JavaScript package manager installed and you can then start the WebUI locally using the
+following and open the URL in your browser.
+
+
+``` bash
+cd web
+npm install
+npm install vite            # Install the vite framework for building the site
+npm run dev
 ```
 
 ## Contributing
