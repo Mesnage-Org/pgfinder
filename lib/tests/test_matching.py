@@ -7,7 +7,7 @@ import pytest
 
 import pgfinder.matching as matching
 from pgfinder.errors import UserError
-from pgfinder.matching import calculate_ppm_delta, pick_most_likely_structures
+from pgfinder.matching import calculate_ppm_delta, consolidate_results, pick_most_likely_structures
 
 BASE_DIR = Path.cwd()
 RESOURCES = BASE_DIR / "tests" / "resources"
@@ -40,3 +40,8 @@ def test_pick_most_likely_structures() -> None:
     reshaped_long_df = pick_most_likely_structures(long_df, 1)
 
     pd.testing.assert_frame_equal(reshaped_long_df, wide_df, check_dtype=False)
+
+
+def test_consolidation(unconsolidated_df: pd.DataFrame, unconsolidated_and_consolidated_df: pd.DataFrame) -> None:
+    """Test the post-processing structure / intensity consolidation step"""
+    pd.testing.assert_frame_equal(consolidate_results(unconsolidated_df), unconsolidated_and_consolidated_df)

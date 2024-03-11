@@ -380,19 +380,21 @@ def data_analysis(
     cleaned_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=potassium, time_delta=rt_window)
     cleaned_data_df = clean_up(ftrs_df=cleaned_df, mass_to_clean=sugar, time_delta=rt_window)
 
-    # set metadata
-    cleaned_data_df.attrs["file"] = raw_data_df.attrs["file"]
-    cleaned_data_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
-    cleaned_data_df.attrs["rt_window"] = rt_window
-    cleaned_data_df.attrs["modifications"] = enabled_mod_list
-    cleaned_data_df.attrs["ppm"] = ppm_tolerance
-    cleaned_data_df.attrs["consolidation_ppm"] = consolidation_ppm
-
     cleaned_data_df.sort_values(by=["Intensity", "RT (min)"], ascending=[False, True], inplace=True, kind="stable")
     cleaned_data_df.reset_index(drop=True, inplace=True)
 
     # Apply some post-processing to the results
-    final_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
+    most_likely_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
+    final_df = consolidate_results(most_likely_df)
+
+    # set metadata
+    final_df.attrs["file"] = raw_data_df.attrs["file"]
+    final_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
+    final_df.attrs["rt_window"] = rt_window
+    final_df.attrs["modifications"] = enabled_mod_list
+    final_df.attrs["ppm"] = ppm_tolerance
+    final_df.attrs["consolidation_ppm"] = consolidation_ppm
+
     return final_df
 
 
@@ -485,3 +487,95 @@ def pick_most_likely_structures(
     merged_df = pd.concat([most_likely, unmatched_rows])
 
     return merged_df.reset_index(drop=True)
+
+
+def consolidate_results(
+    df: pd.DataFrame,
+    intensity_column: str = "Intensity (consolidated)",
+    structure_column: str = "Inferred structure (consolidated)",
+    rt_column: str = "RT (min)",
+    theo_column: str = "Theo (Da)",
+    ppm_column: str = "Delta ppm",
+    abundance_column: str = "Abundance (%)",
+    oligomer_column: str = "Oligomerisation",
+    total_column: str = "Total intensity",
+    suffix: str = "candidate",
+) -> pd.DataFrame:
+    """
+    Add a final table of muropeptide structures and their relative abundances
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame of structures to be processed.
+    intensity_column : str
+        Intensity column.
+    structure_column : str
+        Structure column.
+    rt_column : str
+        RT column.
+    theo_column : str
+        Theoretical Mass column.
+    ppm_column : str
+        Delta ppm column.
+    abundance_column : str
+        Abundance column.
+    oligomer_column : str
+        Oligomer column.
+    total_column : str
+        Total column.
+    suffix : str
+        Suffix appended to all consolidation columns to avoid duplicate column names. If a column has '(consolidated)'
+        in it already this suffix is included within the parentheses.
+
+    Returns
+    -------
+    pd.DataFrame
+        The input dataframe with additional columns containing the consolidated results
+    """
+
+    def pick_from_highest_intensity_instance(column: pd.Series):
+        return column[df.loc[column.index, intensity_column].idxmax()]
+
+    consolidated_df = (
+        df.groupby(structure_column)
+        .agg(
+            {
+                rt_column: pick_from_highest_intensity_instance,
+                intensity_column: "sum",
+                theo_column: pick_from_highest_intensity_instance,
+                ppm_column: pick_from_highest_intensity_instance,
+            }
+        )
+        .reset_index()
+    )
+    total_intensity = consolidated_df[intensity_column].sum()
+    consolidated_df[abundance_column] = consolidated_df[intensity_column] / total_intensity
+
+    consolidated_df[oligomer_column] = consolidated_df[structure_column].apply(lambda s: s[-1])
+    consolidated_df.sort_values(
+        by=[oligomer_column, abundance_column], ascending=[True, False], inplace=True, kind="stable", ignore_index=True
+    )
+
+    consolidated_df.at[0, total_column] = total_intensity
+    consolidated_df = consolidated_df[
+        [total_column, structure_column, abundance_column, rt_column, theo_column, ppm_column]
+    ]
+
+    consolidated_df[abundance_column] = consolidated_df[abundance_column].round(4)
+    consolidated_df[rt_column] = consolidated_df[rt_column].round(2)
+    consolidated_df[ppm_column] = consolidated_df[ppm_column].round(1)
+
+    # Add " (suffix)" to all columns, or insert if
+    consolidated_df.rename(
+        columns=(
+            lambda x: (
+                x.replace("(consolidated)", f"(consolidated {suffix})")
+                if re.search("(consolidated)", x)
+                else x + f" ({suffix})"
+            )
+        ),
+        inplace=True,
+    )
+
+    return pd.concat([df, consolidated_df], axis=1)
