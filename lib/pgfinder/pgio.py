@@ -1,11 +1,11 @@
 """PG Finder I/O operations"""
 
+import importlib.resources as pkg_resources
 import logging
 import sqlite3
 from datetime import datetime
 from importlib.metadata import version
 from pathlib import Path, PurePath
-from typing import Dict, Union
 
 import numpy as np
 import pandas as pd
@@ -17,18 +17,20 @@ try:
 except ImportError:
     from yaml import Loader
 
+from pgfinder import COLUMNS
 from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-def ms_file_reader(file) -> pd.DataFrame:
-    """Read mass spec data.
+def ms_file_reader(file: str | Path) -> pd.DataFrame:
+    """
+    Read mass spec data.
 
     Parameters
     ----------
-    file: Union[str, Path]
+    file : str | Path
         Path to be loaded.
 
     Returns
@@ -56,13 +58,17 @@ def ms_file_reader(file) -> pd.DataFrame:
     return return_df
 
 
-def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
-    """Reads Features file from Byos
+def ftrs_reader(file: str | Path, columns: dict = COLUMNS) -> pd.DataFrame:
+    """
+    Reads Features file from Byos.
 
     Parameters
     ----------
-    file: Union[str, Path]
+    file : str | Path
         Feature file to be read.
+    columns : dict
+        Dictionary of columns, this defaults to the global COLUMNS which is read from 'config/columns.yaml' and
+    simplifies extension to new formats.
 
     Returns
     -------
@@ -74,44 +80,20 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
         # Reads sql database into dataframe
         ff = pd.read_sql(sql, db)
         # Adds empty "Inferred structure" and "Theo (Da)" columns
-        ff["Inferred structure"] = np.nan
-        ff["Theo (Da)"] = np.nan
-        # Renames columns to expected column heading required for data_analysis function
-        ftrs_52_columns = [
-            "Id",
-            "apexRetentionTime",
-            "charges",
-            "mwMonoIsotopicMass",
-            "apexIntensity",
-        ]
+        ff = ff.reindex(columns=[*ff.columns.tolist(), *columns["pgfinder"]["inferred"].values()], fill_value=np.nan)
 
-        ftrs_311_columns = [
-            "Id",
-            "apexRetentionTimeMinutes",
-            "chargeOrder",
-            "apexMwMonoisotopic",
-            "maxIntensity",
-        ]
-
-        pgfinder_columns = [
-            "ID",
-            "RT (min)",
-            "Charge",
-            "Obs (Da)",
-            "Intensity",
-        ]
-
-        is_ftrs_52 = set(ftrs_52_columns).issubset(ff.columns)
-        is_ftrs_311 = set(ftrs_311_columns).issubset(ff.columns)
+        # Determine if file is v311 or v52
+        is_ftrs_52 = set(columns["ftrs_52"]).issubset(ff.columns)
+        is_ftrs_311 = set(columns["ftrs_311"]).issubset(ff.columns)
 
         if is_ftrs_52:
             ff.rename(
-                columns=dict(zip(ftrs_52_columns, pgfinder_columns)),
+                columns=dict(zip(columns["ftrs_52"], columns["pgfinder"]["input"])),
                 inplace=True,
             )
         elif is_ftrs_311:
             ff.rename(
-                columns=dict(zip(ftrs_311_columns, pgfinder_columns)),
+                columns=dict(zip(columns["ftrs_311"], columns["pgfinder"]["input"])),
                 inplace=True,
             )
         else:
@@ -120,26 +102,41 @@ def ftrs_reader(file: Union[str, Path]) -> pd.DataFrame:
             )
 
         # Reorder columns in dataframe to desired order, dropping unwanted columns
-        cols_order = [
-            "ID",
-            "RT (min)",
-            "Charge",
-            "Obs (Da)",
-            "Theo (Da)",
-            "Inferred structure",
-            "Intensity",
-        ]
-        ff = ff[cols_order]
-
-        return ff
+        return _select_and_order_columns(ff)
 
 
-def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
-    """Reads theoretical masses files (csv) returning a Panda Dataframe
+def _select_and_order_columns(df: pd.DataFrame, columns: dict = COLUMNS) -> pd.DataFrame:
+    """
+    Select (renamed) columns and order them.
 
     Parameters
     ----------
-    file: Union[str, Path]
+    df : pd.DataFrame
+        Full dataframe from which a subset of variables is to be returned.
+    columns : dict
+        Dictionary of columns, this defaults to the global COLUMNS which is read from 'config/columns.yaml' and
+    simplifies extension to new formats.
+
+
+    Returns
+    -------
+    pd.DataFrame
+        Subset of data frame with selected columns in specified order.
+    """
+    cols_order = columns["pgfinder"]["input"] + list(columns["pgfinder"]["inferred"].values())
+    # Move Intensity column to the end to match required order
+    cols_order.append(cols_order.pop(cols_order.index("Intensity")))
+    return df[cols_order].copy()
+
+
+def theo_masses_reader(file: str | Path) -> pd.DataFrame:
+    """
+    Reads theoretical masses files (csv) returning a Panda Dataframe
+
+    Parameters
+    ----------
+    file : str | Path
+        Path to file to be loaded.
 
     Returns
     -------
@@ -185,18 +182,22 @@ def theo_masses_reader(file: Union[str, Path]) -> pd.DataFrame:
     return theo_masses_df
 
 
-def maxquant_file_reader(file):
-    """Reads maxquant files and outputs data as a dataframe.
+def maxquant_file_reader(file: str | Path, columns: dict = COLUMNS):
+    """
+    Reads maxquant files and outputs data as a dataframe.
 
     Parameters
     ----------
-    filepath: Union[str, Path]
+    filepath : str | Path
         Path to a text file.
+    columns : dict
+        Dictionary of columns, this defaults to the global COLUMNS which is read from 'config/columns.yaml' and
+    simplifies extension to new formats.
 
     Returns
     -------
     pd.DataFrame
-        Pandas Data frame
+        Pandas Data frame.
     """
 
     # reads file into dataframe
@@ -209,34 +210,22 @@ def maxquant_file_reader(file):
                 "you're using the allPeptides.txt file from MaxQuant?"
             )
         ) from e
-    # adds inferredStructure column
-    maxquant_df["Inferred structure"] = np.nan
-    # adds theo_mwMonoisotopic column
-    maxquant_df["Theo (Da)"] = np.nan
+    # adds empty columns for inferred structure and theoretical mass
+    maxquant_df = maxquant_df.reindex(
+        columns=[*maxquant_df.columns.tolist(), *columns["pgfinder"]["inferred"].values()], fill_value=np.nan
+    )
+
     # insert dataframe index as a column
     maxquant_df.reset_index(level=0, inplace=True)
     # Renames columns to expected column heading required for data_analysis function
     maxquant_df.rename(
-        columns={
-            "index": "ID",
-            "Retention time": "RT (min)",
-            "Mass": "Obs (Da)",
-        },
+        columns=dict(zip(columns["maxquant"], ["ID", "RT (min)", "Obs (Da)"])),
         inplace=True,
     )
-    # Desired variables and order
-    cols_order = [
-        "ID",
-        "RT (min)",
-        "Charge",
-        "Obs (Da)",
-        "Theo (Da)",
-        "Inferred structure",
-        "Intensity",
-    ]
     # Reorder columns in dataframe to desired order.
     try:
-        maxquant_df = maxquant_df[cols_order]
+        return _select_and_order_columns(maxquant_df)
+        # maxquant_df = maxquant_df[cols_order]
     except KeyError as e:
         raise UserError(
             (
@@ -244,32 +233,36 @@ def maxquant_file_reader(file):
                 "you're using the allPeptides.txt file from a supported version of MaxQuant?"
             )
         ) from e
-
     return maxquant_df
 
 
 def dataframe_to_csv_metadata(
     output_dataframe: pd.DataFrame,
-    save_filepath: Union[str, Path] = None,
-    filename: Union[str, Path] = None,
+    save_filepath: str | Path = None,
+    filename: str | Path = None,
     float_format: str = "%.4f",
-) -> Union[str, Path]:
-    """If save_filepath is specified return the relative path of the output file, including the filename, otherwise
+) -> str | None:
+    """
+    Convert dataframe to CSV with metadata.
+
+    If save_filepath is specified return the relative path of the output file, including the filename, otherwise
     return the .csv in the form of a string.
 
     Parameters
     ----------
-    output_dataframe: pd.DataFrame
+    output_dataframe : pd.DataFrame
         Dataframe to output.
-    save_filepath: Union[str, Path]
+    save_filepath : str | Path
         Path to save to.
-    filename: Union[str, Path]
+    filename : str | Path
         Filename to save to.
-    float_format: str
-        Format for floating point numbers (default 4 decimal places)
+    float_format : str
+        Format for floating point numbers (default 4 decimal places).
 
     Returns
     -------
+    str | None
+        Either returns the path to write data to or writes it to CSV.
     """
     release = version("pgfinder")
     _version = ".".join(release.split("."[:2]))
@@ -300,7 +293,13 @@ def dataframe_to_csv_metadata(
 
 
 def default_filename(prefix: str = "results_") -> str:
-    """Generate a default filename based on the current date/time.
+    """
+    Generate a default filename based on the current date/time.
+
+    Parameters
+    ----------
+    prefix : str
+        String to use as a prefix, default is 'results_'.
 
     Returns
     -------
@@ -314,18 +313,20 @@ def default_filename(prefix: str = "results_") -> str:
     return filename
 
 
-def read_yaml(filename: Union[str, Path]) -> Dict:
-    """Read a YAML file.
+def read_yaml(filename: str | Path) -> dict:
+    """
+    Read a YAML file.
 
     Parameters
     ----------
-    filename: Union[str, Path]
+    filename : str | Path
         YAML file to read.
 
     Returns
     -------
-    Dict
-        Dictionary of the file."""
+    dict
+        Dictionary of the file.
+    """
 
     with Path(filename).open() as f:
         try:

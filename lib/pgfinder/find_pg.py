@@ -6,7 +6,6 @@ import importlib.resources as pkg_resources
 import logging
 import warnings
 from pathlib import Path
-from typing import Union
 
 import yaml
 
@@ -59,13 +58,13 @@ def create_parser() -> arg.ArgumentParser:
 
 
 def process_file(
-    input_file: Union[str, Path],
-    masses_file: Union[str, Path],
+    input_file: str | Path,
+    masses_file: str | Path,
     mod_list: list,
     ppm_tolerance: float = 10,
     consolidation_ppm: float = 1,
     time_delta: int = 0.5,
-    output_dir: Union[str, Path] = "./",
+    output_dir: str | Path = "./",
     float_format: int = 4,
     to_csv: dict = None,
 ):
@@ -73,9 +72,9 @@ def process_file(
 
     Parameters
     ----------
-    input_file : Union[str, Path]
+    input_file : str | Path
         Mass Spectrometry input file to process.
-    masses_file : Union[str, Path]
+    masses_file : str | Path
         Input file of known masses.
     mod_list : list
         Modifications to include.
@@ -83,7 +82,7 @@ def process_file(
         Parts Per Million tolerance for matching.
     time_delta : int
         Time difference.
-    output_dir : Union[str, Path]
+    output_dir : str | Path
         Output directory where results are written to.
     float_format : int
        Decimal places to use in CSV files.

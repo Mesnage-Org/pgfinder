@@ -100,3 +100,25 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | modifications | List of [modifications](#modifications) |
 | ppm | ppm tolerance |
 | rt_window | Window used for in-source decay correction (min) |
+
+### PGFinder Output
+
+| Field                             | Description                                                                                   |
+|:----------------------------------|:----------------------------------------------------------------------------------------------|
+| `Metadata`                        | Metadata about input files.                                                                   |
+| `ID`                              | Peak identifier.                                                                              |
+| `RT (min)`                        | Retention Time in minutes?                                                                    |
+| `Charge`                          | ?                                                                                             |
+| `Obs (Da)`                        | Observed mass in [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit))                 |
+| `Theo (Da)`                       | Theoretical mass in  [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit))             |
+| `Delta ppm`                       | Change in Parts Per Million?                                                                  |
+| `Inferred structure`              | Inferred peptidoglycan structure.                                                             |
+| `Intensity`                       | Intensity of peak in units?                                                                   |
+| `Inferred structure (best match)` | Most likely inferred structure.                                                               |
+| `Intensity (best match)`          | Intensity of the most likely inferred structure.                                              |
+| `Total Intensity`                 | ?                                                                                             |
+| `Structure`                       | Structure of ?                                                                                |
+| `Abundance (%)`                   | Amount (as a percent) of the inferred structure?                                              |
+| `Consolidated RT (min)`           | Consolidated Retnetion time in minutes?                                                              |
+| `Consolidated Theo (Da)`          | Consolidated theoretical mass in [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit)) |
+| `Consolidated Delta ppm`          | Consolidated change in Parts Per Million?                                                     |
