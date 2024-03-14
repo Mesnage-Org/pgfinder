@@ -7,7 +7,7 @@ from decimal import Decimal
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
-from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS, COLUMNS
+from pgfinder import COLUMNS, MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
 from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME
 

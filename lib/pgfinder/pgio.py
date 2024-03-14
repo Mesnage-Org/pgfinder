@@ -1,6 +1,5 @@
 """PG Finder I/O operations"""
 
-import importlib.resources as pkg_resources
 import logging
 import sqlite3
 from datetime import datetime
