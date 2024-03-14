@@ -1,4 +1,4 @@
-RT (min),Theo (Da),Delta ppm,Inferred structure (consolidated),Intensity (consolidated),Total intensity (candidate),Inferred structure (consolidated candidate),Abundance (%) (candidate),RT (min) (candidate),Theo (Da) (candidate),Delta ppm (candidate)
+RT (min),Theo (Da),Delta ppm,Inferred structure (best match),Intensity (best match),Total Intensity,Structure,Abundance (%),Consolidated RT (min),Consolidated Theo (Da),Consolidated Delta ppm
 1,100,0.1,gm|0,100,360,gm|0,0.5278,1,100,0.1
 2,200,0.2,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",50,,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",0.4167,4,400,0.4
 3,300,0.3,gm-AEJR|1,20,,gm-AEJR|1,0.0556,3,300,0.3

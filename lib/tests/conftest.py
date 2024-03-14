@@ -195,10 +195,4 @@ def unconsolidated_df() -> pd.DataFrame:
 @pytest.fixture
 def unconsolidated_and_consolidated_df() -> pd.DataFrame:
     """Return a combined unconsolidated and consolidated dataframe to test against."""
-    # df = pd.read_csv(RESOURCES_DIR / "consolidated.csv")
-    # # Its not a great idea to have duplicate column names in dataframes/csv but they are there and so
-    # # Pandas appends `.1` to the second instances, we strip these out as `consolidate_results()` returns
-    # # duplicate column names (perhaps something that should be addressed)
-    # df.columns = [col.replace(".1", "") for col in df.columns]
-    # return df
     return pd.read_csv(RESOURCES_DIR / "consolidated.csv")
