@@ -4,23 +4,23 @@ import io
 import logging
 import pkgutil
 from pathlib import Path
-from typing import List, Union
 
 import numpy as np
 import pandas as pd
 
+from pgfinder import COLUMNS
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
 
-def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifications.txt") -> List:
+def allowed_modifications(config_file: str | Path = "config/allowed_modifications.txt") -> list:
     """
     Loads allowable modifications from a csv file as a list.
 
     Parameters
     ----------
-    config_file: Union[str, Path]
+    config_file : str | Path
         Path to a configuration file. Default 'config/allowed_modifications.txt'
 
     Returns
@@ -32,7 +32,7 @@ def allowed_modifications(config_file: Union[str, Path] = "config/allowed_modifi
     return [ln.strip().decode("utf-8") for ln in io.BytesIO(data).readlines() if not ln.isspace()]
 
 
-def validate_raw_data_df(raw_data_df: pd.DataFrame) -> Union[None, ValueError]:
+def validate_raw_data_df(raw_data_df: pd.DataFrame, columns: dict = COLUMNS["pgfinder"]) -> None | ValueError:
     """Validate that the raw data is a Pandas Dataframe with specific column names and that it has attributes.
 
     Parameters
@@ -42,27 +42,26 @@ def validate_raw_data_df(raw_data_df: pd.DataFrame) -> Union[None, ValueError]:
 
     Returns
     -------
-    Union[None, ValueError]
+    None | ValueError
         Error specific to the problem encountered with the data frame if any are encountered.
 
     Raises
     ------
     ValueError
     """
-
     if not isinstance(raw_data_df, pd.DataFrame):
         raise ValueError("raw_data_df must be a DataFrame.")
 
     if not raw_data_df.attrs["file"]:
         raise ValueError("raw_data_df must have a file attribute.")
 
-    colnames = ["ID", "RT (min)", "Obs (Da)", "Theo (Da)", "Inferred structure", "Intensity"]
+    colnames = columns["input"] + list(columns["inferred"].values())
 
     if not set(colnames).issubset(set(raw_data_df.columns.to_list())):
         raise ValueError("raw_data_df column names are incorrect")
 
 
-def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> Union[None, ValueError]:
+def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> None | ValueError:
     """Validate that the theoretical masses data is a Pandas Dataframe with specific column names and that it has
     attributes.
 
@@ -73,7 +72,7 @@ def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> Union[None, ValueEr
 
     Returns
     -------
-    Union[None, ValueError]
+    None | ValueError
         Error specific to the problem encountered with the data frame if any are encountered.
 
     Raises
@@ -98,7 +97,7 @@ def validate_theo_masses_df(theo_masses_df: pd.DataFrame) -> Union[None, ValueEr
         raise ValueError("theo_masses_df column data types are incorrect")
 
 
-def validate_rt_window(rt_window: float) -> Union[None, ValueError]:
+def validate_rt_window(rt_window: float) -> None | ValueError:
     """Validate that rt_window is an float.
 
     Parameters
@@ -108,7 +107,7 @@ def validate_rt_window(rt_window: float) -> Union[None, ValueError]:
 
     Returns
     -------
-    Union[None, ValueError]
+    None | ValueError
         If no error nothing is returned, otherwise a ValueError is raised.
 
     Raises
@@ -121,7 +120,7 @@ def validate_rt_window(rt_window: float) -> Union[None, ValueError]:
     # todo: range?
 
 
-def validate_enabled_mod_list(enabled_mod_list: list) -> Union[None, ValueError]:
+def validate_enabled_mod_list(enabled_mod_list: list) -> None | ValueError:
     """Validate that enabled_mod_list is a list and modifications are allowed.
 
     Parameters
@@ -131,7 +130,7 @@ def validate_enabled_mod_list(enabled_mod_list: list) -> Union[None, ValueError]
 
     Returns
     -------
-    Union[None, ValueError]
+    None | ValueError
         If no error nothing is returned, otherwise a ValueError is raised.
 
     Raises
@@ -148,7 +147,7 @@ def validate_enabled_mod_list(enabled_mod_list: list) -> Union[None, ValueError]
         raise ValueError("Requested modification(s) not recognised.")
 
 
-def validate_user_ppm(user_ppm: int) -> Union[None, ValueError]:
+def validate_user_ppm(user_ppm: int) -> None | ValueError:
     """Validate that user_ppm is an integer.
 
     Parameters
@@ -158,7 +157,7 @@ def validate_user_ppm(user_ppm: int) -> Union[None, ValueError]:
 
     Returns
     -------
-    Union[None, ValueError]
+    None | ValueError
         If no error nothing is returned, otherwise a ValueError is raised.
 
     Raises
