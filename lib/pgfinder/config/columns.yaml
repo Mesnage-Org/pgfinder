@@ -1,0 +1,42 @@
+# Configuration file for columns in different versions of input files and the desired pgfinder columns
+# Columns used in ftrs v311 file formats that are relevant to the work, others are discarded
+ftrs_311:
+  - Id
+  - apexRetentionTimeMinutes
+  - chargeOrder
+  - apexMwMonoisotopic
+  - maxIntensity
+# Columns used in ftrs v52 file formats that are relevant to the work, others are discarded
+ftrs_52:
+  - Id
+  - apexRetentionTime
+  - charges
+  - mwMonoIsotopicMass
+  - apexIntensity
+maxquant:
+  - index
+  - Retention time
+  - Mass
+# PGFinder columns
+pgfinder:
+  # Columns from files are renamed to these values
+  input:
+    - ID
+    - RT (min)
+    - Charge
+    - Obs (Da)
+    - Intensity
+  # The inferred mass and structure columns
+  inferred:
+    mass: Theo (Da)
+    structure: Inferred structure
+  # Suffix to add to columns to identify the best match, appended to fields in parentheses
+  best_match_suffix: best match
+  # Dictionary mapping the input columns to related but unique consolidated column names
+  consolidation:
+    Total Intensity: Total Intensity
+    Abundance (%): Abundance (%)
+    Inferred structure (best match): Structure
+    RT (min): Consolidated RT (min)
+    Theo (Da): Consolidated Theo (Da)
+    Delta ppm: Consolidated Delta ppm

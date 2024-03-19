@@ -7,21 +7,25 @@ from decimal import Decimal
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
-from pgfinder import MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
+from pgfinder import COLUMNS, MASS_TO_CLEAN, MOD_TYPE, MULTIMERS
 from pgfinder.errors import UserError
 from pgfinder.logs.logs import LOGGER_NAME
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
+# Only need pgfinder columns so subset those here to simplify subsequent indexing
+COLUMNS = COLUMNS["pgfinder"]
+
 
 def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
-    """Calculates ppm tolerance value
+    """
+    Calculates ppm tolerance value
 
     Parameters
     ----------
-    mw: float
+    mw : float
         Molecular weight.
-    ppm_tol: int
+    ppm_tol : int
         PPM tolerance
 
     Returns
@@ -33,20 +37,22 @@ def calc_ppm_tolerance(mw: float, ppm_tol: int = 10) -> float:
 
 
 def filtered_theo(ftrs_df: pd.DataFrame, theo_df: pd.DataFrame, user_ppm: int) -> pd.DataFrame:
-    """Generate list of observed structures from theoretical masses dataframe to reduce search space.
+    """
+    Generate list of observed structures from theoretical masses dataframe to reduce search space.
 
     Parameters
     ----------
-    ftrs_df: pd.DataFrame
+    ftrs_df : pd.DataFrame
         Features dataframe.
-    theo_df: pd.DataFrame
+    theo_df : pd.DataFrame
         Theoretical dataframe.
-    user_ppm: int
+    user_ppm : int
+        User specified Parts Per Million.
 
     Returns
     -------
     pd.DataFrame
-        ?
+        Dataframe filtered on matches with theoretical masses.
     """
     # Match theoretical structures to raw data to generate a list of observed structures
     matched_df = matching(ftrs_df=ftrs_df, matching_df=theo_df, set_ppm=user_ppm)
@@ -64,32 +70,39 @@ def filtered_theo(ftrs_df: pd.DataFrame, theo_df: pd.DataFrame, user_ppm: int) -
     return filtered_df
 
 
-def multimer_builder(theo_df, multimer_type: str):
-    """Generate multimers (dimers & trimers) from observed monomers
+def multimer_builder(theo_df: pd.DataFrame, multimer_type: str, columns: dict = COLUMNS) -> pd.DataFrame:
+    """
+    Generate multimers (dimers & trimers) from observed monomers.
 
     Parameters
     ----------
-    theo_df:
-        dataframe containing theoretical monomerics structures and their corresponding masses
-    multimer_type: str
+    theo_df : pd.DataFrame
+        Dataframe containing theoretical monomerics structures and their corresponding masses.
+    multimer_type : str
+        Type of multimers to build.
+    columns : dict
+        Dictionary of pgfinder columns, loaded by default from 'pgfinder/config/columns.yaml'.
 
     Returns
     -------
     pd.DataFrame
-        dataframe containing theoretical multimers and their corresponding masses
+        Dataframe containing theoretical multimers and their corresponding masses.
     """
 
     theo_mw = []
     theo_struct = []
 
+    # Perhaps need a better way
+    inferred_structure = columns["inferred"]["structure"]
+
     # Builder sub function - calculates multimer mass and name
     def builder(name, mass, mult_num: int):
         for _, row in theo_df.iterrows():
             if (
-                len(row["Inferred structure"][: len(row["Inferred structure"]) - 2]) > 2
+                len(row[inferred_structure][: len(row[inferred_structure]) - 2]) > 2
             ):  # Prevent dimer creation using just gm (input format is XX|n) X = letters n = number
                 mw = row["Theo (Da)"]
-                acceptor = row["Inferred structure"][: len(row["Inferred structure"]) - 2]
+                acceptor = row[inferred_structure][: len(row[inferred_structure]) - 2]
                 donor = name
                 donor_mw = mass
                 theo_mw.append(Decimal(mw) + donor_mw + Decimal("-18.0106"))
@@ -105,12 +118,13 @@ def multimer_builder(theo_df, multimer_type: str):
     [builder(molecule, Decimal(features["mass"]), features["mult_num"]) for molecule, features in multimer.items()]
 
     # converts lists to dataframe
-    multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=["Theo (Da)", "Inferred structure"])
+    multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=list(columns["inferred"].values()))
     return multimer_df
 
 
 def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.DataFrame:
-    """Generates modified muropeptides (calculates new mass and add modification tag to structure name)
+    """
+    Generate modified muropeptides (calculates new mass and add modification tag to structure name).
 
     Parameters
     ----------
@@ -122,7 +136,7 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame of ???
+        Pandas DataFrame of ???.
     """
     mod_mass = Decimal(MOD_TYPE[mod_type]["mass"])
     # NOTE: This regex extracts the modification abbrevation from the end of its full name / type —
@@ -161,15 +175,16 @@ def modification_generator(filtered_theo_df: pd.DataFrame, mod_type: str) -> pd.
 
 
 def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int) -> pd.DataFrame:
-    """Match theoretical masses to observed masses within ppm tolerance.
+    """
+    Match theoretical masses to observed masses within ppm tolerance.
 
     Parameters
     ----------
-    ftrs_df: pd.DataFrame
+    ftrs_df : pd.DataFrame
         Features DataFrame
-    matching_df: pd.DataFrame
+    matching_df : pd.DataFrame
         Matching DataFrame
-    set_ppm: int
+    set_ppm : int
 
     Returns
     -------
@@ -178,7 +193,6 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int) -> 
     """
     molecular_weights = matching_df[["Inferred structure", "Theo (Da)"]]
     matches_df = pd.DataFrame()
-
     for s, m in molecular_weights.itertuples(index=False):
         # FIXME: I'm not sure if it's better to convert everything to float or
         # to convert everthing to Decimal instead
@@ -198,21 +212,22 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int) -> 
 
 
 def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -> pd.DataFrame:
-    """Clean up a DataFrame.
+    """
+    Clean up a DataFrame.
 
     Parameters
     ----------
-    ftrs_df: pd.DataFrame
+    ftrs_df : pd.DataFrame
         Features dataframe?
-    mass_to_clean: Decimal
+    mass_to_clean : Decimal
         Mass to be cleaned.
     time_delta: float
-        ?
+        Clean up window.
 
     Returns
     -------
     pd.DataFrame:
-        ?
+        Tidied Dataframe.
     """
     # Get the type of adduct based on the mass_to_clean (which is a float)
     adducts = {"sodiated": Decimal("21.9819"), "potassated": Decimal("37.9559"), "decay": Decimal("203.0793")}
@@ -310,7 +325,8 @@ def data_analysis(
     ppm_tolerance: float,
     consolidation_ppm: float,
 ) -> pd.DataFrame:
-    """Perform analysis.
+    """
+    Perform analysis.
 
     Parameters
     ----------
@@ -319,17 +335,18 @@ def data_analysis(
     theo_masses_df : pd.DataFrame
         Theoretical masses as Pandas DataFrame.
     rt_window : float
-        Set time window for in-source decay and salt adduct cleanup
+        Set time window for in-source decay and salt adduct cleanup.
     enabled_mod_list : list
         List of modifications to enable.
     ppm_tolerance : float
-        The ppm tolerance used when matching the theoretical masses of structures to observed ions
+        The ppm tolerance used when matching the theoretical masses of structures to observed ions.
     consolidation_ppm : float
-        The minimum absolute ppm difference between two matches before one is picked as "most likely" over the other
+        The minimum absolute ppm difference between two matches before one is picked as "most likely" over the other.
 
     Returns
     -------
     pd.DataFrame
+        Dataframe of matches.
     """
     sugar = Decimal("203.0793")
     sodium = Decimal("21.9819")
@@ -337,7 +354,6 @@ def data_analysis(
 
     LOGGER.info("Filtering theoretical masses by observed masses")
     obs_monomers_df = filtered_theo(ftrs_df=raw_data_df, theo_df=theo_masses_df, user_ppm=ppm_tolerance)
-
     # Make sure the enabled_mod_list (if empty), is actually represented by an empty list
     enabled_mod_list = enabled_mod_list or []
 
@@ -404,7 +420,8 @@ def calculate_ppm_delta(
     theoretical: str = "Theo (Da)",
     diff: str = "Delta ppm",
 ) -> pd.DataFrame:
-    """Calculate the difference in Parts Per Million between observed and theoretical masses.
+    """
+    Calculate the difference in Parts Per Million between observed and theoretical masses.
 
     The PPM difference between observed and theoretical mass is calculated as...
 
@@ -439,15 +456,20 @@ def calculate_ppm_delta(
 def pick_most_likely_structures(
     df: pd.DataFrame,
     consolidation_ppm: float,
+    columns: dict = COLUMNS,
 ) -> pd.DataFrame:
-    """Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
+    """
+    Add rows that consolidate ambiguous matches, picking matches with the closest ppm.
 
     Parameters
     ----------
-    df: pd.DataFrame
+    df : pd.DataFrame
         DataFrame of structures to be processed.
-    consolidation_ppm: float
+    consolidation_ppm : float
         Minimum Parts Per Million tolerance distinguishing matches.
+    columns : dict
+        Dictionary of columns, this defaults to the global COLUMNS which is read from 'config/columns.yaml' and
+    simplifies extension to new formats.
 
     Returns
     -------
@@ -456,10 +478,23 @@ def pick_most_likely_structures(
         in the file for completeness.
     """
 
-    def add_most_likely_structure(group):
+    def add_most_likely_structure(group) -> pd.DataFrame:
+        """
+        Determines the most likely structure.
+
+        Parameters
+        ----------
+        group : pd.DataFrame
+            DataFrame of structures.
+
+        Returns
+        -------
+        pd.DataFrame
+            Dataframe of most likely values.
+        """
         # Sort by lowest absolute ppm first, then break ties with structures (short to long)
         group.sort_values(
-            by=["Delta ppm", "Inferred structure"],
+            by=["Delta ppm", columns["inferred"]["structure"]],
             ascending=[True, False],
             key=lambda k: abs(k) if is_numeric_dtype(k) else k,
             inplace=True,
@@ -467,19 +502,20 @@ def pick_most_likely_structures(
         )
         group.reset_index(drop=True, inplace=True)
 
+        # The hard coded 'Delta ppm' and 'Intensity column names aren't yet handled dynamically
         abs_min_ppm = group["Delta ppm"].loc[0]
         abs_min_intensity = group["Intensity"].loc[0]
 
         min_ppm_structure_idxs = abs(abs(abs_min_ppm) - abs(group["Delta ppm"])) < consolidation_ppm
-        min_ppm_structures = ",   ".join(group["Inferred structure"].loc[min_ppm_structure_idxs])
+        min_ppm_structures = ",   ".join(group[columns["inferred"]["structure"]].loc[min_ppm_structure_idxs])
 
-        group.at[0, "Inferred structure (consolidated)"] = min_ppm_structures
-        group.at[0, "Intensity (consolidated)"] = abs_min_intensity
+        group.at[0, f"Inferred structure ({columns['best_match_suffix']})"] = min_ppm_structures
+        group.at[0, f"Intensity ({columns['best_match_suffix']})"] = abs_min_intensity
 
         return group
 
-    matched_rows = df[df["Inferred structure"].notnull()]
-    unmatched_rows = df[df["Inferred structure"].isnull()]
+    matched_rows = df[df[columns["inferred"]["structure"]].notnull()]
+    unmatched_rows = df[df[columns["inferred"]["structure"]].isnull()]
 
     grouped_df = matched_rows.groupby("ID", as_index=False, sort=False)
     most_likely = grouped_df.apply(add_most_likely_structure)
@@ -491,15 +527,16 @@ def pick_most_likely_structures(
 
 def consolidate_results(
     df: pd.DataFrame,
-    intensity_column: str = "Intensity (consolidated)",
-    structure_column: str = "Inferred structure (consolidated)",
+    intensity_column: str = f"Intensity ({COLUMNS['best_match_suffix']})",
+    structure_column: str = f"Inferred structure ({COLUMNS['best_match_suffix']})",
     rt_column: str = "RT (min)",
     theo_column: str = "Theo (Da)",
     ppm_column: str = "Delta ppm",
     abundance_column: str = "Abundance (%)",
     oligomer_column: str = "Oligomerisation",
-    total_column: str = "Total intensity",
+    total_column: str = "Total Intensity",
     suffix: str = "candidate",
+    columns: dict = COLUMNS,
 ) -> pd.DataFrame:
     """
     Add a final table of muropeptide structures and their relative abundances
@@ -531,7 +568,7 @@ def consolidate_results(
     Returns
     -------
     pd.DataFrame
-        The input dataframe with additional columns containing the consolidated results
+        The input dataframe with additional columns containing the consolidated results.
     """
 
     def pick_from_highest_intensity_instance(column: pd.Series):
@@ -565,17 +602,7 @@ def consolidate_results(
     consolidated_df[abundance_column] = consolidated_df[abundance_column].round(4)
     consolidated_df[rt_column] = consolidated_df[rt_column].round(2)
     consolidated_df[ppm_column] = consolidated_df[ppm_column].round(1)
-
-    # Add " (suffix)" to all columns, or insert if
-    consolidated_df.rename(
-        columns=(
-            lambda x: (
-                x.replace("(consolidated)", f"(consolidated {suffix})")
-                if re.search("(consolidated)", x)
-                else x + f" ({suffix})"
-            )
-        ),
-        inplace=True,
-    )
+    # Rename columns using mapping defined in pgfinder/config/columns.yaml under 'consolidation'
+    consolidated_df.rename(columns=columns["consolidation"], inplace=True)
 
     return pd.concat([df, consolidated_df], axis=1)

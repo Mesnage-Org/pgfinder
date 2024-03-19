@@ -100,3 +100,25 @@ The column name of the first column contains [embedded metadata](#embedded-metad
 | modifications | List of [modifications](#modifications) |
 | ppm | ppm tolerance |
 | rt_window | Window used for in-source decay correction (min) |
+
+### PGFinder Output
+
+| Field                             | Description                                                                                   |
+|:----------------------------------|:----------------------------------------------------------------------------------------------|
+| `Metadata`                        | Metadata about input files.                                                                   |
+| `ID`                              | Peak identifier.                                                                              |
+| `RT (min)`                        | Retention Time in minutes.                                                                    |
+| `Charge`                          | Charge states at which mass was observed. Can be used to work back from monoisotopic mass to the recorded raw mass/charge ratios.                                                                                            |
+| `Obs (Da)`                        | Observed mass in [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit))                 |
+| `Theo (Da)`                       | Theoretical mass in  [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit))             |
+| `Delta ppm`                       | Change in Parts Per Million (difference between `Obs (Da)` and `Theo (Da)`).                                                                  |
+| `Inferred structure`              | Inferred peptidoglycan structure.                                                             |
+| `Intensity`                       | Intensity of peak in relative units.                                                                   |
+| `Inferred structure (best match)` | Most likely inferred structure.                                                               |
+| `Intensity (best match)`          | Intensity of the most likely inferred structure.                                              |
+| `Total Intensity`                 | Sum of intensities for consolidated structures. Can be used to compare how much material was injected/measured between different runs.                                                                                             |
+| `Structure`                       | Structure of most likely inferred structure.                                                                                |
+| `Abundance (%)`                   | Amount (as a percentage of total intensity) of the inferred structure.                                              |
+| `Consolidated RT (min)`           | Consolidated Retention time in minutes of the most likely inferred structure..                                                              |
+| `Consolidated Theo (Da)`          | Consolidated theoretical mass in [Dalton (unit)](https://en.wikipedia.org/wiki/Dalton_(unit)) of the most likely inferred structure. |
+| `Consolidated Delta ppm`          | Consolidated change in Parts Per Million of the most likely inferred structure.                                                     |
