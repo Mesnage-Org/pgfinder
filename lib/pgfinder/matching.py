@@ -599,7 +599,6 @@ def consolidate_results(
         [total_column, structure_column, abundance_column, rt_column, theo_column, ppm_column]
     ]
 
-    consolidated_df[abundance_column] = consolidated_df[abundance_column].round(4)
     consolidated_df[rt_column] = consolidated_df[rt_column].round(2)
     consolidated_df[ppm_column] = consolidated_df[ppm_column].round(1)
     # Rename columns using mapping defined in pgfinder/config/columns.yaml under 'consolidation'
