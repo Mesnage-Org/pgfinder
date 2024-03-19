@@ -141,7 +141,7 @@ def df_diff_ppm(sample_df: pd.DataFrame) -> pd.DataFrame:
     """Return a target data frame for tests with diff_pm included."""
     DELTA_DF = pd.DataFrame(
         {
-            "Delta ppm": [
+            "Delta (ppm)": [
                 -500000.0,
                 427577.82345296827,
                 -0.5742528357381609,
@@ -154,7 +154,7 @@ def df_diff_ppm(sample_df: pd.DataFrame) -> pd.DataFrame:
     )
     DELTA_DF = pd.concat([sample_df, DELTA_DF], axis=1)
     DELTA_DF = DELTA_DF.convert_dtypes()
-    return DELTA_DF[["id", "obs", "exp", "Delta ppm", "inferred", "intensity"]]
+    return DELTA_DF[["id", "obs", "exp", "Delta (ppm)", "inferred", "intensity"]]
 
 
 @pytest.fixture

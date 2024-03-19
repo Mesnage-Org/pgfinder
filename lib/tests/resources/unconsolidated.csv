@@ -1,4 +1,4 @@
-RT (min),Theo (Da),Delta ppm,Inferred structure (best match),Intensity (best match)
+RT (min),Theo (Da),Delta (ppm),Inferred structure (best match),Intensity (best match)
 1,100,0.1,gm|0,100
 2,200,0.2,"gm-AEJN|1,   gm-AEJGG|1,   gm-AEJX|1",50
 3,300,0.3,gm-AEJR|1,20

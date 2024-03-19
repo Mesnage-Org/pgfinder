@@ -416,9 +416,9 @@ def data_analysis(
 
 def calculate_ppm_delta(
     df: pd.DataFrame,
-    observed: str = "Obs (Da)",
-    theoretical: str = "Theo (Da)",
-    diff: str = "Delta ppm",
+    observed: str = COLUMNS["input"]["obs"],
+    theoretical: str = COLUMNS["inferred"]["mass"],
+    diff: str = COLUMNS["delta"],
 ) -> pd.DataFrame:
     """
     Calculate the difference in Parts Per Million between observed and theoretical masses.
@@ -494,7 +494,7 @@ def pick_most_likely_structures(
         """
         # Sort by lowest absolute ppm first, then break ties with structures (short to long)
         group.sort_values(
-            by=["Delta ppm", columns["inferred"]["structure"]],
+            by=[columns["delta"], columns["inferred"]["structure"]],
             ascending=[True, False],
             key=lambda k: abs(k) if is_numeric_dtype(k) else k,
             inplace=True,
@@ -502,11 +502,10 @@ def pick_most_likely_structures(
         )
         group.reset_index(drop=True, inplace=True)
 
-        # The hard coded 'Delta ppm' and 'Intensity column names aren't yet handled dynamically
-        abs_min_ppm = group["Delta ppm"].loc[0]
-        abs_min_intensity = group["Intensity"].loc[0]
+        abs_min_ppm = group[columns["delta"]].loc[0]
+        abs_min_intensity = group[columns["input"]["intensity"]].loc[0]
 
-        min_ppm_structure_idxs = abs(abs(abs_min_ppm) - abs(group["Delta ppm"])) < consolidation_ppm
+        min_ppm_structure_idxs = abs(abs(abs_min_ppm) - abs(group[columns["delta"]])) < consolidation_ppm
         min_ppm_structures = ",   ".join(group[columns["inferred"]["structure"]].loc[min_ppm_structure_idxs])
 
         group.at[0, f"Inferred structure ({columns['best_match_suffix']})"] = min_ppm_structures
@@ -529,13 +528,12 @@ def consolidate_results(
     df: pd.DataFrame,
     intensity_column: str = f"Intensity ({COLUMNS['best_match_suffix']})",
     structure_column: str = f"Inferred structure ({COLUMNS['best_match_suffix']})",
-    rt_column: str = "RT (min)",
-    theo_column: str = "Theo (Da)",
-    ppm_column: str = "Delta ppm",
-    abundance_column: str = "Abundance (%)",
+    rt_column: str = COLUMNS["input"]["rt"],
+    theo_column: str = COLUMNS["inferred"]["mass"],
+    ppm_column: str = COLUMNS["delta"],
+    abundance_column: str = COLUMNS["consolidation"]["Abundance (%)"],
     oligomer_column: str = "Oligomerisation",
-    total_column: str = "Total Intensity",
-    suffix: str = "candidate",
+    total_column: str = COLUMNS["consolidation"]["Total Intensity"],
     columns: dict = COLUMNS,
 ) -> pd.DataFrame:
     """
@@ -561,9 +559,6 @@ def consolidate_results(
         Oligomer column.
     total_column : str
         Total column.
-    suffix : str
-        Suffix appended to all consolidation columns to avoid duplicate column names. If a column has '(consolidated)'
-        in it already this suffix is included within the parentheses.
 
     Returns
     -------

@@ -21,11 +21,13 @@ maxquant:
 pgfinder:
   # Columns from files are renamed to these values
   input:
-    - ID
-    - RT (min)
-    - Charge
-    - Obs (Da)
-    - Intensity
+    id: ID
+    rt: RT (min)
+    charge: Charge
+    obs: Obs (Da)
+    intensity: Intensity
+  # Name of column for difference between observer and theoretical parts per million
+  delta: Delta (ppm)
   # The inferred mass and structure columns
   inferred:
     mass: Theo (Da)
@@ -39,4 +41,4 @@ pgfinder:
     Inferred structure (best match): Structure
     RT (min): Consolidated RT (min)
     Theo (Da): Consolidated Theo (Da)
-    Delta ppm: Consolidated Delta ppm
+    Delta (ppm): Consolidated Delta (ppm)

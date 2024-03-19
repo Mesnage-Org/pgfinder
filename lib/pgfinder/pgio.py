@@ -87,12 +87,12 @@ def ftrs_reader(file: str | Path, columns: dict = COLUMNS) -> pd.DataFrame:
 
         if is_ftrs_52:
             ff.rename(
-                columns=dict(zip(columns["ftrs_52"], columns["pgfinder"]["input"])),
+                columns=dict(zip(columns["ftrs_52"], columns["pgfinder"]["input"].values())),
                 inplace=True,
             )
         elif is_ftrs_311:
             ff.rename(
-                columns=dict(zip(columns["ftrs_311"], columns["pgfinder"]["input"])),
+                columns=dict(zip(columns["ftrs_311"], columns["pgfinder"]["input"].values())),
                 inplace=True,
             )
         else:
@@ -122,7 +122,7 @@ def _select_and_order_columns(df: pd.DataFrame, columns: dict = COLUMNS) -> pd.D
     pd.DataFrame
         Subset of data frame with selected columns in specified order.
     """
-    cols_order = columns["pgfinder"]["input"] + list(columns["pgfinder"]["inferred"].values())
+    cols_order = list(columns["pgfinder"]["input"].values()) + list(columns["pgfinder"]["inferred"].values())
     # Move Intensity column to the end to match required order
     cols_order.append(cols_order.pop(cols_order.index("Intensity")))
     return df[cols_order].copy()
