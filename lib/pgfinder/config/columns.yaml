@@ -17,10 +17,6 @@ maxquant:
   - index
   - Retention time
   - Mass
-# Columns for the theoretical masses data
-theo_masses:
-  - Inferred structure
-  - Theo (Da)
 # PGFinder columns
 pgfinder:
   # Columns from files are renamed to these values

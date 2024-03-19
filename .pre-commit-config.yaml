@@ -4,22 +4,22 @@ repos:
     hooks:
       - id: check-case-conflict
       - id: check-symlinks
-      - id: destroyed-symlinks
-      - id: mixed-line-ending
       - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-json
-      - id: pretty-format-json
-        args: ["--autofix", "--no-sort-keys"]
-        exclude: ^web/
       - id: check-toml
       - id: check-yaml
+      - id: destroyed-symlinks
       - id: end-of-file-fixer
         exclude: \.out$
       - id: fix-byte-order-marker
+      - id: mixed-line-ending
       - id: name-tests-test
         args: ["--pytest-test-first"]
       - id: no-commit-to-branch # Protects main/master by default
+      - id: pretty-format-json
+        args: ["--autofix", "--no-sort-keys"]
+        exclude: ^web/
       - id: requirements-txt-fixer
       - id: trailing-whitespace
 

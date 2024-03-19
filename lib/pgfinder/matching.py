@@ -119,7 +119,6 @@ def multimer_builder(theo_df: pd.DataFrame, multimer_type: str, columns: dict = 
 
     # converts lists to dataframe
     multimer_df = pd.DataFrame(list(zip(theo_mw, theo_struct)), columns=list(columns["inferred"].values()))
-    # print(f"[multimer_builder] :\n{multimer_df=}")
     return multimer_df
 
 
@@ -194,11 +193,9 @@ def matching(ftrs_df: pd.DataFrame, matching_df: pd.DataFrame, set_ppm: int) -> 
     """
     molecular_weights = matching_df[["Inferred structure", "Theo (Da)"]]
     matches_df = pd.DataFrame()
-    # print(f"[matching] :\n{molecular_weights=}")
     for s, m in molecular_weights.itertuples(index=False):
         # FIXME: I'm not sure if it's better to convert everything to float or
         # to convert everthing to Decimal instead
-        # print(f"{m=}")
         m = float(m)
         tolerance = calc_ppm_tolerance(m, set_ppm)
         mw_matches = ftrs_df[(ftrs_df["Obs (Da)"] >= m - tolerance) & (ftrs_df["Obs (Da)"] <= m + tolerance)].copy()
@@ -225,7 +222,7 @@ def clean_up(ftrs_df: pd.DataFrame, mass_to_clean: Decimal, time_delta: float) -
     mass_to_clean : Decimal
         Mass to be cleaned.
     time_delta: float
-        Change in time?
+        Clean up window.
 
     Returns
     -------
@@ -356,12 +353,7 @@ def data_analysis(
     potassium = Decimal("37.9559")
 
     LOGGER.info("Filtering theoretical masses by observed masses")
-    # print("######### FIRST TIME TCALLING filtered_theo() WE ARE PASSING....")
-    # print(f"{raw_data_df=}")
-    # print(f"{theo_masses_df=}")
-    # print(f"{ppm_tolerance=}")
     obs_monomers_df = filtered_theo(ftrs_df=raw_data_df, theo_df=theo_masses_df, user_ppm=ppm_tolerance)
-    # print(f"[data_analysis] :\n{obs_monomers_df=}")
     # Make sure the enabled_mod_list (if empty), is actually represented by an empty list
     enabled_mod_list = enabled_mod_list or []
 
@@ -411,7 +403,6 @@ def data_analysis(
     most_likely_df = pick_most_likely_structures(cleaned_data_df, consolidation_ppm)
     final_df = consolidate_results(most_likely_df)
 
-    # Order columns
     # set metadata
     final_df.attrs["file"] = raw_data_df.attrs["file"]
     final_df.attrs["masses_file"] = theo_masses_df.attrs["file"]
