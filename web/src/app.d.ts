@@ -4,6 +4,8 @@ declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
     fragmentsData: VirtFile | undefined;
+    fragmentsLibrary: VirtFile | undefined;
+    muropeptidesLibrary: VirtFile | undefined;
 	enabledModifications: Array<string>;
 	ppmTolerance: number;
 	cleanupWindow: number;

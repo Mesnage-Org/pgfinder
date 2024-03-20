@@ -1,3 +1,5 @@
+"""Functions used in uploading files from the WebUI."""
+
 import sys
 import tempfile
 from contextlib import contextmanager
@@ -22,6 +24,14 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 def ms_upload_reader(upload: dict) -> pd.DataFrame:
     with uploaded_file(upload) as file:
         return pgio.ms_file_reader(file)
+
+
+def builder_upload_reader(upload: dict) -> pd.DataFrame:
+    if upload["content"] is None:
+        upload["content"] = open(MASS_LIB_DIR / upload["name"], "rb").read()
+
+    with uploaded_file(upload) as file:
+        return pd.DataFrame(file)
 
 
 @contextmanager
