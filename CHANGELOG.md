@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2024-03-20
+
+### Added
+
+- Added automatic structure consolidation for single datasets (#266)
+- Parameterized column names via `config/columns.yaml` (#269 + #275)
+
+### Changed
+
+- Bumped minimum Python version to 3.10 (#269)
+- Renamed old columns with `(consolidated)` to `(best match)` (#269)
+
 ## [1.1.1] - 2023-11-06
 
 ### Changed
@@ -64,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Let there be peptidoglycan.
 
-[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/Mesnage-Org/pgfinder/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Mesnage-Org/pgfinder/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Mesnage-Org/pgfinder/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.3...v1.1.0
 [1.0.3]: https://github.com/Mesnage-Org/pgfinder/compare/v1.0.2...v1.0.3
