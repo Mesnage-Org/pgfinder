@@ -117,6 +117,7 @@
         <!-- Smithereens -->
 		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
 			<section class="flex flex-col space-y-4 justify-center p-4">
+            <!-- How to bind two items here to FragmentsDataUploader? -->
 				<FragmentsDataUploader bind:value={pyio.fragmentsData} />
 				<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>
 					Build database
