@@ -587,7 +587,7 @@ def consolidate_results(
         .reset_index()
     )
     total_intensity = consolidated_df[intensity_column].sum()
-    consolidated_df[abundance_column] = consolidated_df[intensity_column] / total_intensity
+    consolidated_df[abundance_column] = consolidated_df[intensity_column] / total_intensity * 100
 
     consolidated_df[oligomer_column] = consolidated_df[structure_column].apply(lambda s: s[-1])
     consolidated_df.sort_values(
