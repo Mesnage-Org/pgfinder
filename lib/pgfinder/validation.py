@@ -55,7 +55,7 @@ def validate_raw_data_df(raw_data_df: pd.DataFrame, columns: dict = COLUMNS["pgf
     if not raw_data_df.attrs["file"]:
         raise ValueError("raw_data_df must have a file attribute.")
 
-    colnames = columns["input"] + list(columns["inferred"].values())
+    colnames = list(columns["input"].values()) + list(columns["inferred"].values())
 
     if not set(colnames).issubset(set(raw_data_df.columns.to_list())):
         raise ValueError("raw_data_df column names are incorrect")

@@ -1,11 +1,5 @@
 # Data Dictionary
 
----
-
-*We are currently updating the nomenclature of many of the data in `pgfinder`. For now, use this page with caution.*
-
----
-
 Effective use of `pgfinder` requires an understanding of the inputs and outputs of the software.
 
 ## Inputs
@@ -60,46 +54,20 @@ with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia col
 
 `pgfinder` outputs `CSV` (`.csv`) files. The columns in these files depend on the input file format.
 
-### FTRS Output Files
-
-The column name of the first column contains [embedded metadata](#embedded-metadata) on the provenance of the file. Subsequent columns are defined as follows:
-
-| Column              | Description                                                                    | Unit |
-|---------------------|--------------------------------------------------------------------------------|------|
-| ID                  | Feature identified from ions corresponding to the same mass and retention time | NA   |
-| xicStart            | Extracted ion chromatogram starting time point                                 | min  |
-| xicEnd              | Extracted ion chromatogram starting time point                                 | min  |
-| ionCount            | Number of occurrence for ions corresponding to the same feature                | NA   |
-| chargeOrder         | Observed ion charge states                                                     | NA   |
-| rt                  | Retention time                                                                 | min  |
-| mwMonoisotopic      | Observed monoisotopic mass                                                     | Da   |
-| theo_mwMonoisotopic | Theoretical monoisotopic mass                                                  | Da   |
-| inferredStructure   | Inferred muropeptide structure                                                 | NA   |
-| maxIntensity        | Signal intensity calculated from Extracted Ion Chromatograms                   | NA   |
-
-### MaxQuant Output Files
-
-The column name of the first column contains [embedded metadata](#embedded-metadata) on the provenance of the file. Subsequent columns are defined as follows:
-
-| Column | Description | Unit |
-|---|---|---|
-| ID | Feature identified from ions corresponding to the same mass and retention time | NA |
-| rt | Retention time | min |
-| rt_length | Time window used to quantify signal intensity based on Extracted Ion Chromatograms | min |
-| mwMonoisotopic | Observed monoisotopic mass | Da |
-| theo_mwMonoisotopic | Theoretical monoisotopic mass | Da |
-| inferredStructure | Inferred muropeptide structure | NA |
-| maxIntensity | Signal intensity calculated from Extracted Ion Chromatograms  | NA |
 
 ### Embedded Metadata
 
+The first column contains the following metadata
+
 | Data | Description |
 |---|---|
-| file | Input data file |
-| masses_file | Mass list file |
-| modifications | List of [modifications](#modifications) |
-| ppm | ppm tolerance |
-| rt_window | Window used for in-source decay correction (min) |
+| `file` | Input data file |
+| `masses_file` | Mass list file |
+| `rt_window` | Retention time window |
+| `modifications` | List of [modifications](#modifications) |
+| `ppm` | ppm tolerance |
+| `consolidation_ppm` | ppm tolerance for consolidation |
+| `version` | PGFinder version used in analysis |
 
 ### PGFinder Output
 
