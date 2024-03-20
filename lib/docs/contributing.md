@@ -72,8 +72,12 @@ made, but typically they are ok to accept — they will be `black` formatting or
 
 ### Releasing to PyPI
 
-Releases to the [Python Package Index (PyPI)](https://pypi.org) are automated and occur when a new release is made on
-GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning](https://semver.org/).
+Releases to the [Python Package Index (PyPI)][pypi] are automated and occur when a new release is made on
+GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning][semver].
+
+## Hacking On the `smitheens` Package
+
+For detailed information on the Smithereens component please refer to the Smithereens section.
 
 ## Hacking On The `web` Directory
 
@@ -97,7 +101,7 @@ a change and saving the file you were working on, the webpage should reload auto
 ### Testing
 
 To test the GUI's functionality (and that it's correctly interfacing with the `pgfinder` backend), you can run `pnpm test`,
-which leverages [Playwright](https://playwright.dev/) for end-to-end testing.
+which leverages [Playwright][pw] for end-to-end testing.
 
 ``` bash
 # Start browser testing in the background
@@ -108,7 +112,7 @@ pnpm test -- --ui
 
 ### Formatting
 
-To ensure consistent formating throughout the `web` directory, you can run [Prettier](https://prettier.io/) using the following command:
+To ensure consistent formating throughout the `web` directory, you can run [Prettier][prettier] using the following command:
 
 ``` bash
 # Run Prettier
@@ -127,3 +131,103 @@ pnpm check:watch
 # Check for potential improvements to code style
 pnpm lint
 ```
+
+### Development
+
+To add sections to the website you need to understand the structure of the [Svelte][svelte] framework. The pages
+components reside under the `src/` directory. There are two sub-directories `src/` and `lib/`.
+
+``` bash
+❱ tree src
+[4.0K Jan 10 10:11]  src
+├── [ 767 Jan 10 10:11]  src/app.d.ts
+├── [ 592 Jan 10 10:11]  src/app.html
+├── [ 252 Jan 10 10:11]  src/app.postcss
+├── [4.0K Mar 20 08:09]  src/lib
+│   ├── [ 165 Jan 10 10:11]  src/lib/constants.ts
+│   ├── [  75 Jan 10 10:11]  src/lib/index.ts
+│   └── [2.1K Mar 20 08:09]  src/lib/pgfinder.ts
+└── [4.0K Mar  6 15:40]  src/routes
+    ├── [2.1K Jan 10 10:11]  src/routes/AdvancedOptions.svelte
+    ├── [1015 Jan 10 10:11]  src/routes/BuiltinLibrarySelector.svelte
+    ├── [1.6K Jan 10 10:11]  src/routes/ErrorModal.svelte
+    ├── [ 352 Jan 10 10:11]  src/routes/Footer.svelte
+    ├── [1.1K Feb 14 16:49]  src/routes/Header.svelte
+    ├── [  31 Jan 10 10:11]  src/routes/+layout.js
+    ├── [2.2K Feb 14 16:49]  src/routes/LinksAndDownloads.svelte
+    ├── [1.5K Jan 10 10:11]  src/routes/MassLibraryUploader.svelte
+    ├── [ 684 Jan 10 10:11]  src/routes/ModificationSelector.svelte
+    ├── [1.2K Jan 10 10:11]  src/routes/MsDataUploader.svelte
+    ├── [3.9K Jan 10 10:11]  src/routes/+page.svelte
+    ├── [   0 Mar  6 15:40]  src/routes/SmithereensUploader.svelte
+    └── [ 694 Feb 14 16:49]  src/routes/Tooltip.svelte
+
+3 directories, 19 files
+```
+
+#### `src/lib`
+
+The `src/lib/` directory contains [TypeScript][ts] files. These are imported automatically via the `$lib` alias as noted
+in `index.ts`. Currently PGFinder has three files `constants.ts`, `pgfinder.ts` and `smithereens.ts`
+
+##### `src/lib/constants.ts`
+
+This exports a set of parameters that are set as defaults for the Python components and are stored in the `defaultPyio`
+variable. It includes...
+
+| Variable               | Value                              |
+|:-----------------------|------------------------------------|
+| `msData`               | Undefined, defaults loaded by xxx. |
+| `massLibrary`          | Undefined, defaults loaded by xxx. |
+| `enabledModifications` | Default is none.                   |
+| `ppmTolerance`         | `10`                               |
+| `cleanupWindow`        | `0.5` seconds.                     |
+| `consolidationPpm`     | `1`.                               |
+
+##### `src/lib/pgfinder.ts`
+
+This script imports [Pyodide][pyodide], a [WebAssembly][wa] library that allows PGFinder to run in the browser as well
+as the constants that are defined in `src/lib/constants.ts`.
+
+``` typescript
+import type { PyProxy, PythonError } from 'pyodide/ffi';       // Imports Python modules
+import { loadPyodide, type PyodideInterface } from 'pyodide';  // Imports pyodide
+import { defaultPyio } from '$lib/constants';                  // Imports src/lib/constants.ts
+
+const pyio: Pyio = { ...defaultPyio };    // Stores constants in pyio
+let pyodide: PyodideInterface;            // Aliases PyodideInterface to pyodide
+```
+
+##### `src/lib/smithereens`
+
+**WORK IN PROGRESS** This is _highly_ experimental and requires manual building of the `smithereens` package from the
+[`TheLostLambda/smithereens@wasm-pilot`](https://github.com/TheLostLambda/smithereens/tree/wasm-pilot/pkg) branch. In
+due course this situation will be improved and the WebAssembly built and compiled in an automated manner.
+
+The `smithereens` package needs to be compiled under [WebAssembly][wa]. Doing so results in a number of files being
+built and saved in the `pkg/` subdirectory. Currently these are copied from the
+[`TheLostLambda/smithereens@wasm-pilot`](https://github.com/TheLostLambda/smithereens/tree/wasm-pilot/pkg) branch to the
+`web/src/lib/` directory as attempts to build them elsewhere have failed.
+
+#### `src/routes/*`
+
+The `src/routes` directory contains the source for the pages and how they are displayed. The main page layout is defined
+in `+page.svelte` which imports content from the other files in this directory as well as the [WebAssembly][wa] setup
+and libraries defined under the `web/src/lib` directory. These later items are imported using the prefix `$lib/`.
+
+
+##### A new Card
+
+To define a new card for inclusion you need to
+
+[npm]: https://www.npmjs.com/
+[pgfinder]: https://github.com/Mesnage-Org/pgfinder/
+[prettier]: https://prettier.io/
+[pw]: https://playwright.dev/
+[pyodide]: https://pyodide.org/en/stable/
+[pypi]: https://pypi.org
+[semver]: https://semver.org/
+[svelte]: https://svelte.dev/docs/
+[ts]: https://www.typescriptlang.org/
+[vite]: https://vitejs.dev/
+[wa]: https://webassembly.org/
