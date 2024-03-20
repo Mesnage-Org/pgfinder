@@ -3,6 +3,7 @@ declare type VirtFile = { name: string; content: ArrayBuffer };
 declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
+    fragmentsData: VirtFile | undefined;
 	enabledModifications: Array<string>;
 	ppmTolerance: number;
 	cleanupWindow: number;
@@ -11,6 +12,22 @@ declare type Pyio = {
 
 declare type MsgType = 'Ready' | 'Result';
 declare type MassLibraryIndex = {
+	[index: string]: {
+		[index: string]: {
+			File: string;
+			Description: string;
+		};
+	};
+};
+declare type FragmentsLibraryIndex = {
+	[index: string]: {
+		[index: string]: {
+			File: string;
+			Description: string;
+		};
+	};
+};
+declare type MuropeptidesLibraryIndex = {
 	[index: string]: {
 		[index: string]: {
 			File: string;

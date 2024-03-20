@@ -21,10 +21,12 @@
 	import LinksAndDownloads from './LinksAndDownloads.svelte';
 	import MassLibraryUploader from './MassLibraryUploader.svelte';
 	import MsDataUploader from './MsDataUploader.svelte';
+    import FragmentsDataUploader from './FragmentsDataUploader.svelte';
 
 	// Worker and JS Imports
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import { defaultPyio } from '$lib/constants';
+    // import pg_to_fragments from '$lib/smithereens';
 	import fileDownload from 'js-file-download';
 	import ErrorModal from './ErrorModal.svelte';
 
@@ -109,8 +111,24 @@
 		<Header {pgfinderVersion} />
 	</svelte:fragment>
 
-	<div class="h-full flex flex-col justify-center items-center">
+
+	<div class="h-full flex flex-cols-2 justify-center items-center">
+
+        <!-- Smithereens -->
 		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
+			<section class="flex flex-col space-y-4 justify-center p-4">
+				<FragmentsDataUploader bind:value={pyio.fragmentsData} />
+				<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>
+					Build database
+				</button>
+				{#if processing}
+					<ProgressBar />
+				{/if}
+			</section>
+		</div>
+
+        <!-- PGFinder -->
+        <div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
 			<section class="flex flex-col space-y-4 justify-center p-4">
 				<MsDataUploader bind:value={pyio.msData} />
 				<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />
@@ -131,6 +149,7 @@
 			</section>
 		</div>
 	</div>
+
 
 	<svelte:fragment slot="footer">
 		<Footer />
