@@ -1,0 +1,22 @@
+{
+  "Bacilus subtilis": {
+    "File": "b_subtilis.csv",
+    "Description": "Muropeptide list for B. subtilis."
+  },
+  "Enterococcus faecalis": {
+    "File": "e_faecalis.csv",
+    "Description": "Muropeptide list for E. faecalis."
+  },
+  "Enterococcus faecium": {
+    "File": "e_faecium.csv",
+    "Description": "Muropeptide list for E. faecium."
+  },
+  "Escherichia coli": {
+    "File": "e_coli.csv",
+    "Description": "Muropeptide list for E. coli."
+  },
+  "Staphylococcus aureus": {
+    "File": "s_aureus.csv",
+    "Description": "Muropeptide list for S. aureus."
+  },
+}

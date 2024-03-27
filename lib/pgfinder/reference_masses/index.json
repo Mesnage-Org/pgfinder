@@ -1,0 +1,6 @@
+{
+  "Escherichia coli": {
+    "File": "e_coli.csv",
+    "Description": "Contains the reference masses of sugars, amino acids and Diaminoacids for E. coli."
+  }
+}
