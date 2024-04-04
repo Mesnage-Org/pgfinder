@@ -17,7 +17,8 @@ let pyodide: PyodideInterface;
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-	await micropip.install('pgfinder==1.2.0-rc1');
+//	await micropip.install('pgfinder==1.2.0-rc1');
+	await micropip.install('./pgfinder-1.2.0rc2.dev32+gf23930e.d20240404-py3-none-any.whl');
 	await pyodide.runPythonAsync('import pgfinder; from pgfinder.gui.shim import *');
 
 	const pgfinderVersion = await pyodide.runPythonAsync('pgfinder.__version__');
@@ -26,15 +27,26 @@ let pyodide: PyodideInterface;
 	const allowedModifications = proxy.toJs();
 	proxy.destroy();
 
-	const json = await pyodide.runPythonAsync('mass_library_index()');
-	const massLibraries = JSON.parse(json);
+    // Load lib/pgfinder/masses/index.json which details the available mass databases
+	const jsonMass = await pyodide.runPythonAsync('mass_library_index()');
+	const massLibraries = JSON.parse(jsonMass);
+
+    // Load lib/pgfginder/reference_masses/index.json which details the available reference masses
+    const jsonFragments = await pyodide.runPythonAsync('reference_mass_library_index()');
+    const fragmentsLibraries = JSON.parse(jsonFragments);
+
+    // Load lib/pgfginder/target_structures/index.json which details the available target_structures/muropeptides
+    const jsonMuropeptides = await pyodide.runPythonAsync('target_structure_library_index()');
+    const muropeptidesLibraries = JSON.parse(jsonMuropeptides);
 
 	postMessage({
 		type: 'Ready',
 		content: {
 			pgfinderVersion,
 			allowedModifications,
-			massLibraries
+			massLibraries,
+            fragmentsLibraries,
+            muropeptidesLibraries
 		}
 	});
 })();

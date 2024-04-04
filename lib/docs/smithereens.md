@@ -95,7 +95,7 @@ wasm-pack build
 
 ### Copying to PGFinder
 
-The package artefacts are located in the `pkg/` directory and it is these that need copying to
+The package artifacts are located in the `pkg/` directory and it is these that need copying to
 `pgfinder/web/src/lib`. The [Hello World!](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html) page
 from the Rust and [[WebAssembly][wa] book is informative as to what each file is/does.
 

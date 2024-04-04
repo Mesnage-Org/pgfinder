@@ -22,6 +22,7 @@
 	import MassLibraryUploader from './MassLibraryUploader.svelte';
 	import MsDataUploader from './MsDataUploader.svelte';
     import FragmentsDataUploader from './FragmentsDataUploader.svelte';
+    import MuropeptidesDataUploader from './MuropeptidesDataUploader.svelte';
 
 	// Worker and JS Imports
 	import PGFinder from '$lib/pgfinder.ts?worker';
@@ -50,6 +51,8 @@
 	let pgfinderVersion: string;
 	let allowedModifications: Array<string>;
 	let massLibraries: MassLibraryIndex;
+    let fragmentsLibraries: FragmentsLibraryIndex;
+    let muropeptidesLibraries: MuropeptidesLibraryIndex;
 
 	// Start PGFinder
 	let pgfinder: Worker | undefined;
@@ -60,6 +63,8 @@
 				pgfinderVersion = content.pgfinderVersion;
 				allowedModifications = content.allowedModifications;
 				massLibraries = content.massLibraries;
+                fragmentsLibraries = content.fragmentsLibraries;
+                muropeptidesLibraries = content.muropeptidesLibraries;
 				loading = false;
 			} else if (type === 'Result') {
 				fileDownload(content.blob, content.filename);
@@ -117,8 +122,10 @@
         <!-- Smithereens -->
 		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
 			<section class="flex flex-col space-y-4 justify-center p-4">
-            <!-- How to bind two items here to FragmentsDataUploader? -->
-				<FragmentsDataUploader bind:value={pyio.fragmentsData} />
+				<FragmentsDataUploader bind:value={pyio.fragmentsData} {fragmentsLibraries} />
+			</section>
+			<section class="flex flex-col space-y-4 justify-center p-4">
+				<MuropeptidesDataUploader bind:value={pyio.muropeptidesData} {muropeptidesLibraries} />
 				<button type="button" class="btn variant-filled" on:click={runAnalysis} disabled={!ready}>
 					Build database
 				</button>
