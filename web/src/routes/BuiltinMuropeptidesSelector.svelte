@@ -5,28 +5,19 @@
 	export let muropeptidesLibraries: MuropeptidesLibraryIndex;
 </script>
 
-<Accordion autocollapse class="w-full">
-	{#each Object.entries(muropeptidesLibraries) as [species, libraries], speciesId}
-		<AccordionItem>
-			<svelte:fragment slot="summary"><i>{species}</i></svelte:fragment>
-			<svelte:fragment slot="content">
-				<ListBox>
-					{#each Object.entries(libraries) as [name, library], libraryId}
-						<ListBoxItem
-							bind:group={value}
-							name="muropeptides-library"
-							value={{ name: library['File'], content: null }}
-						>
-							<div class="flex items-center">
-								<p class="grow">{name}</p>
-								<Tooltip popupId="library{speciesId}{libraryId}">
-									{library['Description']}
-								</Tooltip>
-							</div>
-						</ListBoxItem>
-					{/each}
-				</ListBox>
-			</svelte:fragment>
-		</AccordionItem>
-	{/each}
-</Accordion>
+{#each Object.entries(muropeptidesLibraries) as [speciesMuropeptides, librariesMuropeptides], speciesIdMuropeptides}
+    <label>
+      <div class="flex items-center">
+        <input
+          type="radio"
+          name="muropeptides-library"
+          value={{ name: librariesMuropeptides['File'], content: null }}
+        />
+<!--        <p class="grow"><i>{speciesMuropeptides}</i> (<code>{librariesMuropeptides['File']}</code>)</p> -->
+        <p class="grow"><i>{speciesMuropeptides}</i></p>
+        <Tooltip popupId="library{speciesIdMuropeptides}">
+          {librariesMuropeptides['Description']}
+        </Tooltip>
+      </div>
+    </label>
+{/each}

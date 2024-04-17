@@ -3,7 +3,9 @@ declare type VirtFile = { name: string; content: ArrayBuffer };
 declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
+    fragmentsData: Array<VirtFile> | undefined;
     fragmentsLibrary: VirtFile | undefined;
+    muropeptidesData: Array<VirtFile> | undefined;
     muropeptidesLibrary: VirtFile | undefined;
 	enabledModifications: Array<string>;
 	ppmTolerance: number;

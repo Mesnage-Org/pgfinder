@@ -5,28 +5,19 @@
 	export let fragmentsLibraries: FragmentsLibraryIndex;
 </script>
 
-<Accordion autocollapse class="w-full">
-	{#each Object.entries(fragmentsLibraries) as [species, libraries], speciesId}
-		<AccordionItem>
-			<svelte:fragment slot="summary"><i>{species}</i></svelte:fragment>
-			<svelte:fragment slot="content">
-				<ListBox>
-					{#each Object.entries(libraries) as [name, library], libraryId}
-						<ListBoxItem
-							bind:group={value}
-							name="fragments-library"
-							value={{ name: library['File'], content: null }}
-						>
-							<div class="flex items-center">
-								<p class="grow">{name}</p>
-								<Tooltip popupId="library{speciesId}{libraryId}">
-									{library['Description']}
-								</Tooltip>
-							</div>
-						</ListBoxItem>
-					{/each}
-				</ListBox>
-			</svelte:fragment>
-		</AccordionItem>
-	{/each}
-</Accordion>
+{#each Object.entries(fragmentsLibraries) as [speciesFragments, librariesFragments], speciesIdFragments}
+    <label>
+      <div class="flex items-center">
+        <input
+          type="radio"
+          name="fragments-library"
+          value={{ name: librariesFragments['File'], content: null }}
+        />
+<!--        <p class="grow"><i>{speciesFragments}</i> (<code>{librariesFragments['File']}</code>)</p> -->
+        <p class="grow"><i>{speciesFragments}</i></p>
+        <Tooltip popupId="library{speciesIdFragments}">
+          {librariesFragments['Description']}
+        </Tooltip>
+      </div>
+    </label>
+{/each}
