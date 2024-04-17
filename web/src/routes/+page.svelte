@@ -87,6 +87,9 @@
 
 	// Reactively compute if Smithereens is ready
 	$: SmithereensReady = !loading && !processing && pyio.fragmentsLibrary !== undefined && pyio.muropeptidesLibrary !== undefined;
+	$: console.log(SmithereensReady);
+	$: console.log(pyio.fragmentsLibrary);
+	$: console.log(pyio.muropeptidesLibrary);
 
 	// Send data to Smithereens for processing
 	function runSmithereensAnalysis() {

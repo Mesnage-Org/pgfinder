@@ -18,7 +18,7 @@ let pyodide: PyodideInterface;
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
 //	await micropip.install('pgfinder==1.2.0-rc1');
-	await micropip.install('./pgfinder-1.2.0rc2.dev32+gf23930e.d20240404-py3-none-any.whl');
+	await micropip.install('/pgfinder-1.2.0rc2.dev36+g456ca69-py3-none-any.whl');
 	await pyodide.runPythonAsync('import pgfinder; from pgfinder.gui.shim import *');
 
 	const pgfinderVersion = await pyodide.runPythonAsync('pgfinder.__version__');

@@ -11,6 +11,7 @@
         <input
           type="radio"
           name="fragments-library"
+          bind:group={value}
           value={{ name: librariesFragments['File'], content: null }}
         />
 <!--        <p class="grow"><i>{speciesFragments}</i> (<code>{librariesFragments['File']}</code>)</p> -->

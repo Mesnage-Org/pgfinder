@@ -11,6 +11,7 @@
         <input
           type="radio"
           name="muropeptides-library"
+          bind:group={value}
           value={{ name: librariesMuropeptides['File'], content: null }}
         />
 <!--        <p class="grow"><i>{speciesMuropeptides}</i> (<code>{librariesMuropeptides['File']}</code>)</p> -->
