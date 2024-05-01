@@ -12,5 +12,8 @@
   "sideEffects": [
     "./smithereens.js",
     "./snippets/*"
-  ]
+  ],
+  "dependencies": {
+    "vite-plugin-wasm": "^3.3.0"
+  }
 }

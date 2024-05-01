@@ -79,7 +79,19 @@ function postError(error: PythonError) {
 	});
 }
 
+// 20240105 - Need to distinguish this from the above so that they respond to the different "messages" should be
+//            in response to runPGFinderAnalysis() function being called (which happens when 'Run Analysis' button is
+//            clicked)
 onmessage = async ({ data }) => {
 	Object.assign(pyio, data);
 	pyodide.runPythonAsync('run_analysis()').then(postResult).catch(postError);
+};
+
+
+// 20240105 - Need to distinguish this from the above so that they respond to the different "messages" should be
+//            in response to runSmithereens() function being called (which happens when 'Build Database' button is
+//            clicked)
+loadlibraries = async ({ data }) => {
+	Object.assign(pyio, data);
+	pyodide.runPythonAsync('load_libraries()').then(postResult).catch(postError);
 };

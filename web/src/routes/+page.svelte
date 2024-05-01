@@ -24,14 +24,22 @@
     import FragmentsDataUploader from './FragmentsDataUploader.svelte';
     import MuropeptidesDataUploader from './MuropeptidesDataUploader.svelte';
 
-	// Worker and JS Imports
+	// PGFinder and JS Imports
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import { defaultPyio } from '$lib/constants';
-    // import pg_to_fragments from '$lib/smithereens';
+    // Import vite-plugin-wasm and Smithereens components
+    import wasm from "vite-plugin-wasm";
+    // 2024-05-01 - This causes an error with a complain that the vite-plugin-wasm is required
+    import * as smithereens_wasm from "$lib/smithereens";
+    // 2024-05-01 - Tried the example at https://vitejs.dev/guide/features.html#webassembly but I've clearly not understood
+    // import init from "$lib/smithereens?init";
+    // init().then((instance) => {
+    //     instance.exports.
+    // })
+
 	import fileDownload from 'js-file-download';
 	import ErrorModal from './ErrorModal.svelte';
-
-	// Initialize Stores for Drawers and Modals
+    // Initialize Stores for Drawers and Modals
 	initializeStores();
 
 	// Get the Error Modal Store
@@ -43,8 +51,10 @@
 	// Pre-Declare Variables
 	let pyio: Pyio = { ...defaultPyio };
 
+
 	let loading = true;
-	let processing = false;
+	let processingPGFinder = false;
+    let processingSmithereens = false;
 	let ready = false;
 	let advancedMode = false;
 
@@ -68,7 +78,7 @@
 				loading = false;
 			} else if (type === 'Result') {
 				fileDownload(content.blob, content.filename);
-				processing = false;
+				processingPGFinder = false;
 			} else if (type === 'Error') {
 				const modal: ModalSettings = {
 					type: 'component',
@@ -80,30 +90,49 @@
 					}
 				};
 				modalStore.trigger(modal);
-				processing = false;
+				processingPGFinder = false;
 			}
 		};
 	});
 
+    // Start Smithereens
+    let smithereens: Worker | undefined;
+    onMount(() => {
+        // Get a new PGFinder instance
+        pgfinder = new PGFinder();
+        // 2024-05-01 - How to run the loadlibraries function defined in pgfinder.ts which calls the
+        //              shim.load_libraries() Python function so we load the masses and muropeptides?
+        // pgfinder.loadlibraries = ({ data: { type, content } }) => {
+        // }
+        processingSmithereens = false;
+    })
 	// Reactively compute if Smithereens is ready
-	$: SmithereensReady = !loading && !processing && pyio.fragmentsLibrary !== undefined && pyio.muropeptidesLibrary !== undefined;
-	$: console.log(SmithereensReady);
-	$: console.log(pyio.fragmentsLibrary);
-	$: console.log(pyio.muropeptidesLibrary);
+	$: SmithereensReady = !loading && !processingSmithereens && pyio.fragmentsLibrary !== undefined && pyio.muropeptidesLibrary !== undefined;
+    $: console.log(`SmithereensReady : ${SmithereensReady}`);
+    $: console.log(`pyio.fragmentsLibrary : ${pyio.fragmentsLibrary}`);
+    $: console.log(`pyio.muropeptidesLibrary : ${pyio.muropeptidesLibrary}`);
+    $: console.log(`pyio.massLibrary : ${pyio.massLibrary}`);
 
 	// Send data to Smithereens for processing
 	function runSmithereensAnalysis() {
     // TODO - Switch this to run smithereens WA using pyio.fragmentsLibrary and pyio.muropeptidesLibrary
-		pgfinder?.postMessage(pyio);
-		processing = true;
+        $: console.log("We have made it into runSmithereensAnalysis!")
+        // SOMETHING GOES HERE TO PASS THE pyio.fragmentsLibrary and pyio.muropeptidesLibrary to Smithereens
+        // Use pgfinder to load the libraries, need to split functionality so this works without mass library
+        // pgfinder?.postMessage(pyio)
+        // 2024-05-01 - Because I can't import "$lib/smithereens" the following won't work
+        let pg = new smithereens_wasm.Peptidoglycan("gm-AEJA")
+        $: console.log(`Monoisotopic Mass : ${pg.monoisotopic_mass()}`);
+        $: console.log(`Fragments :\n ${wasm.pg_to_fragments(pg)}`);
+		processingSmithereens = true;
 	}
 	// Reactively compute if PGFinder is ready
-	$: PGFinderReady = !loading && !processing && pyio.msData !== undefined && pyio.massLibrary !== undefined;
+	$: PGFinderReady = !loading && !processingPGFinder && pyio.msData !== undefined && pyio.massLibrary !== undefined;
 
 	// Send data to PGFinder for processing
 	function runPGFinderAnalysis() {
 		pgfinder?.postMessage(pyio);
-		processing = true;
+		processingPGFinder = true;
 	}
 
 	// Reactively adapt the UI when entering advanced mode
@@ -141,7 +170,7 @@
 				<button type="button" class="btn variant-filled" on:click={runSmithereensAnalysis} disabled={!SmithereensReady}>
 					Build database
 				</button>
-				{#if processing}
+				{#if processingSmithereens}
 					<ProgressBar />
 				{/if}
 			</section>
@@ -163,7 +192,7 @@
 				<button type="button" class="btn variant-filled" on:click={runPGFinderAnalysis} disabled={!PGFinderReady}>
 					Run Analysis
 				</button>
-				{#if processing}
+				{#if processingPGFinder}
 					<ProgressBar />
 				{/if}
 			</section>
