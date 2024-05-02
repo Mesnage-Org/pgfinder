@@ -27,15 +27,7 @@
 	// PGFinder and JS Imports
 	import PGFinder from '$lib/pgfinder.ts?worker';
 	import { defaultPyio } from '$lib/constants';
-    // Import vite-plugin-wasm and Smithereens components
-    import wasm from "vite-plugin-wasm";
-    // 2024-05-01 - This causes an error with a complain that the vite-plugin-wasm is required
-    import * as smithereens_wasm from "$lib/smithereens";
-    // 2024-05-01 - Tried the example at https://vitejs.dev/guide/features.html#webassembly but I've clearly not understood
-    // import init from "$lib/smithereens?init";
-    // init().then((instance) => {
-    //     instance.exports.
-    // })
+	import init, { Peptidoglycan, pg_to_fragments } from 'smithereens';
 
 	import fileDownload from 'js-file-download';
 	import ErrorModal from './ErrorModal.svelte';
@@ -99,7 +91,9 @@
     let smithereens: Worker | undefined;
     onMount(() => {
         // Get a new PGFinder instance
-        pgfinder = new PGFinder();
+        init().then(() => {
+        	console.log("smithereens wasm loaded!");
+        })
         // 2024-05-01 - How to run the loadlibraries function defined in pgfinder.ts which calls the
         //              shim.load_libraries() Python function so we load the masses and muropeptides?
         // pgfinder.loadlibraries = ({ data: { type, content } }) => {
@@ -116,14 +110,14 @@
 	// Send data to Smithereens for processing
 	function runSmithereensAnalysis() {
     // TODO - Switch this to run smithereens WA using pyio.fragmentsLibrary and pyio.muropeptidesLibrary
-        $: console.log("We have made it into runSmithereensAnalysis!")
+        console.log("We have made it into runSmithereensAnalysis!")
         // SOMETHING GOES HERE TO PASS THE pyio.fragmentsLibrary and pyio.muropeptidesLibrary to Smithereens
         // Use pgfinder to load the libraries, need to split functionality so this works without mass library
         // pgfinder?.postMessage(pyio)
         // 2024-05-01 - Because I can't import "$lib/smithereens" the following won't work
-        let pg = new smithereens_wasm.Peptidoglycan("gm-AEJA")
-        $: console.log(`Monoisotopic Mass : ${pg.monoisotopic_mass()}`);
-        $: console.log(`Fragments :\n ${wasm.pg_to_fragments(pg)}`);
+        let pg = new Peptidoglycan("gm-AEJA")
+        console.log(`Monoisotopic Mass : ${pg.monoisotopic_mass()}`);
+        console.log(`Fragments :\n ${pg_to_fragments(pg)}`);
 		processingSmithereens = true;
 	}
 	// Reactively compute if PGFinder is ready
