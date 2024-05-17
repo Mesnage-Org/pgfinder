@@ -33,7 +33,7 @@ repos:
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: "v0.3.3"
+    rev: v0.4.7
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -49,11 +49,11 @@ repos:
   #         - svelte
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.0.0-beta.2
+    rev: v9.3.0
     hooks:
       - id: eslint
         types: [file]
-        args: [--fix, --resolve-plugins-relative-to, ~/.cache/pre-commit]
+        args: [--fix, --no-warn-ignored]
         files: \.(js|ts|svelte)$
         additional_dependencies:
           - eslint

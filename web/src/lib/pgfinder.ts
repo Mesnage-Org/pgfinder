@@ -17,8 +17,11 @@ let pyodide: PyodideInterface;
 	pyodide.registerJsModule('pyio', pyio);
 	await pyodide.loadPackage(['micropip', 'sqlite3']);
 	const micropip = pyodide.pyimport('micropip');
-//	await micropip.install('pgfinder==1.2.0-rc1');
-	await micropip.install('/pgfinder-1.2.0rc2.dev36+g456ca69-py3-none-any.whl');
+	await micropip.install('pgfinder==1.2.0-rc1');
+    // If you need to test development version of pgfinder you should build the wheel and copy the resulting .whl to the
+    // lib/ directory (adajacent to this file), replace the version below and comment out the above (which loads from
+    // PyPI).
+	// await micropip.install('./pgfinder-1.2.0rc2.dev39+g75eb8a8.d20240603-py3-none-any.whl');
 	await pyodide.runPythonAsync('import pgfinder; from pgfinder.gui.shim import *');
 
 	const pgfinderVersion = await pyodide.runPythonAsync('pgfinder.__version__');
@@ -31,22 +34,12 @@ let pyodide: PyodideInterface;
 	const jsonMass = await pyodide.runPythonAsync('mass_library_index()');
 	const massLibraries = JSON.parse(jsonMass);
 
-    // Load lib/pgfginder/reference_masses/index.json which details the available reference masses
-    const jsonFragments = await pyodide.runPythonAsync('reference_mass_library_index()');
-    const fragmentsLibraries = JSON.parse(jsonFragments);
-
-    // Load lib/pgfginder/target_structures/index.json which details the available target_structures/muropeptides
-    const jsonMuropeptides = await pyodide.runPythonAsync('target_structure_library_index()');
-    const muropeptidesLibraries = JSON.parse(jsonMuropeptides);
-
 	postMessage({
 		type: 'Ready',
 		content: {
 			pgfinderVersion,
 			allowedModifications,
 			massLibraries,
-            fragmentsLibraries,
-            muropeptidesLibraries
 		}
 	});
 })();
@@ -79,19 +72,7 @@ function postError(error: PythonError) {
 	});
 }
 
-// 20240105 - Need to distinguish this from the above so that they respond to the different "messages" should be
-//            in response to runPGFinderAnalysis() function being called (which happens when 'Run Analysis' button is
-//            clicked)
 onmessage = async ({ data }) => {
 	Object.assign(pyio, data);
 	pyodide.runPythonAsync('run_analysis()').then(postResult).catch(postError);
-};
-
-
-// 20240105 - Need to distinguish this from the above so that they respond to the different "messages" should be
-//            in response to runSmithereens() function being called (which happens when 'Build Database' button is
-//            clicked)
-loadlibraries = async ({ data }) => {
-	Object.assign(pyio, data);
-	pyodide.runPythonAsync('load_libraries()').then(postResult).catch(postError);
 };

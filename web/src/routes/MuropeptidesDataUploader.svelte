@@ -4,7 +4,7 @@
 	import BuiltinFragmentsSelector from './BuiltinFragmentsSelector.svelte';
 	import BuiltinMuropeptidesSelector from './BuiltinMuropeptidesSelector.svelte';
 	export let value: VirtFile | undefined;
-    export let muropeptidesLibraries: MuropeptidesLibraryIndex | undefined;
+    export let muropeptidesLibraryIndex: MuropeptidesLibraryIndex | undefined;
 
 	let files: FileList;
 	let customMuropeptideLibrary = false;
@@ -12,6 +12,7 @@
 	async function dataUploaded(): Promise<void> {
 		value = { name: files[0].name, content: await files[0].arrayBuffer() };
 	}
+    $: console.log(`MuropeptidesDataUploader value :`, value);
 </script>
 
 
@@ -36,8 +37,8 @@
 						{/if}
 					</svelte:fragment>
 				</FileDropzone>
-			{:else if muropeptidesLibraries !== undefined}
-				<BuiltinMuropeptidesSelector bind:value {muropeptidesLibraries} />
+			{:else if muropeptidesLibraryIndex !== undefined}
+				<BuiltinMuropeptidesSelector bind:value {muropeptidesLibraryIndex} />
 			{:else}
 				<div class="flex justify-center">
 					<ProgressRadial />

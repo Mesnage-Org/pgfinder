@@ -2,10 +2,10 @@
 	import { Accordion, AccordionItem, ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import Tooltip from './Tooltip.svelte';
 	export let value: VirtFile | undefined;
-	export let fragmentsLibraries: FragmentsLibraryIndex;
+	export let fragmentsLibraryIndex: FragmentsLibraryIndex;
 </script>
 
-{#each Object.entries(fragmentsLibraries) as [speciesFragments, librariesFragments], speciesIdFragments}
+{#each Object.entries(fragmentsLibraryIndex) as [speciesFragments, librariesFragments], speciesIdFragments}
     <label>
       <div class="flex items-center">
         <input

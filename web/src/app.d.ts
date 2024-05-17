@@ -3,16 +3,21 @@ declare type VirtFile = { name: string; content: ArrayBuffer };
 declare type Pyio = {
 	msData: Array<VirtFile> | undefined;
 	massLibrary: VirtFile | undefined;
-    fragmentsData: Array<VirtFile> | undefined;
-    fragmentsLibrary: VirtFile | undefined;
-    muropeptidesData: Array<VirtFile> | undefined;
-    muropeptidesLibrary: VirtFile | undefined;
+    // fragmentsData: Array<VirtFile> | undefined;
+    // fragmentsLibrary: VirtFile | undefined;
+    // muropeptidesData: Array<VirtFile> | undefined;
+    // muropeptidesLibrary: VirtFile | undefined;
 	enabledModifications: Array<string>;
 	ppmTolerance: number;
 	cleanupWindow: number;
 	consolidationPpm: number;
 };
-
+declare type Smithereens = {
+    fragmentsLibraryIndex: VirtFile | undefined;
+    fragmentsData: Array<VirtFile> | undefined;
+    muropeptidesLibraryIndex: VirtFile | undefined;
+    muropeptidesData: Array<VirtFile> | undefined;
+};
 declare type MsgType = 'Ready' | 'Result';
 declare type MassLibraryIndex = {
 	[index: string]: {

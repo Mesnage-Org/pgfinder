@@ -3,7 +3,7 @@
     // Need to define these
 	import BuiltinFragmentsSelector from './BuiltinFragmentsSelector.svelte';
 	export let value: VirtFile | undefined;
-    export let fragmentsLibraries: FragmentsLibraryIndex | undefined;
+    export let fragmentsLibraryIndex: FragmentsLibraryIndex | undefined;
 
 	let files: FileList;
 	let customFragmentsLibrary = false;
@@ -11,6 +11,8 @@
 	async function dataUploaded(): Promise<void> {
 		value = { name: files[0].name, content: await files[0].arrayBuffer() };
 	}
+    $: console.log(`FragmentsDataUploader value :`, value);
+
 </script>
 
 <div class="flex flex-col items-center">
@@ -35,8 +37,8 @@
 						{/if}
 					</svelte:fragment>
 				</FileDropzone>
-			{:else if fragmentsLibraries !== undefined}
-				<BuiltinFragmentsSelector bind:value {fragmentsLibraries} />
+			{:else if fragmentsLibraryIndex !== undefined}
+				<BuiltinFragmentsSelector bind:value {fragmentsLibraryIndex} />
 			{:else}
 				<div class="flex justify-center">
 					<ProgressRadial />

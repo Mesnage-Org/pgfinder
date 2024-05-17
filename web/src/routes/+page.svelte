@@ -26,7 +26,9 @@
 
 	// PGFinder and JS Imports
 	import PGFinder from '$lib/pgfinder.ts?worker';
-	import { defaultPyio } from '$lib/constants';
+    import Smithereens from '$lib/smithereens.ts?worker';
+
+	import { defaultPyio, defaultSmithereens } from '$lib/constants';
 	import init, { Peptidoglycan, pg_to_fragments } from 'smithereens';
 
 	import fileDownload from 'js-file-download';
@@ -42,9 +44,10 @@
 
 	// Pre-Declare Variables
 	let pyio: Pyio = { ...defaultPyio };
-
+    let smithereens: Smithereens = { ...defaultSmithereens };
 
 	let loading = true;
+    let loadingSmithereens = true;
 	let processingPGFinder = false;
     let processingSmithereens = false;
 	let ready = false;
@@ -53,8 +56,11 @@
 	let pgfinderVersion: string;
 	let allowedModifications: Array<string>;
 	let massLibraries: MassLibraryIndex;
-    let fragmentsLibraries: FragmentsLibraryIndex;
-    let muropeptidesLibraries: MuropeptidesLibraryIndex;
+    let fragmentsLibraryIndex: FragmentsLibraryIndex;
+    let muropeptidesLibraryIndex: MuropeptidesLibraryIndex;
+    // Need to define string reference to each of the fragmentsDataFile
+    let fragmentsDataFile: string;
+    let muropeptidesDataFile: string;
 
 	// Start PGFinder
 	let pgfinder: Worker | undefined;
@@ -65,8 +71,6 @@
 				pgfinderVersion = content.pgfinderVersion;
 				allowedModifications = content.allowedModifications;
 				massLibraries = content.massLibraries;
-                fragmentsLibraries = content.fragmentsLibraries;
-                muropeptidesLibraries = content.muropeptidesLibraries;
 				loading = false;
 			} else if (type === 'Result') {
 				fileDownload(content.blob, content.filename);
@@ -88,33 +92,58 @@
 	});
 
     // Start Smithereens
-    let smithereens: Worker | undefined;
+    let smithereensWorker: Worker | undefined;
     onMount(() => {
-        // Get a new PGFinder instance
+        smithereensWorker = new Smithereens();
+        smithereensWorker.onmessage = ({ data: { type, content } }) => {
+            if (type === 'Ready') {
+            // This is wrong I think
+                fragmentsLibraryIndex = content.fragmentsLibraryIndex;
+                muropeptidesLibraryIndex = content.muropeptidesLibraryIndex;
+                console.log('fragmentsLibraryIndex :', fragmentsLibraryIndex);
+                console.log('muropeptidesLibraryIndex :', muropeptidesLibraryIndex)
+                loadingSmithereens = false;
+            } else if (type === 'Process') {
+                fragmentsDataFile = content.fragmentsData;
+                muropeptidesDataFile = content.muropeptidesData;
+                processingSmithereens = true;
+            } else if (type === 'Result') {
+                fileDownload(content.blob, content.filename);
+	  			processingSmithereens = false;
+            } else if (type === 'Error') {
+				const modal: ModalSettings = {
+					type: 'component',
+					component: {
+						ref: ErrorModal,
+						props: {
+							message: content.message
+						}
+					}
+				};
+				modalStore.trigger(modal);
+				processingSmithereens = false;
+          }
+        };
         init().then(() => {
         	console.log("smithereens wasm loaded!");
         })
-        // 2024-05-01 - How to run the loadlibraries function defined in pgfinder.ts which calls the
-        //              shim.load_libraries() Python function so we load the masses and muropeptides?
-        // pgfinder.loadlibraries = ({ data: { type, content } }) => {
-        // }
         processingSmithereens = false;
     })
 	// Reactively compute if Smithereens is ready
-	$: SmithereensReady = !loading && !processingSmithereens && pyio.fragmentsLibrary !== undefined && pyio.muropeptidesLibrary !== undefined;
-    $: console.log(`SmithereensReady : ${SmithereensReady}`);
-    $: console.log(`pyio.fragmentsLibrary : ${pyio.fragmentsLibrary}`);
-    $: console.log(`pyio.muropeptidesLibrary : ${pyio.muropeptidesLibrary}`);
-    $: console.log(`pyio.massLibrary : ${pyio.massLibrary}`);
+    $: console.log(`!loadingSmithereens : `, !loadingSmithereens);
+    $: console.log(`!processingSmithereens  : `, !processingSmithereens);
+    $: console.log(`smithereensWorker  : `, smithereensWorker);
+    $: console.log(`smithereens.fragmentsData  : `, smithereens.fragmentsData);
+    $: console.log(`smithereens.muropeptidesData  : `, smithereens.muropeptidesData);
+    $: console.log(`smithereens  : `, smithereens);
+	$: SmithereensReady = !loadingSmithereens && !processingSmithereens && smithereens.fragmentsData !== undefined && smithereens.muropeptidesData !== undefined;
+    $: console.log(`SmithereensReady : `, SmithereensReady);
 
 	// Send data to Smithereens for processing
 	function runSmithereensAnalysis() {
-    // TODO - Switch this to run smithereens WA using pyio.fragmentsLibrary and pyio.muropeptidesLibrary
         console.log("We have made it into runSmithereensAnalysis!")
-        // SOMETHING GOES HERE TO PASS THE pyio.fragmentsLibrary and pyio.muropeptidesLibrary to Smithereens
-        // Use pgfinder to load the libraries, need to split functionality so this works without mass library
-        // pgfinder?.postMessage(pyio)
-        // 2024-05-01 - Because I can't import "$lib/smithereens" the following won't work
+        // Now we call smithereens.ts
+        smithereensWorker?.postMessage(smithereens)
         let pg = new Peptidoglycan("gm-AEJA")
         console.log(`Monoisotopic Mass : ${pg.monoisotopic_mass()}`);
         console.log(`Fragments :\n ${pg_to_fragments(pg)}`);
@@ -157,10 +186,10 @@
         <!-- Smithereens -->
 		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
 			<section class="flex flex-col space-y-4 justify-center p-4">
-				<FragmentsDataUploader bind:value={pyio.fragmentsLibrary} {fragmentsLibraries} />
+				<FragmentsDataUploader bind:value={smithereens.fragmentsData} {fragmentsLibraryIndex} />
 			</section>
 			<section class="flex flex-col space-y-4 justify-center p-4">
-				<MuropeptidesDataUploader bind:value={pyio.muropeptidesLibrary} {muropeptidesLibraries} />
+				<MuropeptidesDataUploader bind:value={smithereens.muropeptidesData} {muropeptidesLibraryIndex} />
 				<button type="button" class="btn variant-filled" on:click={runSmithereensAnalysis} disabled={!SmithereensReady}>
 					Build database
 				</button>
