@@ -1,5 +1,5 @@
 /* tslint:disable */
- 
+
 export const memory: WebAssembly.Memory;
 export function __wbg_peptidoglycan_free(a: number): void;
 export function peptidoglycan_new(a: number, b: number, c: number): void;

@@ -1,5 +1,5 @@
 /* tslint:disable */
- 
+
 /**
 * @param {Peptidoglycan} precursor
 * @returns {string}
