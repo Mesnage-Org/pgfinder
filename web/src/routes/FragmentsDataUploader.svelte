@@ -15,7 +15,7 @@
 
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" data-testid="fragmentsDataUploader">
 	<h5 class="pb-1 h5">Building block components</h5>
     <p>(list of sugars and amino-acids)</p>
 	<TabGroup class="w-full" justify="justify-center">

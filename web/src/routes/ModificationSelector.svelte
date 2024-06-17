@@ -4,7 +4,7 @@
 	export let allowedModifications: Array<string> | undefined;
 </script>
 
-<div class="flex flex-col items-center aspect-square overflow-y-auto">
+<div class="flex flex-col items-center aspect-square overflow-y-auto" data-testid="modificationSelector">
 	<h5 class="pb-1 h5">Modifications</h5>
 	{#if allowedModifications !== undefined}
 		<ListBox class="w-full overflow-y-auto" multiple>

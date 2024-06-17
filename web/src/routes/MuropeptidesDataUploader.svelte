@@ -16,7 +16,7 @@
 </script>
 
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" data-testid="muropeptides-data-uploader">
 	<h5 class="pb-1 h5">Muropeptide List</h5>
 	<TabGroup class="w-full" justify="justify-center">
 		<Tab bind:group={customMuropeptideLibrary} name="built-in" value={false}>Built-In</Tab>

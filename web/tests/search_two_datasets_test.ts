@@ -3,15 +3,16 @@ import { expect, test } from '@playwright/test';
 test('run a search with two datasets', async ({ page }) => {
 	await page.goto('/');
 
-	await page.getByRole('textbox').click();
+	await page.getByTestId('file-dropzone').getByRole('textbox').click();
 	await page
+        .getByTestId('file-dropzone')
 		.getByRole('textbox')
 		.setInputFiles([
 			'tests/data/C. difficile WT (Bern et al).ftrs',
 			'tests/data/E. coli WT (Patel et al).ftrs'
 		]);
-	await page.getByRole('button', { name: 'Clostridium difficile' }).click();
-	await page.getByRole('option', { name: 'Non-Redundant' }).click();
+	await page.getByTestId('MassLibraryUploader').getByRole('button', { name: 'Clostridium difficile' }).click();
+	await page.getByTestId('MassLibraryUploader').getByRole('option', { name: 'Non-Redundant' }).click();
 
 	const downloads: string[] = [];
 	page.on('download', (download) => downloads.push(download.suggestedFilename()));

@@ -12,11 +12,11 @@
 	}
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" data-testid="MassLibraryUploader">
 	<h5 class="pb-1 h5">Mass Database</h5>
 	<TabGroup class="w-full" justify="justify-center">
-		<Tab bind:group={customMassLibrary} name="built-in" value={false}>Built-In</Tab>
-		<Tab bind:group={customMassLibrary} name="custom" value={true}>Custom</Tab>
+		<Tab bind:group={customMassLibrary} name="builtInMass" value={false}>Built-In</Tab>
+		<Tab bind:group={customMassLibrary} name="customMassLibrary" value={true}>Custom Mass</Tab>
 		<svelte:fragment slot="panel">
 			{#if customMassLibrary}
 				<FileDropzone name="mass-library" bind:files on:change={dataUploaded} accept=".csv">

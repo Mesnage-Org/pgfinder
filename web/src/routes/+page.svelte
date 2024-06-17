@@ -9,7 +9,7 @@
 		storePopup,
 		initializeStores,
 		getModalStore,
-		type ModalSettings
+		ModalSettings
 	} from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { onMount } from 'svelte';
@@ -184,7 +184,7 @@
 	<div class="h-full flex flex-cols-2 justify-center items-center">
 
         <!-- Smithereens -->
-		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
+		<div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}" data-testid="Smithereens">
 			<section class="flex flex-col space-y-4 justify-center p-4">
 				<FragmentsDataUploader bind:value={smithereens.fragmentsData} {fragmentsLibraryIndex} />
 			</section>
@@ -200,7 +200,7 @@
 		</div>
 
         <!-- PGFinder -->
-        <div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}">
+        <div class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}" data-testid="PGFinder">
 			<section class="flex flex-col space-y-4 justify-center p-4">
 				<MsDataUploader bind:value={pyio.msData} />
 				<MassLibraryUploader bind:value={pyio.massLibrary} {massLibraries} />

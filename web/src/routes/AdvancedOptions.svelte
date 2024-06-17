@@ -14,15 +14,15 @@
 	<AccordionItem bind:open={advancedMode}>
 		<svelte:fragment slot="summary">Advanced Options</svelte:fragment>
 		<svelte:fragment slot="content">
-			<div class="grid md:grid-cols-2 md:gap-8">
+			<div class="grid md:grid-cols-2 md:gap-8" data-testid="advancedModifications">
 				<ModificationSelector bind:value={enabledModifications} {allowedModifications} />
 				<div class="flex flex-col justify-between aspect-square overflow-y-auto">
-					<div class="flex flex-col items-center">
+					<div class="flex flex-col items-center" data-testid="advancedPpmTolerance">
 						<h5 class="pb-1 h5">PPM Tolerance</h5>
 						<input bind:value={ppmTolerance} class="input" type="number" step="1" min="0" />
 					</div>
 
-					<div class="flex flex-col items-center">
+					<div class="flex flex-col items-center" data-testid="advancedCleanupWindow">
 						<h5 class="pb-1 h5">
 							Cleanup Window
 							<Tooltip style="inline ml-1" popupId="cleanupTooltip">
@@ -32,7 +32,7 @@
 						<input bind:value={cleanupWindow} class="input" type="number" step="0.1" min="0" />
 					</div>
 
-					<div class="flex flex-col items-center">
+					<div class="flex flex-col items-center" data-testid="advancedConsolidationPpm">
 						<h5 class="pb-1 h5">
 							Consolidation PPM
 							<Tooltip style="inline ml-1" popupId="consolidationTooltip">
