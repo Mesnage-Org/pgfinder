@@ -8,9 +8,9 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
-		"strict": true,
-        "exclude": [
-            "../src/lib/pkg/smithereens*.js"
-        ]
-	}
+		"strict": true
+	},
+	"exclude": [
+		"src/lib/pkg/smithereens*.js"
+	]
 }
