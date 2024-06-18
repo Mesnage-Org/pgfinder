@@ -1,6 +1,7 @@
 # Smithereens
 
 ## EBNF Notation for PG Structures (https://github.com/matthijsgroen/ebnf2railroad)
+
 ```
 (*
   The PG Structural Language
