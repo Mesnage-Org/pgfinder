@@ -14,9 +14,9 @@ declare type Pyio = {
 };
 declare type Smithereens = {
     fragmentsLibraryIndex: VirtFile | undefined;
-    fragmentsData: Array<VirtFile> | undefined;
+    fragmentsData: VirtFile | undefined;
     muropeptidesLibraryIndex: VirtFile | undefined;
-    muropeptidesData: Array<VirtFile> | undefined;
+    muropeptidesData: VirtFile | undefined;
 };
 declare type MsgType = 'Ready' | 'Result';
 declare type MassLibraryIndex = {
