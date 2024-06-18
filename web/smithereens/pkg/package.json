@@ -1,0 +1,15 @@
+{
+  "name": "smithereens",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "smithereens_bg.wasm",
+    "smithereens.js",
+    "smithereens.d.ts"
+  ],
+  "module": "smithereens.js",
+  "types": "smithereens.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

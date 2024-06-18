@@ -34,5 +34,8 @@ cov*.xml
 #Built docs
 docs/_build/*
 
+# Sphinx .rst
+*.rst
+
 # Setuptools Version file
 pgfinder/_version.py

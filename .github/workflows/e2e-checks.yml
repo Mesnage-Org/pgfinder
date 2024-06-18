@@ -35,4 +35,6 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright Tests
-        run: pnpm test
+        run: |
+          tree -fhD     # Looking for location of smithereens_bg.wasm
+          pnpm test

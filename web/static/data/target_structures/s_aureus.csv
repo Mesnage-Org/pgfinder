@@ -1,0 +1,24 @@
+Structure
+gm |0
+gm-gm |0
+gm(Anh) |1
+gm(-Ac) |1
+gm-AEJ |1
+gm-AEJA |1
+gm-AEJG |1
+gm-AEJAG |1
+gm-AEJKR |1
+gm-AEJ (Anh) |1
+gm-AEJA (Anh) |1
+gm-AEJA (-Ac) |1
+gm-gm-AEJA |1
+gm-AEJA=gm-AEJA (4-3) |2
+gm-AEJA=gm-AEJ (3-3) |2
+gm-AEJ=gm-AEJ (3-3) |2
+gm-AEJKR=gm-AEJA (4-3) |2
+gm-AEJA=gm-AEJA (Anh) (4-3) |2
+gm-AEJAG=gm-AEJA (4-3) |2
+gm-AEJKR=gm-AEJ (Anh) (3-3) |2
+gm-gm-AEJA=gm-AEJA (4-3) |2
+gm(-Ac)-AEJA=gm-AEJA (4-3) |2
+gm(+Ac)-AEJA=gm-AEJ (Anh) (3-3) |2

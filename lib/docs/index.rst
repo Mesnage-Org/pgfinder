@@ -10,6 +10,7 @@ Welcome to pgfinder's documentation!
     usage
     data_dictionary
     contributing
+    smithereens
     copying
 
 .. toctree::
