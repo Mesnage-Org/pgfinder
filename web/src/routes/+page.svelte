@@ -8,9 +8,9 @@
 		ProgressBar,
 		storePopup,
 		initializeStores,
-		getModalStore,
-		ModalSettings
+		getModalStore
 	} from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { onMount } from 'svelte';
 
