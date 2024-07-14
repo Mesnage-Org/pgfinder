@@ -1,24 +1,19 @@
 declare type VirtFile = { name: string; content: ArrayBuffer };
 
-declare type Pyio = {
+declare type PGFinderState = {
   msData: Array<VirtFile> | undefined;
   massLibrary: VirtFile | undefined;
-  // fragmentsData: Array<VirtFile> | undefined;
-  // fragmentsLibrary: VirtFile | undefined;
-  // muropeptidesData: Array<VirtFile> | undefined;
-  // muropeptidesLibrary: VirtFile | undefined;
   enabledModifications: Array<string>;
   ppmTolerance: number;
   cleanupWindow: number;
   consolidationPpm: number;
 };
-declare type Smithereens = {
-  fragmentsLibraryIndex: VirtFile | undefined;
-  fragmentsData: VirtFile | undefined;
+
+declare type SmithereensState = {
   muropeptidesLibraryIndex: VirtFile | undefined;
   muropeptidesData: VirtFile | undefined;
 };
-declare type MsgType = "Ready" | "Result";
+
 declare type MassLibraryIndex = {
   [index: string]: {
     [index: string]: {
@@ -27,31 +22,46 @@ declare type MassLibraryIndex = {
     };
   };
 };
-declare type FragmentsLibraryIndex = {
+declare type MassDatabaseTemplates = {
   [index: string]: {
     File: string;
     Description: string;
   };
 };
-declare type MuropeptidesLibraryIndex = {
-  [index: string]: {
-    File: string;
-    Description: string;
-  };
-};
-declare type ReadyMsg = {
-  pgfinderVersion: string;
+
+// PGFinder Worker Message Types ===============================================
+
+declare type PGFinderMsg = PGFReadyMsg | PGFResultMsg | PGFErrorMsg;
+
+declare type PGFReadyMsg = {
+  type: "Ready";
+  version: string;
   allowedModifications: Array<string>;
   massLibraries: MassLibraryIndex;
 };
-declare type ResultMsg = {
+
+declare type PGFResultMsg = {
+  type: "Result";
   filename: string;
   blob: Blob;
 };
-declare type ErrorMsg = {
+
+declare type PGFErrorMsg = {
+  type: "Error";
   message: string;
 };
-declare type Msg = {
-  type: MsgType;
-  content: ReadyMsg | ResultMsg | ErrorMsg;
+
+// Smithereens Worker Message Types ============================================
+
+declare type SmithereensMsg = SReadyMsg | SSingleMsg;
+
+declare type SReadyMsg = {
+  type: "Ready";
+  version: string;
+  massDatabaseTemplates: MassDatabaseTemplates;
+};
+
+declare type SSingleMsg = {
+  type: "Single";
+  structure: string;
 };

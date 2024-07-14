@@ -5,34 +5,31 @@
     Tab,
     ProgressRadial,
   } from "@skeletonlabs/skeleton";
-  // Need to define these
-  import BuiltinFragmentsSelector from "./BuiltinFragmentsSelector.svelte";
+  import MassDatabaseSelector from "./MassDatabaseSelector.svelte";
   export let value: VirtFile | undefined;
-  export let fragmentsLibraryIndex: FragmentsLibraryIndex | undefined;
+  export let massLibraries: MassLibraryIndex | undefined;
 
   let files: FileList;
-  let customFragmentsLibrary = false;
+  let customMassLibrary = false;
 
   async function dataUploaded(): Promise<void> {
     value = { name: files[0].name, content: await files[0].arrayBuffer() };
   }
-  $: console.log(`FragmentsDataUploader value :`, value);
 </script>
 
-<div class="flex flex-col items-center" data-testid="fragmentsDataUploader">
-  <h5 class="pb-1 h5">Building block components</h5>
-  <p>(list of sugars and amino-acids)</p>
+<div class="flex flex-col items-center" data-testid="MassLibraryUploader">
+  <h5 class="pb-1 h5">Mass Database</h5>
   <TabGroup class="w-full" justify="justify-center">
-    <Tab bind:group={customFragmentsLibrary} name="built-in" value={false}
+    <Tab bind:group={customMassLibrary} name="builtInMass" value={false}
       >Built-In</Tab
     >
-    <Tab bind:group={customFragmentsLibrary} name="custom" value={true}
-      >Custom</Tab
+    <Tab bind:group={customMassLibrary} name="customMassLibrary" value={true}
+      >Custom Mass</Tab
     >
     <svelte:fragment slot="panel">
-      {#if customFragmentsLibrary}
+      {#if customMassLibrary}
         <FileDropzone
-          name="fragments-library"
+          name="mass-library"
           bind:files
           on:change={dataUploaded}
           accept=".csv"
@@ -46,12 +43,12 @@
           </svelte:fragment>
           <svelte:fragment slot="meta">
             {#if !value}
-              Fragments (.csv)
+              PGFinder Mass Library (.csv)
             {/if}
           </svelte:fragment>
         </FileDropzone>
-      {:else if fragmentsLibraryIndex !== undefined}
-        <BuiltinFragmentsSelector bind:value {fragmentsLibraryIndex} />
+      {:else if massLibraries !== undefined}
+        <MassDatabaseSelector bind:value {massLibraries} />
       {:else}
         <div class="flex justify-center">
           <ProgressRadial />

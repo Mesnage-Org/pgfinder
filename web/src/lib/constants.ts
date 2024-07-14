@@ -1,4 +1,4 @@
-export const defaultPyio = {
+export const defaultPGFinderState = {
   msData: undefined,
   massLibrary: undefined,
   enabledModifications: [],

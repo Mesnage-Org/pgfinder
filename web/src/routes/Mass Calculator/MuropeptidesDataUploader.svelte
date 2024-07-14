@@ -5,31 +5,43 @@
     Tab,
     ProgressRadial,
   } from "@skeletonlabs/skeleton";
-  import BuiltinLibrarySelector from "./BuiltinLibrarySelector.svelte";
+  // Need to define these
+  import BuiltinMuropeptidesSelector from "./BuiltinMuropeptidesSelector.svelte";
   export let value: VirtFile | undefined;
-  export let massLibraries: MassLibraryIndex | undefined;
+  export let muropeptidesLibraryIndex: MuropeptidesLibraryIndex | undefined;
 
   let files: FileList;
-  let customMassLibrary = false;
+  let customMuropeptideLibrary = false;
 
   async function dataUploaded(): Promise<void> {
     value = { name: files[0].name, content: await files[0].arrayBuffer() };
   }
+
+  let structure = "";
+  $: console.log(structure);
 </script>
 
-<div class="flex flex-col items-center" data-testid="MassLibraryUploader">
-  <h5 class="pb-1 h5">Mass Database</h5>
+<div
+  class="flex flex-col items-center"
+  data-testid="muropeptides-data-uploader"
+>
+  <h5 class="pb-1 h5">Mass Calculator</h5>
   <TabGroup class="w-full" justify="justify-center">
-    <Tab bind:group={customMassLibrary} name="builtInMass" value={false}
-      >Built-In</Tab
+    <Tab bind:group={customMuropeptideLibrary} name="built-in" value={false}
+      >Bulk</Tab
     >
-    <Tab bind:group={customMassLibrary} name="customMassLibrary" value={true}
-      >Custom Mass</Tab
+    <Tab bind:group={customMuropeptideLibrary} name="custom" value={true}
+      >Single</Tab
     >
     <svelte:fragment slot="panel">
-      {#if customMassLibrary}
+      {#if customMuropeptideLibrary}
+        <label class="label">
+          <span>Structure</span>
+          <input bind:value={structure} class="input" type="text" placeholder="gm-AEJA" />
+        </label>
+      {:else if muropeptidesLibraryIndex !== undefined}
         <FileDropzone
-          name="mass-library"
+          name="muropeptide-library"
           bind:files
           on:change={dataUploaded}
           accept=".csv"
@@ -43,12 +55,11 @@
           </svelte:fragment>
           <svelte:fragment slot="meta">
             {#if !value}
-              PGFinder Mass Library (.csv)
+              Muropeptide (.csv)
             {/if}
           </svelte:fragment>
         </FileDropzone>
-      {:else if massLibraries !== undefined}
-        <BuiltinLibrarySelector bind:value {massLibraries} />
+        <BuiltinMuropeptidesSelector bind:value {muropeptidesLibraryIndex} />
       {:else}
         <div class="flex justify-center">
           <ProgressRadial />

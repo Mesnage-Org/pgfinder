@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
   import ModificationSelector from "./ModificationSelector.svelte";
-  import Tooltip from "./Tooltip.svelte";
+  import Tooltip from "../Tooltip.svelte";
   export let enabledModifications: Array<string>;
   export let allowedModifications: Array<string> | undefined;
   export let ppmTolerance: number;

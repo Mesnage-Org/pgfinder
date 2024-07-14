@@ -38,33 +38,6 @@ repos:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
 
-  # - repo: https://github.com/pre-commit/mirrors-prettier
-  #   rev: v3.1.0
-  #   hooks:
-  #     - id: prettier
-  #       args: [--write] # edit files in-place
-  #       additional_dependencies:
-  #         - prettier
-  #         - prettier-plugin-svelte
-  #         - svelte
-
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.5.0
-    hooks:
-      - id: eslint
-        types: [file]
-        args: [--fix, --no-warn-ignored]
-        files: \.(js|ts|svelte)$
-        additional_dependencies:
-          - eslint
-          - typescript
-          - svelte
-          - svelte-eslint-parser
-          - eslint-plugin-svelte
-          - eslint-config-prettier
-          - '@typescript-eslint/eslint-plugin'
-          - '@typescript-eslint/parser'
-
 ci:
   autofix_prs: true
   autofix_commit_msg: '[pre-commit.ci] Fixing issues with pre-commit'

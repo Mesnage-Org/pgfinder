@@ -1,6 +1,6 @@
 <script lang="ts">
   import { FileDropzone } from "@skeletonlabs/skeleton";
-  import Tooltip from "./Tooltip.svelte";
+  import Tooltip from "../Tooltip.svelte";
   export let value: Array<VirtFile> | undefined;
 
   let files: FileList;

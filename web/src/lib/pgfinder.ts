@@ -1,8 +1,8 @@
 import type { PyProxy, PythonError } from "pyodide/ffi";
 import { loadPyodide, type PyodideInterface } from "pyodide";
-import { defaultPyio } from "$lib/constants";
+import { defaultPGFinderState } from "$lib/constants";
 
-const pyio: Pyio = { ...defaultPyio };
+const state: PGFinderState = { ...defaultPGFinderState };
 let pyodide: PyodideInterface;
 
 // Maybe someday (once top-level await is even more universal), I should get
@@ -12,9 +12,9 @@ let pyodide: PyodideInterface;
   // These files can also be hosted locally from `/static` if something ever
   // happens to this CDN, but there will be some build-system demons to battle.
   pyodide = await loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/",
+    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/",
   });
-  pyodide.registerJsModule("pyio", pyio);
+  pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
   const micropip = pyodide.pyimport("micropip");
   await micropip.install("pgfinder==1.2.0-rc1");
@@ -26,7 +26,7 @@ let pyodide: PyodideInterface;
     "import pgfinder; from pgfinder.gui.shim import *",
   );
 
-  const pgfinderVersion = await pyodide.runPythonAsync("pgfinder.__version__");
+  const version = await pyodide.runPythonAsync("pgfinder.__version__");
 
   const proxy = await pyodide.runPythonAsync("allowed_modifications()");
   const allowedModifications = proxy.toJs();
@@ -36,14 +36,13 @@ let pyodide: PyodideInterface;
   const jsonMass = await pyodide.runPythonAsync("mass_library_index()");
   const massLibraries = JSON.parse(jsonMass);
 
-  postMessage({
+  const msg: PGFReadyMsg = {
     type: "Ready",
-    content: {
-      pgfinderVersion,
-      allowedModifications,
-      massLibraries,
-    },
-  });
+    version,
+    allowedModifications,
+    massLibraries,
+  };
+  postMessage(msg);
 })();
 
 function postResult(proxy: PyProxy) {
@@ -54,27 +53,27 @@ function postResult(proxy: PyProxy) {
     const fileparts = file.split(".");
     fileparts[fileparts.length - 1] = "csv";
     const filename = fileparts.join(".");
-    postMessage({
+
+    const msg: PGFResultMsg = {
       type: "Result",
-      content: {
-        filename,
-        blob,
-      },
-    });
+      filename,
+      blob
+    };
+    postMessage(msg);
   });
 }
 
 function postError(error: PythonError) {
   const message = error.message;
-  postMessage({
+
+  const msg: PGFErrorMsg = {
     type: "Error",
-    content: {
-      message,
-    },
-  });
+    message
+  };
+  postMessage(msg);
 }
 
 onmessage = async ({ data }) => {
-  Object.assign(pyio, data);
+  Object.assign(state, data);
   pyodide.runPythonAsync("run_analysis()").then(postResult).catch(postError);
 };

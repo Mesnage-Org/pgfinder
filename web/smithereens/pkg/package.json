@@ -1,5 +1,5 @@
 {
-  "name": "smithereens",
+  "name": "wasm-shim",
   "type": "module",
   "version": "0.1.0",
   "files": [
@@ -7,7 +7,7 @@
     "smithereens.js",
     "smithereens.d.ts"
   ],
-  "module": "smithereens.js",
+  "main": "smithereens.js",
   "types": "smithereens.d.ts",
   "sideEffects": [
     "./snippets/*"
