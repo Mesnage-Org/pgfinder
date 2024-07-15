@@ -1,8 +1,8 @@
 import type { PyProxy, PythonError } from "pyodide/ffi";
 import { loadPyodide, type PyodideInterface } from "pyodide";
-import { defaultPGFinderState } from "$lib/constants";
+import { defaultPythonState } from "$lib/constants";
 
-const state: PGFinderState = { ...defaultPGFinderState };
+const state: PythonState = { ...defaultPythonState };
 let pyodide: PyodideInterface;
 
 // Maybe someday (once top-level await is even more universal), I should get

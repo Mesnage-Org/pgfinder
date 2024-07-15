@@ -18,7 +18,7 @@
 <div class="flex flex-col items-center">
   <h5 class="pb-1 h5">
     Deconvoluted Datasets
-    <Tooltip style="inline ml-1" popupId="supported-versions">
+    <Tooltip style="inline ml-1" type="info">
       This version has been tested with .ftrs files from Byos v3.11, v5.1, and
       v5.2, as well as allPeptides.txt files from Maxquant v2.0.1.0 through
       v2.4.2.0

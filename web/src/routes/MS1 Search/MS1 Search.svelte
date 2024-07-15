@@ -8,7 +8,7 @@
   import MassDatabaseUploader from "./MassDatabaseUploader.svelte";
   import MsDataUploader from "./MsDataUploader.svelte";
   import ErrorModal from "../ErrorModal.svelte";
-  import { defaultPGFinderState } from "$lib/constants";
+  import { defaultPythonState } from "$lib/constants";
   import PGFinder from "$lib/pgfinder.ts?worker";
   import fileDownload from "js-file-download";
   import { onMount } from "svelte";
@@ -19,7 +19,7 @@
   const modalStore = getModalStore();
 
   // Declare component state
-  let state: PGFinderState = { ...defaultPGFinderState };
+  let state: PythonState = { ...defaultPythonState };
   let allowedModifications: Array<string>;
   let massLibraries: MassLibraryIndex;
   let loading = true;
@@ -86,7 +86,7 @@
   class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}"
   data-testid="MS1 Search"
 >
-  <section class="flex flex-col space-y-4 justify-center p-4">
+  <section class="flex flex-col space-y-4 p-4">
     <MsDataUploader bind:value={state.msData} />
 
     <MassDatabaseUploader bind:value={state.massLibrary} {massLibraries} />

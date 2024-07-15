@@ -12,7 +12,7 @@ import init, { Peptidoglycan, version } from "smithereens";
   // Initialise wasm and wait for it to finish *before* returning `Ready`
   await init();
 
-  let msg: SmithereensMsg = {
+  const msg: SmithereensRes = {
     type: "Ready",
     version: version(),
     massDatabaseTemplates,
@@ -44,13 +44,52 @@ function postResult(csvString: string, filename: string) {
 // 	});
 // }
 
-function processSingle(structure: string): string {
+function validate({ structure }: SValidateReq): SValidateRes | SSingleErr {
   try {
-    let mass = new Peptidoglycan(structure).monoisotopic_mass();
-    return `Monoisotopic Mass: ${mass} Da`;
+    if (structure.length != 0) {
+      new Peptidoglycan(structure);
+    }
+    return {
+      type: "ValidateRes"
+    };
   } catch (msg) {
-    console.error(msg);
-    return "Invalid Structure";
+    // FIXME: I should eventually do something with this error `msg`!
+    return {
+      type: "SingleErr"
+    };
+  }
+}
+
+function mass({ structure }: SMassReq): SMassRes | SSingleErr {
+  try {
+    const mass = (structure.length != 0) ? new Peptidoglycan(structure).monoisotopic_mass() : "";
+    return {
+      type: "MassRes",
+      mass
+    };
+  } catch (msg) {
+    // FIXME: I should eventually do something with this error `msg`!
+    return {
+      type: "SingleErr"
+    };
+  }
+}
+
+function fragment({ structure }: SFragmentReq): SFragmentRes | SSingleErr {
+  try {
+    const fragments = new Peptidoglycan(structure).fragment();
+    const filename = `${structure}.csv`;
+    const blob = new Blob([fragments], { type: "text/csv" });
+    return {
+      type: "FragmentRes",
+      filename,
+      blob
+    };
+  } catch (msg) {
+    // FIXME: I should eventually do something with this error `msg`!
+    return {
+      type: "SingleErr"
+    };
   }
 }
 
@@ -96,11 +135,17 @@ async function processBulk(data: any) {
   postResult(csvString, "muropeptide_masses.csv");
 }
 
-onmessage = async ({ data: msg }: MessageEvent<SmithereensMsg>) => {
-  switch (msg.type) {
-    case "Single":
-      console.log(processSingle(msg.structure));
-      break;
-  }
+const dispatchTable = {
+  "MassReq": mass,
+  "ValidateReq": validate,
+  "FragmentReq": fragment,
+};
+
+onmessage = async ({ data: msg }: MessageEvent<SmithereensReq>) => {
+  // FIXME: Refactor this to a switch table that just picks a function, but
+  // they are all then applied to the message in the same way!
   console.log(msg);
+  // NOTE: Typescript isn't clever enough to know this is okay yet
+  let response: SmithereensRes = dispatchTable[msg.type](msg as any);
+  postMessage(response);
 };

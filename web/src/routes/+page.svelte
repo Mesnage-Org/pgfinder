@@ -21,7 +21,9 @@
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   import LinksAndDownloads from "./LinksAndDownloads.svelte";
-    import Ms1Search from "./MS1 Search/MS1 Search.svelte";
+  import Ms1Search from "./MS1 Search/MS1 Search.svelte";
+  import MassCalculator from "./Mass Calculator/Mass Calculator.svelte";
+    import Fragmenter from "./Fragmenter/Fragmenter.svelte";
 
   // Initialize Stores for Drawers and Modals
   initializeStores();
@@ -46,8 +48,10 @@
     <Header pgfinderVersion={ms1SearchVersion} />
   </svelte:fragment>
 
-  <div class="h-full flex flex-cols-2 justify-center items-center">
-    <Ms1Search bind:version={ms1SearchVersion}/>
+  <div class="h-full flex flex-col lg:flex-row justify-center items-center">
+    <MassCalculator />
+    <Ms1Search bind:version={ms1SearchVersion} />
+    <Fragmenter />
   </div>
 
   <svelte:fragment slot="footer">

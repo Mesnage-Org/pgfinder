@@ -1,17 +1,12 @@
 declare type VirtFile = { name: string; content: ArrayBuffer };
 
-declare type PGFinderState = {
+declare type PythonState = {
   msData: Array<VirtFile> | undefined;
   massLibrary: VirtFile | undefined;
   enabledModifications: Array<string>;
   ppmTolerance: number;
   cleanupWindow: number;
   consolidationPpm: number;
-};
-
-declare type SmithereensState = {
-  muropeptidesLibraryIndex: VirtFile | undefined;
-  muropeptidesData: VirtFile | undefined;
 };
 
 declare type MassLibraryIndex = {
@@ -53,15 +48,50 @@ declare type PGFErrorMsg = {
 
 // Smithereens Worker Message Types ============================================
 
-declare type SmithereensMsg = SReadyMsg | SSingleMsg;
+declare type SmithereensReq = SMassReq | SValidateReq | SFragmentReq;
 
-declare type SReadyMsg = {
+declare type SmithereensRes = SReady
+  | SSingleErr
+  | SMassRes
+  | SValidateRes
+  | SFragmentRes;
+
+declare type SReady = {
   type: "Ready";
   version: string;
   massDatabaseTemplates: MassDatabaseTemplates;
 };
 
-declare type SSingleMsg = {
-  type: "Single";
+declare type SMassReq = {
+  type: "MassReq";
   structure: string;
+};
+
+declare type SMassRes = {
+  type: "MassRes";
+  mass: string;
+};
+
+declare type SSingleErr = {
+  type: "SingleErr";
+};
+
+declare type SValidateReq = {
+  type: "ValidateReq";
+  structure: string;
+}
+
+declare type SValidateRes = {
+  type: "ValidateRes";
+}
+
+declare type SFragmentReq = {
+  type: "FragmentReq";
+  structure: string;
+};
+
+declare type SFragmentRes = {
+  type: "FragmentRes";
+  filename: string;
+  blob: Blob;
 };

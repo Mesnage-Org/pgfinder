@@ -24,7 +24,7 @@
             >
               <div class="flex items-center">
                 <p class="grow">{name}</p>
-                <Tooltip popupId="library{speciesId}{libraryId}">
+                <Tooltip type="info">
                   {library["Description"]}
                 </Tooltip>
               </div>

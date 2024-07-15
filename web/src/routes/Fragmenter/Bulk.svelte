@@ -6,7 +6,7 @@
     ProgressRadial,
   } from "@skeletonlabs/skeleton";
   // Need to define these
-  import BuiltinMuropeptidesSelector from "./BuiltinMuropeptidesSelector.svelte";
+  import Tooltip from "../Tooltip.svelte";
   export let value: VirtFile | undefined;
   export let muropeptidesLibraryIndex: MuropeptidesLibraryIndex | undefined;
 
@@ -18,9 +18,25 @@
   }
 
   let structure = "";
-  $: console.log(structure);
 </script>
 
+{#each Object.entries(muropeptidesLibraryIndex) as [speciesMuropeptides, librariesMuropeptides], speciesIdMuropeptides}
+  <label>
+    <div class="flex items-center">
+      <input
+        type="radio"
+        name="muropeptides-library"
+        bind:group={value}
+        value={{ name: librariesMuropeptides["File"], content: null }}
+      />
+      <!--        <p class="grow"><i>{speciesMuropeptides}</i> (<code>{librariesMuropeptides['File']}</code>)</p> -->
+      <p class="grow"><i>{speciesMuropeptides}</i></p>
+      <Tooltip popupId="library{speciesIdMuropeptides}">
+        {librariesMuropeptides["Description"]}
+      </Tooltip>
+    </div>
+  </label>
+{/each}
 <div
   class="flex flex-col items-center"
   data-testid="muropeptides-data-uploader"
@@ -37,7 +53,12 @@
       {#if customMuropeptideLibrary}
         <label class="label">
           <span>Structure</span>
-          <input bind:value={structure} class="input" type="text" placeholder="gm-AEJA" />
+          <input
+            bind:value={structure}
+            class="input"
+            type="text"
+            placeholder="gm-AEJA"
+          />
         </label>
       {:else if muropeptidesLibraryIndex !== undefined}
         <FileDropzone
@@ -59,7 +80,6 @@
             {/if}
           </svelte:fragment>
         </FileDropzone>
-        <BuiltinMuropeptidesSelector bind:value {muropeptidesLibraryIndex} />
       {:else}
         <div class="flex justify-center">
           <ProgressRadial />

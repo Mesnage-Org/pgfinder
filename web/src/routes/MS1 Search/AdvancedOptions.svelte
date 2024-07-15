@@ -45,7 +45,7 @@
           >
             <h5 class="pb-1 h5">
               Cleanup Window
-              <Tooltip style="inline ml-1" popupId="cleanupTooltip">
+              <Tooltip style="inline ml-1" type="info">
                 Set time window for in-source decay and salt adduct cleanup
               </Tooltip>
             </h5>
@@ -64,7 +64,7 @@
           >
             <h5 class="pb-1 h5">
               Consolidation PPM
-              <Tooltip style="inline ml-1" popupId="consolidationTooltip">
+              <Tooltip style="inline ml-1" type="info">
                 During consolidation, structures with the lowest absolute ppm
                 are selected over those farther from the theoretical mass.
                 However, if two or more matches have a theoretical mass less
