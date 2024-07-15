@@ -179,6 +179,13 @@ export class Peptidoglycan {
         }
     }
     /**
+    * @returns {number}
+    */
+    oligomerization_state() {
+        const ret = wasm.peptidoglycan_oligomerization_state(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
     * @returns {string}
     */
     monoisotopic_mass() {

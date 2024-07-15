@@ -1,11 +1,13 @@
 <script lang="ts">
   import { getModalStore } from "@skeletonlabs/skeleton";
   export let message: string;
+  export let manualError: boolean;
 
   const modalStore = getModalStore();
   let traceVisible = false;
 
-  $: userError = message.match("(?<=pgfinder.errors.UserError: ).*");
+  $: userError =
+    message.match("(?<=pgfinder.errors.UserError: ).*") || (manualError && message);
 
   $: traceHidden = traceVisible || !userError ? "" : "hidden";
   $: modalWidth = traceHidden ? "w-modal-slim" : "w-full max-w-3xl";
@@ -45,7 +47,7 @@
       class="btn variant-filled"
       on:click={() => modalStore.close()}>Okay</button
     >
-    {#if userError}
+    {#if userError && !manualError}
       <button
         type="button"
         class="btn variant-filled-error"

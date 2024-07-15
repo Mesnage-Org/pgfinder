@@ -5,21 +5,30 @@
     Tab,
     ProgressRadial,
   } from "@skeletonlabs/skeleton";
-  // Need to define these
   import Tooltip from "../Tooltip.svelte";
-  export let value: VirtFile | undefined;
-  export let muropeptidesLibraryIndex: MuropeptidesLibraryIndex | undefined;
+  import { onMount } from "svelte";
+
+  export let structures: File | undefined;
+  export let buildCommand: () => void;
+  export let ready: boolean;
 
   let files: FileList;
-  let customMuropeptideLibrary = false;
+  let structuresIndex: StructuresIndex | undefined;
 
-  async function dataUploaded(): Promise<void> {
-    value = { name: files[0].name, content: await files[0].arrayBuffer() };
+  onMount(async () => {
+    const res = await fetch("/data/structures_templates/index.json");
+    structuresIndex = JSON.parse(await res.text());
+  });
+
+  function structuresUploaded() {
+    const file = files.item(0);
+    if (file) {
+      structures = file;
+    }
   }
-
-  let structure = "";
 </script>
 
+<!--
 {#each Object.entries(muropeptidesLibraryIndex) as [speciesMuropeptides, librariesMuropeptides], speciesIdMuropeptides}
   <label>
     <div class="flex items-center">
@@ -29,7 +38,6 @@
         bind:group={value}
         value={{ name: librariesMuropeptides["File"], content: null }}
       />
-      <!--        <p class="grow"><i>{speciesMuropeptides}</i> (<code>{librariesMuropeptides['File']}</code>)</p> -->
       <p class="grow"><i>{speciesMuropeptides}</i></p>
       <Tooltip popupId="library{speciesIdMuropeptides}">
         {librariesMuropeptides["Description"]}
@@ -37,54 +45,38 @@
     </div>
   </label>
 {/each}
-<div
-  class="flex flex-col items-center"
-  data-testid="muropeptides-data-uploader"
->
-  <h5 class="pb-1 h5">Mass Calculator</h5>
-  <TabGroup class="w-full" justify="justify-center">
-    <Tab bind:group={customMuropeptideLibrary} name="built-in" value={false}
-      >Bulk</Tab
-    >
-    <Tab bind:group={customMuropeptideLibrary} name="custom" value={true}
-      >Single</Tab
-    >
-    <svelte:fragment slot="panel">
-      {#if customMuropeptideLibrary}
-        <label class="label">
-          <span>Structure</span>
-          <input
-            bind:value={structure}
-            class="input"
-            type="text"
-            placeholder="gm-AEJA"
-          />
-        </label>
-      {:else if muropeptidesLibraryIndex !== undefined}
-        <FileDropzone
-          name="muropeptide-library"
-          bind:files
-          on:change={dataUploaded}
-          accept=".csv"
-        >
-          <svelte:fragment slot="message">
-            {#if value === undefined}
-              <p><b>Upload a file</b> or drag and drop</p>
-            {:else}
-              <p>{value.name}</p>
-            {/if}
-          </svelte:fragment>
-          <svelte:fragment slot="meta">
-            {#if !value}
-              Muropeptide (.csv)
-            {/if}
-          </svelte:fragment>
-        </FileDropzone>
+-->
+<div class="flex flex-col items-center space-y-4">
+  <FileDropzone
+    name="structure-list"
+    bind:files
+    on:change={structuresUploaded}
+    accept=".txt"
+  >
+    <svelte:fragment slot="message">
+      {#if structures === undefined}
+        <p><b>Upload a file</b> or drag and drop</p>
       {:else}
-        <div class="flex justify-center">
-          <ProgressRadial />
-        </div>
+        <p>{structures.name}</p>
       {/if}
     </svelte:fragment>
-  </TabGroup>
+    <svelte:fragment slot="meta">
+      {#if !structures}
+        Muropeptide Structures (.txt)
+      {/if}
+    </svelte:fragment>
+  </FileDropzone>
+  {#if structuresIndex}{:else}
+    <div class="flex justify-center">
+      <ProgressRadial />
+    </div>
+  {/if}
+  <button
+    type="button"
+    class="btn variant-filled w-full"
+    on:click={buildCommand}
+    disabled={!ready}
+  >
+    Build Database
+  </button>
 </div>

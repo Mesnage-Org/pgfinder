@@ -15,8 +15,8 @@
   // Get the Error Modal Store
   const modalStore = getModalStore();
 
-  let loadingSmithereens = true;
-  let processingSmithereens = false;
+  let loading = true;
+  let processing = false;
   let bulk = true;
 
   // Single Structure State
@@ -38,49 +38,27 @@
   onMount(() => {
     smithereens = new Smithereens();
     smithereens.onmessage = ({ data: msg }: MessageEvent<SmithereensRes>) => {
-      console.log(msg);
       switch (msg.type) {
         case "Ready":
-          loadingSmithereens = false;
+          loading = false;
           break;
         case "ValidateRes":
           validStructure = true;
           break;
         case "FragmentRes":
           fileDownload(msg.blob, msg.filename);
-          processingSmithereens = false
+          processing = false
           break;
         case "SingleErr":
           validStructure = false;
           break;
       }
-    //   if (type === "Ready") {
-    //     loadingSmithereens = false;
-    //   } else if (type === "Process") {
-    //     processingSmithereens = true;
-    //   } else if (type === "Result") {
-    //     fileDownload(content.blob, content.filename);
-    //     processingSmithereens = false;
-    //   } else if (type === "Error") {
-    //     const modal: ModalSettings = {
-    //       type: "component",
-    //       component: {
-    //         ref: ErrorModal,
-    //         props: {
-    //           message: content.message,
-    //         },
-    //       },
-    //     };
-    //     modalStore.trigger(modal);
-    //     processingSmithereens = false;
-    //   }
-    // };
-    processingSmithereens = false;
+    processing = false;
   }});
   // Reactively compute if Smithereens is ready
   $: ready =
-    !loadingSmithereens &&
-    !processingSmithereens &&
+    !loading &&
+    !processing &&
     (!bulk && structure && validStructure);
 
   function fragment() {
@@ -93,7 +71,7 @@
       };
       smithereens.postMessage(msg);
     }
-    processingSmithereens = true;
+    processing = true;
   }
 
   // Reactively compute the name of the fragment button
@@ -101,15 +79,16 @@
 </script>
 
 <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Fragmenter">
-  <section class="flex flex-col space-y-4 items-center p-4">
+  <section class="flex flex-col items-center p-4">
     <h5 class="pb-1 h5">Fragment Generator</h5>
     <TabGroup class="w-full" justify="justify-center">
       <Tab bind:group={bulk} name="bulk" value={true}>Bulk</Tab>
       <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
       <svelte:fragment slot="panel">
         {#if bulk}
+          <!-- FIXME: Don't forget to add the space-y-4 to the inner div here... -->
           <p>TODO</p>
-          {#if processingSmithereens}
+          {#if processing}
             <ProgressBar />
           {/if}
         {:else}
@@ -120,14 +99,14 @@
 
     <button
       type="button"
-      class="btn variant-filled w-full"
+      class="btn variant-filled w-full mt-4"
       on:click={fragment}
       disabled={!ready}
     >
       Fragment Structure{plural}
     </button>
-    {#if processingSmithereens}
-      <ProgressBar />
+    {#if processing}
+      <ProgressBar class="mt-4"/>
     {/if}
   </section>
 </div>

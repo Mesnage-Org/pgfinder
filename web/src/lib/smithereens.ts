@@ -6,43 +6,20 @@
 import init, { Peptidoglycan, version } from "smithereens";
 
 (async () => {
-  const template_index = await fetch("/data/mass_database_templates/index.json");
-  const massDatabaseTemplates = JSON.parse(await template_index.text());
-
   // Initialise wasm and wait for it to finish *before* returning `Ready`
   await init();
 
-  const msg: SmithereensRes = {
+  const msg: SReady = {
     type: "Ready",
     version: version(),
-    massDatabaseTemplates,
   };
-
   postMessage(msg);
 })();
 
-// What type should 'proxy' be?
-function postResult(csvString: string, filename: string) {
-  const blob = new Blob([csvString as BlobPart], { type: "text/csv" });
-  postMessage({
-    type: "Result",
-    content: {
-      filename,
-      blob,
-    },
-  });
-}
 
-// What type should 'error' be? Do we need a postError function here?
-// function postError(error: string) {
-// 	const message = error.message;
-// 	postMessage({
-// 		type: 'Error',
-// 		content: {
-// 			message
-// 		}
-// 	});
-// }
+function csvBlob(csv: string): Blob {
+  return new Blob([csv], { type: "text/csv" });
+}
 
 function validate({ structure }: SValidateReq): SValidateRes | SSingleErr {
   try {
@@ -79,73 +56,69 @@ function fragment({ structure }: SFragmentReq): SFragmentRes | SSingleErr {
   try {
     const fragments = new Peptidoglycan(structure).fragment();
     const filename = `${structure}.csv`;
-    const blob = new Blob([fragments], { type: "text/csv" });
+    const blob = csvBlob(fragments);
     return {
       type: "FragmentRes",
       filename,
       blob
     };
   } catch (msg) {
-    // FIXME: I should eventually do something with this error `msg`!
+    // FIXME: I should eventually do something more with this error `msg`!
+    if (msg instanceof WebAssembly.RuntimeError) {
+      // FIXME: This appears to be an OOM error when we use more than 4GB of
+      // memory (which 32-bit WASM) can't address — properly report this error
+      // to users when an input is long enough to trigger this!
+      console.error("Yikes mate — ran out of WASM memory...");
+    }
     return {
       type: "SingleErr"
     };
   }
 }
 
-// FIXME: Need to write this up properly!
-async function processBulk(data: any) {
-  // Load each of the files
-  const muropeptidesPath = await fetch(
-    `/data/target_structures/${data.muropeptidesData["name"]}`,
-  );
-  const muroLibrary = await muropeptidesPath.text();
-  // Split the muroLibrary into an array so we can iterate over it
-  const muroLibraryArray = muroLibrary.split(/\r?\n/);
+async function masses({ structures }: SMassesReq): Promise<SMassesRes | SBulkErr> {
+  const loadedStructures = await structures.text();
 
-  // Loop over the array calculating the mass using Peptidoglycan.monoisotopic_mass() and saving to a dictionary
-  const muropeptidesMasses = new Map();
-  muroLibraryArray.forEach(function(muropeptide) {
-    const muropeptideClean = muropeptide.split(" |")[0];
-    if (muropeptideClean != "Structure" && muropeptideClean != "") {
-      // Instantiate Smithereens as pg
-      const pg = new Peptidoglycan(muropeptide);
-      // Calculate mass
+  let csv = "Structure,Monoisotopic Mass\n";
+  const structureList = loadedStructures.match(/[^\r\n]+/g) || [];
+  for (const [index, structure] of structureList.entries()) {
+    try {
+      const pg = new Peptidoglycan(structure);
+      const oligoState= pg.oligomerization_state();
       const mass = pg.monoisotopic_mass();
-      // Save mass to dictionary
-      muropeptidesMasses.set(muropeptide, mass);
+      csv += `"${structure}|${oligoState}",${mass}\n`;
+    } catch (msg) {
+      // FIXME: I should eventually do something with this error `msg`!
+      const line = index + 1;
+      return {
+        type: "BulkErr",
+        structure,
+        line
+      };
     }
-  });
-
-  // Convert to CSV
-  function CSV(arrayToConvert: Map<string, string>) {
-    // Convert Object to Array first
-    const array = Object.keys(arrayToConvert).map((key) => {
-      return { [key]: arrayToConvert[key as keyof typeof arrayToConvert] };
-    });
-    // Header
-    let result = "Structure,mass\n";
-    // Add the rows
-    array.forEach(function(obj) {
-      result += Object.keys(obj) + "," + Object.values(obj) + "\n";
-    });
-    return result;
   }
-  const csvString = CSV(muropeptidesMasses);
-  postResult(csvString, "muropeptide_masses.csv");
+
+  const fileparts = structures.name.split(".");
+  fileparts[fileparts.length - 1] = "csv";
+  const filename = fileparts.join(".");
+  const blob = csvBlob(csv);
+
+  return {
+    type: "MassesRes",
+    filename,
+    blob
+  }
 }
 
 const dispatchTable = {
   "MassReq": mass,
+  "MassesReq": masses,
   "ValidateReq": validate,
   "FragmentReq": fragment,
 };
 
 onmessage = async ({ data: msg }: MessageEvent<SmithereensReq>) => {
-  // FIXME: Refactor this to a switch table that just picks a function, but
-  // they are all then applied to the message in the same way!
-  console.log(msg);
   // NOTE: Typescript isn't clever enough to know this is okay yet
-  let response: SmithereensRes = dispatchTable[msg.type](msg as any);
+  let response: SmithereensRes = await dispatchTable[msg.type](msg as any);
   postMessage(response);
 };

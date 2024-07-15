@@ -11,13 +11,27 @@
   import Smithereens from "$lib/smithereens.ts?worker";
   import fileDownload from "js-file-download";
   import Single from "./Single.svelte";
+  import Bulk from "./Bulk.svelte";
 
   // Get the Error Modal Store
   const modalStore = getModalStore();
 
-  let loadingSmithereens = true;
-  let processingSmithereens = false;
+  let loading = true;
+  let processing = false;
   let tab = "bulk";
+
+  // Bulk Database State
+  let structures: File | undefined;
+
+  function runBulk() {
+    let msg: SMassesReq = {
+      type: "MassesReq",
+      // SAFETY: Button only enabled if `structures` has been set
+      structures: structures as File,
+    };
+    smithereens.postMessage(msg);
+    processing = true;
+  }
 
   // Single Structure State
   let validStructure = true;
@@ -27,7 +41,7 @@
   $: structure, runSingle();
 
   function runSingle() {
-    let msg: SmithereensReq = {
+    let msg: SMassReq = {
       type: "MassReq",
       structure,
     };
@@ -41,70 +55,58 @@
     smithereens.onmessage = ({ data: msg }) => {
       switch (msg.type) {
         case "Ready":
-          loadingSmithereens = false;
+          loading = false;
           break;
         case "MassRes":
           validStructure = true;
           mass = msg.mass;
           break;
+        case "MassesRes":
+          fileDownload(msg.blob, msg.filename);
+          processing = false;
+          break;
         case "SingleErr":
           validStructure = false;
           break;
+        case "BulkErr":
+          const message =
+            `The structure '${msg.structure}' on line ${msg.line} was invalid` +
+            ". Please replace it with a valid structure and try again.";
+          const modal: ModalSettings = {
+            type: "component",
+            component: {
+              ref: ErrorModal,
+              props: {
+                message,
+                manualError: true,
+              },
+            },
+          };
+          modalStore.trigger(modal);
       }
-      //   if (type === "Ready") {
-      //     loadingSmithereens = false;
-      //   } else if (type === "Process") {
-      //     processingSmithereens = true;
-      //   } else if (type === "Result") {
-      //     fileDownload(content.blob, content.filename);
-      //     processingSmithereens = false;
-      //   } else if (type === "Error") {
-      //     const modal: ModalSettings = {
-      //       type: "component",
-      //       component: {
-      //         ref: ErrorModal,
-      //         props: {
-      //           message: content.message,
-      //         },
-      //       },
-      //     };
-      //     modalStore.trigger(modal);
-      //     processingSmithereens = false;
-      //   }
-      // };
-      processingSmithereens = false;
+      processing = false;
     };
   });
   // Reactively compute if Smithereens is ready
-  $: SmithereensReady =
-    !loadingSmithereens &&
-    !processingSmithereens;
+  $: ready = !loading && !processing;
 </script>
 
 <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Mass Calculator">
-  <section class="flex flex-col space-y-4 items-center p-4">
+  <section class="flex flex-col items-center p-4">
     <h5 class="pb-1 h5">Mass Calculator</h5>
     <TabGroup class="w-full" justify="justify-center">
       <Tab bind:group={tab} name="built-in" value={"bulk"}>Bulk</Tab>
       <Tab bind:group={tab} name="custom" value={"single"}>Single</Tab>
       <svelte:fragment slot="panel">
         {#if tab === "bulk"}
-          <p>TODO</p>
-          <button
-            type="button"
-            class="btn variant-filled"
-            on:click={() => console.log("Hot stuff!")}
-            disabled={!SmithereensReady}
-          >
-            Build database
-          </button>
-          {#if processingSmithereens}
-            <ProgressBar />
-          {/if}
+          <Bulk bind:structures buildCommand={runBulk} {ready} />
         {:else if tab === "single"}
           <Single bind:structure {validStructure} {mass} />
         {/if}
       </svelte:fragment>
     </TabGroup>
+    {#if processing}
+      <ProgressBar class="mt-4" />
+    {/if}
   </section>
 </div>
