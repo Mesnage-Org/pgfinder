@@ -16,7 +16,6 @@ import init, { Peptidoglycan, version } from "smithereens";
   postMessage(msg);
 })();
 
-
 function csvBlob(csv: string): Blob {
   return new Blob([csv], { type: "text/csv" });
 }
@@ -27,27 +26,30 @@ function validate({ structure }: SValidateReq): SValidateRes | SSingleErr {
       new Peptidoglycan(structure);
     }
     return {
-      type: "ValidateRes"
+      type: "ValidateRes",
     };
   } catch (msg) {
     // FIXME: I should eventually do something with this error `msg`!
     return {
-      type: "SingleErr"
+      type: "SingleErr",
     };
   }
 }
 
 function mass({ structure }: SMassReq): SMassRes | SSingleErr {
   try {
-    const mass = (structure.length != 0) ? new Peptidoglycan(structure).monoisotopic_mass() : "";
+    const mass =
+      structure.length != 0
+        ? new Peptidoglycan(structure).monoisotopic_mass()
+        : "";
     return {
       type: "MassRes",
-      mass
+      mass,
     };
   } catch (msg) {
     // FIXME: I should eventually do something with this error `msg`!
     return {
-      type: "SingleErr"
+      type: "SingleErr",
     };
   }
 }
@@ -60,7 +62,7 @@ function fragment({ structure }: SFragmentReq): SFragmentRes | SSingleErr {
     return {
       type: "FragmentRes",
       filename,
-      blob
+      blob,
     };
   } catch (msg) {
     // FIXME: I should eventually do something more with this error `msg`!
@@ -71,12 +73,14 @@ function fragment({ structure }: SFragmentReq): SFragmentRes | SSingleErr {
       console.error("Yikes mate — ran out of WASM memory...");
     }
     return {
-      type: "SingleErr"
+      type: "SingleErr",
     };
   }
 }
 
-async function masses({ structures }: SMassesReq): Promise<SMassesRes | SBulkErr> {
+async function masses({
+  structures,
+}: SMassesReq): Promise<SMassesRes | SBulkErr> {
   const loadedStructures = await structures.text();
 
   let csv = "Structure,Monoisotopic Mass\n";
@@ -84,7 +88,7 @@ async function masses({ structures }: SMassesReq): Promise<SMassesRes | SBulkErr
   for (const [index, structure] of structureList.entries()) {
     try {
       const pg = new Peptidoglycan(structure);
-      const oligoState= pg.oligomerization_state();
+      const oligoState = pg.oligomerization_state();
       const mass = pg.monoisotopic_mass();
       csv += `"${structure}|${oligoState}",${mass}\n`;
     } catch (msg) {
@@ -93,7 +97,7 @@ async function masses({ structures }: SMassesReq): Promise<SMassesRes | SBulkErr
       return {
         type: "BulkErr",
         structure,
-        line
+        line,
       };
     }
   }
@@ -106,15 +110,15 @@ async function masses({ structures }: SMassesReq): Promise<SMassesRes | SBulkErr
   return {
     type: "MassesRes",
     filename,
-    blob
-  }
+    blob,
+  };
 }
 
 const dispatchTable = {
-  "MassReq": mass,
-  "MassesReq": masses,
-  "ValidateReq": validate,
-  "FragmentReq": fragment,
+  MassReq: mass,
+  MassesReq: masses,
+  ValidateReq: validate,
+  FragmentReq: fragment,
 };
 
 onmessage = async ({ data: msg }: MessageEvent<SmithereensReq>) => {

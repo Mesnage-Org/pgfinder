@@ -88,7 +88,7 @@
     };
   });
   // Reactively compute if Smithereens is ready
-  $: ready = !loading && !processing;
+  $: ready = !loading && !processing && structures !== undefined;
 </script>
 
 <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Mass Calculator">

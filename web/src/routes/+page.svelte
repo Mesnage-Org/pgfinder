@@ -23,7 +23,7 @@
   import LinksAndDownloads from "./LinksAndDownloads.svelte";
   import Ms1Search from "./MS1 Search/MS1 Search.svelte";
   import MassCalculator from "./Mass Calculator/Mass Calculator.svelte";
-    import Fragmenter from "./Fragmenter/Fragmenter.svelte";
+  import Fragmenter from "./Fragmenter/Fragmenter.svelte";
 
   // Initialize Stores for Drawers and Modals
   initializeStores();

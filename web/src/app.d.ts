@@ -51,10 +51,10 @@ declare type PGFErrorMsg = {
 // Smithereens Worker Message Types ============================================
 
 declare type SmithereensReq =
-  SMassReq |
-  SMassesReq |
-  SValidateReq |
-  SFragmentReq;
+  | SMassReq
+  | SMassesReq
+  | SValidateReq
+  | SFragmentReq;
 
 declare type SMassReq = {
   type: "MassReq";
@@ -69,7 +69,7 @@ declare type SMassesReq = {
 declare type SValidateReq = {
   type: "ValidateReq";
   structure: string;
-}
+};
 
 declare type SFragmentReq = {
   type: "FragmentReq";
@@ -79,13 +79,13 @@ declare type SFragmentReq = {
 // -----------------------------------------------------------------------------
 
 declare type SmithereensRes =
-  SReady |
-  SSingleErr |
-  SBulkErr |
-  SMassRes |
-  SMassesRes |
-  SValidateRes |
-  SFragmentRes;
+  | SReady
+  | SSingleErr
+  | SBulkErr
+  | SMassRes
+  | SMassesRes
+  | SValidateRes
+  | SFragmentRes;
 
 declare type SReady = {
   type: "Ready";
@@ -115,7 +115,7 @@ declare type SMassesRes = {
 
 declare type SValidateRes = {
   type: "ValidateRes";
-}
+};
 
 declare type SFragmentRes = {
   type: "FragmentRes";

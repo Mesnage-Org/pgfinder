@@ -57,7 +57,7 @@ function postResult(proxy: PyProxy) {
     const msg: PGFResultMsg = {
       type: "Result",
       filename,
-      blob
+      blob,
     };
     postMessage(msg);
   });
@@ -68,7 +68,7 @@ function postError(error: PythonError) {
 
   const msg: PGFErrorMsg = {
     type: "Error",
-    message
+    message,
   };
   postMessage(msg);
 }

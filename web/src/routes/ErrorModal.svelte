@@ -7,7 +7,8 @@
   let traceVisible = false;
 
   $: userError =
-    message.match("(?<=pgfinder.errors.UserError: ).*") || (manualError && message);
+    message.match("(?<=pgfinder.errors.UserError: ).*") ||
+    (manualError && message);
 
   $: traceHidden = traceVisible || !userError ? "" : "hidden";
   $: modalWidth = traceHidden ? "w-modal-slim" : "w-full max-w-3xl";

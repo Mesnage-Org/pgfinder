@@ -28,8 +28,8 @@
   function runValidate() {
     let msg: SmithereensReq = {
       type: "ValidateReq",
-      structure
-    }
+      structure,
+    };
     smithereens?.postMessage(msg);
   }
 
@@ -47,19 +47,17 @@
           break;
         case "FragmentRes":
           fileDownload(msg.blob, msg.filename);
-          processing = false
+          processing = false;
           break;
         case "SingleErr":
           validStructure = false;
           break;
       }
-    processing = false;
-  }});
+      processing = false;
+    };
+  });
   // Reactively compute if Smithereens is ready
-  $: ready =
-    !loading &&
-    !processing &&
-    (!bulk && structure && validStructure);
+  $: ready = !loading && !processing && !bulk && structure && validStructure;
 
   function fragment() {
     if (bulk) {
@@ -67,7 +65,7 @@
     } else {
       let msg: SmithereensReq = {
         type: "FragmentReq",
-        structure
+        structure,
       };
       smithereens.postMessage(msg);
     }
@@ -106,7 +104,7 @@
       Fragment Structure{plural}
     </button>
     {#if processing}
-      <ProgressBar class="mt-4"/>
+      <ProgressBar class="mt-4" />
     {/if}
   </section>
 </div>

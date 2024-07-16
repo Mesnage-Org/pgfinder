@@ -7,7 +7,7 @@
   } from "@skeletonlabs/skeleton";
   import { base } from "$app/paths";
   import { onMount } from "svelte";
-    import Tooltip from "../Tooltip.svelte";
+  import Tooltip from "../Tooltip.svelte";
 
   export let structures: File | undefined;
   export let buildCommand: () => void;
@@ -55,15 +55,19 @@
       <svelte:fragment slot="content">
         {#if structuresIndex}
           {#each Object.entries(structuresIndex) as [species, info]}
-            <a href="{base}/data/structures_templates/{info['file']}">
-              <div class="flex items-center">
-                <p class="grow">{species}</p>
-                <Tooltip type="info">
-                  {info["citation"]}
-                </Tooltip>
+            <a href="{base}/data/structures_templates/{info['file']}" download>
+              <div
+                class="flex items-center py-2 px-4 hover:variant-soft-surface"
+              >
+                <p class="grow"><i>{species}</i></p>
+                {#if info["citation"]}
+                  <Tooltip type="info" width="w-44">
+                    {info["citation"]}
+                  </Tooltip>
+                {/if}
               </div>
             </a>
-         {/each}
+          {/each}
         {:else}
           <div class="flex justify-center">
             <ProgressRadial />
