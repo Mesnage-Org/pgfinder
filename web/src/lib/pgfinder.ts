@@ -17,7 +17,7 @@ let pyodide: PyodideInterface;
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
   const micropip = pyodide.pyimport("micropip");
-  await micropip.install("pgfinder==1.2.0-rc1");
+  await micropip.install("pgfinder==1.2.1");
   // If you need to test development version of pgfinder you should build the wheel and copy the resulting .whl to the
   // lib/ directory (adajacent to this file), replace the version below and comment out the above (which loads from
   // PyPI).
