@@ -20,9 +20,9 @@ declare type MassLibraryIndex = {
 };
 
 declare type StructuresIndex = {
-  [index: string]: {
+  [species: string]: {
     file: string;
-    description: string;
+    citation: string | undefined;
   };
 };
 

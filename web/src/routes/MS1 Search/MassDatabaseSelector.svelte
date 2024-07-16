@@ -20,12 +20,12 @@
             <ListBoxItem
               bind:group={value}
               name="mass-library"
-              value={{ name: library["File"], content: null }}
+              value={{ name: library["file"], content: null }}
             >
               <div class="flex items-center">
                 <p class="grow">{name}</p>
                 <Tooltip type="info">
-                  {library["Description"]}
+                  {library["description"]}
                 </Tooltip>
               </div>
             </ListBoxItem>

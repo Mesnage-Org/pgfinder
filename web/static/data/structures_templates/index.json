@@ -1,22 +1,24 @@
 {
   "Bacilus subtilis": {
-    "File": "b_subtilis.csv",
-    "Description": "Muropeptide list for B. subtilis."
+    "file": "b_subtilis.txt",
+    "citation": "Atrih et al. 1999"
+  },
+  "Clostridium difficile": {
+    "file": "c_difficile.txt",
+    "citation": "Galley et al. 2024"
   },
   "Enterococcus faecalis": {
-    "File": "e_faecalis.csv",
-    "Description": "Muropeptide list for E. faecalis."
+    "file": "e_faecalis.txt",
+    "citation": "Emirian et al. 2009"
   },
   "Enterococcus faecium": {
-    "File": "e_faecium.csv",
-    "Description": "Muropeptide list for E. faecium."
+    "file": "e_faecium.txt"
   },
   "Escherichia coli": {
-    "File": "e_coli.csv",
-    "Description": "Muropeptide list for E. coli."
+    "file": "e_coli.txt",
+    "citation": "Patel et al. 2021"
   },
   "Staphylococcus aureus": {
-    "File": "s_aureus.csv",
-    "Description": "Muropeptide list for S. aureus."
+    "file": "s_aureus.txt"
   }
 }

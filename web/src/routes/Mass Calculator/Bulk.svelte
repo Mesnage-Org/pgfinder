@@ -1,12 +1,13 @@
 <script lang="ts">
   import {
     FileDropzone,
-    TabGroup,
-    Tab,
     ProgressRadial,
+    AccordionItem,
+    Accordion,
   } from "@skeletonlabs/skeleton";
-  import Tooltip from "../Tooltip.svelte";
+  import { base } from "$app/paths";
   import { onMount } from "svelte";
+    import Tooltip from "../Tooltip.svelte";
 
   export let structures: File | undefined;
   export let buildCommand: () => void;
@@ -16,7 +17,7 @@
   let structuresIndex: StructuresIndex | undefined;
 
   onMount(async () => {
-    const res = await fetch("/data/structures_templates/index.json");
+    const res = await fetch(`${base}/data/structures_templates/index.json`);
     structuresIndex = JSON.parse(await res.text());
   });
 
@@ -28,24 +29,6 @@
   }
 </script>
 
-<!--
-{#each Object.entries(muropeptidesLibraryIndex) as [speciesMuropeptides, librariesMuropeptides], speciesIdMuropeptides}
-  <label>
-    <div class="flex items-center">
-      <input
-        type="radio"
-        name="muropeptides-library"
-        bind:group={value}
-        value={{ name: librariesMuropeptides["File"], content: null }}
-      />
-      <p class="grow"><i>{speciesMuropeptides}</i></p>
-      <Tooltip popupId="library{speciesIdMuropeptides}">
-        {librariesMuropeptides["Description"]}
-      </Tooltip>
-    </div>
-  </label>
-{/each}
--->
 <div class="flex flex-col items-center space-y-4">
   <FileDropzone
     name="structure-list"
@@ -66,11 +49,29 @@
       {/if}
     </svelte:fragment>
   </FileDropzone>
-  {#if structuresIndex}{:else}
-    <div class="flex justify-center">
-      <ProgressRadial />
-    </div>
-  {/if}
+  <Accordion class="w-full">
+    <AccordionItem>
+      <svelte:fragment slot="summary">Template Lists</svelte:fragment>
+      <svelte:fragment slot="content">
+        {#if structuresIndex}
+          {#each Object.entries(structuresIndex) as [species, info]}
+            <a href="{base}/data/structures_templates/{info['file']}">
+              <div class="flex items-center">
+                <p class="grow">{species}</p>
+                <Tooltip type="info">
+                  {info["citation"]}
+                </Tooltip>
+              </div>
+            </a>
+         {/each}
+        {:else}
+          <div class="flex justify-center">
+            <ProgressRadial />
+          </div>
+        {/if}
+      </svelte:fragment>
+    </AccordionItem>
+  </Accordion>
   <button
     type="button"
     class="btn variant-filled w-full"
