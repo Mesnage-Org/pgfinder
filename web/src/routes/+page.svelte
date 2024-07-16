@@ -16,6 +16,7 @@
     offset,
     arrow,
   } from "@floating-ui/dom";
+  import { defaultVersions } from "$lib/constants";
 
   // Component Imports
   import Footer from "./Footer.svelte";
@@ -32,8 +33,7 @@
   storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
   // Component state
-  // FIXME: Replace this with an object that stores all two / three versions in fields!
-  let ms1SearchVersion: string;
+  let versions: Versions = { ...defaultVersions };
 </script>
 
 <Modal regionBackdrop="bg-surface-backdrop-token overflow-y-hidden" />
@@ -44,13 +44,13 @@
 
 <AppShell>
   <svelte:fragment slot="header">
-    <!-- FIXME: Need to handle the different versions!-->
-    <Header pgfinderVersion={ms1SearchVersion} />
+    <Header {versions} />
   </svelte:fragment>
 
   <div class="h-full flex flex-col lg:flex-row justify-center items-center">
-    <MassCalculator />
-    <Ms1Search bind:version={ms1SearchVersion} />
+    <MassCalculator bind:version={versions.Smithereens} />
+    <Ms1Search bind:version={versions.PGFinder} />
+    <!-- NOTE: Version is currently tied to that of the `MassCalculator`-->
     <Fragmenter />
   </div>
 

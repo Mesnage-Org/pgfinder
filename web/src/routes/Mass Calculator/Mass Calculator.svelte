@@ -13,6 +13,8 @@
   import Single from "./Single.svelte";
   import Bulk from "./Bulk.svelte";
 
+  export let version: string | undefined;
+
   // Get the Error Modal Store
   const modalStore = getModalStore();
 
@@ -55,6 +57,7 @@
     smithereens.onmessage = ({ data: msg }) => {
       switch (msg.type) {
         case "Ready":
+          version = msg.version;
           loading = false;
           break;
         case "MassRes":

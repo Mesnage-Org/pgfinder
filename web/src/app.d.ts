@@ -1,5 +1,13 @@
+declare const WEBUI_VERSION: string;
+
 // FIXME: Remove this! I can just use the native JS `File`!
 declare type VirtFile = { name: string; content: ArrayBuffer };
+
+declare type Versions = {
+  WebUI: string;
+  Smithereens: string | undefined;
+  PGFinder: string | undefined;
+};
 
 declare type PythonState = {
   msData: Array<VirtFile> | undefined;

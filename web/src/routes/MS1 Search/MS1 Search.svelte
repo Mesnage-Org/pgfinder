@@ -13,7 +13,7 @@
   import fileDownload from "js-file-download";
   import { onMount } from "svelte";
 
-  export let version: string;
+  export let version: string | undefined;
 
   // Get the Error Modal Store
   const modalStore = getModalStore();

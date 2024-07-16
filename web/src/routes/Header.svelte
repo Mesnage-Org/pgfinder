@@ -4,10 +4,11 @@
   import { faBars, faBook } from "@fortawesome/free-solid-svg-icons";
   import { faGithub } from "@fortawesome/free-brands-svg-icons";
   import { getDrawerStore } from "@skeletonlabs/skeleton";
-  export let pgfinderVersion: string | undefined;
+  import Tooltip from "./Tooltip.svelte";
+  export let versions: Versions;
 
   const drawerStore = getDrawerStore();
-  function openDrawer(): void {
+  function openDrawer() {
     drawerStore.open({
       width: "max-w-[80%] w-96",
     });
@@ -26,12 +27,19 @@
   </svelte:fragment>
 
   <p class="text-xl text-center">
-    <strong>
-      PGFinder
-      {#if pgfinderVersion}
-        (v{pgfinderVersion})
-      {/if}
-    </strong>
+    <strong> PGFinder </strong>
+    <Tooltip style="inline ml-1" width="w-44" type="info">
+      <div class="grid grid-flow-row-dense text-sm text-left">
+        {#each Object.entries(versions) as [tool, version]}
+          <strong>{tool}:</strong>
+          {#if version}
+            <p class="col-start-2 font-mono ml-1">v{version}</p>
+          {:else}
+            <div class="placeholder animate-pulse" />
+          {/if}
+        {/each}
+      </div>
+    </Tooltip>
   </p>
 
   <svelte:fragment slot="trail">

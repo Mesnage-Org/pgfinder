@@ -11,12 +11,12 @@
 </script>
 
 <Accordion autocollapse class="w-full">
-  {#each Object.entries(massLibraries) as [species, libraries], speciesId}
+  {#each Object.entries(massLibraries) as [species, libraries]}
     <AccordionItem>
       <svelte:fragment slot="summary"><i>{species}</i></svelte:fragment>
       <svelte:fragment slot="content">
         <ListBox>
-          {#each Object.entries(libraries) as [name, library], libraryId}
+          {#each Object.entries(libraries) as [name, library]}
             <ListBoxItem
               bind:group={value}
               name="mass-library"
