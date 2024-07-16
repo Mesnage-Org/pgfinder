@@ -83,6 +83,7 @@
             },
           };
           modalStore.trigger(modal);
+          break;
       }
       processing = false;
     };

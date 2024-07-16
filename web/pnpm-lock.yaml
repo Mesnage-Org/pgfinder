@@ -14,6 +14,9 @@ importers:
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.5.1
         version: 6.5.2
+      client-zip:
+        specifier: ^2.4.5
+        version: 2.4.5
       js-file-download:
         specifier: ^0.4.12
         version: 0.4.12
@@ -759,6 +762,9 @@ packages:
   chokidar@3.6.0:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
+
+  client-zip@2.4.5:
+    resolution: {integrity: sha512-4y4d5ZeTH/szIAMQeC8ju67pxtvj+3u20wMGwOFrZk+pegy3aSEA2JkwgC8XVDTXP/Iqn1gyqNQXmkyBp4KLEQ==}
 
   code-red@1.0.4:
     resolution: {integrity: sha512-7qJWqItLA8/VPVlKJlFXU+NBlo/qyfs39aJcuMT/2ere32ZqvF5OSxgdM5xOfJJ7O429gg2HM47y8v9P+9wrNw==}
@@ -2341,6 +2347,8 @@ snapshots:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  client-zip@2.4.5: {}
 
   code-red@1.0.4:
     dependencies:

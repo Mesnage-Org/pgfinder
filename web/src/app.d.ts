@@ -54,7 +54,8 @@ declare type SmithereensReq =
   | SMassReq
   | SMassesReq
   | SValidateReq
-  | SFragmentReq;
+  | SFragmentReq
+  | SFragmentsReq;
 
 declare type SMassReq = {
   type: "MassReq";
@@ -76,6 +77,11 @@ declare type SFragmentReq = {
   structure: string;
 };
 
+declare type SFragmentsReq = {
+  type: "FragmentsReq";
+  structures: File;
+};
+
 // -----------------------------------------------------------------------------
 
 declare type SmithereensRes =
@@ -85,7 +91,8 @@ declare type SmithereensRes =
   | SMassRes
   | SMassesRes
   | SValidateRes
-  | SFragmentRes;
+  | SFragmentRes
+  | SFragmentsRes;
 
 declare type SReady = {
   type: "Ready";
@@ -119,6 +126,12 @@ declare type SValidateRes = {
 
 declare type SFragmentRes = {
   type: "FragmentRes";
+  filename: string;
+  blob: Blob;
+};
+
+declare type SFragmentsRes = {
+  type: "FragmentsRes";
   filename: string;
   blob: Blob;
 };

@@ -45,6 +45,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.6.7",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "client-zip": "^2.4.5",
     "js-file-download": "^0.4.12",
     "playwright": "^1.45.1",
     "pyodide": "^0.26.1",

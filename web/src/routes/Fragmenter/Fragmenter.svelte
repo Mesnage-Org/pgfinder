@@ -11,6 +11,7 @@
   import Smithereens from "$lib/smithereens.ts?worker";
   import fileDownload from "js-file-download";
   import Single from "./Single.svelte";
+  import Bulk from "./Bulk.svelte";
 
   // Get the Error Modal Store
   const modalStore = getModalStore();
@@ -18,6 +19,9 @@
   let loading = true;
   let processing = false;
   let bulk = true;
+
+  // Bulk Database State
+  let structures: File | undefined;
 
   // Single Structure State
   let validStructure = true;
@@ -46,22 +50,48 @@
           validStructure = true;
           break;
         case "FragmentRes":
+        case "FragmentsRes":
           fileDownload(msg.blob, msg.filename);
           processing = false;
           break;
         case "SingleErr":
           validStructure = false;
           break;
+        case "BulkErr":
+          const message =
+            `The structure '${msg.structure}' on line ${msg.line} was invalid` +
+            ". Please replace it with a valid structure and try again.";
+          const modal: ModalSettings = {
+            type: "component",
+            component: {
+              ref: ErrorModal,
+              props: {
+                message,
+                manualError: true,
+              },
+            },
+          };
+          modalStore.trigger(modal);
+          break;
       }
       processing = false;
     };
   });
   // Reactively compute if Smithereens is ready
-  $: ready = !loading && !processing && !bulk && structure && validStructure;
+  $: ready =
+    !loading &&
+    !processing &&
+    ((!bulk && structure && validStructure) ||
+      (bulk && structures !== undefined));
 
   function fragment() {
     if (bulk) {
-      console.error("TODO");
+      let msg: SmithereensReq = {
+        type: "FragmentsReq",
+        // SAFETY: Button only enabled if `structures` has been set
+        structures: structures as File,
+      };
+      smithereens.postMessage(msg);
     } else {
       let msg: SmithereensReq = {
         type: "FragmentReq",
@@ -84,11 +114,7 @@
       <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
       <svelte:fragment slot="panel">
         {#if bulk}
-          <!-- FIXME: Don't forget to add the space-y-4 to the inner div here... -->
-          <p>TODO</p>
-          {#if processing}
-            <ProgressBar />
-          {/if}
+          <Bulk bind:structures />
         {:else}
           <Single bind:structure {validStructure} />
         {/if}
