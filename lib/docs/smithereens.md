@@ -1,8 +1,9 @@
 # Smithereens
 
-[Smithreens][sm] is written in [rust][rust] and is intended to be used in the [Web Assembly][wass] framework as a backend to
-the [PGFinder][pgfinder] WebUI. Its purpose is to take as input a set of monomer building blocks and derive the
-molecular mass of Multimers which are built based on user specified structure of Monomer units and crosslinks.
+[Smithreens][sm] (also known as `pgfinder-next`) is written in [Rust][rust] and is intended to be used in the [Web
+Assembly][wass] framework as a backend to the [PGFinder][pgfinder] WebUI. Its purpose is to take structures in PGLang,
+calculate their monoisotopic masses for performing an MS1 search, then simulating the fragmentation of those structures
+to enable MS2 analysis.
 
 ## Integration with PGFinder
 
@@ -12,11 +13,11 @@ bacterial cell walls and determining the likely structure of constituents and a 
 [here][pgfinder_web] (see also [PGFinder documentation][pgfinder_docs]).
 
 The array of peptidoglycans is vast and the purpose of Smithereens is to allow users to specify their own list of
-building blocks and target multimers and have these molecular masses serve as input to the current [PGFinder][pgfinder].
+muropeptide structures and have these molecular masses serve as input to the current [PGFinder][pgfinder].
 
-Because of the stack (set of software) being used in the project and that it is currently under heavy development
-automated deployment is not yet in place. To which end the following steps are required to build the software and
-integrate it with the WebUI.
+Because of the stack (set of software) being used in the project and the fact that it is currently under heavy
+development means automated deployment is not yet in place. Until this build process is automated, the following steps
+are required to build the software and integrate it with the WebUI.
 
 ### Pre-requisites
 
@@ -25,18 +26,17 @@ There are a number of pre-requisites to working with Rust. How you install these
 + [Rust][rust]
 
 You may already have this installed system wide (check with `which rustc`) but it is recommended you install under your
-user account using [rustup][rustup the repository
+user account using [rustup][rustup].
 
-Obvious first step but you need a copy of this repository locally in order to build it. You may wish to fork and clone a
-copy of your own fork, in which case adjust the URLs appropriately (if you don't have GitHub configured with SSH keys
-then use the [HTML](https://github.com/TheLostLambda/smithereens.git) address to clone instead). Development work is
-being carried out `wasm-pilot` so you need to switch branches.
+The `smithereens` / `pgfinder-next` repository currently exists as a sub-repo of the [PGFinder][pgfinder] repository in
+the `smithereens/` directory. If, however, this is your first time cloning the `pgfinder` repository, then you may need
+to initialise the submodule:
 
-``` bash
-cd ~/work/git/hub/TheLostLambda
-git clone git@github.com:TheLostLambda/smithereens.git
-cd smimthereens
-git switch wasm-pilot
+```bash
+git clone https://github.com/Mesnage-Org/pgfinder.git
+cd pgfinder
+# Now initialize the `smithereens` submodule
+git submodule update --init --recursive
 ```
 
 ### Building the Package
@@ -84,19 +84,18 @@ either need `root` access or to be in the `sudo` group that permits access. The 
 cp -r /home/neil/work/git/hub/TheLostLambda/smithereens/tmp/rust-std-1.76.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown /usr/lib/rustlib/.
 ```
 
-
-`wasm-pack` can then be used to build the packages.
+`wasm-pack` can then be used to build the `wasm-shim` packaage / crate which contains the code needed to run
+`smithereens` from the WebUI:
 
 ``` bash
-wasm-pack build
+cd crates/wasm-shim/
+wasm-pack build --out-name smithereens --target web
 ```
-
-**NB** - Currently this fails in some situations the following assumes
 
 ### Copying to PGFinder
 
-The package artifacts are located in the `pkg/` directory and it is these that need copying to
-`pgfinder/web/src/lib`. The [Hello World!](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html) page
+The generated package artifacts are located in the `pkg/` directory and it is these that need copying to
+`web/smithereens/pkg`. The [Hello World!](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html) page
 from the Rust and [[WebAssembly][wa] book is informative as to what each file is/does.
 
 ``` bash
@@ -118,28 +117,20 @@ total 5748
 | `*.d.ts`       | "_contains TypeScript type declarations for the JavaScript glue._"                                                                                    |
 | `package.json` | "_[The package.json file contains metadata about the generated JavaScript and WebAssembly package.](https://docs.npmjs.com/files/package.json)_"      |
 
-Once these files are in place  the next step is to refer to them from the Svelte web-framework
+Before copying these artefacts, make sure that the old ones have been deleted from the `web/smithereens/` directory:
 
-**NB** - currently static files from the
-[`TheLostLambda/smithereens@wasm-pilot`](https://github.com/TheLostLambda/smithereens/tree/wasm-pilot/pkg) branch and
-_haven't_ created them from source as attempts to do so failed.
+```bash
+rm -r ../../../web/smithereens/pkg/
+cp -r pkg/ ../../../web/smithereens/
+```
 
-
-
-
-### Adding the Uploader - Svelte
-
-
-**WORK IN PROGRESS** So far we have setup the Rust code, compiled it under [WebASsembly][wa]. We now need to turn to the [Svelte][svelte]
-framework and write some code for this to be usable.
-
+After this, your changes to `smithereens` should be visible from the WebUI (after re-running `pnpm dev`).
 
 [cargo]: https://doc.rust-lang.org/cargo/
 [pgfinder]: https://github.com/Mesnage-Org/pgfinder
 [pginder_docs]: https://pgfinder.readthedocs.io/en/latest/
 [pgfinder_web]: https://mesnage-org.github.io/pgfinder/
 [rust]: https://doc.rust-lang.org/stable/book/
-[rustc]:
 [rustup]: https://www.rust-lang.org/tools/install
 [rust_wasm]: https://rustwasm.github.io/docs/book/game-of-life/hello-world.html
 [sm]: https://github.com/TheLostLambda/smithereens
