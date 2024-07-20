@@ -1,0 +1,4 @@
+[submodule "smithereens"]
+	path = smithereens
+	url = git@github.com:TheLostLambda/pgfinder-next.git
+	branch = pgfinder-2
