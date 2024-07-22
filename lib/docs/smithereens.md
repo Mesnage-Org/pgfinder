@@ -26,7 +26,7 @@ There are a number of pre-requisites to working with Rust. How you install these
 + [Rust][rust]
 
 You may already have this installed system wide (check with `which rustc`) but it is recommended you install under your
-user account using [rustup][rustup].
+user account using [rustup][rustup], as of writing the minimum supported version is 1.79.0.
 
 The `smithereens` / `pgfinder-next` repository currently exists as a sub-repo of the [PGFinder][pgfinder] repository in
 the `smithereens/` directory. If, however, this is your first time cloning the `pgfinder` repository, then you may need
@@ -44,7 +44,7 @@ git submodule update --init --recursive
 Rust packages are configured via the `Cargo.toml` which is used by [Cargo][cargo] the Rust package manager to build the
 package. This handles downloading dependencies, compiling the package and making binaries that can be used.
 
-Once you are on the correct branch (`wasm-pilot` as of 2024-03-06) it is simple to use Cargo to
+Once you are on the correct branch (`pgfinder-2` as of 2024-07-22) it is simple to use Cargo to
 
 ``` bash
 cargo build
@@ -66,22 +66,23 @@ instead. There are [instructions][wasm32-unknown-unknown] on how to do this whic
 
 ``` bash
 ❱ rustc --version
-  rustc 1.76.0 (07dca489a 2024-02-04) (Arch Linux rust 1:1.76.0-1)
+  rustc 1.79.0 (129f3b996 2024-06-10)
 ❱ mkdir tmp && cd tmp
-❱ wget https://static.rust-lang.org/dist/rust-std-1.76.0-wasm32-unknown-unknown.tar.gz
-❱ tar xzvf rust-std-1.76.0-wasm32-unknown-unknown.tar.gz
-❱ cd rust-std-1.76.0-wasm32-unknown-unknown
+❱ wget https://static.rust-lang.org/dist/rust-std-1.79.0-wasm32-unknown-unknown.tar.gz
+❱ tar xzvf rust-std-1.79.0-wasm32-unknown-unknown.tar.gz
+❱ cd rust-std-1.79.0-wasm32-unknown-unknown
 ❱ rustc --print sysroot
-  /usr
+  /usr/lib/rustlib/
 ```
 
 Under this directory you should find `lib/rustlib` (i.e. in this example the full path is `/usr/lib/rustlib/`) and the
-file `rust-std-1.76.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown` needs copying there. Those familiar
-with UNIX like operating systems will have recognised that this is a directory that normal users can not access, so you
-either need `root` access or to be in the `sudo` group that permits access. The following steps were undertaken as `root`
+file `rust-std-1.79.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown` needs
+copying there. Those familiar with UNIX like operating systems will have recognised that this is a directory that normal
+users can not access, so you either need `root` access or to be in the `sudo` group that permits access. The following
+steps were undertaken as `root`
 
 ``` bash
-cp -r /home/neil/work/git/hub/TheLostLambda/smithereens/tmp/rust-std-1.76.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown /usr/lib/rustlib/.
+cp -r /home/neil/work/git/hub/TheLostLambda/smithereens/tmp/rust-std-1.79.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown /usr/lib/rustlib/.
 ```
 
 `wasm-pack` can then be used to build the `wasm-shim` packaage / crate which contains the code needed to run
