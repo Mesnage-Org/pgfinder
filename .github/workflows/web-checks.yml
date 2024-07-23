@@ -32,7 +32,7 @@ jobs:
 
       # This is needed for `pnpm check` to find the WASM code's type definitions
       - name: HACK — Build Once
-        run: pnpm dev
+        run: pnpm build
 
       - name: Run Svelte Check
         run: pnpm check
