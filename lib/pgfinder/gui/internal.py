@@ -31,7 +31,7 @@ def theo_masses_upload_reader(upload: dict) -> pd.DataFrame:
 
 @contextmanager
 def uploaded_file(upload: dict):
-    with tempfile.TemporaryDirectory() as tempdir:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir:
         file = Path(tempdir) / upload["name"]
         with open(file, "wb") as f:
             f.write(upload["content"])
