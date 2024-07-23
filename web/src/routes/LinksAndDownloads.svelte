@@ -4,7 +4,7 @@
   import { faDownload } from "@fortawesome/free-solid-svg-icons";
 </script>
 
-<div class="mx-4 my-4" data-testid="deconvolutedData">
+<div class="mx-4 my-4">
   <h4 class="h4">Deconvoluted Example Datasets</h4>
   <dl class="list-dl">
     <a href="{base}/data/E. coli WT (Patel et al).ftrs">

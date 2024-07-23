@@ -7,7 +7,6 @@ test("links are live", async ({ page }) => {
 
   const page1Promise = page.waitForEvent("popup");
   await page
-    .getByTestId("deconvolutedData")
     .getByRole("link", { name: "Browse Built-In Mass Databases" })
     .click();
   const page1 = await page1Promise;
@@ -17,17 +16,13 @@ test("links are live", async ({ page }) => {
   );
 
   const page2Promise = page.waitForEvent("popup");
-  await page
-    .getByTestId("deconvolutedData")
-    .getByRole("link", { name: "Download MaxQuant" })
-    .click();
+  await page.getByRole("link", { name: "Download MaxQuant" }).click();
   const page2 = await page2Promise;
   await page2.waitForLoadState("domcontentloaded");
   expect(await page2.title()).toEqual("MaxQuant");
 
   const page3Promise = page.waitForEvent("popup");
   await page
-    .getByTestId("deconvolutedData")
     .getByRole("link", { name: "Download ProteoWizard (MSConvert)" })
     .click();
   const page3 = await page3Promise;
@@ -36,7 +31,6 @@ test("links are live", async ({ page }) => {
 
   const page4Promise = page.waitForEvent("popup");
   await page
-    .getByTestId("deconvolutedData")
     .getByRole("link", { name: "https://doi.org/10.7554/eLife.70597" })
     .click();
   const page4 = await page4Promise;
@@ -46,7 +40,6 @@ test("links are live", async ({ page }) => {
 
   await page.getByTestId("drawer-backdrop").click();
 
-  // These hang when including getByTestId() could probably add more <div> in the page anyway
   const page5Promise = page.waitForEvent("popup");
   await page.getByRole("link").first().click();
   const page5 = await page5Promise;

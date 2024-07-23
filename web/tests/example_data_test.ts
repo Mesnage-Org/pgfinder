@@ -6,7 +6,6 @@ test("example data can be downloaded", async ({ page }) => {
 
   const downloadPromise = page.waitForEvent("download");
   await page
-    .getByTestId("deconvolutedData")
     .getByRole("link", {
       name: "Escherichia coli Strain BW25113 — Patel et al. 2021",
     })
@@ -16,7 +15,6 @@ test("example data can be downloaded", async ({ page }) => {
 
   const download1Promise = page.waitForEvent("download");
   await page
-    .getByTestId("deconvolutedData")
     .getByRole("link", {
       name: "Clostridium difficile Strain R20291 — Bern et al. 2017",
     })
