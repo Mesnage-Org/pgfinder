@@ -71,7 +71,7 @@
         case "SingleErr":
           validStructure = false;
           break;
-        case "BulkErr":
+        case "BulkErr": {
           const message =
             `The structure '${msg.structure}' on line ${msg.line} was invalid` +
             ". Please replace it with a valid structure and try again.";
@@ -87,6 +87,7 @@
           };
           modalStore.trigger(modal);
           break;
+        }
       }
       processing = false;
     };

@@ -120,7 +120,7 @@ async function fragments({
 }: SFragmentsReq): Promise<SFragmentsRes | SBulkErr> {
   const loadedStructures = await structures.text();
 
-  let files: File[] = [];
+  const files: File[] = [];
   const structureList = loadedStructures.match(/[^\r\n]+/g) || [];
   for (const [index, structure] of structureList.entries()) {
     try {
@@ -166,6 +166,7 @@ const dispatchTable = {
 
 onmessage = async ({ data: msg }: MessageEvent<SmithereensReq>) => {
   // NOTE: Typescript isn't clever enough to know this is okay yet
-  let response: SmithereensRes = await dispatchTable[msg.type](msg as any);
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const response: SmithereensRes = await dispatchTable[msg.type](msg as any);
   postMessage(response);
 };

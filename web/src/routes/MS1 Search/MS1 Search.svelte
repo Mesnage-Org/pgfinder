@@ -42,7 +42,7 @@
           fileDownload(msg.blob, msg.filename);
           processing = false;
           break;
-        case "Error":
+        case "Error": {
           const modal: ModalSettings = {
             type: "component",
             component: {
@@ -55,6 +55,7 @@
           modalStore.trigger(modal);
           processing = false;
           break;
+        }
       }
     };
   });
