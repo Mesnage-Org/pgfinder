@@ -6,15 +6,20 @@ The [Data Dictionary](data_dictionary.md) describes software inputs and outputs.
 ## WebUI
 
 An interactive web-page for running your analysis is available at
-[mesnage-org.github.io/pgfinder/](https://mesnage-org.github.io/pgfinder/). On first visiting the page you will
-have to wait awhile whilst it sets up in the background (for those curious or interested, it is using
-[Pyodide](https://pyodide.org/en/stable/) running on [Web Assembly (WASM)](https://webassembly.org/) It'll take
-some time to install PGFinder and all its Python dependencies. Once loaded, the page should look like the image below.
+[mesnage-org.github.io/pgfinder/](https://mesnage-org.github.io/pgfinder/). On first visiting the page you will have to
+wait awhile whilst it sets up in the background (for those curious or interested, it is using
+[Pyodide](https://pyodide.org/en/stable/) running on [Web Assembly (WASM)](https://webassembly.org/). It'll take some
+time to install PGFinder and all its Python dependencies. Once loaded, you should see something like the following:
 
+![Full WebUI](/img/full_ui.png)
+
+### MS1 Search Module
+
+The module for performing an MS1 search — the original function of PGFinder and the function provided by the
 ![Initial screenshot of PGFinder GUI](https://github.com/Mesnage-Org/pgfinder/assets/70374280/9537c200-5b48-4d50-ac72-1c8b62d83909)
 
 
-### Upload a file
+#### Upload a file
 
 You should click on the large button with a dashed border to **Upload a file** and select your Byos (`.ftrs`) or
 MaxQuant (`.txt`) file that you wish to analyse. Please note which versions of these programs are currently supported — the tooltip contains specific version numbers
@@ -26,7 +31,7 @@ If you have no deconvoluted dataset but you want to test PGFinder, you can downl
 
 
 
-### Choose a Mass Database
+#### Choose a Mass Database
 
 You then have the option to choose which **Mass Database** will be used to search your sample. There are several
 provisioned for your convenience, from both _Clostridium difficile_ and _Escherichia coli_. Each
@@ -39,34 +44,34 @@ with an `i` in it, and a tooltip describing the database will appear).
 ![Choosing mass libraries](https://github.com/Mesnage-Org/pgfinder/assets/70374280/41764585-e64f-4a23-adfd-c7a379d47782)
 
 
-#### Using a Custom Database
+##### Using a Custom Database
 
 If you have your own database, you can choose to upload it by clicking on **Custom** and then the **Upload a file** box
 that appears under this. Then you can select which `.csv` file to upload.
 
-### Advanced Options
+#### Advanced Options
 
 A number of advanced options are now available, and they can be viewed and set by clicking on the downwards pointing arrow
 next to the text **Advanced Options**.
 
-#### Modifications
+##### Modifications
 
 A scrollable list of modifications is presented; select by clicking on these. You can select as many modifications as
 you'd like, just click on those you want to enable and the background will turn white to indicate that it has been
 selected. The list is long, but there is slider on the right or you can scroll up and down with your mouse-wheel / touchpad.
 
-#### PPM Tolerance
+##### PPM Tolerance
 
 The Parts Per Million tolerance for matching molecules can be set by entering a number in the box underneath the **PPM
 Tolerance** heading.
 
-#### Cleanup Window
+##### Cleanup Window
 
 This is the retention-time window (in minutes) that PGFinder will search when looking for salt adducts and decay products
 of each identified structure. These adducts and decay products are then removed from the search output, and their intensities
 are transferred to the parent ion / structure.
 
-#### Consolidation PPM
+##### Consolidation PPM
 
 During consolidation, structures with the lowest absolute ppm are selected over those farther from the theoretical mass.
 However, if two or more matches have a theoretical mass less than the consolidation ppm apart, then all of those matches are retained.
@@ -85,11 +90,11 @@ In the screenshot below we have...
 ![Setting Advanced Options in PGFinder](https://github.com/Mesnage-Org/pgfinder/assets/70374280/a63e21ff-8276-4bdd-be64-c27b41c4aab1)
 
 
-### Run Analysis
+#### Run Analysis
 
 Once you are ready to run the analysis, simply click on the **Run Analysis** button.
 
-### Results
+#### Results
 
 After the analysis has run, a CSV file will be automatically downloaded. In most browsers, unless the configuration has been changed, the file will be downloaded to the `Downloads`
 directory on your computer. Most browsers let you see a list of files that have been downloaded if you press `Control + j`.
