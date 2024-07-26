@@ -1,9 +1,10 @@
 # PGLang
 
 To represent complex, branched peptidoglycan structures using text, PGLang was developed. Both the Mass Calculator and
-Fragmenter modules of the WebUI take PGLang as an input.
+Fragmenter modules of the WebUI take PGLang as an input. Below, you can see a number of cartoon muropeptide structures
+and their PGLang representations. Note that, when representing multimers, the donor must always come first!
 
-!!! INSERT PGLANG EXAMPLE FIGURE HERE !!!
+![A set of example structures and their PGLang representations](/img/pglang.png)
 
 ## Syntax
 
