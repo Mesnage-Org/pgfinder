@@ -30,8 +30,12 @@ jobs:
       - name: Install Project Dependencies
         run: pnpm install
 
+      # This is needed for `pnpm check` to find the WASM code's type definitions
+      - name: HACK — Build Once
+        run: pnpm build
+
       - name: Run Svelte Check
         run: pnpm check
 
-      # - name: Run Prettier & ESLint
-      #   run: pnpm lint
+      - name: Run Prettier & ESLint
+        run: pnpm lint

@@ -1,3 +1,5 @@
+"""Module for gluing the WebUI together."""
+
 from pgfinder import matching, pgio, validation
 from pgfinder.gui.internal import (
     MASS_LIB_DIR,
@@ -24,7 +26,7 @@ def run_analysis():
         ppmTolerance,
     )
 
-    theo_masses = theo_masses_upload_reader(massLibrary.to_py())
+    theo_masses = theo_masses_upload_reader(upload=massLibrary.to_py())
 
     def analyze(virt_file):
         ms_data = ms_upload_reader(virt_file)

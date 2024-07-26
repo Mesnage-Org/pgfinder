@@ -72,8 +72,12 @@ made, but typically they are ok to accept — they will be `black` formatting or
 
 ### Releasing to PyPI
 
-Releases to the [Python Package Index (PyPI)](https://pypi.org) are automated and occur when a new release is made on
-GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning](https://semver.org/).
+Releases to the [Python Package Index (PyPI)][pypi] are automated and occur when a new release is made on
+GitHub with a tag that begins with `v#.#.#'`. PGFinder uses [semantic verisoning][semver].
+
+## Hacking On the `smitheens` Package
+
+For detailed information on the Smithereens component please refer to the Smithereens section.
 
 ## Hacking On The `web` Directory
 
@@ -97,7 +101,7 @@ a change and saving the file you were working on, the webpage should reload auto
 ### Testing
 
 To test the GUI's functionality (and that it's correctly interfacing with the `pgfinder` backend), you can run `pnpm test`,
-which leverages [Playwright](https://playwright.dev/) for end-to-end testing.
+which leverages [Playwright][pw] for end-to-end testing.
 
 ``` bash
 # Start browser testing in the background
@@ -108,7 +112,7 @@ pnpm test -- --ui
 
 ### Formatting
 
-To ensure consistent formating throughout the `web` directory, you can run [Prettier](https://prettier.io/) using the following command:
+To ensure consistent formating throughout the `web` directory, you can run [Prettier][prettier] using the following command:
 
 ``` bash
 # Run Prettier
@@ -127,3 +131,24 @@ pnpm check:watch
 # Check for potential improvements to code style
 pnpm lint
 ```
+
+Further details on developing the WebUI can be found under [Svelte][svelte]
+
+
+
+[card]: https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook/Card
+[div]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div
+[json]: https://www.json.org/json-en.html
+[npm]: https://www.npmjs.com/
+[pandas]: https://pandas.pydata.org/
+[pathlib]: https://docs.python.org/3/library/pathlib.html
+[pgfinder]: https://github.com/Mesnage-Org/pgfinder/
+[prettier]: https://prettier.io/
+[pw]: https://playwright.dev/
+[pyodide]: https://pyodide.org/en/stable/
+[pypi]: https://pypi.org
+[semver]: https://semver.org/
+[svelte]: https://svelte.dev/docs/
+[ts]: https://www.typescriptlang.org/
+[vite]: https://vitejs.dev/
+[wa]: https://webassembly.org/

@@ -8,8 +8,10 @@ Welcome to pgfinder's documentation!
     introduction
     installation
     usage
+    pglang
     data_dictionary
     contributing
+    smithereens
     copying
 
 .. toctree::

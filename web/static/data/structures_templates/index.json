@@ -1,0 +1,24 @@
+{
+  "Bacilus subtilis": {
+    "file": "b_subtilis.txt",
+    "citation": "Atrih et al. 1999"
+  },
+  "Clostridium difficile": {
+    "file": "c_difficile.txt",
+    "citation": "Galley et al. 2024"
+  },
+  "Enterococcus faecalis": {
+    "file": "e_faecalis.txt",
+    "citation": "Emirian et al. 2009"
+  },
+  "Enterococcus faecium": {
+    "file": "e_faecium.txt"
+  },
+  "Escherichia coli": {
+    "file": "e_coli.txt",
+    "citation": "Patel et al. 2021"
+  },
+  "Staphylococcus aureus": {
+    "file": "s_aureus.txt"
+  }
+}

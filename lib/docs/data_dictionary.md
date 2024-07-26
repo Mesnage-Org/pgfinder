@@ -22,22 +22,22 @@ tab separated value (`TSV`) files with a `.txt` extension.
 Any number of modifications can be selected to enrich the search space of the database of masses
 to which the input data is being compared. Allowed mofifications are:
 
-| Modification | Description |
-|---|---|
-| Sodium	| Search for masses corresponding to sodium adducts |
-| Potassium	| Search for masses corresponding to potassium adducts |
-| Anh	| Search for anhydromuropeptides |
-| DeAc	| Search for deacetylated muropeptides |
-| DeAc_Anh	| Search for deacetylated anhydromuropeptides |
-| Nude	| Search for muropeptides with an extra GlcNAc-MurNAc disaccharide |
-| Decay	| Correct output taking into account in-source decay products |
-| Amidation | Search for Amidated muropeptides |
-| Amidase	| Search for peptides resulting from amidase cleavage (GlcNAc-MurNAc loss) |
-| Double_Anh	| Search for anhydromuropeptides (2 Anhydro groups) |
-| Multimers	| Search for multimers resulting from 3-3 and 4-3 crosslinks |
-| Multimers | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
-| Multimer Lac	| Search for lactyl-peptides multimers |
-| O-Ac	| Search for O-acetylated muropeptides |
+| Modification | Description                                                                          |
+|:-------------|:-------------------------------------------------------------------------------------|
+| Sodium       | Search for masses corresponding to sodium adducts                                    |
+| Potassium    | Search for masses corresponding to potassium adducts                                 |
+| Anh          | Search for anhydromuropeptides                                                       |
+| DeAc         | Search for deacetylated muropeptides                                                 |
+| DeAc_Anh     | Search for deacetylated anhydromuropeptides                                          |
+| Nude         | Search for muropeptides with an extra GlcNAc-MurNAc disaccharide                     |
+| Decay        | Correct output taking into account in-source decay products                          |
+| Amidation    | Search for Amidated muropeptides                                                     |
+| Amidase      | Search for peptides resulting from amidase cleavage (GlcNAc-MurNAc loss)             |
+| Double_Anh   | Search for anhydromuropeptides (2 Anhydro groups)                                    |
+| Multimers    | Search for multimers resulting from 3-3 and 4-3 crosslinks                           |
+| Multimers    | Glyco	Search for multimers resulting from transglycosylation (no transpeptidation |
+| Multimer Lac | Search for lactyl-peptides multimers                                                 |
+| O-Ac         | Search for O-acetylated muropeptides                                                 |
 
 ### Mass Databases (Lists)
 
@@ -50,6 +50,51 @@ with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia col
 | Structure        | Structure code    | NA               |
 | Monoisotopicmass | Monoisotopic mass | atomic mass unit |
 
+### Reference Masses
+
+The reference masses file defines the masses of the building blocks used to determine the mass of target structures
+(muropeptides). A default file is provided as part of the package but user supplied files can be used instead. The file
+should be ASCII text CSV (not Excel files) with the following columns.
+
+| Column | Description                  | Units    |
+|:-------|:-----------------------------|:---------|
+| Code   | Encoding of the component    | `string` |
+| Mass   | Atomic Mass of the component | Daltons  |
+| Name   | Name of component            | `string` |
+
+
+### Target Structures
+
+The target structures are species specific and define the muropeptides for which the mass is to be calculated. A number
+of options are available but users can also supply their own file. The file should be ASCII text CSV (not Excel files)
+with a single column that defines the structure using the Codes defined in the [reference masses](#reference_masses)
+file. An example is shown below
+
+```
+Structure
+gm |0
+gm-gm |0
+gm(Anh) |1
+gm(-Ac) |1
+gm-AEJ |1
+gm-AEJA |1
+gm-AEJG |1
+gm-AEJAG |1
+gm-AEJKR |1
+gm-AEJ (Anh) |1
+gm-AEJA (Anh) |1
+gm-AEJA (-Ac) |1
+```
+
+Available species specific target structures currently available.
+
++ _Bacilus subtilis_
++ _Enterococcus faecalis_
++ _Enterococcus faecium_
++ _Escehrichia coli_
++ _Staphylococcus aureus_
+
+
 ## Outputs
 
 `pgfinder` outputs `CSV` (`.csv`) files. The columns in these files depend on the input file format.
@@ -59,15 +104,15 @@ with a `.csv` extension. `pgfinder` has built-in mass lists for *Escherichia col
 
 The first column contains the following metadata
 
-| Data | Description |
-|---|---|
-| `file` | Input data file |
-| `masses_file` | Mass list file |
-| `rt_window` | Retention time window |
-| `modifications` | List of [modifications](#modifications) |
-| `ppm` | ppm tolerance |
-| `consolidation_ppm` | ppm tolerance for consolidation |
-| `version` | PGFinder version used in analysis |
+| Data                | Description                             |
+|:--------------------|:----------------------------------------|
+| `file`              | Input data file                         |
+| `masses_file`       | Mass list file                          |
+| `rt_window`         | Retention time window                   |
+| `modifications`     | List of [modifications](#modifications) |
+| `ppm`               | ppm tolerance                           |
+| `consolidation_ppm` | ppm tolerance for consolidation         |
+| `version`           | PGFinder version used in analysis       |
 
 ### PGFinder Output
 

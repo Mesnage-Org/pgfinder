@@ -1,0 +1,15 @@
+{
+  "name": "wasm-shim",
+  "type": "module",
+  "version": "0.1.1",
+  "files": [
+    "smithereens_bg.wasm",
+    "smithereens.js",
+    "smithereens.d.ts"
+  ],
+  "main": "smithereens.js",
+  "types": "smithereens.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
