@@ -156,30 +156,28 @@ The picture below shows the expected content of the output. It contains the foll
 
 ### Fragment Generator Module
 
-This module can be used to fragment PGLang structures (as they would fragment when subjected to CID or HCD) — either of
-single structures, returning a CSV file of monoisotopic `[M + H]+` adducts that can be used in a manual MS2 search, or
-in bulk, returning a `.zip` file containing the CSV files for many structures at once.
+This module can be used to fragment PGLang structures (as they would fragment when subjected to CID or HCD) —
+generating in single mode a CSV file of monoisotopic `[M + H]+` adducts that can be used in a manual MS2 search, or, in
+bulk: returning a `.zip` file containing the CSV files for many structures at once.
 
-![Initial screenshot of the Mass Calculator UI](/img/masscalc.png)
-
-#### Bulk Calculation
-
-To generate a new mass database, you must upload a `.txt` file containing a list of line-separated PGLang structures.
-If you'd like to see a couple of examples, or would like to adapt a pre-existing template-list of structures, then you
-can click to expand the "Template Lists" dropdown and click on a template to download it:
-
-![List of muropeptide template-lists](/img/templates.png)
-
-You can then upload your (potentially) edited template file, click "Build Database", and the resultant mass database
-should be downloaded as a `.csv` file that can be uploaded to the MS1 Search Module.
-
-![Start bulk mass calculation](/img/mcbulkgo.png)
+![Initial screenshot of the Fragment Generator UI](/img/fraggen.png)
 
 #### Single Calculation
 
-If you're only interested in calculating the mass of a single muropeptide, there is no need to save its structure in a
-one-line file to upload — instead, you can switch to the "Single" tab to interactively calculate masses. Simply type in
-a structure and watch as its mass is updated:
+If you're only interested in calculating the fragments from a single muropeptide, there is no need to save its structure
+in a one-line file to upload — instead, you can switch to the "Single" tab to interactively calculate masses. Simply type in
+a structure, press "Fragment Structures", and your CSV file will be downloaded:
+
+![Single structure fragmentation](/img/fgsingle.png)
+
+#### Bulk Calculation
+
+To fragment multiple structures at once, you must upload a `.txt` file containing a list of line-separated PGLang
+structures. For an example, you can download one of the template lists from the Mass Calculator module to examine,
+edit, and upload. From there, you can click "Build Database", and the resultant set of fragment files should be
+downloaded as a `.zip` file.
+
+![Start bulk structure fragmentation](/img/fgbulk.png)
 
 ## Command Line
 
