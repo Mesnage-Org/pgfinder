@@ -107,31 +107,33 @@
   $: plural = bulk ? "s" : "";
 </script>
 
-<div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Fragmenter">
-  <section class="flex flex-col items-center p-4">
-    <h5 class="pb-1 h5">Fragment Generator</h5>
-    <TabGroup class="w-full" justify="justify-center">
-      <Tab bind:group={bulk} name="bulk" value={true}>Bulk</Tab>
-      <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
-      <svelte:fragment slot="panel">
-        {#if bulk}
-          <Bulk bind:structures />
-        {:else}
-          <Single bind:structure {validStructure} />
-        {/if}
-      </svelte:fragment>
-    </TabGroup>
+<div class="flex flex-col items-center">
+  <h3 class="pb-1 h3">Fragment Generator</h3>
+  <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Fragment Generator">
+    <section class="flex flex-col items-center p-4">
+      <TabGroup class="w-full" justify="justify-center">
+        <Tab bind:group={bulk} name="bulk" value={true}>Bulk</Tab>
+        <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
+        <svelte:fragment slot="panel">
+          {#if bulk}
+            <Bulk bind:structures />
+          {:else}
+            <Single bind:structure {validStructure} />
+          {/if}
+        </svelte:fragment>
+      </TabGroup>
 
-    <button
-      type="button"
-      class="btn variant-filled w-full mt-4"
-      on:click={fragment}
-      disabled={!ready}
-    >
-      Fragment Structure{plural}
-    </button>
-    {#if processing}
-      <ProgressBar class="mt-4" />
-    {/if}
-  </section>
+      <button
+        type="button"
+        class="btn variant-filled w-full mt-4"
+        on:click={fragment}
+        disabled={!ready}
+      >
+        Fragment Structure{plural}
+      </button>
+      {#if processing}
+        <ProgressBar class="mt-4" />
+      {/if}
+    </section>
+  </div>
 </div>
