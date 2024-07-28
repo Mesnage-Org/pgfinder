@@ -50,10 +50,12 @@
   <div
     class="h-full flex flex-col gap-4 lg:flex-row justify-center items-center"
   >
+    <div />
     <MassCalculator bind:version={versions.Smithereens} />
     <Ms1Search bind:version={versions.PGFinder} />
     <!-- NOTE: Version is currently tied to that of the `MassCalculator`-->
     <FragmentGenerator />
+    <div />
   </div>
 
   <svelte:fragment slot="footer">
