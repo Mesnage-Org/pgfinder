@@ -24,7 +24,7 @@
   import LinksAndDownloads from "./LinksAndDownloads.svelte";
   import Ms1Search from "./MS1 Search/MS1 Search.svelte";
   import MassCalculator from "./Mass Calculator/Mass Calculator.svelte";
-  import Fragmenter from "./Fragmenter/Fragmenter.svelte";
+  import FragmentGenerator from "./Fragment Generator/Fragment Generator.svelte";
 
   // Initialize Stores for Drawers and Modals
   initializeStores();
@@ -47,11 +47,13 @@
     <Header {versions} />
   </svelte:fragment>
 
-  <div class="h-full flex flex-col lg:flex-row justify-center items-center">
+  <div
+    class="h-full flex flex-col gap-4 lg:flex-row justify-center items-center"
+  >
     <MassCalculator bind:version={versions.Smithereens} />
     <Ms1Search bind:version={versions.PGFinder} />
     <!-- NOTE: Version is currently tied to that of the `MassCalculator`-->
-    <Fragmenter />
+    <FragmentGenerator />
   </div>
 
   <svelte:fragment slot="footer">

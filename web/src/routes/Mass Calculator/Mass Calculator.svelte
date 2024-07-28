@@ -96,22 +96,24 @@
   $: ready = !loading && !processing && structures !== undefined;
 </script>
 
-<div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Mass Calculator">
-  <section class="flex flex-col items-center p-4">
-    <h5 class="pb-1 h5">Mass Calculator</h5>
-    <TabGroup class="w-full" justify="justify-center">
-      <Tab bind:group={tab} name="built-in" value={"bulk"}>Bulk</Tab>
-      <Tab bind:group={tab} name="custom" value={"single"}>Single</Tab>
-      <svelte:fragment slot="panel">
-        {#if tab === "bulk"}
-          <Bulk bind:structures buildCommand={runBulk} {ready} />
-        {:else if tab === "single"}
-          <Single bind:structure {validStructure} {mass} />
-        {/if}
-      </svelte:fragment>
-    </TabGroup>
-    {#if processing}
-      <ProgressBar class="mt-4" />
-    {/if}
-  </section>
+<div class="flex flex-col items-center">
+  <h3 class="pb-1 h3">Mass Calculator</h3>
+  <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Mass Calculator">
+    <section class="flex flex-col items-center p-4">
+      <TabGroup class="w-full" justify="justify-center">
+        <Tab bind:group={tab} name="built-in" value={"bulk"}>Bulk</Tab>
+        <Tab bind:group={tab} name="custom" value={"single"}>Single</Tab>
+        <svelte:fragment slot="panel">
+          {#if tab === "bulk"}
+            <Bulk bind:structures buildCommand={runBulk} {ready} />
+          {:else if tab === "single"}
+            <Single bind:structure {validStructure} {mass} />
+          {/if}
+        </svelte:fragment>
+      </TabGroup>
+      {#if processing}
+        <ProgressBar class="mt-4" />
+      {/if}
+    </section>
+  </div>
 </div>

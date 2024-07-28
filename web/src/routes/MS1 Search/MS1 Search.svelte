@@ -83,35 +83,38 @@
   $: animateWidth = !advancedMode ? "transition-all" : "";
 </script>
 
-<div
-  class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}"
-  data-testid="MS1 Search"
->
-  <section class="flex flex-col space-y-4 p-4">
-    <MsDataUploader bind:value={state.msData} />
+<div class="flex flex-col items-center">
+  <h3 class="pb-1 h3">MS Analysis</h3>
+  <div
+    class="card m-2 w-[20rem] {uiWidth} max-w-[90%] {animateWidth}"
+    data-testid="MS1 Search"
+  >
+    <section class="flex flex-col space-y-4 p-4">
+      <MsDataUploader bind:value={state.msData} />
 
-    <MassDatabaseUploader bind:value={state.massLibrary} {massLibraries} />
+      <MassDatabaseUploader bind:value={state.massLibrary} {massLibraries} />
 
-    <AdvancedOptions
-      bind:enabledModifications={state.enabledModifications}
-      bind:ppmTolerance={state.ppmTolerance}
-      bind:cleanupWindow={state.cleanupWindow}
-      bind:consolidationPpm={state.consolidationPpm}
-      bind:advancedMode
-      {allowedModifications}
-    />
+      <AdvancedOptions
+        bind:enabledModifications={state.enabledModifications}
+        bind:ppmTolerance={state.ppmTolerance}
+        bind:cleanupWindow={state.cleanupWindow}
+        bind:consolidationPpm={state.consolidationPpm}
+        bind:advancedMode
+        {allowedModifications}
+      />
 
-    <button
-      type="button"
-      class="btn variant-filled"
-      on:click={runAnalysis}
-      disabled={!ready}
-    >
-      Run Analysis
-    </button>
+      <button
+        type="button"
+        class="btn variant-filled"
+        on:click={runAnalysis}
+        disabled={!ready}
+      >
+        Run Analysis
+      </button>
 
-    {#if processing}
-      <ProgressBar />
-    {/if}
-  </section>
+      {#if processing}
+        <ProgressBar />
+      {/if}
+    </section>
+  </div>
 </div>
