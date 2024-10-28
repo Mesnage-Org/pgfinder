@@ -35,7 +35,7 @@
           {#if version}
             <p class="col-start-2 font-mono ml-1">v{version}</p>
           {:else}
-            <div class="placeholder animate-pulse" />
+            <div class="placeholder animate-pulse"></div>
           {/if}
         {/each}
       </div>
