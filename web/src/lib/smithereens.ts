@@ -31,8 +31,8 @@ function mass({ structure }: SMassReq): SMassRes | SSingleErr {
       type: "MassRes",
       mass,
     };
-  } catch (msg) {
-    // FIXME: I should eventually do something with this error `msg`!
+  } catch {
+    // FIXME: I should eventually do something with the error message!
     return {
       type: "SingleErr",
     };
@@ -52,8 +52,8 @@ async function masses({
       const oligoState = pg.oligomerization_state();
       const mass = pg.monoisotopic_mass();
       csv += `"${structure}|${oligoState}",${mass}\n`;
-    } catch (msg) {
-      // FIXME: I should eventually do something with this error `msg`!
+    } catch {
+      // FIXME: I should eventually do something with the error message!
       const line = index + 1;
       return {
         type: "BulkErr",
@@ -83,8 +83,8 @@ function validate({ structure }: SValidateReq): SValidateRes | SSingleErr {
     return {
       type: "ValidateRes",
     };
-  } catch (msg) {
-    // FIXME: I should eventually do something with this error `msg`!
+  } catch {
+    // FIXME: I should eventually do something with the error message!
     return {
       type: "SingleErr",
     };

@@ -50,6 +50,6 @@
     <p class="text-center font-normal font-token">
       <slot />
     </p>
-    <div class="arrow {color}" />
+    <div class="arrow {color}"></div>
   </div>
 {/if}

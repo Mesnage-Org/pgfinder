@@ -40,6 +40,9 @@
   let structure = "";
   let mass = "";
 
+  // TODO: Once we move to Svelte 5, there will be a better way to do this that
+  // doesn't trigger this lint!
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   $: structure, runSingle();
 
   function runSingle() {
