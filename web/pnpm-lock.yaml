@@ -24,7 +24,7 @@ importers:
         specifier: ^1.48.2
         version: 1.48.2
       pyodide:
-        specifier: ^0.26.3
+        specifier: '=0.26.3'
         version: 0.26.3
       svelte-fa:
         specifier: ^4.0.3
