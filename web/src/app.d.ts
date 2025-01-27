@@ -120,6 +120,7 @@ declare type SBulkErr = {
 declare type SMassRes = {
   type: "MassRes";
   mass: string;
+  smiles: string;
 };
 
 declare type SMassesRes = {
