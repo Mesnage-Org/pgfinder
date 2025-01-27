@@ -143,7 +143,8 @@ def theo_masses_reader(file: str | Path) -> pd.DataFrame:
         Pandas DataFrame of theoretical masses.
     """
     try:
-        theo_masses_df = pd.read_csv(file, usecols=["Structure", "Monoisotopic Mass"])
+        cols = ["Structure", "Monoisotopic Mass"]
+        theo_masses_df = pd.read_csv(file, usecols=cols)[cols]
         theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     except (pd.errors.ParserError, UnicodeDecodeError) as e:
         raise UserError(
