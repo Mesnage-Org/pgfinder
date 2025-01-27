@@ -50,14 +50,15 @@ async function masses({
 }: SMassesReq): Promise<SMassesRes | SBulkErr> {
   const loadedStructures = await structures.text();
 
-  let csv = "Structure,Monoisotopic Mass\n";
+  let csv = "Structure,Monoisotopic Mass,SMILES\n";
   const structureList = loadedStructures.match(/[^\r\n]+/g) || [];
   for (const [index, structure] of structureList.entries()) {
     try {
       const pg = new Peptidoglycan(structure);
       const oligoState = pg.oligomerization_state();
       const mass = pg.monoisotopic_mass();
-      csv += `"${structure}|${oligoState}",${mass}\n`;
+      const smiles = pg.smiles();
+      csv += `"${structure}|${oligoState}",${mass},${smiles}\n`;
     } catch {
       // FIXME: I should eventually do something with the error message!
       const line = index + 1;
