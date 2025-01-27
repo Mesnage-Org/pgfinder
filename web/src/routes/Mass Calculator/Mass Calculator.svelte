@@ -39,6 +39,7 @@
   let validStructure = true;
   let structure = "";
   let mass = "";
+  let smiles = "";
 
   // TODO: Once we move to Svelte 5, there will be a better way to do this that
   // doesn't trigger this lint!
@@ -66,6 +67,7 @@
         case "MassRes":
           validStructure = true;
           mass = msg.mass;
+          smiles = msg.smiles;
           break;
         case "MassesRes":
           fileDownload(msg.blob, msg.filename);
@@ -110,7 +112,7 @@
           {#if tab === "bulk"}
             <Bulk bind:structures buildCommand={runBulk} {ready} />
           {:else if tab === "single"}
-            <Single bind:structure {validStructure} {mass} />
+            <Single bind:structure {validStructure} {mass} {smiles} />
           {/if}
         </svelte:fragment>
       </TabGroup>

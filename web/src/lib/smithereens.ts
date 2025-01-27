@@ -23,19 +23,23 @@ function csvBlob(csv: string): Blob {
 
 function mass({ structure }: SMassReq): SMassRes | SSingleErr {
   try {
-    const mass =
-      structure.length != 0
-        ? new Peptidoglycan(structure).monoisotopic_mass()
-        : "";
+    const [mass, smiles] =
+      structure.length != 0 ? calculate_mass_and_smiles() : ["", ""];
     return {
       type: "MassRes",
       mass,
+      smiles,
     };
   } catch {
     // FIXME: I should eventually do something with the error message!
     return {
       type: "SingleErr",
     };
+  }
+
+  function calculate_mass_and_smiles(): [string, string] {
+    const pg = new Peptidoglycan(structure);
+    return [pg.monoisotopic_mass(), pg.smiles()];
   }
 }
 
@@ -44,14 +48,15 @@ async function masses({
 }: SMassesReq): Promise<SMassesRes | SBulkErr> {
   const loadedStructures = await structures.text();
 
-  let csv = "Structure,Monoisotopic Mass\n";
+  let csv = "Structure,Monoisotopic Mass,SMILES\n";
   const structureList = loadedStructures.match(/[^\r\n]+/g) || [];
   for (const [index, structure] of structureList.entries()) {
     try {
       const pg = new Peptidoglycan(structure);
       const oligoState = pg.oligomerization_state();
       const mass = pg.monoisotopic_mass();
-      csv += `"${structure}|${oligoState}",${mass}\n`;
+      const smiles = pg.smiles();
+      csv += `"${structure}|${oligoState}",${mass},${smiles}\n`;
     } catch {
       // FIXME: I should eventually do something with the error message!
       const line = index + 1;

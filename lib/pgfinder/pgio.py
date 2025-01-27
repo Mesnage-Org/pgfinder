@@ -143,7 +143,9 @@ def theo_masses_reader(file: str | Path) -> pd.DataFrame:
         Pandas DataFrame of theoretical masses.
     """
     try:
-        theo_masses_df = pd.read_csv(file)
+        cols = ["Structure", "Monoisotopic Mass"]
+        theo_masses_df = pd.read_csv(file, usecols=cols)[cols]
+        theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     except (pd.errors.ParserError, UnicodeDecodeError) as e:
         raise UserError(
             (
@@ -158,16 +160,14 @@ def theo_masses_reader(file: str | Path) -> pd.DataFrame:
                 "selected the correct file and that it contains CSV data."
             )
         ) from e
-
-    try:
-        theo_masses_df.columns = ["Inferred structure", "Theo (Da)"]
     except ValueError as e:
         raise UserError(
             (
-                "The supplied mass database didn't have the correct number of "
-                "columns. Have you checked the format of your database against one of the built-in databases?"
+                "The supplied mass database didn't have the correct columns. "
+                "Have you checked the format of your database against one of the built-in databases?"
             )
         ) from e
+
     # Check that all structures are followed by "|n" where n is one or more digits
     if not theo_masses_df["Inferred structure"].str.contains(r"\|\d+$").all():
         raise UserError(

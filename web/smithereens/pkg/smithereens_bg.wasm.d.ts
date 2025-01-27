@@ -6,6 +6,7 @@ export function __wbg_peptidoglycan_free(a: number): void;
 export function peptidoglycan_new(a: number, b: number, c: number): void;
 export function peptidoglycan_oligomerization_state(a: number): number;
 export function peptidoglycan_monoisotopic_mass(a: number, b: number): void;
+export function peptidoglycan_smiles(a: number, b: number): void;
 export function peptidoglycan_fragment(a: number, b: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_export_0(a: number, b: number, c: number): void;
