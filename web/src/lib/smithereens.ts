@@ -24,9 +24,7 @@ function csvBlob(csv: string): Blob {
 function mass({ structure }: SMassReq): SMassRes | SSingleErr {
   try {
     const [mass, smiles] =
-      structure.length != 0
-        ? calculate_mass_and_smiles()
-        : ["", ""];
+      structure.length != 0 ? calculate_mass_and_smiles() : ["", ""];
     return {
       type: "MassRes",
       mass,
@@ -39,10 +37,10 @@ function mass({ structure }: SMassReq): SMassRes | SSingleErr {
     };
   }
 
-    function calculate_mass_and_smiles(): [string, string] {
-        const pg = new Peptidoglycan(structure);
-        return [pg.monoisotopic_mass(), pg.smiles()];
-    }
+  function calculate_mass_and_smiles(): [string, string] {
+    const pg = new Peptidoglycan(structure);
+    return [pg.monoisotopic_mass(), pg.smiles()];
+  }
 }
 
 async function masses({
