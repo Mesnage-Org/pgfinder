@@ -5,6 +5,11 @@
  */
 export function version(): string;
 /**
+ * @param {(Replicate)[]} replicates
+ * @returns {string}
+ */
+export function consolidate(replicates: Replicate[]): string;
+/**
  */
 export class Peptidoglycan {
   free(): void;
@@ -29,6 +34,16 @@ export class Peptidoglycan {
    */
   fragment(): string;
 }
+/**
+ */
+export class Replicate {
+  free(): void;
+  /**
+   * @param {number} number
+   * @param {string} csv
+   */
+  constructor(number: number, csv: string);
+}
 
 export type InitInput =
   | RequestInfo
@@ -46,6 +61,9 @@ export interface InitOutput {
   readonly peptidoglycan_monoisotopic_mass: (a: number, b: number) => void;
   readonly peptidoglycan_smiles: (a: number, b: number) => void;
   readonly peptidoglycan_fragment: (a: number, b: number) => void;
+  readonly __wbg_replicate_free: (a: number) => void;
+  readonly replicate_new: (a: number, b: number, c: number) => number;
+  readonly consolidate: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_export_0: (a: number, b: number, c: number) => void;
   readonly __wbindgen_export_1: (a: number, b: number) => number;

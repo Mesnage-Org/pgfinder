@@ -3,7 +3,7 @@ import { loadPyodide, type PyodideInterface } from "pyodide";
 import { defaultPythonState } from "$lib/constants";
 // NOTE: This is a temporary hack for getting the Rust-based cross-replicate consolidation code in here — in the future
 // hopefully we won't need to shuffle between languages this way!
-import init, { Peptidoglycan, version } from "smithereens";
+import init, { consolidate, Replicate } from "smithereens";
 
 const state: PythonState = { ...defaultPythonState };
 let pyodide: PyodideInterface;
@@ -23,11 +23,11 @@ let pyodide: PyodideInterface;
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
   const micropip = pyodide.pyimport("micropip");
-  await micropip.install("pgfinder==1.3.2");
+  await micropip.install("pgfinder==1.4.0");
   // If you need to test development version of pgfinder you should build the wheel and copy the resulting .whl to the
   // lib/ directory (adajacent to this file), replace the version below and comment out the above (which loads from
   // PyPI).
-  // await micropip.install('./pgfinder-1.2.0rc2.dev39+g75eb8a8.d20240603-py3-none-any.whl');
+  // await micropip.install("./pgfinder-1.3.3.dev4+g97e51ef-py3-none-any.whl");
   await pyodide.runPythonAsync(
     "import pgfinder; from pgfinder.gui.shim import *",
   );
@@ -77,10 +77,13 @@ function postResult(proxy: PyProxy) {
     for (const [basename, files] of groupedReplicates) {
       const suffix = files.map(([{ replicate }, _]) => replicate).join(",");
       const filename = `${basename}_${suffix}`;
-      console.log(filename);
-      const csv = Array.from(files.map(([_, csv]) => csv));
-      console.log(csv);
-      // TODO: Call WASM and add new consolidated dataset to `result`!
+      const replicates = Array.from(
+        files.map(
+          ([{ replicate }, csv]) => new Replicate(Number(replicate), csv),
+        ),
+      );
+      // FIXME: This should be an object / class, not a tuple of filename and data...
+      result.push([filename, consolidate(replicates)]);
     }
 
     return result;
