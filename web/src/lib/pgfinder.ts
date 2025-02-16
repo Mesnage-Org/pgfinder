@@ -64,18 +64,18 @@ function postResult(proxy: PyProxy) {
     const fileparts = /(?<basename>.+?)(?:_0*(?<replicate>\d+))?$/;
     const needConsolidation = result
       .map(([filename, c]): [{ [key: string]: string }, string] => [
-        filename.match(fileparts)?.groups!,
+        filename.match(fileparts)!.groups!,
         c,
       ])
-      .filter(([{ replicate }, _]) => replicate !== undefined);
+      .filter(([{ replicate }]) => replicate !== undefined);
 
     const groupedReplicates = Map.groupBy(
       needConsolidation,
-      ([{ basename }, _]) => basename,
+      ([{ basename }]) => basename,
     );
 
     for (const [basename, files] of groupedReplicates) {
-      const suffix = files.map(([{ replicate }, _]) => replicate).join(",");
+      const suffix = files.map(([{ replicate }]) => replicate).join(",");
       const filename = `${basename}_${suffix}`;
       const replicates = Array.from(
         files.map(
