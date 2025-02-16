@@ -1,7 +1,7 @@
 {
   "name": "wasm-shim",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "files": [
     "smithereens_bg.wasm",
     "smithereens.js",

@@ -591,7 +591,7 @@ def consolidate_results(
 
     consolidated_df.at[0, total_column] = total_intensity
     consolidated_df = consolidated_df[
-        [total_column, structure_column, abundance_column, rt_column, theo_column, ppm_column]
+        [total_column, structure_column, intensity_column, abundance_column, rt_column, theo_column, ppm_column]
     ]
 
     consolidated_df[rt_column] = consolidated_df[rt_column].round(2)

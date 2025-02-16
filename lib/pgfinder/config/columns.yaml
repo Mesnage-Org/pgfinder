@@ -37,6 +37,7 @@ pgfinder:
   # Dictionary mapping the input columns to related but unique consolidated column names
   consolidation:
     Total Intensity: Total Intensity
+    Intensity (best match): Consolidated Intensity
     Abundance (%): Abundance (%)
     Inferred structure (best match): Structure
     RT (min): Consolidated RT (min)
