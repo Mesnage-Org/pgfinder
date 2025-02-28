@@ -1,0 +1,17 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Rady
+  given-names: Brooks Joseph
+  orcid: https://orcid.org/0000-0003-4763-4070
+- family-names: Patel
+  given-names: Ankur
+  orcid: https://orcid.org/0000-0001-8161-3455
+- family-names: Turner
+  given-names: Robert
+- family-names: Shephard
+  given-names: Neil
+  orcid: https://orcid.org/0000-0001-8301-6857
+title: PGFinder
+version: v1.3.2
+date-released: 2025-02-28
