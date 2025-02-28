@@ -1,9 +1,20 @@
 # PGFinder
 
+<div align="center">
+
 [![codecov](https://codecov.io/gh/Mesnage-Org/pgfinder/branch/master/graph/badge.svg?token=5SM94G9Z6K)](https://codecov.io/gh/Mesnage-Org/pgfinder)
 [![PyPI version](https://img.shields.io/pypi/v/pgfinder?color=blue)](https://pypi.org/project/pgfinder/)
 [![Documentation Status](https://readthedocs.org/projects/pgfinder/badge/?version=latest)](https://pgfinder.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/ORDA--DOI-10.15131%2Fshef.data.20101751.v1-lightgrey)](https://doi.org/10.15131/shef.data.20101751.v1)
+
+</div>
+<div align="center">
+
+[![Downloads](https://static.pepy.tech/badge/pgfinder)](https://pepy.tech/project/pgfinder)
+[![Downloads](https://static.pepy.tech/badge/pgfinder/month)](https://pepy.tech/project/pgfinder)
+[![Downloads](https://static.pepy.tech/badge/pgfinder/week)](https://pepy.tech/project/pgfinder)
+
+</div>
 
 A web-site for processing samples is available at [PGFinder](https://mesnage-org.github.io/pgfinder/). For
 descriptions of the features of each version please refer to the
