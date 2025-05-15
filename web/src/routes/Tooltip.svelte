@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+  import { type PopupSettings } from "@skeletonlabs/skeleton-svelte";
   import Fa from "svelte-fa";
   import {
     faCircleInfo,
@@ -35,11 +35,11 @@
   switch (type) {
     case "info":
       icon = faCircleInfo;
-      color = "variant-filled-secondary";
+      color = "preset-filled-secondary-500";
       break;
     case "warn":
       icon = faTriangleExclamation;
-      color = "variant-filled-error";
+      color = "preset-filled-error-500";
       break;
   }
 </script>
@@ -52,7 +52,7 @@
     class="card p-4 {color} {width} max-w-[calc(100vw-16px)] z-50"
     data-popup={popupId}
   >
-    <p class="text-center font-normal font-token">
+    <p class="text-center font-normal base-font-family">
       {@render children?.()}
     </p>
     <div class="arrow {color}"></div>

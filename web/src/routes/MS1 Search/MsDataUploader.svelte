@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileDropzone } from "@skeletonlabs/skeleton";
+  import { FileUpload } from "@skeletonlabs/skeleton-svelte";
   import Tooltip from "../Tooltip.svelte";
   interface Props {
     value: Array<VirtFile> | undefined;
@@ -29,7 +29,7 @@
     </Tooltip>
   </h5>
 
-  <FileDropzone
+  <FileUpload
     regionInterface="overflow-hidden"
     name="ms-data"
     bind:files
@@ -53,5 +53,5 @@
         Byos (.ftrs) or MaxQuant (.txt)
       {/if}
     {/snippet}
-  </FileDropzone>
+  </FileUpload>
 </div>

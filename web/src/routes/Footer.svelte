@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AppBar } from "@skeletonlabs/skeleton";
+  import { AppBar } from "@skeletonlabs/skeleton-svelte";
 </script>
 
 <AppBar gridColumns="grid-cols-1" slotDefault="place-self-center">

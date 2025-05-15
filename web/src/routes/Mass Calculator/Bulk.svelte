@@ -1,10 +1,6 @@
 <script lang="ts">
   import {
-    FileDropzone,
-    ProgressRadial,
-    AccordionItem,
-    Accordion,
-  } from "@skeletonlabs/skeleton";
+    Accordion, FileUpload, ProgressRing } from "@skeletonlabs/skeleton-svelte";
   import { base } from "$app/paths";
   import { onMount } from "svelte";
   import Tooltip from "../Tooltip.svelte";
@@ -34,7 +30,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-  <FileDropzone
+  <FileUpload
     name="structure-list"
     bind:files
     on:change={structuresUploaded}
@@ -52,9 +48,9 @@
         Muropeptide Structures (.txt)
       {/if}
     {/snippet}
-  </FileDropzone>
+  </FileUpload>
   <Accordion class="w-full">
-    <AccordionItem>
+    <Accordion.Item>
       {#snippet summary()}
         Template Lists
       {/snippet}
@@ -63,7 +59,7 @@
           {#each Object.entries(structuresIndex) as [species, info]}
             <a href="{base}/data/structures_templates/{info['file']}" download>
               <div
-                class="flex items-center py-2 px-4 hover:variant-soft-surface"
+                class="flex items-center py-2 px-4 hover:preset-tonal-surface"
               >
                 <p class="grow"><i>{species}</i></p>
                 {#if info["citation"]}
@@ -76,15 +72,15 @@
           {/each}
         {:else}
           <div class="flex justify-center">
-            <ProgressRadial />
+            <ProgressRing />
           </div>
         {/if}
       {/snippet}
-    </AccordionItem>
+    </Accordion.Item>
   </Accordion>
   <button
     type="button"
-    class="btn variant-filled w-full"
+    class="btn preset-filled w-full"
     onclick={buildCommand}
     disabled={!ready}
   >

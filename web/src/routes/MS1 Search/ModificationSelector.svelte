@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ListBox, ListBoxItem, ProgressRadial } from "@skeletonlabs/skeleton";
+  import { ProgressRing } from "@skeletonlabs/skeleton-svelte";
   interface Props {
     value: Array<string>;
     allowedModifications: Array<string> | undefined;
@@ -24,7 +24,7 @@
     </ListBox>
   {:else}
     <div class="flex h-full items-center">
-      <ProgressRadial />
+      <ProgressRing />
     </div>
   {/if}
 </div>

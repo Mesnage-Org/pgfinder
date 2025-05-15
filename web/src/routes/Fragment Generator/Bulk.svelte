@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileDropzone } from "@skeletonlabs/skeleton";
+  import { FileUpload } from "@skeletonlabs/skeleton-svelte";
 
   interface Props {
     structures: File | undefined;
@@ -18,7 +18,7 @@
 </script>
 
 <div class="flex flex-col items-center space-y-4">
-  <FileDropzone
+  <FileUpload
     name="structure-list"
     bind:files
     on:change={structuresUploaded}
@@ -36,5 +36,5 @@
         Muropeptide Structures (.txt)
       {/if}
     {/snippet}
-  </FileDropzone>
+  </FileUpload>
 </div>

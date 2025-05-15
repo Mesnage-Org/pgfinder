@@ -2,12 +2,8 @@
   import { run } from "svelte/legacy";
 
   import {
-    ProgressBar,
     Tab,
-    TabGroup,
-    getModalStore,
-    type ModalSettings,
-  } from "@skeletonlabs/skeleton";
+    type ModalSettings, Progress, Tabs } from "@skeletonlabs/skeleton-svelte";
   import ErrorModal from "../ErrorModal.svelte";
   import { onMount } from "svelte";
   import Smithereens from "$lib/smithereens.ts?worker";
@@ -118,7 +114,7 @@
   <h3 class="pb-1 h3">Fragment Generator</h3>
   <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Fragment Generator">
     <section class="flex flex-col items-center p-4">
-      <TabGroup class="w-full" justify="justify-center">
+      <Tabs class="w-full" justify="justify-center">
         <Tab bind:group={bulk} name="bulk" value={true}>Bulk</Tab>
         <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
         {#snippet panel()}
@@ -128,18 +124,18 @@
             <Single bind:structure {validStructure} />
           {/if}
         {/snippet}
-      </TabGroup>
+      </Tabs>
 
       <button
         type="button"
-        class="btn variant-filled w-full mt-4"
+        class="btn preset-filled w-full mt-4"
         onclick={fragment}
         disabled={!ready}
       >
         Fragment Structure{plural}
       </button>
       {#if processing}
-        <ProgressBar class="mt-4" />
+        <Progress class="mt-4" />
       {/if}
     </section>
   </div>

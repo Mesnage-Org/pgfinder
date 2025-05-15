@@ -1,10 +1,6 @@
 <script lang="ts">
   import {
-    FileDropzone,
-    TabGroup,
-    Tab,
-    ProgressRadial,
-  } from "@skeletonlabs/skeleton";
+    Tab, FileUpload, Tabs, ProgressRing } from "@skeletonlabs/skeleton-svelte";
   import MassDatabaseSelector from "./MassDatabaseSelector.svelte";
   interface Props {
     value: VirtFile | undefined;
@@ -23,7 +19,7 @@
 
 <div class="flex flex-col items-center">
   <h5 class="pb-1 h5">Mass Database</h5>
-  <TabGroup class="w-full" justify="justify-center">
+  <Tabs class="w-full" justify="justify-center">
     <Tab bind:group={customMassLibrary} name="builtInMass" value={false}
       >Built-In</Tab
     >
@@ -32,7 +28,7 @@
     >
     {#snippet panel()}
       {#if customMassLibrary}
-        <FileDropzone
+        <FileUpload
           name="mass-library"
           bind:files
           on:change={dataUploaded}
@@ -50,14 +46,14 @@
               PGFinder Mass Library (.csv)
             {/if}
           {/snippet}
-        </FileDropzone>
+        </FileUpload>
       {:else if massLibraries !== undefined}
         <MassDatabaseSelector bind:value {massLibraries} />
       {:else}
         <div class="flex justify-center">
-          <ProgressRadial />
+          <ProgressRing />
         </div>
       {/if}
     {/snippet}
-  </TabGroup>
+  </Tabs>
 </div>

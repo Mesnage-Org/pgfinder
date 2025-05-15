@@ -8,7 +8,7 @@
   <h4 class="h4">Deconvoluted Example Datasets</h4>
   <dl class="list-dl">
     <a href="{base}/data/E. coli WT (Patel et al).ftrs">
-      <div class="flex items-stretch hover:variant-soft-surface">
+      <div class="flex items-stretch hover:preset-tonal-surface">
         <div class="badge bg-secondary-500 h-full">
           <Fa icon={faDownload} size="lg" />
         </div>
@@ -20,7 +20,7 @@
     </a>
 
     <a href="{base}/data/C. difficile WT (Bern et al).ftrs">
-      <div class="flex items-stretch hover:variant-soft-surface">
+      <div class="flex items-stretch hover:preset-tonal-surface">
         <div class="badge bg-secondary-500 h-full">
           <Fa icon={faDownload} size="lg" />
         </div>

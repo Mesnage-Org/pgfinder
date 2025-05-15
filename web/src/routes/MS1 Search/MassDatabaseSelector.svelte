@@ -1,10 +1,7 @@
 <script lang="ts">
   import {
-    Accordion,
-    AccordionItem,
-    ListBox,
-    ListBoxItem,
-  } from "@skeletonlabs/skeleton";
+    Accordion
+  } from "@skeletonlabs/skeleton-svelte";
   import Tooltip from "../Tooltip.svelte";
   interface Props {
     value: VirtFile | undefined;
@@ -16,7 +13,7 @@
 
 <Accordion autocollapse class="w-full">
   {#each Object.entries(massLibraries) as [species, libraries]}
-    <AccordionItem>
+    <Accordion.Item>
       {#snippet summary()}
         <i>{species}</i>
       {/snippet}
@@ -38,6 +35,6 @@
           {/each}
         </ListBox>
       {/snippet}
-    </AccordionItem>
+    </Accordion.Item>
   {/each}
 </Accordion>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
+  import { Accordion } from "@skeletonlabs/skeleton-svelte";
   import ModificationSelector from "./ModificationSelector.svelte";
   import Tooltip from "../Tooltip.svelte";
   interface Props {
@@ -22,7 +22,7 @@
 </script>
 
 <Accordion class="w-full">
-  <AccordionItem bind:open={advancedMode}>
+  <Accordion.Item bind:open={advancedMode}>
     {#snippet summary()}
       Advanced Options
     {/snippet}
@@ -85,5 +85,5 @@
         </div>
       </div>
     {/snippet}
-  </AccordionItem>
+  </Accordion.Item>
 </Accordion>

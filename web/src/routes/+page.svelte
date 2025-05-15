@@ -2,13 +2,6 @@
   // Svelte and UI Imports
   import "../app.postcss";
   import {
-    AppShell,
-    Drawer,
-    Modal,
-    storePopup,
-    initializeStores,
-  } from "@skeletonlabs/skeleton";
-  import {
     computePosition,
     autoUpdate,
     flip,
@@ -36,7 +29,7 @@
   let versions: Versions = $state({ ...defaultVersions });
 </script>
 
-<Modal regionBackdrop="bg-surface-backdrop-token overflow-y-hidden" />
+<Modal regionBackdrop="bg-surface-50/50 dark:bg-surface-950/50 overflow-y-hidden" />
 
 <Drawer>
   <LinksAndDownloads />

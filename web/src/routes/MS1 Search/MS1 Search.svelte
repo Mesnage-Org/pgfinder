@@ -2,10 +2,7 @@
      Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
   import {
-    ProgressBar,
-    getModalStore,
-    type ModalSettings,
-  } from "@skeletonlabs/skeleton";
+    type ModalSettings, Progress } from "@skeletonlabs/skeleton-svelte";
   import AdvancedOptions from "./AdvancedOptions.svelte";
   import MassDatabaseUploader from "./MassDatabaseUploader.svelte";
   import MsDataUploader from "./MsDataUploader.svelte";
@@ -107,7 +104,7 @@
 
       <button
         type="button"
-        class="btn variant-filled"
+        class="btn preset-filled"
         on:click={runAnalysis}
         disabled={!ready}
       >
@@ -115,7 +112,7 @@
       </button>
 
       {#if processing}
-        <ProgressBar />
+        <Progress />
       {/if}
     </section>
   </div>

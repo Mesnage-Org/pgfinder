@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { AppBar } from "@skeletonlabs/skeleton";
+  import { AppBar } from "@skeletonlabs/skeleton-svelte";
   import Fa from "svelte-fa";
   import { faBars, faBook } from "@fortawesome/free-solid-svg-icons";
   import { faGithub } from "@fortawesome/free-brands-svg-icons";
-  import { getDrawerStore } from "@skeletonlabs/skeleton";
   import Tooltip from "./Tooltip.svelte";
   interface Props {
     versions: Versions;

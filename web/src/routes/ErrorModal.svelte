@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { getModalStore } from "@skeletonlabs/skeleton";
-  interface Props {
+    interface Props {
     message: string;
     manualError: boolean;
   }
@@ -50,13 +49,13 @@
   <footer class="card-footer flex flex-row-reverse justify-between">
     <button
       type="button"
-      class="btn variant-filled"
+      class="btn preset-filled"
       onclick={() => modalStore.close()}>Okay</button
     >
     {#if userError && !manualError}
       <button
         type="button"
-        class="btn variant-filled-error"
+        class="btn preset-filled-error-500"
         onclick={() => (traceVisible = !traceVisible)}
       >
         {#if traceVisible}
