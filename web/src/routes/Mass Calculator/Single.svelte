@@ -1,15 +1,24 @@
 <script lang="ts">
   import Tooltip from "../Tooltip.svelte";
 
-  export let structure: string;
-  export let validStructure: boolean;
-  export let mass: string;
-  export let smiles: string;
+  interface Props {
+    structure: string;
+    validStructure: boolean;
+    mass: string;
+    smiles: string;
+  }
+
+  let {
+    structure = $bindable(),
+    validStructure,
+    mass,
+    smiles,
+  }: Props = $props();
 
   // Assign an error style to the input box if the structure is invalid
-  $: color = validStructure ? "" : "text-error-400";
+  let color = $derived(validStructure ? "" : "text-error-400");
   // Show and hide the warning icon
-  $: warning = validStructure ? "hidden" : "";
+  let warning = $derived(validStructure ? "hidden" : "");
 </script>
 
 <div class="flex flex-col gap-1">

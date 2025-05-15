@@ -5,7 +5,11 @@
   import { faGithub } from "@fortawesome/free-brands-svg-icons";
   import { getDrawerStore } from "@skeletonlabs/skeleton";
   import Tooltip from "./Tooltip.svelte";
-  export let versions: Versions;
+  interface Props {
+    versions: Versions;
+  }
+
+  let { versions }: Props = $props();
 
   const drawerStore = getDrawerStore();
   function openDrawer() {
@@ -20,11 +24,11 @@
   slotDefault="place-self-center"
   slotTrail="place-content-end"
 >
-  <svelte:fragment slot="lead">
-    <button on:click={openDrawer}>
+  {#snippet lead()}
+    <button onclick={openDrawer}>
       <Fa icon={faBars} size="lg" />
     </button>
-  </svelte:fragment>
+  {/snippet}
 
   <p class="text-xl text-center">
     <strong> PGFinder </strong>
@@ -42,7 +46,7 @@
     </Tooltip>
   </p>
 
-  <svelte:fragment slot="trail">
+  {#snippet trail()}
     <a
       href="https://pgfinder.readthedocs.io/en/latest/usage.html"
       target="_blank"
@@ -53,5 +57,5 @@
     <a href="https://github.com/Mesnage-Org/pgfinder" target="_blank">
       <Fa icon={faGithub} size="lg" />
     </a>
-  </svelte:fragment>
+  {/snippet}
 </AppBar>

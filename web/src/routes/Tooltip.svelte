@@ -8,12 +8,17 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { onMount } from "svelte";
 
-  export let type: string;
-  export let style: string = "";
-  export let width: string = "w-96";
+  interface Props {
+    type: string;
+    style?: string;
+    width?: string;
+    children?: import("svelte").Snippet;
+  }
 
-  let popupId: `${string}-${string}-${string}-${string}-${string}`;
-  let tooltip: PopupSettings;
+  let { type, style = "", width = "w-96", children }: Props = $props();
+
+  let popupId: `${string}-${string}-${string}-${string}-${string}` = $state();
+  let tooltip: PopupSettings = $state();
 
   onMount(() => {
     popupId = window.crypto.randomUUID();
@@ -24,8 +29,8 @@
     };
   });
 
-  let icon: IconDefinition;
-  let color: string;
+  let icon: IconDefinition = $state();
+  let color: string = $state();
 
   switch (type) {
     case "info":
@@ -48,7 +53,7 @@
     data-popup={popupId}
   >
     <p class="text-center font-normal font-token">
-      <slot />
+      {@render children?.()}
     </p>
     <div class="arrow {color}"></div>
   </div>

@@ -2,18 +2,31 @@
   import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
   import ModificationSelector from "./ModificationSelector.svelte";
   import Tooltip from "../Tooltip.svelte";
-  export let enabledModifications: Array<string>;
-  export let allowedModifications: Array<string> | undefined;
-  export let ppmTolerance: number;
-  export let cleanupWindow: number;
-  export let consolidationPpm: number;
-  export let advancedMode: boolean;
+  interface Props {
+    enabledModifications: Array<string>;
+    allowedModifications: Array<string> | undefined;
+    ppmTolerance: number;
+    cleanupWindow: number;
+    consolidationPpm: number;
+    advancedMode: boolean;
+  }
+
+  let {
+    enabledModifications = $bindable(),
+    allowedModifications,
+    ppmTolerance = $bindable(),
+    cleanupWindow = $bindable(),
+    consolidationPpm = $bindable(),
+    advancedMode = $bindable(),
+  }: Props = $props();
 </script>
 
 <Accordion class="w-full">
   <AccordionItem bind:open={advancedMode}>
-    <svelte:fragment slot="summary">Advanced Options</svelte:fragment>
-    <svelte:fragment slot="content">
+    {#snippet summary()}
+      Advanced Options
+    {/snippet}
+    {#snippet content()}
       <div class="grid md:grid-cols-2 md:gap-8">
         <ModificationSelector
           bind:value={enabledModifications}
@@ -71,6 +84,6 @@
           </div>
         </div>
       </div>
-    </svelte:fragment>
+    {/snippet}
   </AccordionItem>
 </Accordion>

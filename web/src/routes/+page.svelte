@@ -33,7 +33,7 @@
   storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
   // Component state
-  let versions: Versions = { ...defaultVersions };
+  let versions: Versions = $state({ ...defaultVersions });
 </script>
 
 <Modal regionBackdrop="bg-surface-backdrop-token overflow-y-hidden" />
@@ -43,9 +43,9 @@
 </Drawer>
 
 <AppShell>
-  <svelte:fragment slot="header">
+  {#snippet header()}
     <Header {versions} />
-  </svelte:fragment>
+  {/snippet}
 
   <div
     class="h-full flex flex-col gap-4 lg:flex-row justify-center items-center"
@@ -58,7 +58,7 @@
     <div></div>
   </div>
 
-  <svelte:fragment slot="footer">
+  {#snippet footer()}
     <Footer />
-  </svelte:fragment>
+  {/snippet}
 </AppShell>

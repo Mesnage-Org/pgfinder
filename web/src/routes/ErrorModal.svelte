@@ -1,17 +1,22 @@
 <script lang="ts">
   import { getModalStore } from "@skeletonlabs/skeleton";
-  export let message: string;
-  export let manualError: boolean;
+  interface Props {
+    message: string;
+    manualError: boolean;
+  }
+
+  let { message, manualError }: Props = $props();
 
   const modalStore = getModalStore();
-  let traceVisible = false;
+  let traceVisible = $state(false);
 
-  $: userError =
+  let userError = $derived(
     message.match("(?<=pgfinder.errors.UserError: ).*") ||
-    (manualError && message);
+      (manualError && message),
+  );
 
-  $: traceHidden = traceVisible || !userError ? "" : "hidden";
-  $: modalWidth = traceHidden ? "w-modal-slim" : "w-full max-w-3xl";
+  let traceHidden = $derived(traceVisible || !userError ? "" : "hidden");
+  let modalWidth = $derived(traceHidden ? "w-modal-slim" : "w-full max-w-3xl");
 </script>
 
 <div class="card flex flex-col gap-4 {modalWidth} max-h-[80vh] transition-all">
@@ -46,13 +51,13 @@
     <button
       type="button"
       class="btn variant-filled"
-      on:click={() => modalStore.close()}>Okay</button
+      onclick={() => modalStore.close()}>Okay</button
     >
     {#if userError && !manualError}
       <button
         type="button"
         class="btn variant-filled-error"
-        on:click={() => (traceVisible = !traceVisible)}
+        onclick={() => (traceVisible = !traceVisible)}
       >
         {#if traceVisible}
           Hide

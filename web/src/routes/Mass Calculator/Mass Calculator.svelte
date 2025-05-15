@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import {
     ProgressBar,
     Tab,
@@ -13,17 +15,21 @@
   import Single from "./Single.svelte";
   import Bulk from "./Bulk.svelte";
 
-  export let version: string | undefined;
+  interface Props {
+    version: string | undefined;
+  }
+
+  let { version = $bindable() }: Props = $props();
 
   // Get the Error Modal Store
   const modalStore = getModalStore();
 
-  let loading = true;
-  let processing = false;
-  let tab = "bulk";
+  let loading = $state(true);
+  let processing = $state(false);
+  let tab = $state("bulk");
 
   // Bulk Database State
-  let structures: File | undefined;
+  let structures: File | undefined = $state();
 
   function runBulk() {
     let msg: SMassesReq = {
@@ -36,15 +42,10 @@
   }
 
   // Single Structure State
-  let validStructure = true;
-  let structure = "";
-  let mass = "";
-  let smiles = "";
-
-  // TODO: Once we move to Svelte 5, there will be a better way to do this that
-  // doesn't trigger this lint!
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  $: structure, runSingle();
+  let validStructure = $state(true);
+  let structure = $state("");
+  let mass = $state("");
+  let smiles = $state("");
 
   function runSingle() {
     let msg: SMassReq = {
@@ -97,8 +98,14 @@
       processing = false;
     };
   });
+  // TODO: Once we move to Svelte 5, there will be a better way to do this that
+  // doesn't trigger this lint!
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  run(() => {
+    structure, runSingle();
+  });
   // Reactively compute if Smithereens is ready
-  $: ready = !loading && !processing && structures !== undefined;
+  let ready = $derived(!loading && !processing && structures !== undefined);
 </script>
 
 <div class="flex flex-col items-center">
@@ -108,13 +115,13 @@
       <TabGroup class="w-full" justify="justify-center">
         <Tab bind:group={tab} name="built-in" value={"bulk"}>Bulk</Tab>
         <Tab bind:group={tab} name="custom" value={"single"}>Single</Tab>
-        <svelte:fragment slot="panel">
+        {#snippet panel()}
           {#if tab === "bulk"}
             <Bulk bind:structures buildCommand={runBulk} {ready} />
           {:else if tab === "single"}
             <Single bind:structure {validStructure} {mass} {smiles} />
           {/if}
-        </svelte:fragment>
+        {/snippet}
       </TabGroup>
       {#if processing}
         <ProgressBar class="mt-4" />

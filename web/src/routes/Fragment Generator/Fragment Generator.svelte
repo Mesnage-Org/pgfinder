@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import {
     ProgressBar,
     Tab,
@@ -16,21 +18,16 @@
   // Get the Error Modal Store
   const modalStore = getModalStore();
 
-  let loading = true;
-  let processing = false;
-  let bulk = true;
+  let loading = $state(true);
+  let processing = $state(false);
+  let bulk = $state(true);
 
   // Bulk Database State
-  let structures: File | undefined;
+  let structures: File | undefined = $state();
 
   // Single Structure State
-  let validStructure = true;
-  let structure = "";
-
-  // TODO: Once we move to Svelte 5, there will be a better way to do this that
-  // doesn't trigger this lint!
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  $: structure, runValidate();
+  let validStructure = $state(true);
+  let structure = $state("");
 
   function runValidate() {
     let msg: SmithereensReq = {
@@ -81,12 +78,6 @@
       processing = false;
     };
   });
-  // Reactively compute if Smithereens is ready
-  $: ready =
-    !loading &&
-    !processing &&
-    ((!bulk && structure && validStructure) ||
-      (bulk && structures !== undefined));
 
   function fragment() {
     if (bulk) {
@@ -106,8 +97,21 @@
     processing = true;
   }
 
+  // TODO: Once we move to Svelte 5, there will be a better way to do this that
+  // doesn't trigger this lint!
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  run(() => {
+    structure, runValidate();
+  });
+  // Reactively compute if Smithereens is ready
+  let ready = $derived(
+    !loading &&
+      !processing &&
+      ((!bulk && structure && validStructure) ||
+        (bulk && structures !== undefined)),
+  );
   // Reactively compute the name of the fragment button
-  $: plural = bulk ? "s" : "";
+  let plural = $derived(bulk ? "s" : "");
 </script>
 
 <div class="flex flex-col items-center">
@@ -117,19 +121,19 @@
       <TabGroup class="w-full" justify="justify-center">
         <Tab bind:group={bulk} name="bulk" value={true}>Bulk</Tab>
         <Tab bind:group={bulk} name="single" value={false}>Single</Tab>
-        <svelte:fragment slot="panel">
+        {#snippet panel()}
           {#if bulk}
             <Bulk bind:structures />
           {:else}
             <Single bind:structure {validStructure} />
           {/if}
-        </svelte:fragment>
+        {/snippet}
       </TabGroup>
 
       <button
         type="button"
         class="btn variant-filled w-full mt-4"
-        on:click={fragment}
+        onclick={fragment}
         disabled={!ready}
       >
         Fragment Structure{plural}

@@ -1,7 +1,11 @@
 <script lang="ts">
   import { ListBox, ListBoxItem, ProgressRadial } from "@skeletonlabs/skeleton";
-  export let value: Array<string>;
-  export let allowedModifications: Array<string> | undefined;
+  interface Props {
+    value: Array<string>;
+    allowedModifications: Array<string> | undefined;
+  }
+
+  let { value = $bindable(), allowedModifications }: Props = $props();
 </script>
 
 <div class="flex flex-col items-center aspect-square overflow-y-auto">

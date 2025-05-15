@@ -6,15 +6,21 @@
     ListBoxItem,
   } from "@skeletonlabs/skeleton";
   import Tooltip from "../Tooltip.svelte";
-  export let value: VirtFile | undefined;
-  export let massLibraries: MassLibraryIndex;
+  interface Props {
+    value: VirtFile | undefined;
+    massLibraries: MassLibraryIndex;
+  }
+
+  let { value = $bindable(), massLibraries }: Props = $props();
 </script>
 
 <Accordion autocollapse class="w-full">
   {#each Object.entries(massLibraries) as [species, libraries]}
     <AccordionItem>
-      <svelte:fragment slot="summary"><i>{species}</i></svelte:fragment>
-      <svelte:fragment slot="content">
+      {#snippet summary()}
+        <i>{species}</i>
+      {/snippet}
+      {#snippet content()}
         <ListBox>
           {#each Object.entries(libraries) as [name, library]}
             <ListBoxItem
@@ -31,7 +37,7 @@
             </ListBoxItem>
           {/each}
         </ListBox>
-      </svelte:fragment>
+      {/snippet}
     </AccordionItem>
   {/each}
 </Accordion>

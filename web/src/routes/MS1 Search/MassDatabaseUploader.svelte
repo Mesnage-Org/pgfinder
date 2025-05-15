@@ -6,11 +6,15 @@
     ProgressRadial,
   } from "@skeletonlabs/skeleton";
   import MassDatabaseSelector from "./MassDatabaseSelector.svelte";
-  export let value: VirtFile | undefined;
-  export let massLibraries: MassLibraryIndex | undefined;
+  interface Props {
+    value: VirtFile | undefined;
+    massLibraries: MassLibraryIndex | undefined;
+  }
 
-  let files: FileList;
-  let customMassLibrary = false;
+  let { value = $bindable(), massLibraries }: Props = $props();
+
+  let files: FileList = $state();
+  let customMassLibrary = $state(false);
 
   async function dataUploaded(): Promise<void> {
     value = { name: files[0].name, content: await files[0].arrayBuffer() };
@@ -26,7 +30,7 @@
     <Tab bind:group={customMassLibrary} name="customMassLibrary" value={true}
       >Custom Mass</Tab
     >
-    <svelte:fragment slot="panel">
+    {#snippet panel()}
       {#if customMassLibrary}
         <FileDropzone
           name="mass-library"
@@ -34,18 +38,18 @@
           on:change={dataUploaded}
           accept=".csv"
         >
-          <svelte:fragment slot="message">
+          {#snippet message()}
             {#if value === undefined}
               <p><b>Upload a file</b> or drag and drop</p>
             {:else}
               <p>{value.name}</p>
             {/if}
-          </svelte:fragment>
-          <svelte:fragment slot="meta">
+          {/snippet}
+          {#snippet meta()}
             {#if !value}
               PGFinder Mass Library (.csv)
             {/if}
-          </svelte:fragment>
+          {/snippet}
         </FileDropzone>
       {:else if massLibraries !== undefined}
         <MassDatabaseSelector bind:value {massLibraries} />
@@ -54,6 +58,6 @@
           <ProgressRadial />
         </div>
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </TabGroup>
 </div>

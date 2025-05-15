@@ -1,9 +1,13 @@
 <script lang="ts">
   import { FileDropzone } from "@skeletonlabs/skeleton";
   import Tooltip from "../Tooltip.svelte";
-  export let value: Array<VirtFile> | undefined;
+  interface Props {
+    value: Array<VirtFile> | undefined;
+  }
 
-  let files: FileList;
+  let { value = $bindable() }: Props = $props();
+
+  let files: FileList = $state();
 
   async function dataUploaded(): Promise<void> {
     value = await Promise.all(
@@ -33,7 +37,7 @@
     accept=".ftrs, .txt"
     multiple
   >
-    <svelte:fragment slot="message">
+    {#snippet message()}
       {#if !value}
         <p><b>Upload a file</b> or drag and drop</p>
       {:else}
@@ -43,11 +47,11 @@
           {/each}
         </ol>
       {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="meta">
+    {/snippet}
+    {#snippet meta()}
       {#if !value}
         Byos (.ftrs) or MaxQuant (.txt)
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </FileDropzone>
 </div>

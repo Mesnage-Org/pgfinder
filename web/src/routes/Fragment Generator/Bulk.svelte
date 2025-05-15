@@ -1,9 +1,13 @@
 <script lang="ts">
   import { FileDropzone } from "@skeletonlabs/skeleton";
 
-  export let structures: File | undefined;
+  interface Props {
+    structures: File | undefined;
+  }
 
-  let files: FileList;
+  let { structures = $bindable() }: Props = $props();
+
+  let files: FileList = $state();
 
   function structuresUploaded() {
     const file = files.item(0);
@@ -20,17 +24,17 @@
     on:change={structuresUploaded}
     accept=".txt"
   >
-    <svelte:fragment slot="message">
+    {#snippet message()}
       {#if structures === undefined}
         <p><b>Upload a file</b> or drag and drop</p>
       {:else}
         <p>{structures.name}</p>
       {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="meta">
+    {/snippet}
+    {#snippet meta()}
       {#if !structures}
         Muropeptide Structures (.txt)
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </FileDropzone>
 </div>

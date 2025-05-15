@@ -9,12 +9,16 @@
   import { onMount } from "svelte";
   import Tooltip from "../Tooltip.svelte";
 
-  export let structures: File | undefined;
-  export let buildCommand: () => void;
-  export let ready: boolean;
+  interface Props {
+    structures: File | undefined;
+    buildCommand: () => void;
+    ready: boolean;
+  }
 
-  let files: FileList;
-  let structuresIndex: StructuresIndex | undefined;
+  let { structures = $bindable(), buildCommand, ready }: Props = $props();
+
+  let files: FileList = $state();
+  let structuresIndex: StructuresIndex | undefined = $state();
 
   onMount(async () => {
     const res = await fetch(`${base}/data/structures_templates/index.json`);
@@ -36,23 +40,25 @@
     on:change={structuresUploaded}
     accept=".txt"
   >
-    <svelte:fragment slot="message">
+    {#snippet message()}
       {#if structures === undefined}
         <p><b>Upload a file</b> or drag and drop</p>
       {:else}
         <p>{structures.name}</p>
       {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="meta">
+    {/snippet}
+    {#snippet meta()}
       {#if !structures}
         Muropeptide Structures (.txt)
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </FileDropzone>
   <Accordion class="w-full">
     <AccordionItem>
-      <svelte:fragment slot="summary">Template Lists</svelte:fragment>
-      <svelte:fragment slot="content">
+      {#snippet summary()}
+        Template Lists
+      {/snippet}
+      {#snippet content()}
         {#if structuresIndex}
           {#each Object.entries(structuresIndex) as [species, info]}
             <a href="{base}/data/structures_templates/{info['file']}" download>
@@ -73,13 +79,13 @@
             <ProgressRadial />
           </div>
         {/if}
-      </svelte:fragment>
+      {/snippet}
     </AccordionItem>
   </Accordion>
   <button
     type="button"
     class="btn variant-filled w-full"
-    on:click={buildCommand}
+    onclick={buildCommand}
     disabled={!ready}
   >
     Build Database
