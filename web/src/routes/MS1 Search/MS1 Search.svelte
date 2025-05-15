@@ -76,7 +76,7 @@
     state.massLibrary !== undefined;
 
   // Reactively adapt the UI when entering advanced mode
-  $: uiWidth = advancedMode ? "md:w-[40rem]" : "";
+  $: uiWidth = advancedMode ? "md:w-160" : "";
 
   // It's nice to animate the width when opening and closing advanced mode, but
   // it seems like animating the opening leads to some jittery animations, so

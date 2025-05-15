@@ -43,7 +43,7 @@
     {/if}
   </p>
   <div
-    class="{traceHidden} mx-4 overflow-auto shadow bg-neutral-900/90 text-xs text-error-500"
+    class="{traceHidden} mx-4 overflow-auto shadow-sm bg-neutral-900/90 text-xs text-error-500"
   >
     <pre class="p-4 pt-1"><code>{message}</code></pre>
   </div>

@@ -45,7 +45,7 @@
 </script>
 
 {#if tooltip}
-  <div class="{style} [&>*]:pointer-events-none" use:popup={tooltip}>
+  <div class="{style} *:pointer-events-none" use:popup={tooltip}>
     <Fa {icon} class="inline" />
   </div>
   <div
