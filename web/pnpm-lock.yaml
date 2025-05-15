@@ -14,6 +14,9 @@ importers:
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.7.2
         version: 6.7.2
+      '@tailwindcss/vite':
+        specifier: ^4.1.7
+        version: 4.1.7(vite@5.4.19(@types/node@22.8.1)(lightningcss@1.30.1))
       client-zip:
         specifier: ^2.5.0
         version: 2.5.0
@@ -57,9 +60,6 @@ importers:
       '@tailwindcss/forms':
         specifier: 0.5.9
         version: 0.5.9(tailwindcss@4.1.7)
-      '@tailwindcss/postcss':
-        specifier: ^4.1.7
-        version: 4.1.7
       '@tailwindcss/typography':
         specifier: 0.5.15
         version: 0.5.15(tailwindcss@4.1.7)
@@ -84,9 +84,6 @@ importers:
       globals:
         specifier: ^15.15.0
         version: 15.15.0
-      postcss:
-        specifier: 8.4.47
-        version: 8.4.47
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -119,10 +116,6 @@ importers:
         version: 0.1.12
 
 packages:
-
-  '@alloc/quick-lru@5.2.0':
-    resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
-    engines: {node: '>=10'}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -709,13 +702,15 @@ packages:
     resolution: {integrity: sha512-5SF95Ctm9DFiUyjUPnDGkoKItPX/k+xifcQhcqX5RA85m50jw1pT/KzjdvlqxRja45Y52nR4MR9fD1JYd7f8NQ==}
     engines: {node: '>= 10'}
 
-  '@tailwindcss/postcss@4.1.7':
-    resolution: {integrity: sha512-88g3qmNZn7jDgrrcp3ZXEQfp9CVox7xjP1HN2TFKI03CltPVd/c61ydn5qJJL8FYunn0OqBaW5HNUga0kmPVvw==}
-
   '@tailwindcss/typography@0.5.15':
     resolution: {integrity: sha512-AqhlCXl+8grUz8uqExv5OTtgpjuVIwFTSXTrh8y9/pw6q2ek7fJ+Y8ZEVw7EB2DCcuCOtEjf9w3+J3rzts01uA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20'
+
+  '@tailwindcss/vite@4.1.7':
+    resolution: {integrity: sha512-tYa2fO3zDe41I7WqijyVbRd8oWT0aEID1Eokz5hMT6wShLIHj3yvwj9XbfuloHP9glZ6H+aG2AN/+ZrxJ1Y5RQ==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -1886,8 +1881,6 @@ packages:
 
 snapshots:
 
-  '@alloc/quick-lru@5.2.0': {}
-
   '@ampproject/remapping@2.3.0':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.8
@@ -2336,14 +2329,6 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.7
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.7
 
-  '@tailwindcss/postcss@4.1.7':
-    dependencies:
-      '@alloc/quick-lru': 5.2.0
-      '@tailwindcss/node': 4.1.7
-      '@tailwindcss/oxide': 4.1.7
-      postcss: 8.4.47
-      tailwindcss: 4.1.7
-
   '@tailwindcss/typography@0.5.15(tailwindcss@4.1.7)':
     dependencies:
       lodash.castarray: 4.4.0
@@ -2351,6 +2336,13 @@ snapshots:
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.1.7
+
+  '@tailwindcss/vite@4.1.7(vite@5.4.19(@types/node@22.8.1)(lightningcss@1.30.1))':
+    dependencies:
+      '@tailwindcss/node': 4.1.7
+      '@tailwindcss/oxide': 4.1.7
+      tailwindcss: 4.1.7
+      vite: 5.4.19(@types/node@22.8.1)(lightningcss@1.30.1)
 
   '@types/cookie@0.6.0': {}
 
