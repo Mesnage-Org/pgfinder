@@ -18,7 +18,7 @@ let pyodide: PyodideInterface;
   // These files can also be hosted locally from `/static` if something ever
   // happens to this CDN, but there will be some build-system demons to battle.
   pyodide = await loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.3/full/",
+    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.27.5/full/",
   });
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
