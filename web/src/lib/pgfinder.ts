@@ -23,11 +23,7 @@ let pyodide: PyodideInterface;
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
   const micropip = pyodide.pyimport("micropip");
-  await micropip.install("pgfinder==1.4.0");
-  // If you need to test development version of pgfinder you should build the wheel and copy the resulting .whl to the
-  // lib/ directory (adajacent to this file), replace the version below and comment out the above (which loads from
-  // PyPI).
-  // await micropip.install("./pgfinder-1.3.3.dev4+g97e51ef-py3-none-any.whl");
+  await micropip.install(`${self.location.origin}/pgfinder-1.4.0-py3-none-any.whl`);
   await pyodide.runPythonAsync(
     "import pgfinder; from pgfinder.gui.shim import *",
   );

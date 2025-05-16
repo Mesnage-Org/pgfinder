@@ -13,6 +13,10 @@ check-py:
 fmt-py:
     cd lib && uv run ruff format
 
+build-py:
+    cd lib && uv build
+    cp lib/dist/*.whl web/static/
+
 install-py:
     cd lib && uv pip install -e ".[dev,docs,tests]"
 

@@ -1,17 +1,16 @@
 [build-system]
 requires = [
   "setuptools >= 45",
-  "setuptools_scm[toml]>=6.2",
   "wheel"
   ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pgfinder"
+version = "1.4.0"
 description = "Peptidoglycan analysis"
 readme = "README.md"
 license = {text = "GNU Lesser GPLv3"}
-dynamic = ["version"]
 
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -63,7 +62,6 @@ dev = [
 ]
 pypi = [
   "build",
-  "setuptools_scm[toml]>=6.2",
   "wheel"
 ]
 
@@ -71,9 +69,6 @@ pypi = [
 where = ["."]
 include = ["pgfinder"]
 exclude = ["tests"]
-
-[tool.setuptools_scm]
-root = ".."
 
 [tool.pytest.ini_options]
 minversion = "7.0"
