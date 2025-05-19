@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run pgfinder at the command line."""
+
 import argparse as arg
 import ast
 import importlib.resources as pkg_resources
