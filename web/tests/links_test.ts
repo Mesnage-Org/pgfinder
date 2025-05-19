@@ -31,28 +31,36 @@ test("links are live", async ({ page }) => {
 
   const page4Promise = page.waitForEvent("popup");
   await page
-    .getByRole("link", { name: "https://doi.org/10.7554/eLife.70597" })
+    .getByRole("link", { name: "Glycopeptide Database Builder (GLAM)" })
     .click();
   const page4 = await page4Promise;
-  // NOTE: Cloudflare blocks us from loading the page, so the best we can do is check the URL...
   await page4.waitForLoadState("domcontentloaded");
-  expect(page4.url()).toEqual("https://elifesciences.org/articles/70597");
+  expect(await page4.title()).toEqual("GLAM");
+
+  const page5Promise = page.waitForEvent("popup");
+  await page
+    .getByRole("link", { name: "https://doi.org/10.7554/eLife.70597" })
+    .click();
+  const page5 = await page5Promise;
+  // NOTE: Cloudflare blocks us from loading the page, so the best we can do is check the URL...
+  await page5.waitForLoadState("domcontentloaded");
+  expect(page5.url()).toEqual("https://elifesciences.org/articles/70597");
 
   await page.getByTestId("drawer-backdrop").click();
 
-  const page5Promise = page.waitForEvent("popup");
+  const page6Promise = page.waitForEvent("popup");
   await page.getByRole("link").first().click();
-  const page5 = await page5Promise;
-  await page5.waitForLoadState("domcontentloaded");
-  const title = await page5.title();
+  const page6 = await page6Promise;
+  await page6.waitForLoadState("domcontentloaded");
+  const title = await page6.title();
   expect(title).toContain("Usage");
   expect(title).toContain("documentation");
 
-  const page6Promise = page.waitForEvent("popup");
+  const page7Promise = page.waitForEvent("popup");
   await page.getByRole("link").nth(1).click();
-  const page6 = await page6Promise;
-  await page6.waitForLoadState("domcontentloaded");
-  expect(await page6.title()).toEqual(
+  const page7 = await page7Promise;
+  await page7.waitForLoadState("domcontentloaded");
+  expect(await page7.title()).toEqual(
     "GitHub - Mesnage-Org/pgfinder: Peptidoglycan MS1 Analysis Tool",
   );
 });
