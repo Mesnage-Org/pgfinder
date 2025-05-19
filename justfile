@@ -43,6 +43,6 @@ check-web:
 
 format-web:
     cd web && pnpm format
-    
+
 install-web:
     cd web && pnpm install
