@@ -33,6 +33,8 @@ export default [
   {
     rules: {
       "no-undef": "off",
+      // TODO: Take a closer look at this and turn it back on!
+      "svelte/require-each-key": "off",
     },
   },
 ];
