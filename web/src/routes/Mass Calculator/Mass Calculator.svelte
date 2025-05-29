@@ -106,8 +106,8 @@
   <div class="card m-2 w-[20rem] max-w-[90%]" data-testid="Mass Calculator">
     <section class="flex flex-col items-center p-4">
       <TabGroup class="w-full" justify="justify-center">
-        <Tab bind:group={tab} name="built-in" value={"bulk"}>Bulk</Tab>
-        <Tab bind:group={tab} name="custom" value={"single"}>Single</Tab>
+        <Tab bind:group={tab} name="built-in" value="bulk">Bulk</Tab>
+        <Tab bind:group={tab} name="custom" value="single">Single</Tab>
         <svelte:fragment slot="panel">
           {#if tab === "bulk"}
             <Bulk bind:structures buildCommand={runBulk} {ready} />
