@@ -37,6 +37,11 @@
   <h4 class="h4">Useful Links & Software</h4>
   <ul class="list-disc pl-4">
     <li>
+      <a href="{base}/Rady and Mesnage 2024.pdf" class="anchor" target="_blank">
+        Instructions For Data Deconvolution
+      </a>
+    </li>
+    <li>
       <a
         href="https://github.com/Mesnage-Org/pgfinder/tree/master/lib/pgfinder/masses"
         class="anchor"
@@ -68,7 +73,6 @@
         Glycopeptide Database Builder (GLAM)
       </a>
     </li>
-    <!-- <li>How to deconvolute raw data (coming soon!)</li> -->
   </ul>
 
   <hr class="my-4" />

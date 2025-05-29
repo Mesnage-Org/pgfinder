@@ -67,6 +67,15 @@ test("links are live", async ({ page }) => {
     "PGFinder, an Open-Source Software for Peptidoglycomics: The Structural Analysis of Bacterial Peptidoglycan by LC-MS | SpringerLink",
   );
 
+  const downloadPromise = page.waitForEvent("download");
+  await page
+    .getByRole("link", {
+      name: "Instructions For Data Deconvolution",
+    })
+    .click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toEqual("Rady and Mesnage 2024.pdf");
+
   await page.getByTestId("drawer-backdrop").click();
 
   const page8Promise = page.waitForEvent("popup");
