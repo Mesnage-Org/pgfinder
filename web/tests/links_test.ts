@@ -39,28 +39,49 @@ test("links are live", async ({ page }) => {
 
   const page5Promise = page.waitForEvent("popup");
   await page
-    .getByRole("link", { name: "https://doi.org/10.7554/eLife.70597" })
+    .getByRole("link", { name: "https://doi.org/10.1038/s42004-025-01490-6" })
     .click();
   const page5 = await page5Promise;
-  // NOTE: Cloudflare blocks us from loading the page, so the best we can do is check the URL...
   await page5.waitForLoadState("domcontentloaded");
-  expect(page5.url()).toEqual("https://elifesciences.org/articles/70597");
-
-  await page.getByTestId("drawer-backdrop").click();
+  expect(await page5.title()).toEqual(
+    "A software tool and strategy for peptidoglycomics, the high-resolution analysis of bacterial peptidoglycans via LC-MS/MS | Communications Chemistry",
+  );
 
   const page6Promise = page.waitForEvent("popup");
-  await page.getByRole("link").first().click();
+  await page
+    .getByRole("link", { name: "https://doi.org/10.7554/eLife.70597" })
+    .click();
   const page6 = await page6Promise;
   await page6.waitForLoadState("domcontentloaded");
-  const title = await page6.title();
-  expect(title).toContain("Usage");
-  expect(title).toContain("documentation");
+  expect(await page6.title()).toEqual(
+    "PGFinder, a novel analysis pipeline for the consistent, reproducible, and high-resolution structural analysis of bacterial peptidoglycans | eLife",
+  );
 
   const page7Promise = page.waitForEvent("popup");
-  await page.getByRole("link").nth(1).click();
+  await page
+    .getByRole("link", { name: "https://doi.org/10.1007/978-1-0716-4007-4_8" })
+    .click();
   const page7 = await page7Promise;
   await page7.waitForLoadState("domcontentloaded");
   expect(await page7.title()).toEqual(
+    "PGFinder, an Open-Source Software for Peptidoglycomics: The Structural Analysis of Bacterial Peptidoglycan by LC-MS | SpringerLink",
+  );
+
+  await page.getByTestId("drawer-backdrop").click();
+
+  const page8Promise = page.waitForEvent("popup");
+  await page.getByRole("link").first().click();
+  const page8 = await page8Promise;
+  await page8.waitForLoadState("domcontentloaded");
+  const title = await page8.title();
+  expect(title).toContain("Usage");
+  expect(title).toContain("documentation");
+
+  const page9Promise = page.waitForEvent("popup");
+  await page.getByRole("link").nth(1).click();
+  const page9 = await page9Promise;
+  await page9.waitForLoadState("domcontentloaded");
+  expect(await page9.title()).toEqual(
     "GitHub - Mesnage-Org/pgfinder: Peptidoglycan MS1 Analysis Tool",
   );
 });
