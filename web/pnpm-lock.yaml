@@ -37,7 +37,7 @@ importers:
         specifier: ^6.7.2
         version: 6.7.2
       '@playwright/test':
-        specifier: 1.51.*
+        specifier: 1.51.1
         version: 1.51.1
       '@skeletonlabs/skeleton':
         specifier: ^2.11.0

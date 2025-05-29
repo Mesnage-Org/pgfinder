@@ -15,7 +15,7 @@
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@playwright/test": "1.51.*",
+    "@playwright/test": "1.51.1",
     "@skeletonlabs/skeleton": "^2.11.0",
     "@skeletonlabs/tw-plugin": "^0.4.1",
     "@sveltejs/adapter-static": "^3.0.8",
