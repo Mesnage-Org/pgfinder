@@ -101,4 +101,6 @@ This software is licensed as specified by the GPL License and LGPL License. Plea
 
 ## References
 
-* [PGFinder, a novel analysis pipeline for the consistent, reproducible, and high-resolution structural analysis of bacterial peptidoglycans | eLife](https://elifesciences.org/articles/70597)
+* [A software tool and strategy for peptidoglycomics, the high-resolution analysis of bacterial peptidoglycans via LC-MS/MS | Communications Chemistry](https://doi.org/10.1038/s42004-025-01490-6)
+* [PGFinder, a novel analysis pipeline for the consistent, reproducible, and high-resolution structural analysis of bacterial peptidoglycans | eLife](https://doi.org/10.7554/eLife.70597)
+* [PGFinder, an Open-Source Software for Peptidoglycomics: The Structural Analysis of Bacterial Peptidoglycan by LC-MS | SpringerLink](https://doi.org/10.1007/978-1-0716-4007-4_8)
