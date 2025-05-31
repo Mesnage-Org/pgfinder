@@ -6,8 +6,8 @@
   <p class="text-center text-sm">
     Any issues or suggestions? Please get in touch!
     <br />
-    <a href="mailto:smesnage@sheffield.ac.uk">
-      <strong>smesnage@sheffield.ac.uk</strong>
+    <a href="mailto:s.mesnage@sheffield.ac.uk">
+      <strong>s.mesnage@sheffield.ac.uk</strong>
     </a>
   </p>
 </AppBar>
