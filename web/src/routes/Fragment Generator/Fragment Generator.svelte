@@ -108,8 +108,9 @@
 
   // Reactively compute the name of the fragment button
   $: plural = bulk ? "s" : "";
-  // Remove trailing and leading spaces from the structure in the
+  // Trim trailing and leading spaces from structure in Single
   $: structure = structure?.trim();
+
 </script>
 
 <div class="flex flex-col items-center">
