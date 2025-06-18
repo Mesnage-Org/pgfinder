@@ -99,8 +99,6 @@
   });
   // Reactively compute if Smithereens is ready
   $: ready = !loading && !processing && structures !== undefined;
-  // Trim trailing and leading spaces from structure in Single
-  $: structure = structure?.trim();
 </script>
 
 <div class="flex flex-col items-center">
