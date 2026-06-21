@@ -1,3 +1,4 @@
+import { base } from "$app/paths";
 import type { PyProxy, PythonError } from "pyodide/ffi";
 import { loadPyodide, type PyodideInterface } from "pyodide";
 import { defaultPythonState } from "$lib/constants";
@@ -19,6 +20,7 @@ let pyodide: PyodideInterface;
   // happens to this CDN, but there will be some build-system demons to battle.
   pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.27.6/full/",
+    lockFileURL: `${base}/pyodide-lock.json`,
   });
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
