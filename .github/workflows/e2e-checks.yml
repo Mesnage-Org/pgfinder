@@ -14,17 +14,17 @@ jobs:
         working-directory: ./web
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: 8
+          version: 11
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 26
           cache: pnpm
           cache-dependency-path: 'web/pnpm-lock.yaml'
 
