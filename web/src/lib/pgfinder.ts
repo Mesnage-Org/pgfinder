@@ -6,6 +6,9 @@ import { defaultPythonState } from "$lib/constants";
 import init, { consolidate, Replicate } from "smithereens";
 
 const state: PythonState = { ...defaultPythonState };
+// FIXME: An utterly revolting hack because I can't get
+// `import { base } from "$app/paths"` to work in this file
+const base = self.location.pathname.startsWith("/pgfinder") ? "/pgfinder" : "";
 let pyodide: PyodideInterface;
 
 // Maybe someday (once top-level await is even more universal), I should get
@@ -19,6 +22,7 @@ let pyodide: PyodideInterface;
   // happens to this CDN, but there will be some build-system demons to battle.
   pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.27.6/full/",
+    lockFileURL: `${base}/pyodide-lock.json`,
   });
   pyodide.registerJsModule("pyio", state);
   await pyodide.loadPackage(["micropip", "sqlite3"]);
